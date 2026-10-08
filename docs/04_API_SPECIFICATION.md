@@ -362,3 +362,5 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | `/api/model-development/datasets/{dataset_id}/migrate-v2` | POST | MigrationRequest·actor·expected legacy/review SHA, 새 BUILT v2만 생성 |
 
 enqueue/retrain은 선택한 manifest expected SHA를 받는다. preflight 실패는 큐 생성 이전에 차단하며 큐가 다시 현재 입력을 검증한다. 실제 계정 미설정503, 범위 밖 경로·malformed nested 입력409를 실검증했다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).
+
+별도 개발용8011 서버의 `/health`, `/readiness`, `/release`, `/predict`는 운영 backend OpenAPI와 구분한다. 3개 원시 수치 시험 모델을 exact release/artifact/입력에 연결하고 운영 Registry를 쓰지 않는다. `/predict`는3개의 유한 값과 expected release/artifact SHA를 받는다. 오래된 선택409·잘못된 입력422·본문크기413·원격Origin/Host403·MIME415를 검증했다. 웹은 운영 token 없이 `/experimental-api`로 연결한다. [30 실행·API](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md).

@@ -1,6 +1,6 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-08**. 이 폴더의 01~29 문서는 10/8 QC·AI·Fusion·승인 gate 확장과 7월 현황·월간보고서 대조를 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-08**. 이 폴더의 01~30 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포를 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
@@ -45,6 +45,7 @@
 | 27 | [7월 월간보고서·Parquet 대조](27_JULY_REPORT_PARQUET_MATCH.md) | 7월 기본 화면,146개 파일 검증,시설·항목 대응과 통계 차이 |
 | 28 | [미산정 지표 보완](28_METRIC_COMPLETION.md) | 전수 시간격자·결측 표현·QC 코드·보고서 참조값·실제 요청 오류율과 산정 근거 |
 | 29 | [단계별 실행·최종 검증](29_DEVELOPMENT_STAGE_EXECUTION.md) | 13단계·세 에이전트·부모 검증·실원천 실험과 미완료 조건 |
+| 30 | [실제 원시 학습·시험 배포](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md) | 7월 인천 133,876행·동결 분할·후보 비교와 별도 개발용 예측 서버 |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
 현황의 기본 관측기간은 **2026년7월 단일 월**이다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.

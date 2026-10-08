@@ -8,6 +8,8 @@
 
 ## 구현 범위
 
+사용자가 선택한 PC 개발용 시험 배포는 [실제 원시 학습·시험 배포](docs/30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)에 기록한다. 7월 인천3항목133,876행으로 실제 후보를 적합·비교하고 별도8011 예측 서버를 [MLOps 웹](http://127.0.0.1:5174/mlops)에 연결했다. 운영 source·Dataset·Registry와 별도이며 미확정 물리 의미를 승인하지 않는다.
+
 - 원문/Parquet hash와 행·열 locator, 의미·단위·시간대·QC·센서 유효기간을 재검증하는 source 계약·인증된 판정·불변 영수증.
 - 승인된 원천 ingest와 observation binding, 사건·문서·QC·라벨의 근거 관계, feature as-of 검증.
 - 원천 의존성을 동결하는 v2 dataset snapshot, 고정 train/validation/test 및 평가·수용 계약.

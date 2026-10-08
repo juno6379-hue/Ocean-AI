@@ -38,3 +38,5 @@
 다음 순서는 근거 보완 → 원천/기간/사건 기술 판정 → 실제 업무 수행 시 계정 설정과 source 승인 → 승인 ingest/v2 snapshot·고정 분할/수용 정책 승인 → 업무별 실제 비교·독립 검토·registry·배포 검증이다. [현재 단계](24_P0_END_TO_END_PROGRESS.md), [QC](12_QC_RULE_RESULT_LAYER.md), [AI](25_ANOMALY_AI.md), [승인](17_HUMAN_IN_THE_LOOP.md)을 따른다.
 
 최종 검증: backend **668 passed / 1 skipped**(229.35초), frontend17 tests·TypeScript/Vite build PASS, 실제 PostgreSQL gate8건·48table 전체backup/restore·liveHTTP13건 PASS. 원시 숫자 적합3개와 격리 모델2건은 실제 물리 fit·model registry·배포0과 구분한다. [13단계 실행 결과](29_DEVELOPMENT_STAGE_EXECUTION.md)를 따른다.
+
+후속 개발용 시험 배포의 최신 전체 회귀는 **backend701 passed / 1 skipped**, frontend20 tests·build PASS다. 실제7월 GR 인천133,876행과 TEST30,187쌍을 독립 검증하고 별도8011 예측 서버·MLOps 시험 패널을 연결했다. 부모 실제HTTP24건·브라우저6건, 14개 운영 원장의 건수/digest 무변경을 확인했다. 이전668은13단계 당시 결과이며, 새 개발 실행·평가와 운영 모델0의 구분은 [30](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)을 따른다.

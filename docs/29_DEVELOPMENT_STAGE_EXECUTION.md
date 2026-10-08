@@ -50,3 +50,7 @@ HWP에서 인천2019-02-27 `118→1276`, 2021-03-24~26 `1276→1326`, 군산2020
 로컬 증거 root는 `D:/AI_Observation/outputs/development-stages-20261008`다. root `stage-index.json`은 receipt 경로와 전체 SHA를 고정한다. receipt 불일치·누락은 FAILED/UNKNOWN이며 문서의 APPROVED/OPERATING 문자열은 권한을 부여하지 않는다. 원문·실험 상세값·SQLite·전체 DB backup·비밀번호·token은 Git에 올리지 않는다.
 
 이전512/548시험과 과거 migration 수치는 이전 확인 기록이다. 현재 판정은 이 문서와 current_status.json의 최신 시각·분모·SHA를 따른다.
+
+## 후속 개발용 학습·시험 배포
+
+이 문서의11:44 UTC 원장 검증 이후 사용자가 **이 PC의 개발용 시험 서버** 배포를 선택했다. 2026-07 GR 인천3항목133,876행으로 실제 후보를 적합·비교하고 별도8011 예측 서버와 MLOps 시험 패널을 연결했다. 운영 Registry·승인·실제 운영 모델 수0은 유지한다. 날짜별 고정 분할·VALIDATION 선정·독립 검증·현재 개발 release와 실행 결과는 [30](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md) 및 해당 JSON을 따른다. 이전 stage-index의 고정 증거는 변경하지 않는다.

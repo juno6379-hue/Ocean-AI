@@ -1,16 +1,18 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-08T11:44:28.046011+00:00",
+  "as_of": "2026-10-08T14:07:24.773788+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/29 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/30 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "date": "2026-10-08",
-      "passed": 668,
+      "passed": 701,
       "skipped": 1,
+      "failed": 0,
       "warnings": 21,
-      "seconds": 229.355,
-      "log_sha256": "1ad67ead60a191c6d58e42d4980ee22c64e2be45117e511fd28289bc8939951e"
+      "log_sha256": "ef1ba5da7981baa6340d71437599a670b625217b876dde275ec091d0d20423ab",
+      "junit_sha256": "5c51c65c4277e038d3456a0a93651b5884dd06b18e665ad9d17ca1e9478f5ed9",
+      "date": "2026-10-08",
+      "seconds": 225.27
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
@@ -73,12 +75,15 @@
       "combined_passed": 14,
       "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
     },
-    "frontend_build_log_sha256": "d9f04ddaabc5230ba7bc8693a770efd5546d5e23aa8790b0b86bdd4ffaeeac23",
+    "frontend_build_log_sha256": "8f86d96639768b60956fbfd53216dcbcf2179e5ef9027bc057c764db32fa512e",
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 17,
+      "passed": 20,
       "failed": 0,
+      "build": "PASS",
+      "test_log_sha256": "26ac9e6bead35083f8d577fb2d3d0870f97dbe2be9c768462975d7c6d0f3e7af",
+      "build_log_sha256": "8f86d96639768b60956fbfd53216dcbcf2179e5ef9027bc057c764db32fa512e",
       "date": "2026-10-08"
     },
     "postgresql_full_restore": {
@@ -214,6 +219,14 @@
       "public_mdc_catalog_applied": false,
       "canonical_processes_preserved": 5,
       "document_ledger_snapshot_unchanged": true
+    },
+    "prior_stage_regression": {
+      "date": "2026-10-08",
+      "passed": 668,
+      "skipped": 1,
+      "warnings": 21,
+      "seconds": 229.355,
+      "log_sha256": "1ad67ead60a191c6d58e42d4980ee22c64e2be45117e511fd28289bc8939951e"
     }
   },
   "runtime": {
@@ -579,5 +592,15 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "10833c3fe84b7b762a88ab96b6c6df26fe4ede42"
+  "verification_base_revision": "10833c3fe84b7b762a88ab96b6c6df26fe4ede42",
+  "experimental_development_release": {
+    "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
+    "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
+    "model_count": 3,
+    "actual_source_rows": 133876,
+    "status": "READY_NON_OPERATIONAL",
+    "operating_model_count": 0,
+    "approved": false,
+    "production_eligible": false
+  }
 }

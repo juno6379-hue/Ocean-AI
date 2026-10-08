@@ -14,7 +14,7 @@
 | QC Copilot | `WorkflowReviewPanel`의 evidence/analyze·workflows, 기존 `AnalysisWorkspace` lake 조회 | exact scope 분석·score/coverage·누락·충돌·PENDING·승인/반려·재개를 표시한다. 계정 미설정이면 분석/조회만 가능하다. |
 | AI Insights | 같은 `AnalysisWorkspace`의 Insights 모드와 관측소 기준 좌표 | 보유 자료·근거를 비교한다. 기존 `/ai-insights/summary`의 휴리스틱 위험 점수 화면과 구분한다. |
 | Equipment | `/api/lake/equipment-evidence`, lake summary, 관측소 기준 좌표 | 문서의 설치·장비 근거를 표시한다. 설치 문구만으로 센서 운영기간·실시간 health를 확정하지 않는다. |
-| MLOps | `/api/mlops/summary`, `/retrain-history`, `/adapters`, 일반 승인 대기 조회 | 코드 구현·worker 설정·프로세스 실행·승인 입력·실제 운영 모델 수를 분리한다. 재학습 입력 선택과 artifact 다운로드 UI는 미연결이다. |
+| MLOps | `/api/mlops/summary`, `/retrain-history`, `/adapters`, 고정 학습 입력 및 별도 `/experimental-api` | 승인 입력 선택·preflight·큐 요청을 연결하고, 실제 7월 원시 자료의 개발용 학습·시험 배포를 별도 패널로 표시한다. 운영 Registry와 시험 모델을 분리한다. 학습 artifact 다운로드 UI는 미연결이다. |
 | Reports | `/api/reports`, `/reports/{report_id}/review`, `/approve`, `/reject` | 목록·상세·JSON 내보내기와 검토 제출·담당 승인/반려를 제공한다. 자동 발행이나 모델 배포가 아니다. |
 | Alerts | `/api/approvals/pending`, `/approve`, `/reject` | 일반 QC_CHANGE·AI_LABEL·REPORT·MODEL_DEPLOY 대기 업무를 처리한다. Source Contract·Dataset·Protocol 전체의 승인 inbox는 아니다. |
 
@@ -22,7 +22,7 @@
 
 lake 조회는 같은 snapshot인지 확인하고 로딩·오류·빈 범위를 분리한다. 참조 좌표나 문서 근거 조회 실패는 별도 메시지로 남기며 성공한 모의 값으로 덮지 않는다. 승인되지 않은 의미·단위·QC와 미확정 장비 기간을 정상 성과로 해석하지 않는다.
 
-MLOps의 Registry 내보내기는 표시 중인 모델·readiness·adapter coverage의 JSON 검토 자료다. 학습 artifact 다운로드가 아니다. 재학습 버튼은 승인된 고정 manifest를 선택·전달하는 UI가 없어 비활성화돼 있다. API/CLI의 worker 구현과 버튼 상태는 별도로 설명해야 한다.
+MLOps의 Registry 내보내기는 표시 중인 모델·readiness·adapter coverage의 JSON 검토 자료다. 학습 artifact 다운로드가 아니다. 고정 manifest 선택·전달 UI는 연결됐으며 현재 실제 승인 입력·담당 권한·학습 설정이 없어 운영 재학습 요청은 차단된다. API/CLI의 worker 구현과 버튼 상태는 별도로 설명해야 한다.
 
 ## 기존 API와 현재 화면의 구분
 
@@ -50,3 +50,5 @@ JSON HTTP 요청 로그와 승인 이력은 목적이 다르다. `ApprovalHistor
 ## 10/8 단계별 보완 결과
 
 System의 DevelopmentStageReview는13단계×구현/시험/자료/승인/운영을 표시하고 SHA증거·남은 입력을 펼친다. MLOps의 TrainingWorkbench/InputPreparationReview는 legacy 검토·정책 양식·세 승인Dataset 선택·manifest preflight·학습 큐를 연결한다. 입력/권한/worker가 없으면 변경 버튼을 비활성화하고 async응답을 revision guard로 차단한다. frontend17시험/build와 부모 실제 브라우저를 통과했다. 7월 기본 기간과 미산정 지표 경계를 유지한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).
+
+후속 개발용 학습·시험 배포는 [30](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)을 따른다. ExperimentalDeploymentPanel은 별도8011 서버의 release/readiness 동등성·정확 입력·artifact SHA를 검증하고 실 예측을 요청한다. 7월 GR 인천 3항목의 고정 분할·후보 오차·참여 SHA를 표시한다. 133,876행의 학습 결과를 운영 모델 수에 합산하지 않는다. 최신20개 frontend 시험과 build 결과는30의 검증 기록으로 분리한다.

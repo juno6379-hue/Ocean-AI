@@ -1,6 +1,7 @@
 // 파일 역할: 모델·데이터셋 버전과 학습·배포 상태를 표시합니다.
 import { API_BASE_URL } from '../api/client';
 import TrainingWorkbench from '../components/TrainingWorkbench';
+import ExperimentalDeploymentPanel from '../components/ExperimentalDeploymentPanel';
 import { observationContext, observationPeriod } from '../data/observationPeriod';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
@@ -126,6 +127,7 @@ const MLOps: React.FC = () => {
   return (
     <div className="p-4 md:p-6 space-y-4 bg-[#F8FAFC] min-h-full font-sans overflow-x-hidden">
       {loadError && <p role="alert" className="text-red-700 text-sm">{loadError}</p>}
+      <ExperimentalDeploymentPanel/>
       <TrainingWorkbench workerConfigured={readiness?.execution?.worker_configured===true} models={modelList}/>
       {/* Top Header */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 border-b border-slate-200 pb-4">

@@ -81,3 +81,5 @@ worker CLI는 backend에서 `python -m app.scripts.model_training_worker --poll-
 ## 10/8 단계별 보완 결과
 
 실제3 native 원천의 동일 TEST각97쌍 비교에서 persistence가 세 TEST오차 모두 낮지만 VALIDATION으로 선정한 WATER_TEMP Ridge를 사후 변경하지 않는다. 격리 정상 권한 E2E는 source→v2→fixedpolicy→worker→독립 reviewer replay→registry→authenticated prediction→배포2회→approved rollback을 완주했다. fixture 모델2건과 원시 artifact는 운영 등록이 아니다. 현재 source/task 학습 준비0이며 source inventory의 운영 수null은 별도 serving readiness에서 검증한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).
+
+후속 [개발용 학습·시험 배포](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)는2026-07 GR 인천3항목 전체133,876행을 새 고정 날짜 분할로 비교했다. 각 TRAIN25,920행으로5개 Ridge alpha를 적합하고 VALIDATION8,640행의 MAE로 세 PERSISTENCE를 선정했다. TEST전체30,187쌍은 독립 sklearn 오라클과 일치했다. 16개 의존 파일을 고정한 별도8011 serving은 운영 champion/승인/registry와 별도이며 운영 모델 수0을 유지한다. UI의 시험 패널에서 실제 예측을 요청한다.

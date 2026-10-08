@@ -6,7 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   // Match the documented FastAPI port; API_PROXY_TARGET remains an explicit override.
-  server: { proxy: { "/api": { target: loadEnv(mode, process.cwd(), "").API_PROXY_TARGET || "http://127.0.0.1:8000", changeOrigin: true } } },
+  server: { proxy: {
+    "/experimental-api": { target: "http://127.0.0.1:8011", changeOrigin: true, rewrite: path => path.replace(/^\/experimental-api/, "") },
+    "/api": { target: loadEnv(mode, process.cwd(), "").API_PROXY_TARGET || "http://127.0.0.1:8000", changeOrigin: true }
+  } },
   plugins: [
     tailwindcss(),
     react()

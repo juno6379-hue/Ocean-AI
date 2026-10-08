@@ -1,0 +1,142 @@
+{
+  "schema_version": "experimental-train-deploy-execution-1",
+  "checked_at": "2026-10-08T14:07:24.773788+00:00",
+  "status": "DEPLOYED_EXPERIMENTAL",
+  "user_selected_target": "THIS_PC_DEVELOPMENT_TEST_SERVER",
+  "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
+  "release_manifest_sha256": "76cf46101c1d5e69e99bf083922c77942c2aec3f42f9205417d0a5e6d83a7e1d",
+  "source": {
+    "table": "GR_OBS_ST",
+    "period": "2026-07",
+    "station_code": "DT_0001",
+    "rows": 133876,
+    "source_sha256": "a91410ea7428f9fcbfe85fae9b7f31ae4f95dd9b5d1039d900fbc386370cb05e",
+    "combined_with_other_sources": false,
+    "physical_unit": null,
+    "timezone": null,
+    "source_QC": "ABSENT_NOT_EVALUATED"
+  },
+  "models": [
+    {
+      "model_id": "AIR_PRES",
+      "selected_model": "PERSISTENCE",
+      "source_membership_count": 44625,
+      "split_counts": {
+        "TEST": 10065,
+        "TRAIN": 25920,
+        "VALIDATION": 8640
+      },
+      "pair_counts": {
+        "TEST": 10062,
+        "TRAIN": 25917,
+        "VALIDATION": 8637
+      },
+      "artifact_sha256": "5d77a74454004d3ba110b804ba437be4aae1ba134301d3397eed76d2ca0f6e79",
+      "source_membership_sha256": "53ec2125bc2056e503b85132b68a6aa8ce9d516bbe0c985e7c37a7dbf2aa4664"
+    },
+    {
+      "model_id": "WATER_TEMP",
+      "selected_model": "PERSISTENCE",
+      "source_membership_count": 44626,
+      "split_counts": {
+        "TEST": 10066,
+        "TRAIN": 25920,
+        "VALIDATION": 8640
+      },
+      "pair_counts": {
+        "TEST": 10063,
+        "TRAIN": 25917,
+        "VALIDATION": 8637
+      },
+      "artifact_sha256": "eccf1c5394bd1997ea82fad2889959c582179cc38427d182acfc24f5e3f91055",
+      "source_membership_sha256": "de77ee77a21b57282c44a1eff787672c363d8662b28e883550e96b960d5da06b"
+    },
+    {
+      "model_id": "SALINITY",
+      "selected_model": "PERSISTENCE",
+      "source_membership_count": 44625,
+      "split_counts": {
+        "TEST": 10065,
+        "TRAIN": 25920,
+        "VALIDATION": 8640
+      },
+      "pair_counts": {
+        "TEST": 10062,
+        "TRAIN": 25917,
+        "VALIDATION": 8637
+      },
+      "artifact_sha256": "c3e63937806a9ca8d588239bc0abf56d88a394614fe90f59c38126dc033bf2af",
+      "source_membership_sha256": "a638304df1739b894c6ca51acfc1973e622afc2cdbb8a11d7ebb060a7040ff07"
+    }
+  ],
+  "evaluation": {
+    "parameters_fit": "TRAIN_ONLY",
+    "selection": "VALIDATION_MAE_ONLY",
+    "test_used_for_selection": false,
+    "refit_on_validation": false,
+    "test_prediction_pairs": 30187,
+    "all_split_pairs": 133849,
+    "ridge_alphas": [
+      0.01,
+      0.1,
+      1,
+      10,
+      100
+    ]
+  },
+  "runtime": {
+    "host": "127.0.0.1",
+    "port": 8011,
+    "state": "READY",
+    "model_count": 3,
+    "web_url": "http://127.0.0.1:5174/mlops",
+    "launcher_pid": 32448,
+    "listener_pid": 21332,
+    "frozen_dependencies": 16,
+    "previous_release_preserved": true
+  },
+  "verification": {
+    "regression": {
+      "status": "PASS",
+      "checked_at": "2026-10-08T14:07:24.773788+00:00",
+      "backend": {
+        "passed": 701,
+        "skipped": 1,
+        "failed": 0,
+        "warnings": 21,
+        "log_sha256": "ef1ba5da7981baa6340d71437599a670b625217b876dde275ec091d0d20423ab",
+        "junit_sha256": "5c51c65c4277e038d3456a0a93651b5884dd06b18e665ad9d17ca1e9478f5ed9"
+      },
+      "frontend": {
+        "passed": 20,
+        "failed": 0,
+        "build": "PASS",
+        "test_log_sha256": "26ac9e6bead35083f8d577fb2d3d0870f97dbe2be9c768462975d7c6d0f3e7af",
+        "build_log_sha256": "8f86d96639768b60956fbfd53216dcbcf2179e5ef9027bc057c764db32fa512e"
+      }
+    },
+    "independent_review": "PASS",
+    "independent_receipt_sha256": "2dad208fa0cd67822f229cf1c5e4ca34a9ec2ab336bc99b2fde4eeecd96c99f2",
+    "parent_actual_http_passed": 24,
+    "parent_actual_http_receipt_sha256": "27c9de38b054c1636facb88af21db073c77f586ce84daaa8406a588a09bd2539",
+    "browser_checks": 6,
+    "browser_receipt_sha256": "e09ffe5f838d0d52e037972f62abf674a9dd205e82c3a9951a8242790561f77b",
+    "agent_frozen_files_verified": 29,
+    "agent_delivery_review_sha256": "d7d1f8353bf1dd36db4185830a03168d02658b321a07df69479253aee1772da7",
+    "production_unchanged_receipt_sha256": "4a1691056f6ad2563526427f6a5a9fea08f51c429ea1475da886bd9e44f1c53c"
+  },
+  "scope": {
+    "experimental": true,
+    "nonoperational": true,
+    "approved": false,
+    "production_eligible": false,
+    "forecast_target": "NEXT_OBSERVED_NATIVE_ROW",
+    "horizon_seconds": null,
+    "operating_model_count": 0,
+    "human_approvals_created": 0,
+    "new_accounts_configured": 0,
+    "production_registry_written": false
+  },
+  "local_evidence_root": "D:/AI_Observation/outputs/train-deploy-20261008",
+  "detailed_metrics_location": "Local release evidence and development MLOps panel; not published in Git"
+}
