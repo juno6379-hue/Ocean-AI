@@ -1,0 +1,654 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { 
+  FileText, CheckCircle, Clock, Sparkles, Search, CheckSquare,
+  Bell, User, ChevronDown, ChevronRight, ChevronLeft,
+  Filter, Download, Eye, MoreVertical, FileDown,
+  FileCheck, FileWarning, BarChart2, Check
+} from 'lucide-react';
+import { 
+  PieChart, Pie, Cell, ResponsiveContainer
+} from 'recharts';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+const Reports: React.FC = () => {
+  // State for AI Report
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiReportDraft, setAiReportDraft] = useState<string | null>(null);
+  const [aiReportStatus, setAiReportStatus] = useState<string | null>(null);
+
+  const [docTypeData, setDocTypeData] = useState<any[]>([]);
+
+  const [documentList, setDocumentList] = useState<any[]>([]);
+  const [reportType, setReportType] = useState('monthly');
+  
+  // Filters
+  const [filterType, setFilterType] = useState('전체');
+  const [filterStation, setFilterStation] = useState('전체');
+  const [filterStatus, setFilterStatus] = useState('전체');
+  
+  // Selected Document
+  const [selectedDocId, setSelectedDocId] = useState<number | null>(null);
+  const [dashboardData, setDashboardData] = useState<any>({
+    aiQueue: [],
+    pendingApprovals: [],
+    recentActivities: []
+  });
+  const [summaryStats, setSummaryStats] = useState({
+    total_docs: '0',
+    this_month_docs: '0',
+    pending_docs: '0',
+    ai_draft_docs: '0',
+    approved_docs: '0',
+    response_rate: '97.8'
+  });
+
+  const fetchReports = async () => {
+      try {
+        const res = await axios.get('http://localhost:8080/api/reports/list');
+        const resStats = await axios.get('http://localhost:8080/api/reports/stats');
+        
+        if (res.data.reports) {
+          setDocumentList(res.data.reports.map((r: any, idx: number) => ({
+            id: idx,
+            name: r.title,
+            type: r.type,
+            target: 'ST_JEJU_01', // Mocking target
+            period: r.date,
+            author: r.author,
+            version: 'v1.0',
+            status: r.status,
+            statusColor: r.statusColor,
+            date: r.date,
+            content: r.summary || `# ${r.title}\n\n**작성자:** ${r.author}\n\n**상태:** ${r.status}\n\n## 📋 보고서 개요\n본 문서는 해양관측소 데이터베이스에서 불러온 AI 생성 보고서입니다.\n\n### 🔍 주요 분석 결과\n- **분석 상태**: 분석이 정상적으로 완료되었습니다.\n- **데이터 무결성**: 수집된 데이터의 99.8%가 정상 범위를 유지하고 있습니다.\n\n> 이 문서는 상세 내용이 요약 필드에 저장되지 않은 초기 버전의 문서일 수 있습니다.`
+          })));
+        }
+        
+        if (resStats.data.docTypeData) {
+          const total = resStats.data.docTypeData.reduce((acc: number, cur: any) => acc + cur.value, 0);
+          setDocTypeData(resStats.data.docTypeData.map((d: any) => ({
+             ...d,
+             percent: total > 0 ? ((d.value / total) * 100).toFixed(1) + '%' : '0%'
+          })));
+        }
+        if (resStats.data.summaryCards) {
+          setSummaryStats(resStats.data.summaryCards);
+        }
+      } catch(e) { console.error(e); }
+    };
+    
+  const fetchDashboard = async () => {
+    try {
+      const resDash = await axios.get('http://localhost:8080/api/reports/dashboard');
+      if (resDash.data) {
+        setDashboardData(resDash.data);
+      }
+    } catch(e) { console.error(e); }
+  };
+
+  useEffect(() => {
+    fetchReports();
+    fetchDashboard();
+  }, []);
+
+  const getIcon = (iconType: string, colorClass: string) => {
+    if (iconType === 'CheckCircle') return <CheckCircle className={`w-3.5 h-3.5 ${colorClass}`} />;
+    if (iconType === 'BarChart2') return <BarChart2 className={`w-3.5 h-3.5 ${colorClass}`} />;
+    if (iconType === 'FileWarning') return <FileWarning className={`w-3.5 h-3.5 ${colorClass}`} />;
+    if (iconType === 'FileCheck') return <FileCheck className={`w-3.5 h-3.5 ${colorClass}`} />;
+    return <FileText className={`w-3.5 h-3.5 ${colorClass}`} />;
+  };
+
+  const handleGenerateReport = async () => {
+    setIsGenerating(true);
+    setAiReportDraft(null);
+    setAiReportStatus(null);
+    try {
+      const res = await fetch('http://localhost:8080/api/qc/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          station_id: 'ST_JEJU_01',
+          period: '2025-05',
+          report_type: reportType
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAiReportDraft(data.report_draft);
+        setAiReportStatus(data.report_status);
+        // Refresh UI data
+        fetchReports();
+        fetchDashboard();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('보고서 생성 중 오류가 발생했습니다.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleExport = () => {
+    // CSV 내보내기 실제 구현
+    if (filteredDocumentList.length === 0) {
+      alert("내보낼 데이터가 없습니다.");
+      return;
+    }
+    
+    // CSV 헤더
+    const headers = ['ID', '문서명', '유형', '관련 관측소', '기간', '작성자', '상태', '버전', '수정일'];
+    
+    // CSV 데이터 행 생성
+    const csvRows = filteredDocumentList.map(doc => {
+      return [
+        doc.id,
+        `"${doc.name.replace(/"/g, '""')}"`, // 쌍따옴표 이스케이프
+        doc.type,
+        doc.target,
+        doc.period,
+        doc.author,
+        doc.status,
+        doc.version,
+        doc.date
+      ].join(',');
+    });
+    
+    // 헤더와 데이터 결합
+    const csvContent = [headers.join(','), ...csvRows].join('\n');
+    
+    // BOM 추가하여 한글 깨짐 방지
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    // 다운로드 링크 생성 및 클릭
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `ocean_reports_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleResetFilters = () => {
+    setFilterType('전체');
+    setFilterStation('전체');
+    setFilterStatus('전체');
+  };
+
+  const handleSelectDoc = (doc: any) => {
+    setSelectedDocId(doc.id);
+    setAiReportDraft(doc.content);
+    setAiReportStatus(doc.status === '승인 완료' ? 'approved' : 'pending_human_approval');
+  };
+
+  const handleTemplateClick = (tplName: string) => {
+    let type = 'monthly';
+    if (tplName === '장애 분석서') type = 'anomaly';
+    else if (tplName === '재학습 검증서') type = 'quality';
+    else if (tplName === '주간 요약 보고서') type = 'weekly';
+    else if (tplName === '월간 품질보고서') type = 'monthly';
+    else if (tplName === '일일 점검보고서') type = 'daily';
+    else if (tplName === '기술문서') type = 'technical';
+    else if (tplName === '간행물 초안') type = 'publication';
+    
+    setReportType(type);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    alert(`[${tplName}] 양식이 선택되었습니다. 상단의 'AI 보고서 생성' 버튼을 눌러주세요.`);
+  };
+
+  const filteredDocumentList = documentList.filter(doc => {
+    if (filterType !== '전체' && !doc.type.includes(filterType)) return false;
+    if (filterStation !== '전체' && doc.target !== filterStation) return false;
+    if (filterStatus !== '전체' && !doc.status.includes(filterStatus)) return false;
+    return true;
+  });
+
+  const handleShowAll = (target: string) => {
+    alert(`[${target}] 전체 보기 페이지로 이동합니다.`);
+  };
+
+  const handleApproveReport = () => {
+    if (window.confirm('AI가 작성한 보고서를 최종 승인하시겠습니까?')) {
+      setAiReportStatus('approved');
+      alert('보고서가 승인 및 확정되었습니다.');
+    }
+  };
+
+  return (
+    <div className="p-4 md:p-6 space-y-4 bg-[#F8FAFC] min-h-full font-sans overflow-x-hidden">
+      {/* Top Header */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-slate-900">보고서 & 문서</h2>
+            <span className="text-sm text-slate-500 font-medium ml-2">월간 품질보고서, 점검기록, AI 생성 리포트, 기술문서를 통합 관리합니다.</span>
+          </div>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <span className="text-slate-500 font-medium">2025.05.28 (수) 10:30 KST</span>
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input 
+              type="text" 
+              placeholder="문서 제목, 작성자 검색" 
+              className="pl-9 pr-4 py-2 border border-slate-200 rounded-md bg-white text-sm w-48 lg:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+            />
+          </div>
+          <div className="relative cursor-pointer">
+            <Bell className="w-5 h-5 text-slate-600" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">12</span>
+          </div>
+          <div className="flex items-center gap-2 cursor-pointer ml-2">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white">
+              <User className="w-4 h-4" />
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-xs font-bold text-slate-700">운영자</p>
+              <p className="text-[10px] text-slate-500">관리자</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        {[
+          { title: '전체 문서 수', val: summaryStats.total_docs, unit: '건', icon: FileText, color: 'text-blue-500', bg: 'bg-blue-50', diff: '↑ 23 (1.9%)', diffColor: 'text-blue-500' },
+          { title: '금월 생성 보고서', val: summaryStats.this_month_docs, unit: '건', icon: CheckSquare, color: 'text-emerald-500', bg: 'bg-emerald-50', diff: '↑ 6 (7.5%)', diffColor: 'text-blue-500' },
+          { title: '검토 대기 문서', val: summaryStats.pending_docs, unit: '건', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50', diff: '↓ 3 (17.6%)', diffColor: 'text-emerald-500' },
+          { title: 'AI 초안 생성', val: summaryStats.ai_draft_docs, unit: '건', icon: Sparkles, color: 'text-purple-500', bg: 'bg-purple-50', diff: '↑ 5 (20.8%)', diffColor: 'text-blue-500' },
+          { title: '승인 완료', val: summaryStats.approved_docs, unit: '건', icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50', diff: '↑ 8 (12.5%)', diffColor: 'text-blue-500' },
+          { title: '문서 검색 응답률', val: summaryStats.response_rate, unit: '%', icon: Search, color: 'text-blue-600', bg: 'bg-blue-100', diff: '↑ 1.2%p', diffColor: 'text-blue-500' },
+        ].map((card, i) => (
+          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`p-2 rounded-full ${card.bg}`}><card.icon className={`w-5 h-5 ${card.color}`} /></div>
+              <span className="text-sm font-bold text-slate-700">{card.title}</span>
+            </div>
+            <div className="mt-2">
+              <p className="text-2xl font-black text-slate-800 text-center">{card.val} <span className="text-sm font-normal text-slate-500">{card.unit}</span></p>
+              <div className="flex justify-between items-center mt-3 pt-2 border-t border-slate-100 text-[10px]">
+                <span className="text-slate-400">전일 대비</span>
+                <span className={`font-bold ${card.diffColor}`}>{card.diff}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Filter Bar */}
+      <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-lg border border-slate-200 shadow-sm text-xs font-medium text-slate-600 gap-3">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span>기간</span>
+            <select className="border border-slate-200 px-2 py-1.5 rounded hover:bg-slate-50 bg-white focus:outline-none">
+              <option>2025-05-01 ~ 2025-05-28</option>
+              <option>최근 3개월</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>문서유형</span>
+            <select value={filterType} onChange={e => setFilterType(e.target.value)} className="border border-slate-200 px-2 py-1.5 rounded hover:bg-slate-50 bg-white focus:outline-none">
+              <option value="전체">전체</option>
+              <option value="품질보고서">품질보고서</option>
+              <option value="기술문서">기술문서</option>
+              <option value="분석보고서">분석보고서</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>관측소</span>
+            <select value={filterStation} onChange={e => setFilterStation(e.target.value)} className="border border-slate-200 px-2 py-1.5 rounded hover:bg-slate-50 bg-white focus:outline-none">
+              <option value="전체">전체</option>
+              <option value="ST_JEJU_01">ST_JEJU_01</option>
+              <option value="ST_HUPO_02">ST_HUPO_02</option>
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>상태</span>
+            <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="border border-slate-200 px-2 py-1.5 rounded hover:bg-slate-50 bg-white focus:outline-none">
+              <option value="전체">전체</option>
+              <option value="승인">승인 완료</option>
+              <option value="대기">승인 대기</option>
+              <option value="반려">반려</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={handleResetFilters} className="flex items-center gap-1.5 text-slate-500 hover:text-slate-800 px-2 py-1.5 mr-2"><Filter className="w-3.5 h-3.5"/> 필터 초기화</button>
+          
+          <div className="flex items-center gap-2 border border-purple-200 bg-purple-50 px-2 py-1.5 rounded-lg shadow-sm">
+            <select 
+              value={reportType}
+              onChange={(e) => setReportType(e.target.value)}
+              className="bg-transparent text-purple-900 text-xs font-bold focus:outline-none cursor-pointer"
+            >
+              <option value="monthly">월간 품질보고서</option>
+              <option value="weekly">주간 요약 보고서</option>
+              <option value="daily">일일 점검보고서</option>
+              <option value="anomaly">장애 분석서</option>
+              <option value="quality">재학습 검증서</option>
+              <option value="technical">기술문서</option>
+              <option value="publication">간행물 초안</option>
+            </select>
+            <button 
+              onClick={handleGenerateReport}
+              disabled={isGenerating}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 text-white rounded font-bold hover:bg-purple-700 transition-colors disabled:opacity-50"
+            >
+              <Sparkles className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`}/> 
+              {isGenerating ? 'AI 초안 작성중...' : 'AI 보고서 생성'}
+            </button>
+          </div>
+
+          <button onClick={handleExport} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 shadow-sm transition-colors">
+            <Download className="w-3.5 h-3.5"/> 내보내기
+          </button>
+        </div>
+      </div>
+
+      {/* Row 1: 문서 목록 & 문서 미리보기 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Left: 문서 목록 테이블 */}
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[420px] flex flex-col">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-base font-bold text-slate-800">문서 목록</h3>
+          </div>
+          <div className="flex-1 overflow-auto custom-scrollbar">
+            <table className="w-full text-xs text-center min-w-[800px]">
+              <thead className="text-slate-500 bg-slate-50 border-y border-slate-200">
+                <tr>
+                  <th className="py-2.5 px-2 w-10"></th>
+                  <th className="py-2.5 px-2 font-medium text-left">문서명</th>
+                  <th className="py-2.5 px-2 font-medium">유형</th>
+                  <th className="py-2.5 px-2 font-medium">관련 관측소</th>
+                  <th className="py-2.5 px-2 font-medium">기간</th>
+                  <th className="py-2.5 px-2 font-medium">작성자</th>
+                  <th className="py-2.5 px-2 font-medium">버전</th>
+                  <th className="py-2.5 px-2 font-medium">상태</th>
+                  <th className="py-2.5 px-2 font-medium">수정일</th>
+                  <th className="py-2.5 px-2 font-medium">작업</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                {filteredDocumentList.map((row, i) => {
+                  const isSelected = selectedDocId === row.id;
+                  return (
+                  <tr key={i} onClick={() => handleSelectDoc(row)} className={`hover:bg-slate-50 transition-colors cursor-pointer ${isSelected ? 'bg-blue-50/30' : ''}`}>
+                    <td className="py-2.5 px-2">
+                      <div className={`w-4 h-4 rounded-sm border flex items-center justify-center mx-auto ${isSelected ? 'border-blue-500 bg-blue-500' : 'border-slate-300'}`}>
+                        {isSelected && <Check className="w-3 h-3 text-white" />}
+                      </div>
+                    </td>
+                    <td className={`py-2.5 px-2 text-left font-medium ${isSelected ? 'text-blue-600 font-bold' : 'text-slate-700'}`}>
+                      <div className="flex items-center gap-2">
+                        <FileText className={`w-4 h-4 ${isSelected ? 'text-blue-500' : 'text-slate-400'}`} />
+                        {row.name}
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-2 text-slate-600">{row.type}</td>
+                    <td className="py-2.5 px-2 text-slate-600">{row.target}</td>
+                    <td className="py-2.5 px-2 text-slate-500">{row.period}</td>
+                    <td className="py-2.5 px-2 text-slate-700">{row.author}</td>
+                    <td className="py-2.5 px-2 text-blue-600 font-medium">{row.version}</td>
+                    <td className="py-2.5 px-2">
+                      <span className={`px-2 py-0.5 border rounded text-[10px] font-bold ${row.statusColor}`}>{row.status}</span>
+                    </td>
+                    <td className="py-2.5 px-2 text-[10px] text-slate-500">{row.date}</td>
+                    <td className="py-2.5 px-2 text-slate-400 flex items-center justify-center gap-2">
+                      <button onClick={(e) => { e.stopPropagation(); handleSelectDoc(row); }} className="hover:text-blue-600"><Eye className="w-4 h-4" /></button>
+                      <button onClick={(e) => { e.stopPropagation(); handleExport(); }} className="hover:text-blue-600"><FileDown className="w-4 h-4" /></button>
+                      <button onClick={(e) => e.stopPropagation()} className="hover:text-slate-700"><MoreVertical className="w-4 h-4" /></button>
+                    </td>
+                  </tr>
+                )})}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-3 pt-3 border-t border-slate-100 text-xs">
+            <span className="text-slate-500">전체 124개</span>
+            <div className="flex items-center gap-1">
+              <button className="p-1 text-slate-400"><ChevronLeft className="w-4 h-4"/></button>
+              <button className="w-6 h-6 rounded bg-blue-100 text-blue-600 font-bold">1</button>
+              <button className="w-6 h-6 rounded hover:bg-slate-50 text-slate-600">2</button>
+              <button className="w-6 h-6 rounded hover:bg-slate-50 text-slate-600">3</button>
+              <button className="w-6 h-6 rounded hover:bg-slate-50 text-slate-600">4</button>
+              <button className="w-6 h-6 rounded hover:bg-slate-50 text-slate-600">5</button>
+              <span className="text-slate-400 px-1">...</span>
+              <button className="w-6 h-6 rounded hover:bg-slate-50 text-slate-600">16</button>
+              <button className="p-1 text-slate-600"><ChevronRight className="w-4 h-4"/></button>
+            </div>
+            <button className="border border-slate-200 px-2 py-1 rounded flex items-center text-slate-600 hover:bg-slate-50">8개씩 보기 <ChevronDown className="w-3 h-3 ml-1"/></button>
+          </div>
+        </div>
+
+        {/* Right: 문서 미리보기 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-5 h-[420px] flex flex-col relative overflow-hidden">
+          <div className="flex justify-between items-center mb-4 shrink-0">
+            <h3 className="text-sm font-bold text-slate-800">문서 미리보기 {aiReportDraft && <span className="ml-2 text-[10px] bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full font-bold animate-pulse">AI Generated</span>}</h3>
+            <div className="flex items-center gap-2">
+              {aiReportStatus === 'pending_human_approval' && (
+                <button onClick={handleApproveReport} className="text-xs bg-emerald-500 text-white px-3 py-1 rounded font-bold hover:bg-emerald-600 shadow-sm transition-colors flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5"/> 최종 승인
+                </button>
+              )}
+              {aiReportStatus === 'approved' && (
+                <span className="text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded font-bold border border-emerald-200 flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5"/> 승인 완료
+                </span>
+              )}
+              <button className="text-slate-400 hover:text-slate-600 ml-2"><MoreVertical className="w-4 h-4"/></button>
+            </div>
+          </div>
+          
+          <div className="flex-1 bg-[#F8FAFC] border border-slate-200 rounded-lg p-5 overflow-auto custom-scrollbar shadow-inner relative prose prose-sm max-w-none prose-slate prose-h1:text-blue-900 prose-h1:text-center prose-h1:text-xl prose-h2:text-blue-800 prose-h3:text-blue-700">
+            {isGenerating ? (
+              <div className="flex flex-col items-center justify-center h-full text-slate-400 space-y-3">
+                <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+                <p className="text-xs font-bold text-slate-600">Ollama (Llama 3) AI가 월간 품질보고서를 분석하고 작성 중입니다...</p>
+                <p className="text-[10px]">데이터 양에 따라 10~20초 정도 소요될 수 있습니다.</p>
+              </div>
+            ) : aiReportDraft ? (
+              <div className="markdown-report">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiReportDraft}</ReactMarkdown>
+              </div>
+            ) : (
+              <>
+                {/* Mock Document Content */}
+                <h2 className="text-lg font-black text-blue-900 text-center mb-1">2025년 5월 월간 품질보고서</h2>
+                <p className="text-[10px] text-center text-slate-500 mb-4 pb-4 border-b border-slate-200">보고기간: 2025.05.01 - 2025.05.31</p>
+                
+                <div className="text-[10px] text-slate-700 space-y-4">
+                  <div>
+                    <h4 className="font-bold text-blue-800 mb-1">개요</h4>
+                    <ul className="list-disc pl-4 space-y-0.5 text-slate-600">
+                      <li>전체 관측소 및 센서의 품질 현황을 종합 분석한 월간 보고서입니다.</li>
+                      <li>데이터 품질, 이상 이벤트, 조치 현황 등을 요약합니다.</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-blue-800 mb-2">핵심 지표</h4>
+                    <div className="grid grid-cols-4 gap-2 text-center bg-white p-2 border border-slate-100 rounded shadow-sm">
+                      <div><p className="text-[9px] text-slate-500 mb-1">데이터 가용률</p><p className="font-bold text-slate-800 text-xs">94.6%</p><p className="text-[8px] text-blue-500">▲ 1.2%p</p></div>
+                      <div><p className="text-[9px] text-slate-500 mb-1">정상 데이터 비율</p><p className="font-bold text-slate-800 text-xs">92.1%</p><p className="text-[8px] text-blue-500">▲ 2.3%p</p></div>
+                      <div><p className="text-[9px] text-slate-500 mb-1">이상 이벤트 수</p><p className="font-bold text-slate-800 text-xs">21건</p><p className="text-[8px] text-emerald-500">▼ 3건</p></div>
+                      <div><p className="text-[9px] text-slate-500 mb-1">조치 완료율</p><p className="font-bold text-slate-800 text-xs">95.7%</p><p className="text-[8px] text-blue-500">▲ 4.0%p</p></div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-bold text-blue-800 mb-1">이상 이벤트</h4>
+                      <div className="space-y-1 mt-2">
+                        <div className="flex items-center gap-1"><div className="w-16 h-1.5 bg-blue-500"></div> <span className="text-[8px]">기타 3건</span></div>
+                        <div className="flex items-center gap-1"><div className="w-20 h-1.5 bg-amber-500"></div> <span className="text-[8px]">통신장애 4건</span></div>
+                        <div className="flex items-center gap-1"><div className="w-24 h-1.5 bg-red-500"></div> <span className="text-[8px]">센서고착 5건</span></div>
+                        <div className="flex items-center gap-1"><div className="w-32 h-1.5 bg-emerald-500"></div> <span className="text-[8px]">배터리 7건</span></div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-blue-800 mb-1">조치사항</h4>
+                      <ul className="list-disc pl-3 space-y-0.5 text-[8px] text-slate-600 leading-tight">
+                        <li>후포(LASER) 통신 안정화 조치 완료</li>
+                        <li>제주 수온 센서 교체 및 보정 완료</li>
+                        <li>데이터 누락 원인 분석 및 재발 방지 적용</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500 shrink-0">
+            <div className="flex flex-col gap-1">
+              <span className="flex"><span className="w-12">문서 ID</span> <span className="text-slate-800 font-medium">DOC-2025-0056</span></span>
+              <span className="flex"><span className="w-12">승인자</span> <span className="text-slate-800 font-medium">{aiReportStatus === 'approved' ? '운영자' : '대기중'}</span></span>
+            </div>
+            <div className="flex flex-col gap-1 items-end">
+              <span className="flex text-blue-600 font-medium">2025-05-28 10:15</span>
+              <span className="flex items-center gap-2">배포 상태 
+                {aiReportStatus === 'approved' ? (
+                  <span className="px-1.5 py-0.5 border border-emerald-200 bg-emerald-50 text-emerald-600 rounded font-bold">배포 완료</span>
+                ) : aiReportDraft ? (
+                   <span className="px-1.5 py-0.5 border border-amber-200 bg-amber-50 text-amber-600 rounded font-bold">승인 대기</span>
+                ) : (
+                  <span className="px-1.5 py-0.5 border border-emerald-200 bg-emerald-50 text-emerald-600 rounded font-bold">배포 완료</span>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: 5 Columns Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
+        {/* 1. AI 생성 리포트 큐 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[280px] flex flex-col">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-bold text-slate-800">AI 생성 리포트 큐</h3>
+            <button onClick={() => handleShowAll("AI 큐")} className="text-[10px] text-slate-500 hover:text-slate-800 border border-slate-200 px-1.5 py-0.5 rounded">전체 보기 <ChevronRight className="w-3 h-3 inline"/></button>
+          </div>
+          <div className="flex-1 overflow-auto space-y-2">
+            {dashboardData.aiQueue.map((item: any, i: number) => (
+              <div key={i} className="flex items-center justify-between p-2 rounded-lg text-[11px] hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                <div className="flex items-center gap-2 w-32">
+                  <div className="p-1 rounded bg-slate-50">
+                    {getIcon(item.icon_type, "text-blue-500")}
+                  </div>
+                  <span className="text-slate-700 font-medium truncate">{item.name}</span>
+                </div>
+                <span className={`px-1.5 py-0.5 rounded font-bold text-[10px] ${item.statusColor}`}>{item.status}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 text-[9px] text-slate-400">최근 업데이트: 실시간 동기화됨</div>
+        </div>
+
+        {/* 2. 승인 대기함 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[280px] flex flex-col">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-bold text-slate-800">승인 대기함</h3>
+            <button onClick={() => handleShowAll("승인 대기함")} className="text-[10px] text-slate-500 hover:text-slate-800 border border-slate-200 px-1.5 py-0.5 rounded">전체 보기 <ChevronRight className="w-3 h-3 inline"/></button>
+          </div>
+          <div className="flex text-[10px] text-slate-400 border-b border-slate-100 pb-1 mb-2 font-medium">
+            <span className="flex-1">문서명</span>
+            <span className="w-10 text-center">요청자</span>
+            <span className="w-16 text-right">요청 시간</span>
+          </div>
+          <div className="flex-1 overflow-auto space-y-2">
+            {dashboardData.pendingApprovals.map((doc: any, i: number) => (
+              <div key={i} className="flex items-center text-[10px] py-1">
+                <div className="flex-1 flex items-center gap-1.5 truncate text-slate-700 font-medium">
+                  {getIcon(doc.icon_type, doc.icon_type === "FileWarning" ? "text-red-500" : "text-amber-500")}
+                  <span className="truncate">{doc.name}</span>
+                </div>
+                <span className="w-10 text-center text-slate-600 truncate">{doc.requester}</span>
+                <span className="w-16 text-right text-slate-500">{doc.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 3. 자주 사용하는 문서 템플릿 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[280px] flex flex-col">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-bold text-slate-800">자주 사용하는 문서 템플릿</h3>
+            <button onClick={() => handleShowAll("문서 템플릿")} className="text-[10px] text-slate-500 hover:text-slate-800 border border-slate-200 px-1.5 py-0.5 rounded">전체 보기 <ChevronRight className="w-3 h-3 inline"/></button>
+          </div>
+          <div className="flex-1 grid grid-cols-3 gap-2">
+            {[
+              { name: '월간 품질보고서', icon: FileText },
+              { name: '일일 점검보고서', icon: FileCheck },
+              { name: '장애 분석서', icon: FileWarning },
+              { name: '재학습 검증서', icon: Sparkles }, // Sparkles for AI
+              { name: '기술문서', icon: FileText },
+              { name: '간행물 초안', icon: FileText },
+            ].map((tpl, i) => (
+              <button key={i} onClick={() => handleTemplateClick(tpl.name)} className="flex flex-col items-center justify-center gap-2 p-2 border border-slate-200 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-colors group">
+                <tpl.icon className="w-6 h-6 text-slate-400 group-hover:text-blue-500" />
+                <span className="text-[9px] font-medium text-slate-600 text-center leading-tight group-hover:text-blue-700">{tpl.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. 문서 유형별 분포 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[280px] flex flex-col">
+          <h3 className="text-sm font-bold text-slate-800 mb-2">문서 유형별 분포</h3>
+          <div className="flex-1 flex flex-col justify-center relative">
+            <div className="h-32 w-full relative mb-2 flex justify-center items-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={docTypeData} innerRadius={35} outerRadius={50} dataKey="value" stroke="none">
+                    {docTypeData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute text-center flex flex-col items-center justify-center">
+                <p className="text-[9px] text-slate-500">전체</p>
+                <p className="text-sm font-black text-slate-800">1,248건</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[9px] px-2">
+              {docTypeData.slice(0,6).map((item, i) => (
+                <div key={i} className="flex items-center gap-1.5 truncate">
+                  <div className="w-2 h-2 rounded-sm shrink-0" style={{ backgroundColor: item.color }}></div>
+                  <span className="text-slate-600 truncate">{item.name} <span className="text-slate-400 ml-0.5">{item.percent}</span></span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 5. 최근 문서 활동 */}
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-[280px] flex flex-col">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-bold text-slate-800">최근 문서 활동</h3>
+            <button onClick={() => handleShowAll("문서 활동")} className="text-[10px] text-slate-500 hover:text-slate-800 border border-slate-200 px-1.5 py-0.5 rounded">전체 보기 <ChevronRight className="w-3 h-3 inline"/></button>
+          </div>
+          <div className="flex-1 overflow-auto pl-1">
+            <div className="relative border-l border-slate-200 space-y-4 pb-2">
+              {dashboardData.recentActivities.map((act: any, i: number) => (
+                <div key={i} className="relative pl-4">
+                  <div className={`absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white ${act.dot}`}></div>
+                  <p className="text-[11px] font-bold text-slate-700 leading-tight">{act.text}</p>
+                  <div className="flex justify-between items-center mt-1">
+                    <span className="text-[9px] text-slate-500">{act.user}</span>
+                    <span className="text-[9px] text-slate-400">{act.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Reports;

@@ -1,0 +1,2 @@
+station_id,station_name,delay_minutes,issue_level
+DT_0005,영흥도,65,CRITICAL

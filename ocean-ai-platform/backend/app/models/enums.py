@@ -1,0 +1,59 @@
+# 파일 역할: 품질 상태 등 도메인 공통 코드값을 정의합니다.
+import enum
+
+class ReportType(str, enum.Enum):
+    DAILY_SITUATION = "DAILY_SITUATION" # 국가해양관측망 일일상황보고
+    SERVICE_MONITORING = "SERVICE_MONITORING" # 바다누리 해양정보서비스 모니터링
+    SPRING_TIDE_MONITORING = "SPRING_TIDE_MONITORING" # 국가해양관측망 대조기모니터링 보고서
+    WEEKLY_TIDE_RESIDUAL = "WEEKLY_TIDE_RESIDUAL" # 주간조위편차경향보고서
+    QUALITY_COLLECTION = "QUALITY_COLLECTION" # 품질처리보고서 및 수집률
+    DAILY_INSPECTION = "DAILY_INSPECTION" # 일일점검보고서
+
+class ReportStatus(str, enum.Enum):
+    DRAFT = "DRAFT"
+    REVIEW = "REVIEW"
+    APPROVED = "APPROVED"
+    PUBLISHED = "PUBLISHED"
+    REJECTED = "REJECTED"
+    ARCHIVED = "ARCHIVED"
+
+class IssueLevel(str, enum.Enum):
+    NORMAL = "NORMAL"
+    WATCH = "WATCH"
+    WARNING = "WARNING"
+    CRITICAL = "CRITICAL"
+
+class ResidualTrend(str, enum.Enum):
+    INCREASE = "INCREASE"
+    DECREASE = "DECREASE"
+    STABLE = "STABLE"
+
+class TriggerType(str, enum.Enum):
+    MANUAL = "MANUAL"
+    SCHEDULED = "SCHEDULED"
+    EVENT_BASED = "EVENT_BASED"
+    TEST = "TEST"
+
+class TestStatus(str, enum.Enum):
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+    ERROR = "ERROR"
+
+class NotificationType(str, enum.Enum):
+    COLLECTION_RATE_DROP = "COLLECTION_RATE_DROP"
+    QC_BAD_INCREASE = "QC_BAD_INCREASE"
+    SERVICE_DELAY = "SERVICE_DELAY"
+    SPRING_TIDE_RISK = "SPRING_TIDE_RISK"
+    TIDE_RESIDUAL_ANOMALY = "TIDE_RESIDUAL_ANOMALY"
+    EQUIPMENT_INSPECTION_REQUIRED = "EQUIPMENT_INSPECTION_REQUIRED"
+    REPORT_APPROVAL_PENDING = "REPORT_APPROVAL_PENDING"
+    REPORT_GENERATION_FAILED = "REPORT_GENERATION_FAILED"
+    AUTOMATION_TEST_FAILED = "AUTOMATION_TEST_FAILED"
+
+class IssueStatus(str, enum.Enum):
+    OPEN = "OPEN"
+    IN_PROGRESS = "IN_PROGRESS"
+    RESOLVED = "RESOLVED"
+    CLOSED = "CLOSED"
+    DEFERRED = "DEFERRED"

@@ -1,0 +1,5 @@
+// 파일 역할: 조위 예측 결과와 평가 정보를 표시합니다.
+import { API_BASE_URL } from '../api/client';
+import React,{useState} from 'react';
+import { apiClient as axios } from '../api/client';
+const Forecasting: React.FC=()=>{const [station,setStation]=useState('DT_0001');const [result,setResult]=useState<any>(null);const run=async()=>{try{const r=await axios.post(`${API_BASE_URL}/forecasting/baseline`,{station_id:station,horizon_hours:72});setResult(r.data);}catch(e){setResult({error:'예측 데이터를 불러오지 못했습니다.'});}};return <div className="p-8"><h1 className="text-3xl font-bold">조위 Forecasting</h1><p className="mt-2 text-slate-600">마지막 관측값을 유지하는 기준선입니다. 학습된 AI 모델의 예측 결과가 아닙니다.</p><div className="mt-6 flex gap-3"><input className="border rounded px-3 py-2" value={station} onChange={e=>setStation(e.target.value)}/><button className="bg-blue-600 text-white rounded px-4" onClick={run}>기준선 예측 실행</button></div>{result&&<pre className="mt-6 bg-white border rounded p-4 text-xs overflow-auto">{JSON.stringify(result,null,2)}</pre>}</div>};export default Forecasting;

@@ -1,0 +1,45 @@
+# Dependencies and build output
+node_modules/
+frontend/dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+.venv/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases, vector indexes, and runtime logs
+*.db
+*.sqlite3
+backend/chroma_db/
+backend/app/data/chroma_db/
+*.log
+*_log.txt
+backend/log.txt
+mlops.json
+
+# Large source archives and downloaded reports
+Down/
+download_*/
+*.pdf
+*.hwpx
+*.xlsx
+*.dat
+
+# Verification data and trained artifacts stay local; commit only sanitized summaries.
+backend/validation_runs/
+backend/data/dataset_snapshots/
+backend/tests/.work/
+data_lake/
+data_lake_test/
+frontend/public/downloads/
+*.joblib
+*.parquet
+*.err
+backend/app/data/document_pipeline/
+mdc_item_inventory.json
+mdc_schema_inventory.json

@@ -1,0 +1,136 @@
+{
+  "checked_at": "2026-10-02T03:15:31.973513+00:00",
+  "contract": {
+    "provider": "ollama",
+    "model": "mxbai-embed-large:latest",
+    "model_digest": "468836162de7f81e041c43663fedbbba921dcea9b9fefea135685a39b2d83dd8",
+    "dimension": 1024,
+    "metric": "cosine",
+    "parser_version": "report-parser-2.2",
+    "chunk_version": "section-issue-table-2.1",
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "embedding_version": "19894990347ab79b",
+    "collection": "ocean_semantic_19894990347ab79b"
+  },
+  "document_index_chunks": 2512,
+  "matched_vector_ids": 2512,
+  "missing_vector_ids": [],
+  "vector_count_including_unpublished_inflight": 2933,
+  "checks": [
+    {
+      "report_type": "DAILY_SITUATION_REPORT",
+      "prompt": "일일상황보고 조위 수온 염분 수신장애",
+      "status": "PASS"
+    },
+    {
+      "report_type": "DAILY_INSPECTION_REPORT",
+      "prompt": "센서 고장 배터리 방전 통신 장애 점검 조치",
+      "status": "PASS"
+    },
+    {
+      "report_type": "QUALITY_GUIDEBOOK",
+      "prompt": "해양관측자료 품질관리 결측 범위 검사 규칙",
+      "status": "PASS"
+    },
+    {
+      "report_type": "QUALITY_PROCESSING_REPORT",
+      "prompt": "품질처리 오류기간 조위 처리결과",
+      "status": "PASS"
+    },
+    {
+      "report_type": "QUALITY_COLLECTION_REPORT",
+      "prompt": "관측소 자료 수집률",
+      "status": "PASS"
+    },
+    {
+      "report_type": "WEEKLY_TIDE_RESIDUAL_REPORT",
+      "prompt": "주간 조위 편차 경향",
+      "status": "PASS"
+    },
+    {
+      "report_type": "SPRING_TIDE_MONITORING_REPORT",
+      "prompt": "대조기 고조 조위 모니터링",
+      "status": "PASS"
+    },
+    {
+      "status": "PASS",
+      "test": "negative_station_filter"
+    }
+  ],
+  "ingestion": {
+    "files": 71957,
+    "eligible_files": 4955,
+    "counts": {
+      "DUPLICATE": 9,
+      "PENDING": 4909,
+      "SUCCEEDED": 31,
+      "EXCLUDED": 67002,
+      "RUNNING": 1,
+      "FAILED": 5
+    },
+    "success_percent": 0.81,
+    "accounted_percent": 93.18,
+    "eligible_processed_percent": 0.91,
+    "unique_successful_documents": 31,
+    "indexed_chunks": 3600,
+    "by_type": {
+      "DAILY_INSPECTION_REPORT": {
+        "DUPLICATE": 1,
+        "PENDING": 622,
+        "SUCCEEDED": 7
+      },
+      "DAILY_SITUATION_REPORT": {
+        "DUPLICATE": 3,
+        "EXCLUDED": 251,
+        "PENDING": 2709,
+        "SUCCEEDED": 6
+      },
+      "OTHER": {
+        "EXCLUDED": 66733
+      },
+      "QUALITY_COLLECTION_REPORT": {
+        "PENDING": 5,
+        "RUNNING": 1,
+        "SUCCEEDED": 6
+      },
+      "QUALITY_GUIDEBOOK": {
+        "SUCCEEDED": 1
+      },
+      "QUALITY_PROCESSING_REPORT": {
+        "DUPLICATE": 2,
+        "EXCLUDED": 2,
+        "FAILED": 2,
+        "PENDING": 406,
+        "SUCCEEDED": 3
+      },
+      "SPRING_TIDE_MONITORING_REPORT": {
+        "DUPLICATE": 2,
+        "EXCLUDED": 16,
+        "PENDING": 1018,
+        "SUCCEEDED": 6
+      },
+      "WEEKLY_TIDE_RESIDUAL_REPORT": {
+        "DUPLICATE": 1,
+        "FAILED": 3,
+        "PENDING": 149,
+        "SUCCEEDED": 2
+      }
+    },
+    "latest_run": {
+      "run_id": "20261002T031500",
+      "root": "C:\\AI_Observation\\ocean-ai-platform\\분류",
+      "status": "RUNNING",
+      "started_at": "2026-10-02T03:15:00.888156+00:00",
+      "ended_at": null
+    },
+    "is_demo": false
+  },
+  "note": "실제 HTTP 경로·원문·ID·필터·유사도 검증이며, 전문가의 검색 관련성 평가는 별도 수행한다.",
+  "ingestion_snapshot_at": "2026-10-02T03:18:51.206618+00:00",
+  "tests": {
+    "pytest_passed": 23,
+    "frontend_build": "PASS",
+    "korean_comment_files": 134,
+    "missing_korean_comments": 0
+  }
+}

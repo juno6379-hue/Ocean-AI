@@ -1,0 +1,192 @@
+{
+  "checked_at": "2026-10-02T04:33:09.158358+00:00",
+  "is_demo": false,
+  "read_only": true,
+  "readiness": {
+    "observation_standard": {
+      "count": 4074,
+      "start": "2026-09-15 15:00:15",
+      "end": "2026-09-18 02:33:45"
+    },
+    "document_index": {
+      "count": 40943,
+      "start": "2024-12-02 00:00:00",
+      "end": "2026-02-02 00:00:00"
+    },
+    "event_registry": 0,
+    "ai_label": 0,
+    "qc_rule_result": 0,
+    "operation_log": 0,
+    "feature_value": 0,
+    "dataset_registry": 0,
+    "observation_scopes": [
+      [
+        "KG_0021",
+        "S_WAVE_KG_0021",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0024",
+        "S_WAVE_KG_0024",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0025",
+        "S_WAVE_KG_0025",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0028",
+        "S_WAVE_KG_0028",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0101",
+        "S_SALINITY_KG_0101",
+        "SALINITY",
+        "2026-09-18 02:33:45",
+        "2026-09-18 02:33:45",
+        1
+      ],
+      [
+        "KG_0101",
+        "S_WAVE_KG_0101",
+        "WAVE",
+        "2026-09-15 15:00:15",
+        "2026-09-18 02:33:45",
+        3581
+      ],
+      [
+        "KG_0102",
+        "S_WAVE_KG_0102",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0201",
+        "S_WAVE_KG_0201",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0202",
+        "S_WAVE_KG_0202",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "KG_0203",
+        "S_WAVE_KG_0203",
+        "WAVE",
+        "2026-09-15 15:30:00",
+        "2026-09-16 08:30:00",
+        35
+      ],
+      [
+        "UN_0001",
+        "S_TIDE_UN_0001",
+        "TIDE",
+        "2026-09-15 15:05:00",
+        "2026-09-16 08:40:00",
+        212
+      ]
+    ],
+    "document_years": [
+      [
+        null,
+        35053
+      ],
+      [
+        "2026",
+        986
+      ],
+      [
+        "2025",
+        4787
+      ],
+      [
+        "2024",
+        117
+      ]
+    ],
+    "sensors": 2
+  },
+  "cases": [],
+  "missing_or_conflicting_sensor_scopes": [
+    {
+      "sensor_id": "S_WAVE_KG_0021",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0102",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0202",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0203",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0028",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0025",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0024",
+      "observations": 35
+    },
+    {
+      "sensor_id": "S_TIDE_UN_0001",
+      "observations": 212
+    },
+    {
+      "sensor_id": "S_WAVE_KG_0201",
+      "observations": 35
+    }
+  ],
+  "live_database_router_check": {
+    "status_code": 200,
+    "events": 0,
+    "transport": "FastAPI TestClient / actual PostgreSQL"
+  },
+  "schema_tables": [
+    "dataset_membership",
+    "event_evidence",
+    "feature_provenance",
+    "label_review_snapshot",
+    "sensor_alias"
+  ],
+  "reviewer_authentication_configured": false,
+  "verified_real_cases": 0,
+  "status": "REAL_CASE_NOT_READY",
+  "required_next_inputs": [
+    "실제 사건의 관측소·센서·변수 기준정보 및 검토된 장비 별칭",
+    "보고일과 구별된 실제 사건 발생기간 및 해당 기간의 원시·표준 관측",
+    "원문 청크·운영 기록·개별 QC 결과 연결",
+    "실제 담당자의 라벨 검토·승인과 Feature 생성 후 Dataset 검증·승인"
+  ]
+}

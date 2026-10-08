@@ -1,0 +1,4417 @@
+{
+  "status": "DESIGN_ONLY_NO_FINAL_SELECTION",
+  "qc_matrix_sha256": "5cb368e78f8ddd58fe5e73eab8338fd1492c23be08cfcbbae498afa86f164e4e",
+  "source_matrix": "LOCAL_ONLY:model-candidate-matrix.json (reviewed 2026-10-07; numeric task rows preserved)",
+  "primary_references": {
+    "causal_tcn": "https://github.com/locuslab/TCN",
+    "tranad": "https://github.com/imperial-qore/TranAD",
+    "lightgbm": "https://lightgbm.readthedocs.io/en/latest/Parameters.html",
+    "patchtst": "https://arxiv.org/abs/2211.14730"
+  },
+  "rows": [
+    {
+      "domain": "fixed_station",
+      "item_id": "tide",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "datum",
+        "scale",
+        "predicted_tide_version",
+        "primary_dual_role",
+        "sea_area",
+        "encoder_adjustments"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        83,
+        84,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "tide",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "datum",
+        "scale",
+        "predicted_tide_version",
+        "primary_dual_role",
+        "sea_area",
+        "encoder_adjustments"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        83,
+        84,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "legacy_lstm_ae_if_assets_verified",
+        "uploaded_2025_lstm_forecast_residual",
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "FORECAST_LSTM_SOURCE_AND_STABLE_ASSETS_FOUND_TRAINING_PROVENANCE_UNVERIFIED_UPLOAD_IN_PROGRESS",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "tide",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "datum",
+        "scale",
+        "predicted_tide_version",
+        "primary_dual_role",
+        "sea_area",
+        "encoder_adjustments"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        83,
+        84,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "RIDGE_HOURLY_OFFLINE_PILOT_EXISTS_NOT_APPROVED",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "water_temperature",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth",
+        "calibration",
+        "replacement",
+        "intake_discharge",
+        "substitute_value_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        84,
+        85,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "water_temperature",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth",
+        "calibration",
+        "replacement",
+        "intake_discharge",
+        "substitute_value_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        84,
+        85,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "water_temperature",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth",
+        "calibration",
+        "replacement",
+        "intake_discharge",
+        "substitute_value_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        84,
+        85,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "RIDGE_HOURLY_OFFLINE_PILOT_EXISTS_NOT_APPROVED",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "salinity",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "conductivity_temperature_pair",
+        "salinity_derivation",
+        "calibration_cleaning",
+        "rain_freshwater_events"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        85,
+        86,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "salinity",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "conductivity_temperature_pair",
+        "salinity_derivation",
+        "calibration_cleaning",
+        "rain_freshwater_events"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        85,
+        86,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "salinity",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "conductivity_temperature_pair",
+        "salinity_derivation",
+        "calibration_cleaning",
+        "rain_freshwater_events"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        85,
+        86,
+        93
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_temperature",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_range",
+        "mounting_height",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        86,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_temperature",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_range",
+        "mounting_height",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        86,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_temperature",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_range",
+        "mounting_height",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        86,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_pressure",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "storage_precision",
+        "sensor_resolution",
+        "pressure_port",
+        "calibration"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_pressure",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "storage_precision",
+        "sensor_resolution",
+        "pressure_port",
+        "calibration"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "air_pressure",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "storage_precision",
+        "sensor_resolution",
+        "pressure_port",
+        "calibration"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "RIDGE_HOURLY_OFFLINE_PILOT_EXISTS_NOT_APPROVED",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_speed",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "UV_components",
+        "direction_convention",
+        "declination",
+        "depth",
+        "instrument_frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_speed",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "UV_components",
+        "direction_convention",
+        "declination",
+        "depth",
+        "instrument_frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_speed",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "UV_components",
+        "direction_convention",
+        "declination",
+        "depth",
+        "instrument_frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        87,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_direction",
+      "task": "quality_review",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "declination",
+        "depth",
+        "calm_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_direction",
+      "task": "anomaly_detection",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "declination",
+        "depth",
+        "calm_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_causal_tcn_residual",
+        "circular_or_vector_adapter_before_tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "current_direction",
+      "task": "forecasting",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "declination",
+        "depth",
+        "calm_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        88,
+        94
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_lightgbm_causal_lags",
+        "circular_or_vector_adapter_before_patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_speed",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "gust_average_definition",
+        "paired_direction",
+        "height",
+        "starting_speed"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_speed",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "gust_average_definition",
+        "paired_direction",
+        "height",
+        "starting_speed"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_speed",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "gust_average_definition",
+        "paired_direction",
+        "height",
+        "starting_speed"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "RIDGE_HOURLY_OFFLINE_PILOT_EXISTS_NOT_APPROVED",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_direction",
+      "task": "quality_review",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "calm_wind_exception",
+        "declination"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_direction",
+      "task": "anomaly_detection",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "calm_wind_exception",
+        "declination"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_causal_tcn_residual",
+        "circular_or_vector_adapter_before_tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wind_direction",
+      "task": "forecasting",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_speed",
+        "calm_wind_exception",
+        "declination"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        89,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_lightgbm_causal_lags",
+        "circular_or_vector_adapter_before_patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_height",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "significant_vs_maximum",
+        "paired_period_direction",
+        "depth",
+        "mooring"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        90,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_height",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "significant_vs_maximum",
+        "paired_period_direction",
+        "depth",
+        "mooring"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        90,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_height",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "significant_vs_maximum",
+        "paired_period_direction",
+        "depth",
+        "mooring"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        90,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_period",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "mean_vs_peak_vs_significant",
+        "paired_height",
+        "zero_wave_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_period",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "mean_vs_peak_vs_significant",
+        "paired_height",
+        "zero_wave_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_period",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "mean_vs_peak_vs_significant",
+        "paired_height",
+        "zero_wave_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        95
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_direction",
+      "task": "quality_review",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_height_period",
+        "coastal_topography"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_direction",
+      "task": "anomaly_detection",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_height_period",
+        "coastal_topography"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_causal_tcn_residual",
+        "circular_or_vector_adapter_before_tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "wave_direction",
+      "task": "forecasting",
+      "representation": "circular_direction_with_paired_magnitude",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "circular_encoding",
+        "paired_height_period",
+        "coastal_topography"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        91,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "circular_or_vector_adapter_before_lightgbm_causal_lags",
+        "circular_or_vector_adapter_before_patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "circular_angular_error",
+        "paired_vector_error_when_valid",
+        "calm_direction_undefined_mask"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "sunshine",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "accumulation_window",
+        "hour_minute_conversion",
+        "paired_irradiance",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "sunshine",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "accumulation_window",
+        "hour_minute_conversion",
+        "paired_irradiance",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "sunshine",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "accumulation_window",
+        "hour_minute_conversion",
+        "paired_irradiance",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "solar_radiation",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instantaneous_vs_accumulated",
+        "paired_sunshine",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "solar_radiation",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instantaneous_vs_accumulated",
+        "paired_sunshine",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "solar_radiation",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instantaneous_vs_accumulated",
+        "paired_sunshine",
+        "day_night"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "visibility",
+      "task": "quality_review",
+      "representation": "scalar_with_physical_context",
+      "target": "human_reviewed_QC_with_not_evaluated_mask",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_max_range",
+        "censoring_or_saturation",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "task_specific_anomaly_score_as_evidence_only"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "visibility",
+      "task": "anomaly_detection",
+      "representation": "scalar_with_physical_context",
+      "target": "event_candidate_score_not_cause_or_final_flag",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_max_range",
+        "censoring_or_saturation",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "causal_tcn_residual",
+        "tranad_if_validated_multivariate"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "fixed_station",
+      "item_id": "visibility",
+      "task": "forecasting",
+      "representation": "scalar_with_physical_context",
+      "target": "future_observation_at_explicit_horizon",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_max_range",
+        "censoring_or_saturation",
+        "environment"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "approved_item_dataset",
+        "task_specific_features",
+        "task_specific_holdout",
+        "artifact_and_runtime_evidence"
+      ],
+      "guide_pages": [
+        24,
+        26,
+        81,
+        82,
+        92,
+        96
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "lightgbm_causal_lags",
+        "patchtst_if_sufficient_regular_history"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_radial",
+      "item_id": "signed_radial_velocity",
+      "task": "quality_review",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_radial",
+      "item_id": "signed_radial_velocity",
+      "task": "anomaly_detection",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_radial",
+      "item_id": "signed_radial_velocity",
+      "task": "forecasting",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_total",
+      "item_id": "UV_vector_field",
+      "task": "quality_review",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_total",
+      "item_id": "UV_vector_field",
+      "task": "anomaly_detection",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "hf_total",
+      "item_id": "UV_vector_field",
+      "task": "forecasting",
+      "representation": "space_time_grid_and_site_geometry",
+      "target": "masked_vector_or_field_QC_candidate_or_explicit_future_vector",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "radial_signed_velocity",
+        "site_bearing_range_geometry",
+        "grid_id_resolution",
+        "same_time_site_availability",
+        "APM_history",
+        "radial_to_total_algorithm_version",
+        "coverage_denominator",
+        "spatial_neighborhood",
+        "filter_and_window_policy"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "HF_vector_asset_inventory",
+        "approved_spatial_grid_contract",
+        "R9_T4_rule_parameters",
+        "reviewed_HF_labels",
+        "spatiotemporal_holdout"
+      ],
+      "guide_pages": [
+        16,
+        30,
+        31,
+        32,
+        33,
+        34,
+        45,
+        46
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "guide_R_T_stage_rules",
+        "signed_radial_or_UV_causal_persistence"
+      ],
+      "challenger_candidates": [
+        "spatial_vector_model_design_required_before_deep_comparison"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "radial_or_vector_rmse_separately",
+        "coverage_conditioned_metrics",
+        "grid_station_holdout"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "coastal_manual",
+      "item_id": "specific_gravity;water_temperature;salinity",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "manual_log",
+        "sample_depth",
+        "same_time_reference_CT"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        47,
+        48
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "coastal_manual",
+      "item_id": "specific_gravity;water_temperature;salinity",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "manual_log",
+        "sample_depth",
+        "same_time_reference_CT"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        47,
+        48
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "coastal_manual",
+      "item_id": "specific_gravity;water_temperature;salinity",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "manual_log",
+        "sample_depth",
+        "same_time_reference_CT"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        47,
+        48
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "ship_ADCP",
+      "item_id": "current_speed;current_direction",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "navigation",
+        "beam_correlation",
+        "percent_good",
+        "error_velocity",
+        "bin_size",
+        "first_bin_depth",
+        "ship_speed",
+        "frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        49,
+        50,
+        51,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "ship_ADCP",
+      "item_id": "current_speed;current_direction",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "navigation",
+        "beam_correlation",
+        "percent_good",
+        "error_velocity",
+        "bin_size",
+        "first_bin_depth",
+        "ship_speed",
+        "frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        49,
+        50,
+        51,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "ship_ADCP",
+      "item_id": "current_speed;current_direction",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "navigation",
+        "beam_correlation",
+        "percent_good",
+        "error_velocity",
+        "bin_size",
+        "first_bin_depth",
+        "ship_speed",
+        "frequency"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        49,
+        50,
+        51,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "CTD_profile",
+      "item_id": "water_temperature;conductivity;salinity;pressure;depth",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "cast_id",
+        "depth",
+        "scan",
+        "downcast_upcast",
+        "T_C_alignment",
+        "calibration",
+        "sensor_serial",
+        "processing_settings"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        52,
+        53,
+        64,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "CTD_profile",
+      "item_id": "water_temperature;conductivity;salinity;pressure;depth",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "cast_id",
+        "depth",
+        "scan",
+        "downcast_upcast",
+        "T_C_alignment",
+        "calibration",
+        "sensor_serial",
+        "processing_settings"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        52,
+        53,
+        64,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "CTD_profile",
+      "item_id": "water_temperature;conductivity;salinity;pressure;depth",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "cast_id",
+        "depth",
+        "scan",
+        "downcast_upcast",
+        "T_C_alignment",
+        "calibration",
+        "sensor_serial",
+        "processing_settings"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        52,
+        53,
+        64,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "drifter",
+      "item_id": "position;derived_current;optional_temperature;optional_salinity",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "platform_id",
+        "drogue_depth",
+        "deployment_recovery",
+        "position_time_pairs",
+        "transmission_interval"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        54,
+        55,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "drifter",
+      "item_id": "position;derived_current;optional_temperature;optional_salinity",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "platform_id",
+        "drogue_depth",
+        "deployment_recovery",
+        "position_time_pairs",
+        "transmission_interval"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        54,
+        55,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "drifter",
+      "item_id": "position;derived_current;optional_temperature;optional_salinity",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "platform_id",
+        "drogue_depth",
+        "deployment_recovery",
+        "position_time_pairs",
+        "transmission_interval"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        54,
+        55,
+        64
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_tide",
+      "item_id": "tide",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instrument_serial",
+        "KST_sync",
+        "staff_gauge",
+        "TBM",
+        "pressure_density",
+        "deployment_interval",
+        "harmonic_reference"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        55,
+        56,
+        57,
+        59,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_tide",
+      "item_id": "tide",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instrument_serial",
+        "KST_sync",
+        "staff_gauge",
+        "TBM",
+        "pressure_density",
+        "deployment_interval",
+        "harmonic_reference"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        55,
+        56,
+        57,
+        59,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_tide",
+      "item_id": "tide",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "instrument_serial",
+        "KST_sync",
+        "staff_gauge",
+        "TBM",
+        "pressure_density",
+        "deployment_interval",
+        "harmonic_reference"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        55,
+        56,
+        57,
+        59,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_multilayer",
+      "item_id": "current_speed;current_direction",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth_bin",
+        "beam_quality",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        62,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_multilayer",
+      "item_id": "current_speed;current_direction",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth_bin",
+        "beam_quality",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        62,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_multilayer",
+      "item_id": "current_speed;current_direction",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "depth_bin",
+        "beam_quality",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        62,
+        65,
+        66
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_single_layer",
+      "item_id": "current_speed;current_direction",
+      "task": "quality_review",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_serial",
+        "depth",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        65,
+        66,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "versioned_guide_rules",
+        "human_evidence_review"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "reviewed_QC_agreement",
+        "false_good_rate",
+        "not_evaluated_preservation",
+        "source_flag_provenance",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_single_layer",
+      "item_id": "current_speed;current_direction",
+      "task": "anomaly_detection",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_serial",
+        "depth",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        65,
+        66,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "approved_rules",
+        "robust_statistics"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unadjusted_precision_recall_f1",
+        "event_recall",
+        "false_alarms_per_day",
+        "first_detection_delay",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    },
+    {
+      "domain": "survey_current_single_layer",
+      "item_id": "current_speed;current_direction",
+      "task": "forecasting",
+      "representation": "profile_trajectory_or_depth_bin_not_generic_fixed_station_sequence",
+      "target": "review_or_anomaly_candidate;forecast_target_horizon_and_domain_must_be_defined",
+      "task_requirement_origin": "ENGINEERING_INFERENCE_FROM_GUIDE_NOT_A_PRESCRIBED_MODEL",
+      "required_inputs": [
+        "source_item_unit_codebook",
+        "physical_sensor_valid_interval",
+        "sampling_and_storage_interval",
+        "source_clock_timezone",
+        "source_flags_preserved",
+        "approved_rule_version_effective_dates",
+        "reviewed_labels_and_evidence",
+        "temporal_station_sensor_split",
+        "no_future_information",
+        "sensor_serial",
+        "depth",
+        "attitude",
+        "declination",
+        "instrument_config"
+      ],
+      "can_reuse_tide_weights": false,
+      "can_reuse_tide_thresholds": false,
+      "missing": [
+        "source_asset_inventory",
+        "dedicated_dataset",
+        "approved_preprocessing",
+        "task_definition_and_holdout"
+      ],
+      "guide_pages": [
+        60,
+        61,
+        65,
+        66,
+        99
+      ],
+      "candidate_status": "DESIGN_ONLY_NO_WINNER",
+      "baseline_candidates": [
+        "persistence",
+        "item_appropriate_seasonal",
+        "ridge_if_adapter_verified"
+      ],
+      "challenger_candidates": [
+        "domain_adapter_required_then_small_baselines"
+      ],
+      "evaluation": [
+        "unit_horizon_specific_mae_rmse_bias",
+        "skill_vs_same_baseline",
+        "interval_coverage_if_reported",
+        "cast_deployment_trajectory_group_holdout_as_applicable"
+      ],
+      "existing_implementation": "NOT_IMPLEMENTED_FOR_THIS_TASK_ITEM",
+      "requirements_status": "NOT_DEFINED",
+      "latency_cost_requirement": "same_hardware_p50_p95_measured_cost_unknown_is_null",
+      "trained_in_this_task": false,
+      "production_approved": false,
+      "reuse_tide_weights_without_item_validation": false
+    }
+  ]
+}

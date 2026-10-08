@@ -1,0 +1,944 @@
+{
+  "verified_on": "2026-09-29",
+  "production_rows_modified": false,
+  "deployment_performed": false,
+  "live_runs": [
+    {
+      "started_at_utc": "2026-09-29T03:51:26.458375+00:00",
+      "station_id": "UN_0006",
+      "source_item_code": "WATER_TEMP",
+      "oracle_read_only": true,
+      "production_rows_modified": false,
+      "source_period_kst": {
+        "start": "2011-12-01T00:00:00",
+        "end_exclusive": "2013-11-01T00:00:00"
+      },
+      "oracle": {
+        "connected": true,
+        "rows": 101751,
+        "first_kst": "2011-12-14T13:55:00",
+        "last_kst": "2013-10-20T17:50:00",
+        "qc_available": false
+      },
+      "postgres": {
+        "connected": true,
+        "schema_isolated": true,
+        "raw_rows": 101751,
+        "standard_rows": 101751,
+        "first_insert_raw": 101751,
+        "first_insert_standard": 101751,
+        "repeat_insert_raw": 0,
+        "repeat_insert_standard": 0,
+        "source_values_match": true,
+        "source_timestamp_preserved": true,
+        "standard_variable": "WATER_TEMP",
+        "unit": "C"
+      },
+      "registry": {
+        "roundtrip_verified": true,
+        "persisted_to_production": false,
+        "status": "PENDING_APPROVAL"
+      },
+      "training": {
+        "model_name": "RIDGE_HOURLY_FORECAST",
+        "task": "FORECASTING",
+        "horizon_hours": 1,
+        "feature_version": "HOURLY-LAGS-1",
+        "preprocessing_version": "HOURLY-MEAN-MIN6-1",
+        "label_version": "OBSERVED_VALUE_UNREVIEWED",
+        "dataset_hash": "50238b1b88848c9964584b25099aa6d4b3d74f8018cf48d2239f124a8bee610c",
+        "data_quality": {
+          "source_rows": 101751,
+          "duplicate_rows": 0,
+          "total_hour_bins": 16229,
+          "usable_hour_bins": 9624,
+          "min_samples_per_hour": 6,
+          "missing_bins_interpolated": 0
+        },
+        "complete_windows": 7458,
+        "features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_6",
+          "lag_12",
+          "lag_24",
+          "lag_48",
+          "past_mean_6",
+          "past_std_6",
+          "hour_sin",
+          "hour_cos"
+        ],
+        "splits": {
+          "train": {
+            "samples": 4474,
+            "start": "2011-12-16T06:00:00+00:00",
+            "end": "2013-03-30T19:00:00+00:00"
+          },
+          "validation": {
+            "samples": 1492,
+            "start": "2013-03-30T20:00:00+00:00",
+            "end": "2013-06-06T05:00:00+00:00"
+          },
+          "test": {
+            "samples": 1492,
+            "start": "2013-06-06T06:00:00+00:00",
+            "end": "2013-10-20T09:00:00+00:00"
+          }
+        },
+        "selection": [
+          {
+            "alpha": 0.1,
+            "validation": {
+              "mae": 0.39134684973772693,
+              "rmse": 0.5730647348532647,
+              "bias": 0.01711728381031131,
+              "sample_count": 1492
+            }
+          },
+          {
+            "alpha": 1.0,
+            "validation": {
+              "mae": 0.38935897804148756,
+              "rmse": 0.5667519949059185,
+              "bias": 0.017155071336044644,
+              "sample_count": 1492
+            }
+          },
+          {
+            "alpha": 10.0,
+            "validation": {
+              "mae": 0.3930767965086767,
+              "rmse": 0.553522532407449,
+              "bias": 0.016999789576123053,
+              "sample_count": 1492
+            }
+          },
+          {
+            "alpha": 100.0,
+            "validation": {
+              "mae": 0.4299914371015712,
+              "rmse": 0.5832517094458796,
+              "bias": 0.02789228376162096,
+              "sample_count": 1492
+            }
+          }
+        ],
+        "selected_alpha": 1.0,
+        "training_seconds": 0.029783600941300392,
+        "test_metrics": {
+          "mae": 0.4597276128433281,
+          "rmse": 0.7134797755932107,
+          "bias": -0.07849385221582536,
+          "sample_count": 1492
+        },
+        "baseline_persistence": {
+          "mae": 0.4768853616594904,
+          "rmse": 0.74436685924526,
+          "bias": -0.019724161859885726,
+          "sample_count": 1492
+        },
+        "baseline_seasonal_24h": {
+          "mae": 1.1425498355345876,
+          "rmse": 1.6869587291957333,
+          "bias": -0.42892573547617113,
+          "sample_count": 1492
+        },
+        "mae_improvement_vs_persistence_pct": 3.5978770152339967,
+        "latency_ms_per_sample": 0.0012430297485465339,
+        "status": "CANDIDATE",
+        "approval_required": true,
+        "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+        "station_id": "UN_0006",
+        "variable_code": "WATER_TEMP",
+        "unit": "C",
+        "source_table": "WEB_OBS_ST",
+        "source_qc_available": false,
+        "artifact_sha256": "dd4b00e1067349079ce2e80c04ba9d52cbbc1c0027dd0fcedc3821f02717214d",
+        "artifact_reload_verified": true,
+        "package_versions": {
+          "sklearn": "1.8.0",
+          "numpy": "2.4.6",
+          "pandas": "2.3.3"
+        }
+      },
+      "postgres_schema_removed": true,
+      "snapshot_sha256": "ca44b009a8699a3728e5b8b479892706ca1f5b86ad051d7591436f79c528d338",
+      "completed_at_utc": "2026-09-29T03:52:48.274014+00:00",
+      "status": "VERIFIED_CANDIDATE_ONLY"
+    },
+    {
+      "started_at_utc": "2026-09-29T03:57:39.849581+00:00",
+      "station_id": "SO_1291",
+      "source_item_code": "TIDE_LEVEL",
+      "source_table": "TP_OBS_SO",
+      "oracle_read_only": true,
+      "production_rows_modified": false,
+      "source_period_kst": {
+        "start": "2025-01-01T00:00:00",
+        "end_exclusive": "2026-01-06T00:00:00"
+      },
+      "oracle": {
+        "connected": true,
+        "rows": 53137,
+        "first_kst": "2025-01-01T00:00:00",
+        "last_kst": "2026-01-05T00:00:00",
+        "qc_available": false
+      },
+      "postgres": {
+        "connected": true,
+        "schema_isolated": true,
+        "raw_rows": 53137,
+        "standard_rows": 53137,
+        "first_insert_raw": 53137,
+        "first_insert_standard": 53137,
+        "repeat_insert_raw": 0,
+        "repeat_insert_standard": 0,
+        "source_values_match": true,
+        "source_timestamp_preserved": true,
+        "standard_variable": "TIDE",
+        "unit": "cm"
+      },
+      "registry": {
+        "roundtrip_verified": true,
+        "persisted_to_production": false,
+        "status": "PENDING_APPROVAL"
+      },
+      "training": {
+        "model_name": "RIDGE_HOURLY_FORECAST",
+        "task": "FORECASTING",
+        "horizon_hours": 1,
+        "feature_version": "HOURLY-LAGS-1",
+        "preprocessing_version": "HOURLY-MEAN-MIN6-1",
+        "label_version": "OBSERVED_VALUE_UNREVIEWED",
+        "dataset_hash": "ddcb9342e0b7b60fe0158a1c0b0766d5820497390b43813c5a03e9869d450df4",
+        "data_quality": {
+          "source_rows": 53137,
+          "duplicate_rows": 0,
+          "total_hour_bins": 8857,
+          "usable_hour_bins": 8856,
+          "min_samples_per_hour": 6,
+          "missing_bins_interpolated": 0
+        },
+        "complete_windows": 8808,
+        "features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_6",
+          "lag_12",
+          "lag_24",
+          "lag_48",
+          "past_mean_6",
+          "past_std_6",
+          "hour_sin",
+          "hour_cos"
+        ],
+        "splits": {
+          "train": {
+            "samples": 5284,
+            "start": "2025-01-02T16:00:00+00:00",
+            "end": "2025-08-10T19:00:00+00:00"
+          },
+          "validation": {
+            "samples": 1762,
+            "start": "2025-08-10T20:00:00+00:00",
+            "end": "2025-10-23T05:00:00+00:00"
+          },
+          "test": {
+            "samples": 1762,
+            "start": "2025-10-23T06:00:00+00:00",
+            "end": "2026-01-04T15:00:00+00:00"
+          }
+        },
+        "selection": [
+          {
+            "alpha": 0.1,
+            "validation": {
+              "mae": 5.526859177016517,
+              "rmse": 7.340599130340057,
+              "bias": -1.1337619781772752,
+              "sample_count": 1762
+            }
+          },
+          {
+            "alpha": 1.0,
+            "validation": {
+              "mae": 6.733953527150995,
+              "rmse": 8.818786971197216,
+              "bias": -1.428276412115891,
+              "sample_count": 1762
+            }
+          },
+          {
+            "alpha": 10.0,
+            "validation": {
+              "mae": 9.347536725032844,
+              "rmse": 11.90272191955038,
+              "bias": -2.1684064336432183,
+              "sample_count": 1762
+            }
+          },
+          {
+            "alpha": 100.0,
+            "validation": {
+              "mae": 18.38353976314733,
+              "rmse": 22.44922913577595,
+              "bias": -3.3654144401489114,
+              "sample_count": 1762
+            }
+          }
+        ],
+        "selected_alpha": 0.1,
+        "training_seconds": 0.02606620080769062,
+        "test_metrics": {
+          "mae": 5.211766425053122,
+          "rmse": 6.6147394519805465,
+          "bias": 0.3814405038232221,
+          "sample_count": 1762
+        },
+        "baseline_persistence": {
+          "mae": 89.07905788876276,
+          "rmse": 101.71828794194947,
+          "bias": 0.06159667045024595,
+          "sample_count": 1762
+        },
+        "baseline_seasonal_24h": {
+          "mae": 74.79964055996973,
+          "rmse": 86.08563667634982,
+          "bias": 0.058815739689746724,
+          "sample_count": 1762
+        },
+        "mae_improvement_vs_persistence_pct": 94.14927980989505,
+        "latency_ms_per_sample": 0.0010507369454142454,
+        "status": "CANDIDATE",
+        "approval_required": true,
+        "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+        "station_id": "SO_1291",
+        "variable_code": "TIDE",
+        "unit": "cm",
+        "source_table": "TP_OBS_SO",
+        "source_qc_available": false,
+        "artifact_sha256": "2ebcfc2dfc863ca4a99cb813f1f2f033a714c2249e0187f0ad0a6e7c98a4326e",
+        "artifact_reload_verified": true,
+        "package_versions": {
+          "sklearn": "1.8.0",
+          "numpy": "2.4.6",
+          "pandas": "2.3.3"
+        }
+      },
+      "postgres_schema_removed": true,
+      "snapshot_sha256": "72279ac7cbdc964b956ac85d5ec42af52703b23af190a7dd9a156fd49b3e4842",
+      "completed_at_utc": "2026-09-29T03:58:24.665789+00:00",
+      "status": "VERIFIED_CANDIDATE_ONLY"
+    },
+    {
+      "started_at_utc": "2026-09-29T03:57:50.310371+00:00",
+      "station_id": "UN_0002",
+      "source_item_code": "AIR_PRES",
+      "source_table": "WEB_OBS_ST",
+      "oracle_read_only": true,
+      "production_rows_modified": false,
+      "source_period_kst": {
+        "start": "2013-01-01T00:00:00",
+        "end_exclusive": "2014-01-01T00:00:00"
+      },
+      "oracle": {
+        "connected": true,
+        "rows": 103573,
+        "first_kst": "2013-01-01T00:00:00",
+        "last_kst": "2013-12-31T23:55:00",
+        "qc_available": false
+      },
+      "postgres": {
+        "connected": true,
+        "schema_isolated": true,
+        "raw_rows": 103573,
+        "standard_rows": 103573,
+        "first_insert_raw": 103573,
+        "first_insert_standard": 103573,
+        "repeat_insert_raw": 0,
+        "repeat_insert_standard": 0,
+        "source_values_match": true,
+        "source_timestamp_preserved": true,
+        "standard_variable": "AIR_PRES",
+        "unit": "HPA"
+      },
+      "registry": {
+        "roundtrip_verified": true,
+        "persisted_to_production": false,
+        "status": "PENDING_APPROVAL"
+      },
+      "training": {
+        "model_name": "RIDGE_HOURLY_FORECAST",
+        "task": "FORECASTING",
+        "horizon_hours": 1,
+        "feature_version": "HOURLY-LAGS-1",
+        "preprocessing_version": "HOURLY-MEAN-MIN6-1",
+        "label_version": "OBSERVED_VALUE_UNREVIEWED",
+        "dataset_hash": "e162455b89adb1205c69d9938077c3fa2b6e4ab2909f19a39f348ba62f1da566",
+        "data_quality": {
+          "source_rows": 103573,
+          "duplicate_rows": 0,
+          "total_hour_bins": 8760,
+          "usable_hour_bins": 8635,
+          "min_samples_per_hour": 6,
+          "missing_bins_interpolated": 0
+        },
+        "complete_windows": 8450,
+        "features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_6",
+          "lag_12",
+          "lag_24",
+          "lag_48",
+          "past_mean_6",
+          "past_std_6",
+          "hour_sin",
+          "hour_cos"
+        ],
+        "splits": {
+          "train": {
+            "samples": 5070,
+            "start": "2013-01-02T16:00:00+00:00",
+            "end": "2013-08-12T19:00:00+00:00"
+          },
+          "validation": {
+            "samples": 1690,
+            "start": "2013-08-12T20:00:00+00:00",
+            "end": "2013-10-22T05:00:00+00:00"
+          },
+          "test": {
+            "samples": 1690,
+            "start": "2013-10-22T06:00:00+00:00",
+            "end": "2013-12-31T15:00:00+00:00"
+          }
+        },
+        "selection": [
+          {
+            "alpha": 0.1,
+            "validation": {
+              "mae": 0.1887395263437738,
+              "rmse": 0.24642063668716782,
+              "bias": -0.0016160499459451838,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 1.0,
+            "validation": {
+              "mae": 0.19978699360726104,
+              "rmse": 0.25911414608648087,
+              "bias": -0.0016489933038944008,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 10.0,
+            "validation": {
+              "mae": 0.28145744675216183,
+              "rmse": 0.3485979716302981,
+              "bias": -0.0020650476334617587,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 100.0,
+            "validation": {
+              "mae": 0.4624085684551989,
+              "rmse": 0.5715028584447287,
+              "bias": -0.005259665527264601,
+              "sample_count": 1690
+            }
+          }
+        ],
+        "selected_alpha": 0.1,
+        "training_seconds": 0.02778259851038456,
+        "test_metrics": {
+          "mae": 0.23346331919407032,
+          "rmse": 0.3137517089754719,
+          "bias": -0.016055076907757423,
+          "sample_count": 1690
+        },
+        "baseline_persistence": {
+          "mae": 0.3662721893491137,
+          "rmse": 0.4768089341543613,
+          "bias": 0.003885601577909302,
+          "sample_count": 1690
+        },
+        "baseline_seasonal_24h": {
+          "mae": 3.1253720638336033,
+          "rmse": 4.350435189772148,
+          "bias": 0.06870808678500986,
+          "sample_count": 1690
+        },
+        "mae_improvement_vs_persistence_pct": 36.25961075315388,
+        "latency_ms_per_sample": 0.0008455615424545559,
+        "status": "CANDIDATE",
+        "approval_required": true,
+        "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+        "station_id": "UN_0002",
+        "variable_code": "AIR_PRES",
+        "unit": "HPA",
+        "source_table": "WEB_OBS_ST",
+        "source_qc_available": false,
+        "artifact_sha256": "0e8608e62a6b2240ef62dd7675b342ab04e3f932ddd9ae9d53645cff11ab5f09",
+        "artifact_reload_verified": true,
+        "package_versions": {
+          "sklearn": "1.8.0",
+          "numpy": "2.4.6",
+          "pandas": "2.3.3"
+        }
+      },
+      "postgres_schema_removed": true,
+      "snapshot_sha256": "0bedba08d26c506667e3b69470a366f276dbce7cf1cf14b72563cffba4a21d4b",
+      "completed_at_utc": "2026-09-29T03:59:14.630090+00:00",
+      "status": "VERIFIED_CANDIDATE_ONLY"
+    },
+    {
+      "started_at_utc": "2026-09-29T03:59:25.562622+00:00",
+      "station_id": "UN_0002",
+      "source_item_code": "WIND_SPEED",
+      "source_table": "WEB_OBS_ST",
+      "oracle_read_only": true,
+      "production_rows_modified": false,
+      "source_period_kst": {
+        "start": "2013-01-01T00:00:00",
+        "end_exclusive": "2014-01-01T00:00:00"
+      },
+      "oracle": {
+        "connected": true,
+        "rows": 103576,
+        "first_kst": "2013-01-01T00:00:00",
+        "last_kst": "2013-12-31T23:55:00",
+        "qc_available": false
+      },
+      "postgres": {
+        "connected": true,
+        "schema_isolated": true,
+        "raw_rows": 103576,
+        "standard_rows": 103576,
+        "first_insert_raw": 103576,
+        "first_insert_standard": 103576,
+        "repeat_insert_raw": 0,
+        "repeat_insert_standard": 0,
+        "source_values_match": true,
+        "source_timestamp_preserved": true,
+        "standard_variable": "WIND_SPEED",
+        "unit": "M/S"
+      },
+      "registry": {
+        "roundtrip_verified": true,
+        "persisted_to_production": false,
+        "status": "PENDING_APPROVAL"
+      },
+      "training": {
+        "model_name": "RIDGE_HOURLY_FORECAST",
+        "task": "FORECASTING",
+        "horizon_hours": 1,
+        "feature_version": "HOURLY-LAGS-1",
+        "preprocessing_version": "HOURLY-MEAN-MIN6-1",
+        "label_version": "OBSERVED_VALUE_UNREVIEWED",
+        "dataset_hash": "3386d0c2a73b982b9d449023cafe36849b77a766f19c31714b73315e166a8e26",
+        "data_quality": {
+          "source_rows": 103576,
+          "duplicate_rows": 0,
+          "total_hour_bins": 8760,
+          "usable_hour_bins": 8636,
+          "min_samples_per_hour": 6,
+          "missing_bins_interpolated": 0
+        },
+        "complete_windows": 8451,
+        "features": [
+          "lag_1",
+          "lag_2",
+          "lag_3",
+          "lag_6",
+          "lag_12",
+          "lag_24",
+          "lag_48",
+          "past_mean_6",
+          "past_std_6",
+          "hour_sin",
+          "hour_cos"
+        ],
+        "splits": {
+          "train": {
+            "samples": 5070,
+            "start": "2013-01-02T16:00:00+00:00",
+            "end": "2013-08-12T18:00:00+00:00"
+          },
+          "validation": {
+            "samples": 1690,
+            "start": "2013-08-12T19:00:00+00:00",
+            "end": "2013-10-22T04:00:00+00:00"
+          },
+          "test": {
+            "samples": 1691,
+            "start": "2013-10-22T05:00:00+00:00",
+            "end": "2013-12-31T15:00:00+00:00"
+          }
+        },
+        "selection": [
+          {
+            "alpha": 0.1,
+            "validation": {
+              "mae": 0.40205516940899105,
+              "rmse": 0.5720428031809298,
+              "bias": -0.025070694287855792,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 1.0,
+            "validation": {
+              "mae": 0.40207636371441013,
+              "rmse": 0.5720764672666848,
+              "bias": -0.025084370308501427,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 10.0,
+            "validation": {
+              "mae": 0.40229478198244517,
+              "rmse": 0.5724165102873533,
+              "bias": -0.02522011276988251,
+              "sample_count": 1690
+            }
+          },
+          {
+            "alpha": 100.0,
+            "validation": {
+              "mae": 0.4046909009027894,
+              "rmse": 0.5760444241698384,
+              "bias": -0.02649259184044765,
+              "sample_count": 1690
+            }
+          }
+        ],
+        "selected_alpha": 0.1,
+        "training_seconds": 0.027833299711346626,
+        "test_metrics": {
+          "mae": 0.4244868881947371,
+          "rmse": 0.5971818442477123,
+          "bias": 0.004787889029649163,
+          "sample_count": 1691
+        },
+        "baseline_persistence": {
+          "mae": 0.4421472859882085,
+          "rmse": 0.6405828229559161,
+          "bias": 0.001838162822787306,
+          "sample_count": 1691
+        },
+        "baseline_seasonal_24h": {
+          "mae": 0.8507982545741268,
+          "rmse": 1.2224109078236935,
+          "bias": 0.012936132465996456,
+          "sample_count": 1691
+        },
+        "mae_improvement_vs_persistence_pct": 3.994234128114127,
+        "latency_ms_per_sample": 0.0008621524594226297,
+        "status": "CANDIDATE",
+        "approval_required": true,
+        "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+        "station_id": "UN_0002",
+        "variable_code": "WIND_SPEED",
+        "unit": "M/S",
+        "source_table": "WEB_OBS_ST",
+        "source_qc_available": false,
+        "artifact_sha256": "17039a1bffb5bb0782cac52e59e76cc55d7d4ef72591ab4ef1f3878ed13fb202",
+        "artifact_reload_verified": true,
+        "package_versions": {
+          "sklearn": "1.8.0",
+          "numpy": "2.4.6",
+          "pandas": "2.3.3"
+        }
+      },
+      "postgres_schema_removed": true,
+      "snapshot_sha256": "512ae865440dc7378d35b7e57660e82871b5cf9b81381d0f89ef4805ebb68798",
+      "completed_at_utc": "2026-09-29T04:00:48.773130+00:00",
+      "status": "VERIFIED_CANDIDATE_ONLY"
+    }
+  ],
+  "historical_parquet": {
+    "model_name": "RIDGE_HOURLY_FORECAST",
+    "task": "FORECASTING",
+    "horizon_hours": 1,
+    "feature_version": "HOURLY-LAGS-1",
+    "preprocessing_version": "PARQUET-QC-GOOD-HOURLY-MIN30-1",
+    "label_version": "SOURCE_QC_GOOD",
+    "dataset_hash": "f40019818e8e5172f8018f36f83bbe02e037e7ee18b83a946b8725cfb6095b91",
+    "data_quality": {
+      "source_rows": 10648794,
+      "accepted_rows": 9847505,
+      "rejected_or_missing_rows": 801289,
+      "invalid_timestamps": 0,
+      "qc_counts": {
+        "B": 801289,
+        "G": 9847505
+      },
+      "accepted_qc": [
+        "G",
+        "1",
+        "GOOD"
+      ],
+      "total_hour_bins": 177480,
+      "usable_hour_bins": 164393,
+      "min_samples_per_hour": 30,
+      "missing_bins_interpolated": 0,
+      "source_timezone": "Asia/Seoul",
+      "source_sha256": "eef9154b4fd388aacd681a3daaf9b85f5c6fa8005db06d14f8a9a1ef6e24b08e",
+      "source_first_utc": "2000-12-31T15:06:00+00:00",
+      "source_last_utc": "2021-03-31T14:59:00+00:00",
+      "source_columns": [
+        "Time",
+        "OTT",
+        "QC2"
+      ],
+      "preprocessing_version": "PARQUET-QC-GOOD-HOURLY-MIN30-1"
+    },
+    "complete_windows": 155356,
+    "features": [
+      "lag_1",
+      "lag_2",
+      "lag_3",
+      "lag_6",
+      "lag_12",
+      "lag_24",
+      "lag_48",
+      "past_mean_6",
+      "past_std_6",
+      "hour_sin",
+      "hour_cos"
+    ],
+    "splits": {
+      "train": {
+        "samples": 93213,
+        "start": "2001-12-06T02:00:00+00:00",
+        "end": "2013-08-03T03:00:00+00:00"
+      },
+      "validation": {
+        "samples": 31071,
+        "start": "2013-08-03T04:00:00+00:00",
+        "end": "2017-04-10T08:00:00+00:00"
+      },
+      "test": {
+        "samples": 31072,
+        "start": "2017-04-10T09:00:00+00:00",
+        "end": "2021-03-24T01:00:00+00:00"
+      }
+    },
+    "selection": [
+      {
+        "alpha": 0.1,
+        "validation": {
+          "mae": 7.460855394733654,
+          "rmse": 9.540549528687857,
+          "bias": -0.23589707059453519,
+          "sample_count": 31071
+        }
+      },
+      {
+        "alpha": 1.0,
+        "validation": {
+          "mae": 7.503607024486385,
+          "rmse": 9.608756012810035,
+          "bias": -0.23286428976080398,
+          "sample_count": 31071
+        }
+      },
+      {
+        "alpha": 10.0,
+        "validation": {
+          "mae": 7.973323643838809,
+          "rmse": 10.302404513318772,
+          "bias": -0.22565023734090414,
+          "sample_count": 31071
+        }
+      },
+      {
+        "alpha": 100.0,
+        "validation": {
+          "mae": 9.620693141113765,
+          "rmse": 12.50110476223955,
+          "bias": -0.31583656621306144,
+          "sample_count": 31071
+        }
+      }
+    ],
+    "selected_alpha": 0.1,
+    "training_seconds": 0.24756130017340183,
+    "test_metrics": {
+      "mae": 7.165944076796531,
+      "rmse": 9.134126734014185,
+      "bias": -0.42362043572809377,
+      "sample_count": 31072
+    },
+    "baseline_persistence": {
+      "mae": 97.4043799978395,
+      "rmse": 111.3170153248678,
+      "bias": -0.04602380642281495,
+      "sample_count": 31072
+    },
+    "baseline_seasonal_24h": {
+      "mae": 79.65607620456217,
+      "rmse": 90.56064036936871,
+      "bias": 0.03836118389280271,
+      "sample_count": 31072
+    },
+    "mae_improvement_vs_persistence_pct": 92.64309872209496,
+    "latency_ms_per_sample": 0.00016229728574410895,
+    "status": "CANDIDATE",
+    "approval_required": true,
+    "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+    "station_id": "DT_0001",
+    "variable_code": "TIDE",
+    "unit": "cm",
+    "source_kind": "EXISTING_PARQUET",
+    "source_file": "DT_0001.parquet",
+    "source_qc_available": true,
+    "artifact_sha256": "f82fd21bf930ec9c712dff8dc45516ab7ea2a805ea5123fd16df48fd5a507cf0",
+    "artifact_reload_verified": true,
+    "package_versions": {
+      "sklearn": "1.8.0",
+      "numpy": "2.4.6",
+      "pandas": "2.3.3"
+    }
+  },
+  "same_station_multivariate": {
+    "model_name": "RIDGE_HOURLY_FORECAST",
+    "task": "FORECASTING",
+    "horizon_hours": 1,
+    "feature_version": "HOURLY-LAGS-SAME-STATION-EXTERNAL-1",
+    "preprocessing_version": "HOURLY-MEAN-MIN6-1",
+    "label_version": "OBSERVED_VALUE_UNREVIEWED",
+    "dataset_hash": "e0522999c4432a8c98858eaa2926dc6bdfd9b261c8894e091fa1ff76d59a0750",
+    "data_quality": {
+      "source_rows": 103576,
+      "duplicate_rows": 0,
+      "total_hour_bins": 8760,
+      "usable_hour_bins": 8636,
+      "min_samples_per_hour": 6,
+      "missing_bins_interpolated": 0,
+      "source_snapshots": [
+        "512ae865440dc7378d35b7e57660e82871b5cf9b81381d0f89ef4805ebb68798",
+        "0bedba08d26c506667e3b69470a366f276dbce7cf1cf14b72563cffba4a21d4b"
+      ]
+    },
+    "complete_windows": 8451,
+    "features": [
+      "lag_1",
+      "lag_2",
+      "lag_3",
+      "lag_6",
+      "lag_12",
+      "lag_24",
+      "lag_48",
+      "past_mean_6",
+      "past_std_6",
+      "hour_sin",
+      "hour_cos",
+      "external_AIR_PRES_lag_1",
+      "external_AIR_PRES_lag_6",
+      "external_AIR_PRES_lag_24"
+    ],
+    "splits": {
+      "train": {
+        "samples": 5070,
+        "start": "2013-01-02T16:00:00+00:00",
+        "end": "2013-08-12T18:00:00+00:00"
+      },
+      "validation": {
+        "samples": 1690,
+        "start": "2013-08-12T19:00:00+00:00",
+        "end": "2013-10-22T04:00:00+00:00"
+      },
+      "test": {
+        "samples": 1691,
+        "start": "2013-10-22T05:00:00+00:00",
+        "end": "2013-12-31T15:00:00+00:00"
+      }
+    },
+    "selection": [
+      {
+        "alpha": 0.1,
+        "validation": {
+          "mae": 0.3997837611279384,
+          "rmse": 0.5697890318546637,
+          "bias": -0.027842614475139745,
+          "sample_count": 1690
+        }
+      },
+      {
+        "alpha": 1.0,
+        "validation": {
+          "mae": 0.3998013204844568,
+          "rmse": 0.5698269301896958,
+          "bias": -0.02787111020826236,
+          "sample_count": 1690
+        }
+      },
+      {
+        "alpha": 10.0,
+        "validation": {
+          "mae": 0.39998871465354,
+          "rmse": 0.5702150620864509,
+          "bias": -0.028141048124121718,
+          "sample_count": 1690
+        }
+      },
+      {
+        "alpha": 100.0,
+        "validation": {
+          "mae": 0.40256984237169247,
+          "rmse": 0.5743227588196621,
+          "bias": -0.030090915648144884,
+          "sample_count": 1690
+        }
+      }
+    ],
+    "selected_alpha": 0.1,
+    "training_seconds": 0.028673401102423668,
+    "test_metrics": {
+      "mae": 0.4253128116110964,
+      "rmse": 0.5932419906477789,
+      "bias": 0.031982559557002806,
+      "sample_count": 1691
+    },
+    "baseline_persistence": {
+      "mae": 0.4421472859882085,
+      "rmse": 0.6405828229559161,
+      "bias": 0.001838162822787306,
+      "sample_count": 1691
+    },
+    "baseline_seasonal_24h": {
+      "mae": 0.8507982545741268,
+      "rmse": 1.2224109078236935,
+      "bias": 0.012936132465996456,
+      "sample_count": 1691
+    },
+    "mae_improvement_vs_persistence_pct": 3.8074358727514745,
+    "latency_ms_per_sample": 0.0012111764716227897,
+    "status": "CANDIDATE",
+    "approval_required": true,
+    "evaluation_protocol": "rolling one-hour-ahead: observed past holdout values are available at each forecast origin; no shuffled split or interpolation",
+    "station_id": "UN_0002",
+    "variable_code": "WIND_SPEED",
+    "unit": "M/S",
+    "covariates": [
+      "AIR_PRES"
+    ],
+    "source_kind": "VERIFIED_MDC_POSTGRES_SNAPSHOTS",
+    "source_qc_available": false,
+    "artifact_sha256": "a34a32f949183c40a7004aae703baf38f1879ca8571cec4c4f506929bea7f2d5",
+    "artifact_reload_verified": true,
+    "package_versions": {
+      "sklearn": "1.8.0",
+      "numpy": "2.4.6",
+      "pandas": "2.3.3"
+    }
+  }
+}

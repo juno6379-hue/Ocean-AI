@@ -1,0 +1,7 @@
+station_id,station_name,network_type
+DT_0001,후포,TIDE
+DT_0002,제주,TIDE
+DT_0003,인천,TIDE
+DT_0004,목포,TIDE
+DT_0005,영흥도,TIDE
+DT_0006,가덕도,TIDE

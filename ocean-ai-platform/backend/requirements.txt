@@ -1,0 +1,38 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+sqlalchemy
+alembic
+psycopg2-binary
+oracledb
+pytest
+httpx
+langgraph
+langchain
+langchain_ollama
+# ml
+scikit-learn
+pandas
+pyarrow
+httpx
+numpy
+# 기타
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+apscheduler
+
+# Offline reproducible model artifacts and Windows timezone database
+joblib
+tzdata
+
+# Versioned document ingestion and vector persistence
+chromadb>=1.5,<2
+pypdf>=6,<7
+openpyxl>=3.1,<4
+olefile>=0.47,<1
+xlrd>=2.0,<3
+
+# Bounded, read-only queries over manifest-selected observation Parquet.
+duckdb>=1.4,<2

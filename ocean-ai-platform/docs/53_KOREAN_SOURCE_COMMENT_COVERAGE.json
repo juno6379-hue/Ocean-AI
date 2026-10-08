@@ -1,0 +1,676 @@
+{
+  "files": 134,
+  "missing_comments": 0,
+  "records": [
+    {
+      "path": "backend\\app\\agents\\automation_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\automation_test_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\cause_diagnosis_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\daily_inspection_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\data_monitoring_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\document_ingester.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\human_approval_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\mlops_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\multi_agent_workflow.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\orchestrator.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\qc_copilot_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\rag_initializer.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\rag_knowledge_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\report_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\service_monitoring_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\sql_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\state.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\agents\\tide_residual_agent.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_agents.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_ai_insights.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_alerts.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_approvals.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_dashboard.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_datalake.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_datasets.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_equipment.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_events.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_features.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_forecasting.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_imputation.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_mlops.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_models.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_observations.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_qc.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_rag.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_reports.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_service_monitoring.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_stations.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_test_auto.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\api\\routes_tide_analysis.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\core\\config.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\core\\database.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\core\\security.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\llm\\ollama_client.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\main.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\ml\\evaluator.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\ml\\feature_generator.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\ml\\model_registry.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\ml\\trainer.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\models\\domain.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\models\\enums.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\answer_generator.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\document_contract.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\document_loader.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\document_pipeline.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\embedder_factory.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\hybrid_retriever.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\report_parser.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\retriever.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\rag\\semantic_ingestion.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\schemas\\domain.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\add_part_a_apis.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\analyze_long_term.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\analyze_parquet.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\annotate_korean_sources.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\build_datalake.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\build_imputation_dataset.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\convert_to_parquet.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\embed_docs.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\forecast_tide_baseline.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\ingest_document_library.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\inspect_mdc_schema.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\inventory_mdc_items.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\load_datalake_stats.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\load_mdc_item_mapping.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\migrate_document_index.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\migrate_mlops_registry.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\migrate_process_schema.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\patch_mlops.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\patch_part_a_ui.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\profile_spool.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_db.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_db_extended.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_features.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_mlops.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_part_a.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\seed_qc_rules.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\serve_document_vectors.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\sync_mdc_db.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\test_oracle.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\train_mdc_multivariate.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\train_parquet_history.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\validate_live_pipeline.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\scripts\\verify_document_retrieval.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\services\\anomaly_detector.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\services\\long_gap_imputation.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\services\\pilot_source_parser.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\app\\services\\test_runner.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\rag_initializer.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\scripts\\create_sample_data.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\scripts\\ingest_reports.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\scripts\\seed_data.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\test_api.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\tests\\conftest.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\tests\\test_document_pipeline.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\tests\\test_ml_training.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\tests\\test_pilot_source_parser.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "backend\\tests\\test_safety_workflow.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\index.html",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\api\\client.ts",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\api\\index.ts",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\App.css",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\App.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\components\\Chatbot.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\components\\Layout.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\components\\OperatorSession.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\index.css",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\main.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\AIInsights.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Alerts.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Dashboard.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\DataLake.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Equipment.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Forecasting.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\MLOps.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Observations.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\QCCopilot.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\Reports.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\ServiceMonitoring.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\StationProfile.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\src\\pages\\System.tsx",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "frontend\\vite.config.ts",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "test_chatbot.py",
+      "has_korean_comment": true,
+      "changed": false
+    },
+    {
+      "path": "test_rag.py",
+      "has_korean_comment": true,
+      "changed": false
+    }
+  ]
+}

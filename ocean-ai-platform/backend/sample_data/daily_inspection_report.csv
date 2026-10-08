@@ -1,0 +1,3 @@
+station_id,sensor_id,equipment_status,issue_found,issue_detail
+DT_0001,HUPO_LASER,ERROR,True,렌즈 오염으로 인한 반복값 발생
+DT_0004,MOKPO_DOTT,NORMAL,True,센서 교체 후 영점 조정 필요
