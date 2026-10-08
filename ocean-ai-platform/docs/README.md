@@ -1,7 +1,9 @@
 # 상세 구현과 날짜별 실행 기록
 
-이 폴더에는 설계, 특정 날짜의 배치·검증 결과와 구현 계약이 함께 보존되어 있다. **현재 운영 상태·설치·API는 저장소 루트의 [현행 문서 안내](../../docs/README.md)와 01~24 문서를 기준으로 확인한다.** 과거 기록에 있는 완료율, 모델 지표, 파일 수, PID, C/D 경로는 그 검증 시점의 근거다.
+이 폴더에는 설계, 특정 날짜의 배치·검증 결과와 구현 계약이 함께 보존되어 있다. **현재 운영 상태·설치·API는 저장소 루트의 [현행 문서 안내](../../docs/README.md)와 01~26 문서를 기준으로 확인한다.** 과거 기록에 있는 완료율, 모델 지표, 파일 수, PID, C/D 경로는 그 검증 시점의 근거다.
 
+- [83: 12종 QC 엔진](83_QC_RULE_ENGINE.md): 실제 가이드 catalog·규칙별 조건·미평가·계보 검증.
+- [84: Fusion과 승인 workflow](84_EVIDENCE_FUSION_WORKFLOW.md): 5종 근거 score와 PostgreSQL stop/resume·무결성·멱등성.
 - [82: 승인 원천 계약과 모델 실행 연결](82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md): 현행 source 판정, v2 snapshot, 고정 protocol, worker·registry·serving 구현 범위.
 - [74: QC agent 계약](74_QC_AGENT_CONTRACT.md), [75: Label agent 계약](75_LABEL_AGENT_CONTRACT.md), [76: MLOps agent 계약](76_MLOPS_AGENT_CONTRACT.md), [77: agent 실행](77_AGENT_COLLABORATION_EXECUTION.md): 각 변경 당시 상세 계약과 검증 기록. 현행 호출·승인 순서는 루트 문서와 실제 코드에서 확인한다.
 - [81: 모델 학습 자동화·원천 감사](81_MODEL_TRAINING_AUTOMATION_AND_SOURCE_AUDIT.md): 82 이전 원천·모델 구현의 과거 기록.

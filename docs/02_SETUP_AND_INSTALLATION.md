@@ -4,7 +4,7 @@
 
 ## 요구 환경과 가져오기
 
-게시 tree는 Python 3.14.2와 Node 24.13.0에서 backend 345 passed/1 skipped, 깨끗한 `npm ci --ignore-scripts` 후 TypeScript/Vite build 통과를 검증했다. Backend requirements는 완전한 버전 lock 파일이 아니므로 재설치한 dependency 조합은 다시 검증한다. 다른 Python 버전의 호환성도 별도 확인한다. [잠금 파일](../ocean-ai-platform/frontend/package-lock.json)의 Vite 요구사항은 Node.js `^20.19.0 || >=22.12.0`이다. Node 18은 현재 설치 기준이 아니다. PostgreSQL 15와 Git이 필요하다. Ollama와 Chroma는 문서 검색을 사용할 때 추가한다.
+이전 tree는 Python 3.14.2와 Node 24.13.0에서 검증했고 이번 전체 회귀 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)를 따른다. 깨끗한 `npm ci --ignore-scripts` 후 TypeScript/Vite build 통과를 검증했다. Backend requirements는 완전한 버전 lock 파일이 아니므로 재설치한 dependency 조합은 다시 검증한다. 다른 Python 버전의 호환성도 별도 확인한다. [잠금 파일](../ocean-ai-platform/frontend/package-lock.json)의 Vite 요구사항은 Node.js `^20.19.0 || >=22.12.0`이다. Node 18은 현재 설치 기준이 아니다. PostgreSQL 15와 Git이 필요하다. Ollama와 Chroma는 문서 검색을 사용할 때 추가한다.
 
 ```powershell
 git clone https://github.com/juno6379-hue/Ocean-AI.git
@@ -55,10 +55,18 @@ Get-Content .env.example |
 새로 만든 **비어 있는 개발 DB**에서는 연결 대상이 개발 DB인지 확인한 후 아래처럼 현재 ORM 테이블을 명시 생성할 수 있다. 이 작업은 DDL을 수행한다. 기존 테이블의 열·제약 변경을 해결하는 migration 대용으로 사용하지 않는다.
 
 ```powershell
-python -c "from app.core.database import Base,engine; from app.models import domain,source_contracts,source_observation_binding; Base.metadata.create_all(bind=engine)"
+python -c "from app.core.database import Base,engine; from app.models import domain,source_contracts,source_observation_binding,agent_workflow; Base.metadata.create_all(bind=engine)"
 ```
 
 기존 DB에 필요한 추가 스키마는 [event/evidence migration](../ocean-ai-platform/backend/app/scripts/migrate_event_evidence.py), [source contract migration](../ocean-ai-platform/backend/app/scripts/migrate_source_contracts.py), [source binding SQL](../ocean-ai-platform/backend/migrations/20261007_source_observation_binding.sql), [registry migration](../ocean-ai-platform/backend/app/scripts/migrate_mlops_registry.py)을 각각 검토한다. Source contract script는 기본 dry-run, `--apply`일 때 두 테이블만 생성한다. Binding은 Standard/SourcePacket/ApprovalHistory FK를 먼저 요구한다. `mdc_sensor_catalog`는 [카탈로그 reconcile](../ocean-ai-platform/backend/app/scripts/reconcile_mdc_sensors.py)의 별도 명시 적용 경로이며 현재 운영에 미생성이다.
+
+## 10/8 QC·workflow 추가 스키마와 분석
+
+기존 PostgreSQL에는 [QC evidence nullable3열](../ocean-ai-platform/backend/migrations/20261008_qc_rule_evidence.sql)과 [workflow run/transition2테이블](../ocean-ai-platform/backend/migrations/20261008_agent_workflow.sql)을 명시 적용한다. 파일은 additive·멱등 DDL이며 기존 결과를 EVALUATED 또는 APPROVED로 backfill하지 않는다. ApprovalHistory/QCRuleResult 등 기존 FK 대상이 먼저 있어야 한다. 검토한 DB 연결에서 각 SQL을 적용하고 열·제약을 확인한다.
+
+실제 계정은 사용자 지시로 업무 수행 시점에 설정한다. `API_IDENTITIES={}`에서도 readonly QC 평가·loopback anomaly fit/analyze·Evidence Fusion을 검토할 수 있다. 실제 workflow 생성/승인/재개는 계정/role을 요구한다. 개발 선언과 JSON artifact는 source/dataset/model 승인 원장에 적재되지 않는다.
+
+현재 최신 개발 웹은 별도 backend8010·frontend5174다. `VITE_API_BASE_URL=http://127.0.0.1:8010/api`를 해당 Vite 세션에 설정한다. Chroma 기본8001과 겹치지 않는다. 일반 신규 설치의 기본8000/5173은 아래와 같다.
 
 ## API와 화면 실행
 

@@ -1,0 +1,895 @@
+{
+  "schema_version": "guide-existing-12-catalog-v1",
+  "guide": {
+    "title": "해양관측자료 품질관리 가이드북(개편)",
+    "cover_edition": "2023.12",
+    "sha256": "d1fd062b7f7313d6dee585692a20665cb4dd724a16008ccdae5ddf250054c9d9",
+    "pdf_page_count": 118,
+    "page_numbering": "one-based PDF pages; printed page = PDF page - 7",
+    "definition_pdf_pages": [
+      23,
+      24
+    ],
+    "status": "DOCUMENT_REFERENCE_UNAPPROVED"
+  },
+  "engine_version": "guide-existing-12-v1",
+  "rules": [
+    {
+      "kind": "WT",
+      "name_ko": "시간 검사",
+      "strength": "Hard",
+      "pdf_pages": [
+        23,
+        83
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "LO",
+      "name_ko": "위치 검사",
+      "strength": "Hard",
+      "pdf_pages": [
+        23,
+        84
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "ER",
+      "name_ko": "오류값 검사",
+      "strength": "Hard",
+      "pdf_pages": [
+        23,
+        81,
+        83
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "GR",
+      "name_ko": "전지구적 한계 검사",
+      "strength": "Hard",
+      "pdf_pages": [
+        23,
+        81,
+        83,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "GD",
+      "name_ko": "고정값 검사",
+      "strength": "Hard",
+      "pdf_pages": [
+        23,
+        81,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "RL",
+      "name_ko": "내적일치성 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        89,
+        90,
+        91
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "SP",
+      "name_ko": "튐값 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        81,
+        83,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "RR",
+      "name_ko": "지역적 한계 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        35,
+        84
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "SR",
+      "name_ko": "계절적 한계 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        84
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "ST",
+      "name_ko": "통계 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        87,
+        92
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "DE",
+      "name_ko": "지연시간 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23,
+        81
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    },
+    {
+      "kind": "PO",
+      "name_ko": "전원 검사",
+      "strength": "Soft",
+      "pdf_pages": [
+        23
+      ],
+      "approved": false,
+      "requires_explicit_source_configuration": true
+    }
+  ],
+  "common_conflicts": {
+    "RL": [
+      "p23 strength Soft versus p81 internal consistency Hard header; explicit selected review severity"
+    ],
+    "RR": [
+      "p23 code RR versus p35 PR; baseline recentyear versus cumulative; no raw-code alias conversion"
+    ],
+    "SR": [
+      "p23 previous-year same-month versus p84 long-term monthly references"
+    ],
+    "ST": [
+      "p23 >=10 previousyears same-month versus daily-statistic algorithm variant p87"
+    ],
+    "DE": [
+      "p23 1-3hours versus p81 24hours"
+    ],
+    "GD": [
+      "after-duration prose versus at-duration algorithm; explicit equality policy required"
+    ]
+  },
+  "items": {
+    "TIDE": {
+      "name_ko": "조위",
+      "quantity_kind": "TIDE_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        83,
+        84
+      ],
+      "reference_unit": "cm",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {},
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": -300,
+        "range_max": 1300,
+        "missing_sentinels": [
+          -9999
+        ],
+        "flat_duration_minutes": 120,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            30
+          ]
+        ]
+      }
+    },
+    "WATER_TEMP": {
+      "name_ko": "수온",
+      "quantity_kind": "WATER_TEMP_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        84,
+        85
+      ],
+      "reference_unit": "degC",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "SP": [
+          "p85 inspection/algorithm/reference-source threshold variants differ"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": -2.5,
+        "range_max": 35,
+        "missing_sentinels": [
+          -9999
+        ],
+        "flat_duration_minutes": 1440,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            1
+          ],
+          [
+            1800,
+            3.53
+          ]
+        ]
+      }
+    },
+    "SALINITY": {
+      "name_ko": "염분",
+      "quantity_kind": "SALINITY_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        85,
+        86
+      ],
+      "reference_unit": "psu",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "SP": [
+          "p86 inspection 0.3 psu/min versus p81 1 psu/min"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 40,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 1440,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            1
+          ],
+          [
+            1800,
+            1
+          ]
+        ]
+      }
+    },
+    "AIR_TEMP": {
+      "name_ko": "기온",
+      "quantity_kind": "AIR_TEMP_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        86,
+        87
+      ],
+      "reference_unit": "degC",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 -50..40 degC versus p86 -80..40 degC"
+        ],
+        "SP": [
+          "p81 and p86 interval thresholds differ"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": -50,
+        "range_max": 40,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 180,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            1
+          ],
+          [
+            1800,
+            4.5
+          ]
+        ]
+      }
+    },
+    "AIR_PRES": {
+      "name_ko": "기압",
+      "quantity_kind": "AIR_PRES_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        87
+      ],
+      "reference_unit": "hPa",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "SP": [
+          "p87 inspection text uses psu/wave-period labels; p81 and p87 numerical thresholds differ"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 850,
+        "range_max": 1060,
+        "missing_sentinels": [
+          -9999
+        ],
+        "flat_duration_minutes": 180,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            2
+          ],
+          [
+            1800,
+            8.6
+          ]
+        ]
+      }
+    },
+    "CURRENT_SPEED": {
+      "name_ko": "유속",
+      "quantity_kind": "CURRENT_SPEED_SCALAR_MAGNITUDE",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        87,
+        88
+      ],
+      "reference_unit": "cm/s",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 0..300 cm/s, p87 adopted 0..3 m/s, and inspection 0..4 m/s require explicit unit/variant"
+        ],
+        "GD": [
+          "p81 observing interval duration versus p87 previous-value wording"
+        ],
+        "SP": [
+          "p88 4 m/s versus 0.36 m/s and interval table 0.35 m/s at 30min"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 300,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": null,
+        "spike_interval_seconds_max_delta": [
+          [
+            1800,
+            35
+          ]
+        ]
+      }
+    },
+    "CURRENT_DIRECTION": {
+      "name_ko": "유향",
+      "quantity_kind": "CURRENT_DIRECTION_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        88
+      ],
+      "reference_unit": "degree",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "SP": [
+          "table2-9 not marked although p88 detail has spike threshold"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 360,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 60,
+        "spike_interval_seconds_max_delta": []
+      }
+    },
+    "WIND_SPEED": {
+      "name_ko": "풍속",
+      "quantity_kind": "WIND_SPEED_SCALAR_MAGNITUDE",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "RL",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        89
+      ],
+      "reference_unit": "m/s",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "SP": [
+          "p81 1min 2 m/s versus p89 1min 1.87 m/s and prose10 m/s/min"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 60,
+        "missing_sentinels": [
+          -99
+        ],
+        "flat_duration_minutes": 180,
+        "spike_interval_seconds_max_delta": [
+          [
+            60,
+            2
+          ],
+          [
+            1800,
+            10.25
+          ]
+        ]
+      }
+    },
+    "WIND_DIRECTION": {
+      "name_ko": "풍향",
+      "quantity_kind": "WIND_DIRECTION_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "RL",
+        "SP"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        89,
+        90
+      ],
+      "reference_unit": "degree",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "RL": [
+          "p90 35degree buoy-wave pairing requires exact reviewed mapping"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 360,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 180,
+        "spike_interval_seconds_max_delta": []
+      }
+    },
+    "WAVE_HEIGHT": {
+      "name_ko": "파고",
+      "quantity_kind": "WAVE_HEIGHT_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "RL",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        90
+      ],
+      "reference_unit": "m",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 closed bounds versus p90 strict 0<WH<30"
+        ],
+        "SP": [
+          "p81 20min2m versus p90 20min2.01m and prose3m/min"
+        ],
+        "RL": [
+          "existing p90 and proposal branch policy differ; period=5 unspecified"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 30,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 120,
+        "spike_interval_seconds_max_delta": [
+          [
+            1200,
+            2
+          ],
+          [
+            1800,
+            2.46
+          ]
+        ]
+      }
+    },
+    "WAVE_PERIOD": {
+      "name_ko": "파주기",
+      "quantity_kind": "WAVE_PERIOD_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "RL",
+        "SP",
+        "RR",
+        "SR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        91
+      ],
+      "reference_unit": "s",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 0..20s versus p91 inspection1.95..26s and strict bounds"
+        ],
+        "SP": [
+          "p91 text uses m/min; p81 30min12.21s versus p91 12.71s"
+        ],
+        "RL": [
+          "p24 marked but period detail references height; explicit paired relation required"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 20,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 120,
+        "spike_interval_seconds_max_delta": [
+          [
+            1200,
+            10
+          ],
+          [
+            1800,
+            12.21
+          ]
+        ]
+      }
+    },
+    "WAVE_DIRECTION": {
+      "name_ko": "파향",
+      "quantity_kind": "WAVE_DIRECTION_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "RL"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        91
+      ],
+      "reference_unit": "degree",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 closed versus p91 strict degree limits"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 360,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 1440,
+        "spike_interval_seconds_max_delta": []
+      }
+    },
+    "SUNSHINE": {
+      "name_ko": "일조",
+      "quantity_kind": "SUNSHINE_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "GD",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        92
+      ],
+      "reference_unit": "minute",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GD": [
+          "p24 marked, p81 duration blank"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 1440,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": null,
+        "spike_interval_seconds_max_delta": []
+      }
+    },
+    "SOLAR_RADIATION": {
+      "name_ko": "일사",
+      "quantity_kind": "SOLAR_RADIATION_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        92
+      ],
+      "reference_unit": "W/m2",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GD": [
+          "p24 not marked but p81/p92 fixed24h detail exists"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 0,
+        "range_max": 1500,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": 1440,
+        "spike_interval_seconds_max_delta": []
+      }
+    },
+    "VISIBILITY": {
+      "name_ko": "시정",
+      "quantity_kind": "VISIBILITY_SCALAR",
+      "applicable_rules": [
+        "WT",
+        "ER",
+        "GR",
+        "ST"
+      ],
+      "applicability_pdf_page": 24,
+      "detail_pdf_pages": [
+        92
+      ],
+      "reference_unit": "m",
+      "reference_only": true,
+      "approved": false,
+      "conflicts": {
+        "GR": [
+          "p81 closed20..3000m versus p92 strict20<value<3000"
+        ]
+      },
+      "summary_profile": {
+        "profile_id": "APPENDIX1_SUMMARY_P81",
+        "pdf_pages": [
+          81
+        ],
+        "range_min": 20,
+        "range_max": 3000,
+        "missing_sentinels": [
+          -999
+        ],
+        "flat_duration_minutes": null,
+        "spike_interval_seconds_max_delta": []
+      }
+    }
+  },
+  "auxiliary_reference_only": {
+    "WIND_GUST": {
+      "unit": "m/s",
+      "range": [
+        0,
+        150
+      ],
+      "missing_sentinels": [
+        -999
+      ],
+      "pdf_pages": [
+        81,
+        89
+      ]
+    },
+    "POWER_VOLTAGE": {
+      "unit": "V",
+      "minimum_voltage": 12,
+      "pdf_pages": [
+        23
+      ]
+    }
+  },
+  "not_implemented_as_this_version": [
+    "second-stage daily/residual/moving statistics table2-8",
+    "ten-test improvement proposal tables2-10..2-12 and appendix2",
+    "automatic operational source approval",
+    "automatic sentinel/scale/unit/datum/timezone inference"
+  ]
+}

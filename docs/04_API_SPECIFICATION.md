@@ -1,12 +1,12 @@
 # 04. API 명세
 
-기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **135 경로·142 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 기본 API 주소는 `http://127.0.0.1:8000`이다.
+기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **145 경로·153 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 기본 API 주소는 `http://127.0.0.1:8000`이다.
 
 ## 인증·오류·운영 경계
 
 [security.py](../ocean-ai-platform/backend/app/core/security.py)는 일반 쓰기 요청에 bearer Actor의 operator/reviewer/admin 권한을 요구한다. 승인·검토·발행 등 reviewer dependency가 있는 경로는 reviewer/admin만 허용한다. 요청 body의 `user_id`는 서버 인증 Actor를 대신하지 않는다. GET은 대체로 공개 조회이나 `/api/session`은 인증을 요구한다. `GET /api/integrations`와 `POST /api/integrations/{source_id}/test`는 별도의 administrator dependency로 admin만 허용한다. SourceContract GET은 공개 조회이며 serving은 loopback을 요구한다.
 
-분석 POST인 `/api/rag/chat`, `/api/rag/hybrid-search`, `/api/qc/copilot/analyze`, `/api/forecasting/baseline`은 일반 쓰기 인증 예외다. `/api/agents/workflow`도 분석 예외지만 demo 전용이다. `/api/qc/run-copilot`, `/api/qc/ai-insights-summary`, `/api/test-auto/run`, `/api/agents/workflow`는 live에서 409로 막힌다. 이 경로를 실제 승인·학습 자동화로 사용하지 않는다.
+분석 POST인 `/api/rag/chat`, `/api/rag/hybrid-search`, `/api/qc/copilot/analyze`, `/api/forecasting/baseline`, `/api/qc/rules/evaluate`, `/api/agents/evidence/analyze`, loopback `/api/anomaly-analysis/fit`·`analyze`는 일반 쓰기 인증 예외다. 실제 계정 설정은 업무 수행 시점으로 유예한다. `/api/agents/workflow`도 분석 예외지만 demo 전용이다. `/api/qc/run-copilot`, `/api/qc/ai-insights-summary`, `/api/test-auto/run`, `/api/agents/workflow`는 live에서 409로 막힌다. 이 경로를 실제 승인·학습 자동화로 사용하지 않는다.
 
 | 응답 | 의미 |
 |---|---|
@@ -51,6 +51,14 @@
 | `/api/reports/{report_id}/review → approve/reject → publish` | 상태 전이와 reviewer를 검증한다. 일부 호환 body의 user_id는 인증 권한이 아니다. |
 
 Source 계약 세부 schema는 [authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), dataset payload는 [routes_datasets](../ocean-ai-platform/backend/app/api/routes_datasets.py), 모델 요청은 [routes_mlops_execution](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py)와 [구현 기록 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다. Worker enqueue가 차단된 상태에서 legacy `/api/mlops/retrain`을 우회 실행 경로로 사용하지 않는다.
+
+## 10/8 분석·영속 승인 흐름
+
+`POST /api/agents/evidence/analyze`는 `{scope:{station_id,sensor_id,variable_code,unit,period_start,period_end,as_of},query,declared_evidence,rule_report,ai_report,file_dependencies}`를 읽기 분석한다. 기간은 timezone offset을 포함한다. Fusion 객체를 직접 반환하며 recommendation_score·coverage_weight·missing_categories·conflicts와 input_sha256을 포함한다. 원본 Rule/AI report checksum·scope·가용시각을 검증한다.
+
+`POST /api/agents/workflows`는 같은 입력에 request_key를 추가하고 operator Actor로 PENDING을 저장한다. 후속 result는 null이다. `GET /workflows`는 선택 scope 필터, `GET /workflows/{id}`는 immutable snapshot을 조회한다. reviewer 결정은 `{request_key,expected_recommendation_sha256,expected_revision,decision:"APPROVED"|"REJECTED",comment}`이며 resume/cancel은 decision을 제외한 동일 검증 값을 요구한다. approve만으로 실행되지 않는다. 별도 resume은 입력/원장/파일 재검증 후 보고서 DRAFT·MLOps 추천만 생성한다. 학습·registry·배포는 수행하지 않는다.
+
+QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md), [anomaly](25_ANOMALY_AI.md)를 따른다. JSON artifact만 다루며 실제 DB/모델 승인 원장에 저장하지 않는다. 업무 DB schema 추가는 [설치](02_SETUP_AND_INSTALLATION.md)를 따른다.
 
 ## 전체 경로 목록
 
@@ -318,4 +326,20 @@ Source 계약 세부 schema는 [authority](../ocean-ai-platform/backend/app/serv
 
 ## 검증 범위
 
-위 135개 경로·142개 operation은 2026-10-08 읽기 전용 OpenAPI와 게시 tree의 route/prefix AST가 일치했다. 이는 API 등록·입력 계약 확인이다. 실원천 승인, 전체 endpoint 쓰기 성공, 모델 학습·배포 완료를 뜻하지 않는다. 상태를 변경하는 endpoint는 실제 검토 자료와 권한·현재 승인 원장이 준비된 뒤 사용한다.
+위 145개 경로·153개 operation은 2026-10-08 최신 backend 읽기 전용 OpenAPI와 등록 라우터를 대조했다. 이는 API 등록·입력 계약 확인이다. 실원천 승인, 전체 endpoint 쓰기 성공, 모델 학습·배포 완료를 뜻하지 않는다. 상태를 변경하는 endpoint는 실제 검토 자료와 권한·현재 승인 원장이 준비된 뒤 사용한다.
+
+### 10/8 추가 경로
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+| [/api/agents/evidence/analyze](../ocean-ai-platform/backend/app/api/routes_agents.py) | POST | POST: AnalysisRequest* | — |
+| [/api/agents/workflows](../ocean-ai-platform/backend/app/api/routes_agents.py) | GET, POST | POST: StartRequest* | — |
+| [/api/agents/workflows/{workflow_id}](../ocean-ai-platform/backend/app/api/routes_agents.py) | GET | — | — |
+| [/api/agents/workflows/{workflow_id}/cancel](../ocean-ai-platform/backend/app/api/routes_agents.py) | POST | POST: TransitionRequest* | — |
+| [/api/agents/workflows/{workflow_id}/decision](../ocean-ai-platform/backend/app/api/routes_agents.py) | POST | POST: DecisionRequest* | — |
+| [/api/agents/workflows/{workflow_id}/resume](../ocean-ai-platform/backend/app/api/routes_agents.py) | POST | POST: TransitionRequest* | — |
+| [/api/anomaly-analysis/analyze](../ocean-ai-platform/backend/app/api/routes_anomaly_analysis.py) | POST | POST: AnalyzeRequest* | — |
+| [/api/anomaly-analysis/fit](../ocean-ai-platform/backend/app/api/routes_anomaly_analysis.py) | POST | POST: FitRequest* | — |
+| [/api/qc/rule-catalog](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET | — | — |
+| [/api/qc/rules/evaluate](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: EvaluateRulesRequest* | — |

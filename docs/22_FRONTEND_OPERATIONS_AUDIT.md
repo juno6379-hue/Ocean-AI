@@ -7,7 +7,7 @@
 | 화면 | 실제 연결 | 해석 범위와 남은 연결 |
 |---|---|---|
 | Dashboard | `/api/lake/summary`, `/api/lake/monitoring`, `/api/stations`, `/api/reports` | 선택 원천·기간·관측망과 전체 기준 범위를 구분한다. 보유 관측소·행 수, 원천 QC 존재 비율은 장비 정상·예상 수집률이 아니다. |
-| QC Copilot | `AnalysisWorkspace`의 lake monitoring·summary | 원천·기간·관측소·항목별 검토 자료를 조회한다. 기존 `/qc/run-copilot` 데모 실행 화면이 아니다. |
+| QC Copilot | `WorkflowReviewPanel`의 evidence/analyze·workflows, 기존 `AnalysisWorkspace` lake 조회 | exact scope 분석·score/coverage·누락·충돌·PENDING·승인/반려·재개를 표시한다. 계정 미설정이면 분석/조회만 가능하다. |
 | AI Insights | 같은 `AnalysisWorkspace`의 Insights 모드와 관측소 기준 좌표 | 보유 자료·근거를 비교한다. 기존 `/ai-insights/summary`의 휴리스틱 위험 점수 화면과 구분한다. |
 | Equipment | `/api/lake/equipment-evidence`, lake summary, 관측소 기준 좌표 | 문서의 설치·장비 근거를 표시한다. 설치 문구만으로 센서 운영기간·실시간 health를 확정하지 않는다. |
 | MLOps | `/api/mlops/summary`, `/retrain-history`, `/adapters`, 일반 승인 대기 조회 | 코드 구현·worker 설정·프로세스 실행·승인 입력·실제 운영 모델 수를 분리한다. 재학습 입력 선택과 artifact 다운로드 UI는 미연결이다. |
@@ -24,7 +24,7 @@ MLOps의 Registry 내보내기는 표시 중인 모델·readiness·adapter cover
 
 기존 `/dashboard/summary`, `/equipment/status`, `/ai-insights/summary` 등 호환 API가 남아 있어도 현재 화면이 모두 호출하는 것은 아니다. live 장비 상태의 미측정 health와 설치 근거를 구분한다. 데모 값·휴리스틱 점수의 존재를 실제 센서 성능으로 세지 않는다. 서버는 `/qc/run-copilot`, `/qc/ai-insights-summary`, `/test-auto/run`, `/agents/workflow`의 prototype 실행을 demo 모드에 제한한다.
 
-특히 기존 agent workflow의 Human Approval은 승인 대기 표시이며 실행을 중단하는 실제 승인 상태가 아니다. [다중 agent 실행 범위](21_MULTI_AGENT_WORKFLOW.md)와 [AI Insights 계산 경계](20_AI_INSIGHTS.md)를 참고한다.
+새 workflow는 PostgreSQL PENDING에서 중단하고 reviewer 결정 후 별도 resume한다. 예상 추천 SHA와 revision을 전달하며 stale scope를 승인하지 않도록 서버 snapshot scope를 표시한다. 호환 demo도 PENDING에서 멈춘다. [다중 agent 실행 범위](21_MULTI_AGENT_WORKFLOW.md)와 [AI Insights 계산 경계](20_AI_INSIGHTS.md)를 참고한다.
 
 ## 인증·로그·상태 조회
 
@@ -36,8 +36,10 @@ JSON HTTP 요청 로그와 승인 이력은 목적이 다르다. `ApprovalHistor
 
 ## 검증과 운영 확인
 
-2026-10-08 공개 작업본은 backend 전체 시험 345개 통과·1개 skip, 깨끗한 `npm ci --ignore-scripts`, TypeScript/Vite `npm run build`가 통과했다. 빌드는 모든 화면의 실제 승인·장애·배포 동작을 현장 검증한 결과가 아니다.
+최신 전체 회귀·웹 확인은 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)와 [current_status.json](current_status.json)에 기록한다. 깨끗한 `npm ci --ignore-scripts`와 TypeScript/Vite build를 검증했다. 빌드는 모든 화면의 실제 승인·장애·배포 동작을 현장 검증한 결과가 아니다.
 
 13:09 KST 실제 backend `/health`와 frontend HTTP는 200이었고 API identities는 0이었다. 13:10:55 KST canonical worker는 RUNNING과 fresh heartbeat가 확인됐지만 작업 큐는 비어 있었다. 승인 입력은 없고 모델 readiness는 BLOCKED, 수용 기준은 NOT_DEFINED, serving은 409 NO_ACTIVE_LOCAL_MODEL이었다. 기존 canonical 프로세스의 확인이며 공개 복사본을 기동했다는 의미는 아니다.
 
 실제 운영 검증에는 담당 인증, 원천·기간·사건 검토, 승인 입력, 실패/반려 화면, 모델 실행과 identity 검증이 필요하다. [설치 문서](02_SETUP_AND_INSTALLATION.md), [승인 경로](17_HUMAN_IN_THE_LOOP.md), [현재 진행 상태](24_P0_END_TO_END_PROGRESS.md)를 따른다.
+
+최신 개발 UI는 `http://127.0.0.1:5174`이며 backend8010에 연결한다. 기존 canonical5173/8000·Chroma8001·worker는 유지한다. [WorkflowReviewPanel](../ocean-ai-platform/frontend/src/components/WorkflowReviewPanel.tsx)은 새 흐름의 상태/권한별 버튼을 제공하며 실제 담당 계정은 아직 설정하지 않았다.

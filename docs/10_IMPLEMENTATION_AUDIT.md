@@ -1,42 +1,36 @@
-# 기능 구현 실태 점검
+# 10/8 Current Implementation Audit
 
-현행화: 2026-10-08
+현행화: 2026-10-08. 9/16 최초 감사 이후의 코드와 이번 QC·AI·Fusion·승인 gate를 실제 구현에 대조한다. 구현 시험, 원천 사실 확인, 실제 담당 승인, 운영 모델은 각각 별도 판정이다.
 
-대상은 이 저장소의 `ocean-ai-platform/backend`와 `frontend`다. 구현된 실행 경로, 시험 통과, 실제 자료 승인, 운영 실행을 각각 구분한다. 2026-09-16의 최초 점검에서 미구현으로 분류했던 기능도 이후 코드가 추가되어 아래 판정을 적용한다.
+## 현재 구현
 
-## 현행 구현과 실제 적용 조건
-
-| 항목 | 현재 코드 경로 | 운영에 필요한 조건·한계 |
+| 항목 | 검증된 실행 경로 | 현재 적용 범위 |
 |---|---|---|
-| 원천 의미·단위·시간·센서 계약 | [source_contract_authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), [요청·판정 API](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | 실제 actor, packet/receipt SHA, 최신 승인 원장, 원문·Parquet 행 재검증이 필요하다. 기술 검토를 인간 승인으로 승격하지 않는다. |
-| Raw/Standard와 원천 binding | [source_contract_snapshot](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py)의 `ingest_approved_source()` | 승인 원천에 한해 멱등 적재한다. literal·해시·locator·물리 센서·기간을 binding에 보존한다. 기존 MDC 매핑은 이 승인 계약을 대체하지 않는다. |
-| QC 실행·최종 검토 | [QC API](../ocean-ai-platform/backend/app/api/routes_qc.py), [승인 API](../ocean-ai-platform/backend/app/api/routes_approvals.py) | min/max 규칙 실행과 검토 후보 저장은 구현됐다. 원천 QC 코드북과 시행기간 승인, 업무별 규칙 적합성 검토가 별도로 필요하다. |
-| AI Label·사건 근거 | [event_evidence](../ocean-ai-platform/backend/app/services/event_evidence.py), [label_review_agent](../ocean-ai-platform/backend/app/services/label_review_agent.py) | 사건·관측·문서·QC·운영 근거와 라벨 검토 snapshot을 연결한다. `PENDING` 후보는 학습 정답이 아니다. |
-| Feature 계산·계보 | [evidence_features](../ocean-ai-platform/backend/app/services/evidence_features.py), [feature_generator](../ocean-ai-platform/backend/app/ml/feature_generator.py) | 사건 기반 과거·현재 feature와 시간별 lag 실험이 구현됐다. 원천/QC 실제 가용 시각과 feature 선언 시각을 snapshot에서 재검증한다. |
-| 문서 수집·Embedding | [document_pipeline](../ocean-ai-platform/backend/app/rag/document_pipeline.py), [document_contract](../ocean-ai-platform/backend/app/rag/document_contract.py) | 파일 원장·내용 중복·재개·Ollama 모델 digest·Chroma 계약을 사용한다. Git clone만으로 원문·색인·실행 완료가 생성되지는 않는다. |
-| Hybrid Retrieval | [hybrid_retriever](../ocean-ai-platform/backend/app/rag/hybrid_retriever.py) | 관계형 필터→벡터→키워드→가중 재정렬이 구현됐다. keyword-only 결과의 cosine은 `null`이다. 검색 성공은 원천 또는 사건 승인과 별개다. |
-| 근거 설명 | [qc_copilot_agent](../ocean-ai-platform/backend/app/agents/qc_copilot_agent.py), 사건·문서 근거와 검토 응답 | 근거·미확정 사유를 전달한다. 설명 문구의 존재가 SHAP 기여도, 모델 confidence 또는 업무별 설명 충실도 평가 완료를 뜻하지 않는다. |
-| Dataset Version | [dataset_lineage](../ocean-ai-platform/backend/app/services/dataset_lineage.py), source dependency freeze | v2 snapshot에 source와 split/evaluation/acceptance 의존성을 동결한다. 기존 v1의 자동 승인·자동 운영 전환은 지원하지 않는다. |
-| 모델 비교·작업·Registry·서빙 | [comparison_runner](../ocean-ai-platform/backend/app/ml/comparison_runner.py), [MLOps 실행 API](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | 고정 분할, 실제 승인, worker, 독립 검토, candidate 등록·배포·loopback 서빙의 코드가 있다. 승인 입력 없이 모델을 만들거나 배포 완료로 표시하지 않는다. |
-| 인증·Human Approval | [security](../ocean-ai-platform/backend/app/core/security.py) 및 각 승인 서비스 | 서버 identities의 actor/role을 사용한다. 요청 본문의 사용자·상태 문자열은 승인 권위가 아니다. 인증 미설정은 차단한다. |
-| 화면·API 등록 | [main.py](../ocean-ai-platform/backend/app/main.py), [API client](../ocean-ai-platform/frontend/src/api/client.ts) | source/technical-review/dataset/approval 등 라우터와 환경별 API wrapper를 연결한다. loading/error/실제 0을 분리한다. |
+| Rule QC | [12종 엔진](../ocean-ai-platform/backend/app/services/qc_rule_engine.py), 버전 catalog, 평가·저장 API | 가이드북 2023.12 p23/table2-7의 WT/LO/ER/GR/GD/RL/SP/RR/SR/ST/DE/PO. 단위·센서 episode·clock·QC 판본/기간·가용 시각·규칙별 보조입력이 없으면 NOT_EVALUATED. |
+| 이상탐지 AI | [fitted anomaly analysis](../ocean-ai-platform/backend/app/services/anomaly_analysis.py), JSON artifact와 loopback 분석 API | 별도 고정 TRAIN/CALIBRATION으로 fit하는 인과 통계 모델. 조위 residual, TEMP/SAL drift, spike, persistence, biofouling candidate, sensor degradation candidate. 원인 확정이나 운영 성능 검증이 아니다. |
+| Evidence Fusion | [fusion](../ocean-ai-platform/backend/app/services/evidence_fusion.py) | Rule/AI/Metadata/Operation/RAG를 Recommendation score로 결합한다. exact scope·기간·availability·원본 checksum을 확인하고 중복/충돌/누락을 표시한다. 개발 recipe이며 고장 확률·승인 운영 기준이 아니다. |
+| Human Approval | [영속 workflow](../ocean-ai-platform/backend/app/agents/multi_agent_workflow.py), [API](../ocean-ai-platform/backend/app/api/routes_agents.py) | PENDING에서 중단한다. reviewer 결정 이후 별도 resume, hash/revision 재확인과 입력 변경·재요청·경합 차단. PostgreSQL에 상태·전이·승인 연결을 보존한다. |
+| 화면 | [WorkflowReviewPanel](../ocean-ai-platform/frontend/src/components/WorkflowReviewPanel.tsx) | QC Copilot에서 scope 분석·상태 조회·승인/반려·재개. 실제 계정 미설정이면 조회/분석만 가능하다. |
+| 원천 계약·production bridge | [authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), [snapshot](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py) | 승인 원천 재검증·ingest binding·v2 source dependency freeze 구현. legacy v1 자동 전환은 미지원이다. |
+| 고정 비교·worker·registry·serving | [model runner](../ocean-ai-platform/backend/app/ml/comparison_runner.py), [실행 API](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | 승인 source/dataset/protocol과 독립 검토를 요구한다. 자료형 기준선 부분 구현이며 72업무의 실제 선정/배포 완료가 아니다. |
+| 문서 검색·Feature·사건 | [문서](15_DOCUMENT_INDEX_INGESTION.md), [feature](14_FEATURE_STORE.md), [라벨](13_AI_LABEL_SEPARATION.md) | 기존 계보·contract·as-of 검증을 유지한다. 문서 검색 결과는 물리 고장 또는 원천 의미 승인 증거로 자동 승격하지 않는다. |
 
-## Copilot·에이전트의 경계
+호환 `/api/agents/workflow`는 demo 전용이며 이제 PENDING에서 멈춘다. live 운영 검토는 `/api/agents/evidence/analyze`와 `/api/agents/workflows`를 사용한다. 기존 일반 orchestrator나 AI Insights 휴리스틱을 새 fitted 모델 실행과 혼동하지 않는다. Workflow 승인 후 생성되는 것은 보고서 초안과 MLOps 추천이다. 학습 enqueue·모델 등록·배포는 수행하지 않는다.
 
-`/api/qc/copilot/analyze`는 저장된 관측·규칙·AI 결과와 문서 검색을 근거로 분석 응답을 반환한다. 최종 QC를 자동 저장하거나 인간 승인으로 처리하지 않는다. [qc_review_agent](../ocean-ai-platform/backend/app/services/qc_review_agent.py)는 코드북·물리 센서·시행기간 등 근거가 없으면 미평가/차단 사유를 반환한다.
+## 검증 기록
 
-호환 경로인 [multi_agent_workflow](../ocean-ai-platform/backend/app/agents/multi_agent_workflow.py)는 휴리스틱 규칙과 `PENDING` 표시를 포함하는 분석 프로토타입이다. 그 `HumanApproval` 단계는 실제 reviewer 결정에 결합된 운영 승인 gate가 아니다. 상세는 [멀티 에이전트 workflow](21_MULTI_AGENT_WORKFLOW.md)를 참고한다. 모든 agent 경로가 엄격한 원천→모델 승인 사슬로 통합됐다고 해석하지 않는다.
+최종 전체 회귀와 frontend build 결과는 [current_status.json](current_status.json)에 기록한다. 이전 공개 tree의 345 passed/1 skipped는 이번 추가 코드의 시험 결과로 재사용하지 않는다.
 
-## 날짜가 있는 검증 기록
+부모 검증은 별도 PostgreSQL schema에 기존 ORM 구조를 만든 뒤 실제 두 additive migration을 두 번 적용했다. 새 session에서 PENDING 유지·승인 전 resume 차단·승인 후 resume·멱등 재요청·입력 membership 변경 차단을 확인하고 schema를 제거했다. 실제 승인·source·dataset·model 원장 값은 바꾸지 않았다. 이 검증은 실제 계정 승인 또는 실제 원천 학습이 아니다.
 
-- 2026-10-08 공개 작업본: backend 전체 시험 **345 passed / 1 skipped**, 깨끗한 `npm ci --ignore-scripts` 및 TypeScript/Vite production build 통과. 이는 코드·재현 설치 검증이다.
-- 부모 에이전트의 2026-10-08 **04:09:54Z** PostgreSQL 읽기 전용 확인: `source_contract_packets`, `source_contract_decisions`, `source_observation_binding`, `approval_history`, `dataset_registry`, `model_registry`, `retraining_history`, `event_registry`, `event_evidence`, `sensor_alias`는 모두 **0**이었다. `API_IDENTITIES`도 0이며 `DATA_MODE=live`, MDC 자동 수집·전체 자동 DDL은 비활성화였다. `mdc_sensor_catalog`는 운영 DB에 아직 없었다. 모델 선언과 실제 마이그레이션·적재를 구분한다.
-- 위 실측의 로컬 근거는 `docs-operational-readonly-20261008.json`이다. 운영 DB와 실측 원장은 Git에 포함하지 않으며, 수치는 해당 확인 시각에 한한다.
-- 같은 날 runtime GET의 MLOps readiness는 `BLOCKED`였다. 기존 canonical worker는 설정·실행 확인됐지만 queue jobs는 비어 있었고 `approved_input_ready=false`, 실제 운영 모델은 0이었다. serving health는 `409 NO_ACTIVE_LOCAL_MODEL`이었다. 프로세스 실행과 실제 학습·운영 완료를 구분한다.
-- 2026-10-07 원천 검토 기록: AIR_PRES 500행의 원문·Parquet 일치는 확인했으나 **18,502개 검증 항목이 미확정**이었다. 검토 파일의 사건 후보 40개 미연결 및 기간 충돌 1건/152 grain의 해결 승인은 확보되지 않았다. 이 40개는 DB 사건 건수가 아니다.
+가이드북 catalog는 실제 PDF 180개 matrix cell과 대조했다. 보존된 실제 AIR_PRES 500행의 hash/literal 일치와 12×500=6,000 QC 미평가를 확인했다. 원천 조건 누락을 정상으로 계산하지 않았다. 실제 WATER_TEMP 500행도 naive 시각·QC 판본·historical 단위/episode 근거 부족으로 fit하지 않았다. 합성 held-out anomaly 결과는 코드 동작 시험이며 실제 해양 자료의 성능 수용 결과가 아니다.
 
-## 남은 단계
+## 실제 운영 상태와 남은 일
 
-실제 원천 의미·단위/배율/기준면·시계·QC 판본/기간·물리 센서/기간의 근거를 확정하고 인증된 담당자가 판정해야 한다. 이어 실제 source ingest, 사건·라벨·feature 계보, v2 snapshot과 고정 프로토콜 승인, 비교 학습·독립 검토·Registry·배포를 진행한다. 단계와 책임은 [Human-in-the-loop](17_HUMAN_IN_THE_LOOP.md), [Dataset](18_DATASET_REGISTRY.md), [MLOps](19_MLOPS_VERSION_AND_EVALUATION.md)에 연결한다.
+업무 DB는 PostgreSQL이다. SQLite는 격리 단위시험과 기존 로컬 worker/file queue에만 남는다. 실제 계정 설정은 사용자 지시로 DEFERRED_BY_USER이며 새 계정·token·인간 승인 기록을 발명하지 않았다. source packet/decision/binding, ApprovalHistory, DatasetRegistry, ModelRegistry, RetrainingHistory는 확인 시각에 모두 0이다.
 
-72개 업무 키의 상태는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이다. 자료형 기준선 지원이 72개 운영 모델 선정·완료를 뜻하지 않는다. 전체 구현 및 자료형별 제한은 [게시 구현 기준](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)을 따른다.
+[원천 사실 재확인](26_SOURCE_FACT_RESOLUTION.md)에서 가이드 판본·현재 항목 literal/단위·캡처 SQL은 확인했다. 과거 행의 배율/기준면·시계·QC 코드북 시행기간·물리 센서 유효기간을 확정할 증거는 부족하다. 기존 미확정 18,502개 항목, 미연결 사건 후보 40개, 기간 충돌 1건/152 scope의 담당 판정도 남아 있다. 실제 source fit·registry·운영 모델은 0이며 P0 전체 운영 완료로 판정하지 않는다.
+
+다음 순서는 근거 보완 → 원천/기간/사건 기술 판정 → 실제 업무 수행 시 계정 설정과 source 승인 → 승인 ingest/v2 snapshot·고정 분할/수용 정책 승인 → 업무별 실제 비교·독립 검토·registry·배포 검증이다. [현재 단계](24_P0_END_TO_END_PROGRESS.md), [QC](12_QC_RULE_RESULT_LAYER.md), [AI](25_ANOMALY_AI.md), [승인](17_HUMAN_IN_THE_LOOP.md)을 따른다.
+
+최종 검증: 2026-10-08 backend **512 passed / 1 skipped**(46.36초), frontend TypeScript/Vite build PASS. 실제 PostgreSQL 임시 schema의 migration·session 재개·입력 변경 차단 PASS와 최신 backend8010의 QC/AI→Fusion 읽기 전용 HTTP 연결을 확인했다. 실제 source fit·model registry·배포는0이다.

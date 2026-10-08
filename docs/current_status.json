@@ -1,19 +1,42 @@
 {
-  "schema_version": "ocean-ai-documentation-status-1",
-  "as_of": "2026-10-08T04:10:55.581022+00:00",
-  "code_revision": "35f86cf8a7cbf0d5e5f538e3ce835649548b945b",
-  "scope": "repository-root docs/01 through docs/24",
+  "schema_version": "ocean-ai-documentation-status-2",
+  "as_of": "2026-10-08T05:14:55.296058+00:00",
+  "code_revision": null,
+  "scope": "repository-root docs/01 through docs/26 and platform implementation docs/82-84",
   "verification": {
     "backend_tests": {
       "date": "2026-10-08",
-      "passed": 345,
-      "skipped": 1
+      "passed": 512,
+      "skipped": 1,
+      "warnings": 18,
+      "seconds": 46.36,
+      "log_sha256": "e3ee7c6f8984c918c8428cb27058c3df649512cf4018665b08700aa798e44e25"
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
-    "method": "Previously verified unchanged implementation tree; fresh read-only PostgreSQL and runtime GET checks"
+    "postgresql_gate": {
+      "status": "PASS",
+      "checked_at": "2026-10-08T05:12:18.552485+00:00",
+      "isolated_schema_removed": true,
+      "cases": [
+        "EXACT_ADDITIVE_MIGRATIONS_AND_IDEMPOTENT_REAPPLY",
+        "POSTGRES_SESSION_REOPEN_PRESERVES_PENDING_AND_STOPS_DOWNSTREAM",
+        "REVIEWER_DECISION_DURABLE_RESUME_AND_IDEMPOTENT_REPLAY",
+        "CHANGED_POSTGRES_SCOPE_MEMBERSHIP_BLOCKS_APPROVAL_WITHOUT_WRITE"
+      ],
+      "public_ledger_unchanged": true
+    },
+    "live_readonly_api": "PASS",
+    "browser_qc_panel": "PASS",
+    "method": "Full isolated backend regression, clean frontend build, disposable PostgreSQL migration/session/replay verification, latest loopback API/browser checks"
   },
   "runtime": {
+    "checked_at": "2026-10-08T05:14:55.296058+00:00",
+    "runtime_is_canonical_workstation_copy": false,
+    "runtime_source": "public_worktree",
+    "backend_url": "http://127.0.0.1:8010",
+    "frontend_url": "http://127.0.0.1:5174",
+    "qc_page_url": "http://127.0.0.1:5174/qc",
     "backend_health": "OK",
     "database_readiness": "OK",
     "frontend_http": "OK",
@@ -21,17 +44,15 @@
     "mdc_sync_enabled": false,
     "auto_create_tables": false,
     "configured_identity_count": 0,
-    "training_worker_running": true,
-    "training_queue_job_count": 0,
-    "mlops_readiness": "BLOCKED",
+    "identity_configuration_status": "DEFERRED_BY_USER",
+    "session_http_status": 503,
+    "canonical_backend_8000_and_frontend_5173_preserved": true,
+    "chroma_8001_preserved": true,
+    "canonical_worker_preserved": true,
+    "new_backend_starts_training_worker": false,
+    "new_backend_local_serving_enabled": false,
     "approved_input_ready": false,
-    "acceptance_criteria_status": "NOT_DEFINED",
-    "serving_health": {
-      "http_status": 409,
-      "code": "NO_ACTIVE_LOCAL_MODEL"
-    },
-    "runtime_is_canonical_workstation_copy": true,
-    "session_http_status": 503
+    "operating_models": 0
   },
   "database_counts": {
     "source_contract_packets": 0,
@@ -44,7 +65,10 @@
     "event_registry": 0,
     "event_evidence": 0,
     "sensor_alias": 0,
-    "mdc_sensor_catalog": null
+    "mdc_sensor_catalog": null,
+    "agent_workflow_run": 0,
+    "agent_workflow_transition": 0,
+    "qc_rule_result": 0
   },
   "schema_not_applied": [
     "mdc_sensor_catalog"
@@ -59,7 +83,7 @@
     "operational_completion": false
   },
   "source_review": {
-    "last_evidence_verification": "2026-10-07",
+    "last_evidence_verification": "2026-10-08",
     "review_grains": 66190,
     "verified_air_pres_rows": 500,
     "unresolved_review_fields": 18502,
@@ -67,14 +91,20 @@
     "period_conflicts": 1,
     "period_conflict_affected_grains": 152,
     "owner_approval_record_count": 0,
-    "raw_materials_committed": false
+    "raw_materials_committed": false,
+    "historical_source_facts_complete": false,
+    "current_metadata_and_captured_sql_rechecked": true,
+    "actual_water_temp_requirements": "NOT_EVALUATED"
   },
   "limitations": [
     "Source semantics, units, scale, datum, time zone, QC revisions and physical sensor validity need owner evidence and approval.",
     "Legacy v1 snapshots have no automatic conversion to source-bound v2 snapshots.",
     "Representation baselines do not complete all 72 task-specific production models.",
-    "Prototype agent workflows and heuristic insights are distinct from approved model execution.",
-    "Historical migration and document ingestion reports are not fresh completion evidence."
+    "Historical migration and document ingestion reports are not fresh completion evidence.",
+    "Actual accounts are deferred by user; readonly development analysis is available without them.",
+    "Historical source semantics, scale/datum/clock, QC effective periods and physical sensor validity remain unconfirmed where evidence is absent.",
+    "Fitted statistical anomaly engine and development Fusion weights do not establish actual marine accuracy or 72 operating models.",
+    "Workflow approval/resume only creates a draft and MLOps recommendation; it does not approve source/QC/dataset/model execution."
   ],
   "document_ingestion": {
     "files": 71960,
@@ -94,5 +124,117 @@
     "is_demo": false,
     "checked_at": "2026-10-08T04:15:21.273811+00:00",
     "latest_run_status": "PARTIAL"
+  },
+  "base_revision": "5829e891a4af39da1829f10ce2c9da9116e4a789",
+  "revision_resolution": "The Git commit containing this file identifies the release; runtime fingerprints are recorded below.",
+  "implementation_release": "2026-10-08_QC12_ANOMALY6_FUSION_APPROVAL_GATE",
+  "previous_verification": {
+    "base_tree": "35f86cf",
+    "backend_tests": {
+      "date": "2026-10-08",
+      "passed": 345,
+      "skipped": 1
+    },
+    "superseded_by_current_release": true
+  },
+  "previous_canonical_runtime": {
+    "checked_at": "2026-10-08T04:10:55.581022+00:00",
+    "backend_health": "OK",
+    "database_readiness": "OK",
+    "frontend_http": "OK",
+    "data_mode": "live",
+    "mdc_sync_enabled": false,
+    "auto_create_tables": false,
+    "configured_identity_count": 0,
+    "training_worker_running": true,
+    "training_queue_job_count": 0,
+    "mlops_readiness": "BLOCKED",
+    "approved_input_ready": false,
+    "acceptance_criteria_status": "NOT_DEFINED",
+    "serving_health": {
+      "http_status": 409,
+      "code": "NO_ACTIVE_LOCAL_MODEL"
+    },
+    "runtime_is_canonical_workstation_copy": true,
+    "session_http_status": 503
+  },
+  "database_counts_checked_at": "2026-10-08T05:07:26.153330+00:00",
+  "additive_schema_application": {
+    "checked_at": "2026-10-08T05:07:26.153330+00:00",
+    "files": [
+      {
+        "filename": "20261008_qc_rule_evidence.sql",
+        "sha256": "aeef003d03cee05b1b52c7d8bb350443f78cf816b765793cb1b08af2e4aabdcb"
+      },
+      {
+        "filename": "20261008_agent_workflow.sql",
+        "sha256": "7617c03477724267300f49c77ad9f96fbd218f133bb45dddf8f0fb89fef01aa1"
+      }
+    ],
+    "existing_ledger_counts_unchanged": true,
+    "workflow_tables_empty": true,
+    "accounts_or_approvals_created": false
+  },
+  "implementation": {
+    "rule_qc": {
+      "supported_rules": [
+        "WT",
+        "LO",
+        "ER",
+        "GR",
+        "GD",
+        "RL",
+        "SP",
+        "RR",
+        "SR",
+        "ST",
+        "DE",
+        "PO"
+      ],
+      "guide_edition": "2023.12",
+      "status": "CONDITIONAL_ENGINE_IMPLEMENTED",
+      "matrix_cells_verified": 180,
+      "actual_sample_rows": 500,
+      "actual_sample_not_evaluated_results": 6000,
+      "complete_actual_source_qc": false
+    },
+    "anomaly_analysis": {
+      "modes": [
+        "SPIKE",
+        "PERSISTENCE",
+        "TIDE_RESIDUAL",
+        "DRIFT",
+        "BIOFOULING_CANDIDATE",
+        "SENSOR_DEGRADATION_CANDIDATE"
+      ],
+      "method": "FIXED_TRAIN_CALIBRATION_CAUSAL_STATISTICAL_FIT",
+      "source_authority": "DECLARED_DEVELOPMENT_CONTRACT",
+      "synthetic_validation": "PASS",
+      "actual_source_fits": 0,
+      "production_eligible": false
+    },
+    "evidence_fusion": {
+      "status": "IMPLEMENTED",
+      "score_kind": "WEIGHTED_EVIDENCE_SUPPORT_NOT_PROBABILITY",
+      "rule_and_ai_report_checksum_required": true,
+      "categories": 5
+    },
+    "workflow": {
+      "status": "IMPLEMENTED_AND_POSTGRESQL_VERIFIED",
+      "pending_stops_execution": true,
+      "explicit_resume_after_review": true,
+      "downstream": "DRAFT_REPORT_AND_MLOPS_RECOMMENDATION_ONLY",
+      "training_enqueued": false,
+      "model_registered": false,
+      "deployment_performed": false
+    }
+  },
+  "implementation_fingerprints": {
+    "app/services/qc_rule_engine.py": "431bcc4cb04bcfc4b8048da8d91e7fb83881527173cc5033726c2a08fedc3ffc",
+    "app/services/qc_rule_catalog.json": "7d30ad39f1ff40bbfb2224866f869ffd53782e958a94f3e71bf767b35e8d4889",
+    "app/services/anomaly_analysis.py": "aef8e9424119c83894f71674a004a6b19892a220a5304a52befc406af506310f",
+    "app/ml/anomaly_artifact.py": "ec7e3000297d9ec4e0ed277b9f61050e4b5080808f6c2f4040242f95f989b745",
+    "app/services/evidence_fusion.py": "a579dc0f8961f3465eced3597c77ad8645d372731add1e933603cc51e913abd1",
+    "app/agents/multi_agent_workflow.py": "a4e94d8b98603c79e5ad5e0489387ebfb0a167c02dba24bd07051b2ecd659ce0"
   }
 }

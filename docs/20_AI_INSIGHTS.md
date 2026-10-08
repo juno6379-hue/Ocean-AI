@@ -38,6 +38,10 @@ GET /api/ai-insights/long-term?station_id=<station_id>&variable_code=<variable_c
 
 ## 검증과 남은 작업
 
-2026-10-08 공개 작업본은 전체 backend 시험 345개 통과·1개 skip 및 깨끗한 frontend 설치·production build가 통과했다. 이는 분석 경로와 코드의 검증이며 실제 위험 점수의 현장 성능 검증은 아니다. 같은 날 13:09 KST 읽기 전용 DB 확인에서는 승인 이력·데이터셋·모델·사건 연결 기록이 모두 0이었다.
+최신 전체 backend 회귀와 frontend build 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)에 기록한다. 이는 분석 경로와 코드의 검증이며 실제 위험 점수의 현장 성능 검증은 아니다. 같은 날 13:09 KST 읽기 전용 DB 확인에서는 승인 이력·데이터셋·모델·사건 연결 기록이 모두 0이었다.
 
 실제 활용에는 승인 원천과 라벨, 기간·사건 연결, 업무별 평가 모집단, 위험 정책의 보정 및 담당자 검토가 필요하다. 현재 실행 상태와 근거 시점은 [P0 진행 현황](24_P0_END_TO_END_PROGRESS.md), 화면 연결은 [프런트엔드 문서](22_FRONTEND_OPERATIONS_AUDIT.md)를 확인한다.
+
+## 10/8 추가 fitted 모델과의 구분
+
+[25: 이상탐지 AI](25_ANOMALY_AI.md)는 fixed TRAIN/CALIBRATION과 numeric artifact를 사용하는 통계 fit/analyze다. 이 문서의 legacy Insights 휴리스틱과 별도다. 실제 원천 조건이 미확정인 입력은 NOT_EVALUATED이고 실제 source fit/운영 registry는0이다. 새 [Fusion](21_MULTI_AGENT_WORKFLOW.md)의 Recommendation score 역시 개발 recipe이며 고장 확률이 아니다.

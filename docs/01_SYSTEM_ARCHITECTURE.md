@@ -48,10 +48,16 @@ flowchart LR
 5. 고정 membership과 승인 split 전략으로 학습한다. 시간 분할에서 같은 센서 episode를 사용할 수 있는지는 승인 프로토콜에 따른다. 이벤트·원천 행·문서 family 재사용, embargo와 feature window 누수는 별도로 검사한다. Legacy v1을 승인 원천 v2로 자동 승격하지 않는다.
 6. 별도 worker가 후보 artifact를 만들고, 독립 검토·등록·배포 승인을 거쳐 serving한다. [학습 운영](19_MLOPS_VERSION_AND_EVALUATION.md), [롤백](19_MLOPS_VERSION_AND_EVALUATION.md)을 참조한다.
 
+## 10/8 QC·AI·Fusion·승인 연결
+
+[12종 QC](12_QC_RULE_RESULT_LAYER.md)와 [fitted anomaly6모드](25_ANOMALY_AI.md)의 exact scope·episode·시간·원본 checksum을 [Evidence Fusion](21_MULTI_AGENT_WORKFLOW.md)에 연결한다. Recommendation score와 coverage·누락·충돌을 함께 반환한다. 개발 가중치는 운영 승인 기준 또는 고장 확률이 아니다.
+
+새 PostgreSQL agent_workflow_run/transition 원장은 PENDING에서 중단하고 reviewer 결정 후 explicit resume한다. 입력 변경·철회·hash/revision 경합·중복 요청을 검증한다. resume은 DRAFT 보고서/MLOps 추천까지만 수행한다. 실제 계정은 업무 수행 시점으로 유예하고 readonly 기술 분석을 제공한다.
+
 ## 실행 모드와 현재 운영 상태
 
 `DATA_MODE=live`, `MDC_SYNC_ENABLED=false`, `AUTO_CREATE_TABLES=false`가 기본이다. Demo prototype 경로는 live에서 409로 막힌다. 승인·쓰기 권한은 [security.py](../ocean-ai-platform/backend/app/core/security.py)의 서버 `API_IDENTITIES`에 등록된 Actor가 결정한다. 임의 기본 관리자나 요청의 `user_id`로 권한을 만들지 않는다.
 
 2026-10-08 13:09 KST 읽기 전용 운영 확인에서 source packet/decision/binding, ApprovalHistory, DatasetRegistry, ModelRegistry, RetrainingHistory, EventRegistry/EventEvidence, SensorAlias는 모두 0이었다. `API_IDENTITIES`도 비어 있다. 13:10:55 KST 추가 조회에서 기존 canonical worker는 RUNNING이며 승인 job이 없는 빈 큐를 대기한다. 공개 checkout이 실행 중이라는 뜻은 아니다. `/api/mlops/readiness`는 BLOCKED이고 `/api/mlops/serving/health`는 활성 로컬 모델이 없어 409다. 이는 실제 승인·학습 흐름을 아직 시작하지 않았다는 상태다. `mdc_sensor_catalog`는 모델 정의가 있으나 운영 테이블이 아직 없다.
 
-72개 업무 범위는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이다. 표현별 baseline 실행 경로를 구현한 상태이며, 업무별 선정·승인·운영 모델 72개가 완료된 상태가 아니다. 2026-10-07 AIR_PRES 500행은 원문/Parquet/locator가 대조되었지만 18,502개 미확정 오류로 승인이 차단되어 있다. 게시 tree의 backend 345 passed/1 skipped와 frontend build 통과는 코드 검증 결과이며 실제 원천 학습·운영 승인을 증명하지 않는다.
+72개 업무 범위는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이다. 표현별 baseline 실행 경로를 구현한 상태이며, 업무별 선정·승인·운영 모델 72개가 완료된 상태가 아니다. 2026-10-07 AIR_PRES 500행은 원문/Parquet/locator가 대조되었지만 18,502개 미확정 오류로 승인이 차단되어 있다. 최신 전체 시험 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)를 따른다. 코드 검증은 실제 원천 학습·운영 승인을 증명하지 않는다.

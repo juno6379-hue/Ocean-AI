@@ -35,7 +35,7 @@ trajectory는 명시된 position endpoint 기준선이다. 업무 고유 adapter
 수치 호출의 p95와 실제 전체 API p95는 별개이고 후자는 운영 평가가 필요하다.
 
 이번 공개 복사본은 고정 credential을 예제값으로 바꾸고 로컬 개인 경로를 추상화했다.
-2026-10-08 공개 복사본 검증은 전체 backend 시험 345개 통과·1개 skip,
+추가 QC/Fusion 전 2026-10-08 공개 복사본 검증은 전체 backend 시험 345개 통과·1개 skip,
 깨끗한 `npm ci --ignore-scripts`와 TypeScript/Vite production build 통과다.
 재현 가능한 설치를 위해 누락된 frontend transitive dependency lock 항목도 정리했다.
 scope matrix의 72개 업무 행은 그대로이며 provenance 경로만 정리했다.
@@ -74,3 +74,7 @@ frontend에서 `npm ci --ignore-scripts` 후 `npm run build`로 확인한다.
 training enqueue → worker 실행 → 독립 재현·검토 → registry → 배포 identity 승인 → loopback pilot 순서다.
 승인 값이 없는 source packet이나 검토 초안을 바로 학습 또는 배포에 사용하지 않는다.
 원천/QC/센서 기간 또는 feature as-of가 바뀌면 snapshot과 모델 근거를 다시 검증한다.
+
+## 2026-10-08 추가 구현
+
+이 문서의 source/snapshot/model 계약 위에 [12종 QC](83_QC_RULE_ENGINE.md), [Fusion·영속 승인 workflow](84_EVIDENCE_FUSION_WORKFLOW.md), [fitted anomaly6모드](../../docs/25_ANOMALY_AI.md)를 연결했다. 현재 원천 사실·실제 운영 상태와 계정 유예는 [10/8 감사](../../docs/10_IMPLEMENTATION_AUDIT.md)를 따른다. 이전 prototype의 PENDING 진행 설명은 새 영속 workflow에 적용하지 않는다.

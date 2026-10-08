@@ -20,9 +20,11 @@ from app.api import routes_foundation
 from app.api import routes_technical_review
 from app.api import routes_source_contracts
 from app.api import routes_integrations
+from app.api import routes_anomaly_analysis
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.models import domain  # Ensure models are loaded before create_all
+from app.models import agent_workflow  # Durable recommendation approval boundary
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -88,6 +90,7 @@ app.include_router(routes_foundation.router)
 app.include_router(routes_technical_review.router)
 app.include_router(routes_source_contracts.router)
 app.include_router(routes_integrations.router)
+app.include_router(routes_anomaly_analysis.router)
 app.include_router(routes_imputation.router)
 app.include_router(routes_forecasting.router)
 

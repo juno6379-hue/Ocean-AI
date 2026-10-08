@@ -1,16 +1,16 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-08**. 이 폴더의 01~24 문서는 [게시 코드 `35f86cf`](https://github.com/juno6379-hue/Ocean-AI/commit/35f86cf8a7cbf0d5e5f538e3ce835649548b945b)를 기준으로 설명한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-08**. 이 폴더의 01~26 문서는 10/8 QC·AI·Fusion·승인 gate 확장을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
-2026-10-08 운영 PostgreSQL을 읽기 전용으로 확인했고, 백엔드 health/readiness와 프런트엔드 HTTP 응답은 정상이다. 기존 canonical 작업본의 학습 worker는 실행 중이며 큐는 비어 있다. **원천 계약·판정·관측 binding·승인 기록·dataset·학습 이력·model registry는 모두 0건**이고, 실제 운영 모델도 0개다. API identities가 설정되지 않아 인증된 승인 절차를 진행할 수 없다. 운영 `mdc_sensor_catalog` 테이블은 아직 적용되지 않았다.
+2026-10-08 운영 PostgreSQL을 읽기 전용으로 확인했고, 백엔드 health/readiness와 프런트엔드 HTTP 응답은 정상이다. 기존 canonical 작업본의 학습 worker는 실행 중이며 큐는 비어 있다. **원천 계약·판정·관측 binding·승인 기록·dataset·학습 이력·model registry는 모두 0건**이고, 실제 운영 모델도 0개다. 실제 계정은 사용자 지시로 업무 수행 시점에 설정한다(DEFERRED_BY_USER). 현재 readonly 기술 분석은 가능하고 실제 승인 쓰기는 차단한다. 운영 `mdc_sensor_catalog` 테이블은 아직 적용되지 않았다.
 
 `/api/mlops/readiness`는 `BLOCKED`, 수용 기준 상태는 `NOT_DEFINED`, `/api/mlops/serving/health`는 `409 NO_ACTIVE_LOCAL_MODEL`이다. 프로세스 실행과 자료형 기준선 구현을 업무별 모델의 운영 완료로 해석하지 않는다. 72개 업무 키는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이며, 구현 범위는 6종 자료형과 3종 업무 알고리즘의 기준선이다.
 
 문서 수집 상태는 2026-10-08 조회에서 eligible 4,958개 중 성공 1,603개·중복 1,513개·대기 1,697개·실패 145개이고 최근 실행은 `PARTIAL`이다. 원문 수집 전체 완료나 모든 chunk의 vector 검색 품질 검증을 뜻하지 않는다. 분모와 상태별 해석은 [15](15_DOCUMENT_INDEX_INGESTION.md)를 확인한다.
 
-게시 코드 검증은 backend **345 passed / 1 skipped**, 깨끗한 frontend 설치 및 TypeScript/Vite production build 통과다. 이는 구현에 대한 검증이며 실원천 승인이나 운영 성능 수용 결과가 아니다. 현재 실행 중인 canonical 작업본과 공개 복사본은 설정·provenance·줄바꿈 정리 때문에 fingerprint가 다를 수 있다.
+최신 전체 backend 회귀·frontend build·PostgreSQL gate 검증 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)와 [current_status.json](current_status.json)을 따른다. 이는 구현에 대한 검증이며 실원천 승인이나 운영 성능 수용 결과가 아니다. 현재 실행 중인 canonical 작업본과 공개 복사본은 설정·provenance·줄바꿈 정리 때문에 fingerprint가 다를 수 있다.
 
 ## 문서 목록
 
@@ -36,10 +36,17 @@
 | 18 | [Dataset registry](18_DATASET_REGISTRY.md) | v2 원천 의존성 동결과 고정 분할 |
 | 19 | [모델 버전·평가](19_MLOPS_VERSION_AND_EVALUATION.md) | worker, 독립 재현, 선정·등록·배포·rollback |
 | 20 | [AI Insights](20_AI_INSIGHTS.md) | 휴리스틱 분석의 구현 범위와 운영 모델의 차이 |
-| 21 | [Multi-agent 실행](21_MULTI_AGENT_WORKFLOW.md) | prototype와 검증된 실행 경로의 구분 |
+| 21 | [Multi-agent 실행](21_MULTI_AGENT_WORKFLOW.md) | Evidence Fusion·영속 stop/resume gate와 실행 경계 |
 | 22 | [프런트엔드 운영 감사](22_FRONTEND_OPERATIONS_AUDIT.md) | 실 API, 인증, 미확정·오류·빈 상태 표시 |
 | 23 | [업무 절차 대응](23_PROCESS_ALIGNMENT.md) | 원천 담당·사건 담당·업무 담당의 결정과 실행 순서 |
 | 24 | [현재 단계와 다음 작업](24_P0_END_TO_END_PROGRESS.md) | 미확정 원천·승인·업무별 모델 운영의 완료 조건 |
+
+| 25 | [이상탐지 AI](25_ANOMALY_AI.md) | fixed fit/calibration·6모드·actual source 미평가 |
+| 26 | [원천 사실 재확인](26_SOURCE_FACT_RESOLUTION.md) | 확인된 근거와 historical 미확정 항목 |
+
+## 10/8 확장과 실행 웹
+
+12종 Rule QC, fitted 통계 이상탐지6모드,5종 Evidence Fusion과 PostgreSQL PENDING stop/resume을 구현했다. 실제 조건이 없으면 NOT_EVALUATED이며 score는 운영 확률이 아니다. 최신 개발 웹은 `http://127.0.0.1:5174`, backend는8010이다. 기존 canonical5173/8000과 worker는 유지한다. 현재 분석/조회는 가능하고 실제 계정 승인·source fit·등록/운영 모델은0이다.
 
 ## 운영 완료까지 필요한 순서
 

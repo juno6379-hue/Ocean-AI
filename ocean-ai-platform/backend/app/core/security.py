@@ -37,7 +37,12 @@ def authorize_api(request: Request):
     demo_paths = {"/api/qc/run-copilot", "/api/qc/ai-insights-summary", "/api/test-auto/run", "/api/agents/workflow"}
     if request.url.path in demo_paths and settings.DATA_MODE != "demo":
         raise HTTPException(409, "This prototype workflow is available only in demo mode")
-    analysis_paths = {"/api/rag/chat", "/api/rag/hybrid-search", "/api/qc/copilot/analyze", "/api/forecasting/baseline", "/api/agents/workflow"}
+    analysis_paths = {
+        "/api/rag/chat", "/api/rag/hybrid-search", "/api/qc/copilot/analyze",
+        "/api/qc/rules/evaluate", "/api/forecasting/baseline",
+        "/api/agents/workflow", "/api/anomaly-analysis/fit",
+        "/api/anomaly-analysis/analyze", "/api/agents/evidence/analyze",
+    }
     if request.method in {"GET", "HEAD", "OPTIONS"} or request.url.path in analysis_paths:
         return
     actor = current_actor(request)

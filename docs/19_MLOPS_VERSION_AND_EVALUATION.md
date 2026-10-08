@@ -75,4 +75,6 @@ worker CLI는 backend에서 `python -m app.scripts.model_training_worker --poll-
 
 2026-10-08 13:09 KST 운영 DB에서 source 승인·Dataset·Model Registry·RetrainingHistory·ApprovalHistory는 모두 0이다. 13:10:55 KST GET 검증에서는 canonical worker의 설정·fresh heartbeat·실제 프로세스가 확인됐고 큐는 비어 있다. readiness는 `BLOCKED`, `approved_input_ready=false`, 수용 기준 `NOT_DEFINED`, serving health는 409 `NO_ACTIVE_LOCAL_MODEL`이다. 공개 복사본이 실행 중인 것이 아니라 기존 canonical worker의 상태이며, 코드와 시험 통과를 실제 학습·운영 모델 선정·배포 완료로 세지 않는다.
 
-근거 코드: [routes_mlops.py](../ocean-ai-platform/backend/app/api/routes_mlops.py), [실행 route](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py), [candidate 권위](../ocean-ai-platform/backend/app/ml/candidate_authority.py), [serving](../ocean-ai-platform/backend/app/ml/serving.py). 공개 복사본 전체 시험은 345개 통과·1개 skip이다.
+근거 코드: [routes_mlops.py](../ocean-ai-platform/backend/app/api/routes_mlops.py), [실행 route](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py), [candidate 권위](../ocean-ai-platform/backend/app/ml/candidate_authority.py), [serving](../ocean-ai-platform/backend/app/ml/serving.py). 최신 전체 회귀는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)와 [current_status.json](current_status.json)을 따른다.
+
+새 [fitted anomaly6모드](25_ANOMALY_AI.md)는 별도 개발 JSON artifact이며 실제 source 승인·72업무 비교·ModelRegistry를 우회하지 않는다. workflow resume 역시 MLOps 추천만 반환하고 training_enqueued/model_registered/deployment_performed는 false다. 실제 계정 설정은 사용자 지시로 운영 시점에 수행한다.

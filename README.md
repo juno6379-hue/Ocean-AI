@@ -2,7 +2,7 @@
 
 관측 수치, 문서와 사건 근거, QC, 검토 라벨, dataset, 모델 실행의 관계를 보존하는 플랫폼이다. 실제 원천과 승인 기록을 연결해 검증하고, 모델 비교·등록·배포가 필요한 조건을 갖췄는지 확인한다.
 
-**현재 구현과 운영 상태는 [현행 문서 안내](docs/README.md)에서 확인한다.** 2026-10-08 코드 검증은 backend 345 passed / 1 skipped와 frontend production build 통과다. 운영 DB의 원천 승인·dataset·학습 이력·model registry는 모두 0건이고 운영 모델도 0개다. 기존 작업본의 worker가 실행 중이어도 승인된 학습 입력이 없으면 모델을 생성하지 않는다. 72개 업무 키는 자료형 기준선의 부분 구현이며 업무별 운영 모델 72개 완료를 뜻하지 않는다.
+**현재 구현과 운영 상태는 [현행 문서 안내](docs/README.md)에서 확인한다.** 2026-10-08 QC12종·fitted anomaly6모드·Evidence Fusion·PostgreSQL stop/resume 승인 gate를 추가했으며 최종 시험과 웹 실행 결과는 현행 문서에 기록한다. 운영 DB의 원천 승인·dataset·학습 이력·model registry는 모두 0건이고 운영 모델도 0개다. 기존 작업본의 worker가 실행 중이어도 승인된 학습 입력이 없으면 모델을 생성하지 않는다. 72개 업무 키는 자료형 기준선의 부분 구현이며 업무별 운영 모델 72개 완료를 뜻하지 않는다.
 
 ## 구현 범위
 
@@ -12,7 +12,7 @@
 - 6종 자료형·3종 업무 알고리즘의 비교 기준선, 학습 큐·worker, 독립 재현 검토, registry, 승인된 loopback serving·배포·rollback 연결.
 - 버전 contract를 사용하는 문서 수집·색인·검색과 React 대시보드의 미확정·빈 상태·오류 표시.
 
-프로토타입 multi-agent 워크플로우와 AI Insights에는 휴리스틱·초안 기능이 남아 있다. 이 경로의 추천이나 `PENDING` marker를 실제 담당 승인 또는 운영 모델의 결과로 사용하지 않는다. 원천 의미 확정, 미연결 사건·기간 충돌 판정, 업무별 원천 비교와 운영 성능 수용은 실제 담당 근거와 승인 후 수행해야 한다.
+새 영속 workflow는 PENDING에서 멈추고 reviewer 결정 후 별도 resume한다. 승인 후에도 보고서 초안과 MLOps 추천이며 실제 source/dataset/model 승인·학습·배포를 대신하지 않는다. 기존 AI Insights 휴리스틱은 fitted anomaly와 별도다. 원천 의미 확정, 미연결 사건·기간 충돌 판정, 업무별 원천 비교와 운영 성능 수용은 실제 담당 근거와 승인 후 수행해야 한다.
 
 ## 저장소 구조
 

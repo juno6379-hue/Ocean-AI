@@ -155,6 +155,9 @@ class QCRuleResult(Base):
     threshold_value = Column(Float)
     result_flag = Column(String, nullable=False)
     result_score = Column(Float)
+    evaluation_status = Column(String(32))
+    result_reason = Column(Text)
+    provenance_json = Column(JSON)
     rule_version = Column(String, nullable=False)
     executed_at = Column(DateTime, nullable=False, server_default=func.now())
 

@@ -8,6 +8,9 @@ from sqlalchemy.orm import Session
 from typing import Optional, List, Dict, Any
 import uuid
 import datetime
+from decimal import Decimal, InvalidOperation
+from collections import Counter
+from app.services.qc_rule_engine import execute_rules, catalog as rule_catalog, digest, number, NotEvaluated
 
 router = APIRouter(
     prefix="/api/qc",
@@ -54,6 +57,82 @@ class ExecuteRulesRequest(BaseModel):
     timestamp_start: Optional[datetime.datetime] = None
     timestamp_end: Optional[datetime.datetime] = None
 
+
+class EvaluateRulesRequest(BaseModel):
+    records: List[Dict[str, Any]]
+    rules: List[Dict[str, Any]]
+    context: Dict[str, Any]
+
+
+@router.get("/rule-catalog")
+def get_rule_catalog():
+    return rule_catalog()
+
+
+@router.post("/rules/evaluate")
+def evaluate_rule_series(req: EvaluateRulesRequest):
+    """Pure conditional analysis; supplied evidence never creates an approval."""
+    try:
+        return execute_rules(req.records, req.rules, req.context)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+
+
+def _aware_iso(value):
+    if value is None:
+        return None
+    # timestamp_utc is the explicit ORM UTC column, not a guessed raw clock.
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=datetime.timezone.utc)
+    return value.isoformat()
+
+
+def _bound_engine_records(rows, db):
+    """Current approved ingestion lineage only; never infer facts from a code."""
+    from app.models.source_observation_binding import SourceObservationBinding
+    from app.models.source_contracts import SourceContractDecision
+    from app.services.source_contract_authority import verify_approved_receipt, SourceContractError
+    records, checked = [], {}
+    bindings = {b.observation_id: b for b in db.query(SourceObservationBinding).filter(SourceObservationBinding.observation_id.in_([r.observation_id for r in rows])).all()} if rows else {}
+    for row in rows:
+        record = {"observation_id": row.observation_id, "station_id": row.station_id,
+            "sensor_id": row.sensor_id, "variable_code": row.variable_code, "unit": row.standard_unit,
+            "timestamp_utc": _aware_iso(row.timestamp_utc), "value": row.value_standard,
+            "available_at": None, "source_facts": None}
+        binding = bindings.get(row.observation_id)
+        if binding:
+            if binding.receipt_sha256 not in checked:
+                decision = db.get(SourceContractDecision, binding.approval_history_id)
+                try:
+                    if not decision:
+                        raise SourceContractError("SOURCE_APPROVAL_LEDGER_MISSING")
+                    verify_approved_receipt(db, decision.receipt, binding.receipt_sha256)
+                    checked[binding.receipt_sha256] = decision.receipt
+                except (SourceContractError, ValueError, OSError):
+                    checked[binding.receipt_sha256] = None
+            receipt = checked[binding.receipt_sha256]
+            proof = binding.payload
+            approved_proofs = receipt.get("observations", {}) if receipt else {}
+            if receipt and any(p == proof for p in approved_proofs.values()) and proof.get("canonical_station_id") == row.station_id and proof.get("canonical_sensor_id") == row.sensor_id and proof.get("standard_variable") == row.variable_code and proof.get("unit") == row.standard_unit and proof.get("quantity_kind") == "SCALAR" and proof.get("timestamp_utc") == record["timestamp_utc"]:
+                item = rule_catalog()["items"].get(row.variable_code)
+                try:
+                    same_value = row.value_standard is not None and Decimal(str(row.value_standard)) == Decimal(str(proof.get("value")))
+                except InvalidOperation:
+                    same_value = False
+                if item and same_value:
+                    datum = (proof.get("quantity_transform") or {}).get("datum", {})
+                    reference_datum = datum.get("identifier") if isinstance(datum, dict) and datum.get("kind") == "SOURCE_DATUM" else None
+                    record["available_at"] = proof.get("available_at")
+                    record["source_facts"] = {"physical_sensor_id": proof.get("physical_sensor_id"), "sensor_episode_id": proof.get("sensor_episode_id"),
+                        "quantity_kind": item["quantity_kind"], "clock_semantics": proof.get("source_clock_semantics"), "source_timezone_name": proof.get("timezone"),
+                        "reference_datum": reference_datum,
+                        "effective_start": proof.get("effective_start"), "effective_end": proof.get("effective_end"),
+                        "evidence": {"sha256": binding.receipt_sha256, "locator": binding.source_row_locator}}
+                    record["received_at"] = proof.get("source_receive_timestamp_utc")
+                    record["receive_evidence"] = {"sha256": binding.receipt_sha256, "locator": binding.source_row_locator}
+        records.append(record)
+    return records
+
 @router.post("/rules/execute")
 def execute_qc_rules(req: ExecuteRulesRequest, db: Session = Depends(get_db)):
     query = db.query(ObservationStandard).filter(ObservationStandard.station_id == req.station_id)
@@ -64,24 +143,53 @@ def execute_qc_rules(req: ExecuteRulesRequest, db: Session = Depends(get_db)):
     rows = query.order_by(ObservationStandard.timestamp_utc).limit(10000).all()
     rules = db.query(QCRuleDefinition).filter(QCRuleDefinition.active == True).all()
     created = 0
-    for row in rows:
+    now = datetime.datetime.now(datetime.timezone.utc)
+    engine_records = _bound_engine_records(rows, db) if any((r.threshold_definition or {}).get("kind") for r in rules) else []
+    reports = {}
+    counts = Counter()
+    for row_index, row in enumerate(rows):
         for rule in rules:
             variables = rule.applicable_variable or []
             if variables and row.variable_code not in variables: continue
-            threshold = (rule.threshold_definition or {}).get("max")
-            minimum = (rule.threshold_definition or {}).get("min")
+            spec = rule.threshold_definition or {}
+            threshold = spec.get("max")
+            minimum = spec.get("min")
             flag = "1"
             score = 1.0
-            if row.value_standard is None:
+            status, reason = "EVALUATED", "LEGACY_RANGE_CONDITIONAL_ANALYSIS"
+            provenance = {"engine_version": "LEGACY_RANGE", "rule_spec_sha256": digest(spec), "guide_equivalence": False, "approval_created": False}
+            if spec.get("kind"):
+                engine_spec = dict(spec, qc_rule_id=rule.qc_rule_id, rule_version=rule.rule_version)
+                # The series is required for causal window tests. Evaluate once
+                # per immutable rule version and reuse its indexed results.
+                key = (rule.qc_rule_id, rule.rule_version)
+                cache = reports.get(key)
+                if cache is None:
+                    cache = execute_rules(engine_records, [engine_spec], {"as_of": now.isoformat(), "executed_at": now.isoformat()})["results"]
+                    reports[key] = cache
+                result = cache[row_index]
+                flag, score, threshold = result["result_flag"], None, result["threshold_value"]
+                status, reason, provenance = result["evaluation_status"], result["result_reason"], result["provenance_json"]
+            elif row.value_standard is None:
                 flag, score = "9", 0.0
-            elif ((threshold is not None and row.value_standard > float(threshold)) or (minimum is not None and row.value_standard < float(minimum))):
-                flag, score = "4", 0.0
+                status, reason = "MISSING", "NULL_VALUE"
+            elif threshold is None and minimum is None:
+                flag, score = "NOT_EVALUATED", None
+                status, reason = "NOT_EVALUATED", "RANGE_PARAMETERS_MISSING"
+            else:
+                try:
+                    if ((threshold is not None and row.value_standard > number(threshold)) or (minimum is not None and row.value_standard < number(minimum))):
+                        flag, score = "4", 0.0
+                except NotEvaluated:
+                    flag, score, threshold = "NOT_EVALUATED", None, None
+                    status, reason = "NOT_EVALUATED", "INVALID_LEGACY_RANGE_PARAMETERS"
             existing = db.query(QCRuleResult).filter(QCRuleResult.observation_id == row.observation_id, QCRuleResult.qc_rule_id == rule.qc_rule_id, QCRuleResult.rule_version == rule.rule_version).first()
             if existing: continue
-            db.add(QCRuleResult(qc_result_id=f"QCR-{uuid.uuid4().hex}", observation_id=row.observation_id, station_id=row.station_id, sensor_id=row.sensor_id, variable_code=row.variable_code, timestamp_utc=row.timestamp_utc, qc_rule_id=rule.qc_rule_id, qc_rule_name=rule.qc_rule_name, qc_stage="RULE", input_value=row.value_standard, threshold_value=threshold, result_flag=flag, result_score=score, rule_version=rule.rule_version, executed_at=datetime.datetime.utcnow()))
+            db.add(QCRuleResult(qc_result_id=f"QCR-{uuid.uuid4().hex}", observation_id=row.observation_id, station_id=row.station_id, sensor_id=row.sensor_id, variable_code=row.variable_code, timestamp_utc=row.timestamp_utc, qc_rule_id=rule.qc_rule_id, qc_rule_name=rule.qc_rule_name, qc_stage="RULE", input_value=row.value_standard, threshold_value=threshold, result_flag=flag, result_score=score, rule_version=rule.rule_version, executed_at=now.replace(tzinfo=None), evaluation_status=status, result_reason=reason, provenance_json=provenance))
             created += 1
+            counts[status] += 1
     db.commit()
-    return {"station_id": req.station_id, "observations": len(rows), "rules": len(rules), "created_results": created, "status": "ANALYSIS_ONLY"}
+    return {"station_id": req.station_id, "observations": len(rows), "rules": len(rules), "created_results": created, "evaluation_counts": dict(counts), "approved": False, "status": "ANALYSIS_ONLY"}
 
 class QCRuleResultCreate(BaseModel):
     observation_id: str
@@ -97,6 +205,9 @@ class QCRuleResultCreate(BaseModel):
     result_flag: str
     result_score: Optional[float] = None
     rule_version: str
+    evaluation_status: Optional[str] = None
+    result_reason: Optional[str] = None
+    provenance_json: Optional[Dict[str, Any]] = None
 
 
 @router.get("/rule-results", response_model=List[QCRuleResultSchema])
@@ -217,6 +328,8 @@ def create_review_candidate(req: ReviewCandidateRequest, db: Session = Depends(g
     results = db.query(QCRuleResult).filter(QCRuleResult.observation_id == observation.observation_id).all()
     if not results:
         raise HTTPException(409, "Execute QC rules before requesting review")
+    if any(r.evaluation_status in {"NOT_EVALUATED", "ERROR"} or r.result_flag == "NOT_EVALUATED" for r in results):
+        raise HTTPException(409, "Resolve non-evaluated rule conditions before requesting final QC review")
     flags = {r.result_flag for r in results}
     if not flags <= {"1", "2", "3", "4", "9", "G", "S", "B", "GOOD", "SUSPECT", "BAD"}:
         raise HTTPException(409, "Unsupported rule flags must be resolved before review")
@@ -255,10 +368,12 @@ def analyze_copilot(req: CopilotAnalyzeRequest, db: Session = Depends(get_db)):
         operations = db.query(OperationLog).filter(OperationLog.station_id == observation.station_id).order_by(OperationLog.event_time.desc()).limit(20).all()
     else:
         operations = []
-    failed_rules = [r for r in rule_results if r.result_flag not in {"1", "G"}]
+    assessed_rules = [r for r in rule_results if r.evaluation_status not in {"NOT_EVALUATED", "ERROR", "MISSING"} and r.result_flag in {"1", "G", "GOOD", "2", "3", "S", "SUSPECT", "4", "B", "BAD"}]
+    failed_rules = [r for r in assessed_rules if r.result_flag in {"4", "B", "BAD"}]
+    suspect_rules = [r for r in assessed_rules if r.result_flag in {"2", "3", "S", "SUSPECT"}]
     imputations = db.query(ObservationImputation).filter(ObservationImputation.station_id == req.station_id).order_by(ObservationImputation.timestamp_utc.desc()).limit(100).all()
     anomaly_scores = [float(a.anomaly_score) for a in ai_results if a.anomaly_score is not None]
-    recommended = "BAD" if any(a.recommended_flag == "BAD" for a in ai_results) or failed_rules else ("SUSPECT" if ai_results else "UNASSESSED")
+    recommended = "BAD" if any(a.recommended_flag == "BAD" for a in ai_results) or failed_rules else ("SUSPECT" if suspect_rules or ai_results else "NORMAL" if assessed_rules else "UNASSESSED")
     evidence = __import__("app.rag.hybrid_retriever", fromlist=["hybrid_search"]).hybrid_search(
         req.query or f"{req.station_id} {req.variable_code or ''} 품질 이상 원인", {
             "station_id": req.station_id, "sensor_id": req.sensor_id, "variable_code": req.variable_code,

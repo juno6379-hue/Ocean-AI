@@ -77,6 +77,9 @@ class QCRuleResultBase(BaseModel):
     threshold_value: Optional[float] = None
     result_flag: str
     result_score: Optional[float] = None
+    evaluation_status: Optional[str] = None
+    result_reason: Optional[str] = None
+    provenance_json: Optional[Dict[str, Any]] = None
     rule_version: str
     executed_at: datetime
 
