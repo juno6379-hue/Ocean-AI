@@ -1,49 +1,39 @@
-# 03. AI Agent 워크플로우 (AI Agent Workflow)
+# 03. Agent 업무와 승인 흐름
 
-이 문서는 플랫폼의 핵심 기능인 **Multi-Agent 기반 관측망 데이터 분석 체계**가 내부적으로 어떻게 작동하는지를 설명합니다.
+기준일: 2026-10-08. Agent는 원천·문서·QC 근거를 모아 검토 후보를 만들고, 실행 가능 조건을 검증한다. 인간의 source/QC/센서 구간 승인과 운영 모델 배포 결정을 대신 기록하지 않는다. [전체 구성](01_SYSTEM_ARCHITECTURE.md), [승인 설계](17_HUMAN_IN_THE_LOOP.md), [상세 구현 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다.
 
-## 🤖 Agent 개요
+## 현재 Agent 구현
 
-기존에는 사람이 수동으로 센서 데이터를 모니터링하고, 이상 발견 시 과거 일지를 뒤져 원인을 찾은 뒤 보고서를 작성해야 했습니다. 
-본 시스템은 이 과정을 각 역할을 맡은 AI Agent들에게 분담하여 **"인지 -> 추론 -> 조치 -> 보고"**의 과정을 자동화합니다.
+| 역할 | 실제 동작 | 산출물의 상태 |
+|---|---|---|
+| QC Copilot | 정확한 station/sensor/item/기간 scope의 원천 QC 문자, 규칙 결과, 문서 근거를 묶는다. 공백·NULL을 보존한다. | 분석/검토 후보. 원문 QC의 의미와 최종 운영 QC는 별도 승인이다. |
+| 원인 진단 | 기존 근거와 문서에 나타난 사건 후보를 정리한다. 자료에 없는 고장 원인·확률을 생성하지 않는다. | 원인 미확정 또는 문서 연결 후보. 검색 유사도를 인과 확신도로 바꾸지 않는다. |
+| 라벨 검토 | 저장된 observation/event/document/operation 식별자와 검토 입력을 대조한다. | 라벨 검토 packet. 누락된 사건·센서 identity를 발명하지 않는다. |
+| 보고서 | 검토 상태를 포함한 초안을 생성한다. | DRAFT와 생성 기록. 검토·승인·발행은 별도 API 상태 전이다. |
+| MLOps | 승인 dataset과 protocol, artifact 계보를 검증하고 실행 요청 또는 우선순위 추천을 만든다. | 추천, BLOCKED, 실행 후보. 추천을 등록·배포 성공으로 표기하지 않는다. |
 
-## 🕵️ 주요 에이전트 목록 및 역할
+근거: [QC Agent](../ocean-ai-platform/backend/app/agents/qc_copilot_agent.py), [원인 진단](../ocean-ai-platform/backend/app/agents/cause_diagnosis_agent.py), [라벨 검토](../ocean-ai-platform/backend/app/services/label_review_agent.py), [보고서 Agent](../ocean-ai-platform/backend/app/agents/report_agent.py), [QC 검토 서비스](../ocean-ai-platform/backend/app/services/qc_review_agent.py).
 
-| 에이전트 클래스명 | 주 역할 | 처리 데이터 유형 | 작동 시점 / 트리거 |
-|:---|:---|:---|:---|
-| `ServiceMonitoringAgent` | 관측소 API 및 시스템 지연 시간, 응답 에러 등을 실시간 모니터링 | 정형 데이터 (네트워크 로그) | 스케줄러 기반 또는 헬스체크 API 호출 시 |
-| `DailyInspectionAgent` | 담당자가 작성한 일일 현장점검 로그에서 위험 키워드 추출 및 티켓팅 | 비정형 데이터 (텍스트) | 신규 점검보고서 등록 시 |
-| `TideResidualAgent` | 천문조(예측 조위)와 실관측 조위의 편차 계산 및 대조기 침수 위험 분석 | 정형 데이터 (수치) | 조위 데이터 갱신 시 |
-| `ReportAgent` | 종합된 이슈와 원인을 바탕으로 상급자 보고용 초안(Markdown/HTML) 자동 작성 | 정형 + 비정형 결합 | 이슈 종결 혹은 정기 보고 시 |
-| `RagKnowledgeAgent` | 과거 6종 운영보고서를 검색하여 유사한 장애 조치 이력 및 원인 추론 제공 | 비정형 벡터 데이터 | 타 에이전트의 원인 분석 요청 시 |
+## 분석 graph와 demo prototype
 
----
+[LangGraph orchestrator](../ocean-ai-platform/backend/app/agents/orchestrator.py)는 `fetch_data → detect_anomalies → diagnose_cause → generate_report` 순서로 수행한다. Station과 target date를 명시하며 선택 sensor/item과 제한된 관측 행을 읽는다. Graph 내부 노드 호출은 source approval, dataset approval, model deployment를 자동으로 수행하는 작업이 아니다.
 
-## 🔁 주요 워크플로우 예시 시나리오
+별도의 [multi_agent_workflow.py](../ocean-ai-platform/backend/app/agents/multi_agent_workflow.py)는 QC→근거 확인→검색→추천→PENDING 검토 객체→초안→MLOps 추천의 prototype다. 여러 역할 이름이 있으나 코드에서는 순차 처리하며 일반 범위 규칙과 최근 Standard 행을 사용한다. 결과는 `ANALYSIS_ONLY`다. 실제 인간 승인이나 훈련을 수행하지 않는다. `/api/agents/workflow`와 `/api/test-auto/run`은 `DATA_MODE=demo`에서만 열리고 live에서는 409다. `/api/agents/workflow/stages`는 단계 설명 조회다.
 
-### 시나리오: "원인 불명의 수온 센서 데이터 결측 발생"
+Live의 `/api/qc/copilot/analyze`는 분석 POST로 사용할 수 있다. 예를 들어 station/sensor/variable scope를 정해 원천 QC와 문서를 조회할 수 있지만, 결과가 나와도 승인된 source contract나 AI label이 생성된 것으로 해석하지 않는다. 실행 payload와 인증은 [API 명세](04_API_SPECIFICATION.md)를 참조한다.
 
-1. **[Data Layer] 이상 감지**: 백엔드의 `AnomalyDetector`가 3시간 동안 특정 관측소의 수온 데이터가 들어오지 않음을 감지합니다.
-2. **[Agent] 원인 추론 요청**: `Orchestrator`가 이 사실을 `RagKnowledgeAgent`에게 전달하며 "A관측소 수온 센서 결측 원인 진단"을 요청합니다.
-3. **[RAG] 지식 검색**: `RagKnowledgeAgent`는 ChromaDB 벡터 저장소에서 과거의 **'국가해양관측망 일일상황보고'** 및 **'일일점검보고서'** 데이터를 검색합니다.
-4. **[LLM] 종합 판단**: 
-   * 검색 결과: "작년 8월, A관측소에서 해조류가 센서 통신 모듈에 얽혀 결측이 발생한 사례(2건) 발견."
-   * LLM 결론: "현재 수온 센서 결측은 통신 모듈의 해조류 얽힘일 확률이 매우 높음. 현장 잠수부 투입 및 케이블 점검 권장."
-5. **[Agent] 보고서 생성**: `ReportAgent`가 위의 분석 결과를 바탕으로 `[초안] A관측소 수온 센서 결측 원인분석 및 조치계획` 보고서를 자동 생성합니다.
-6. **[Frontend] 알림 및 결재**: 사용자 대시보드에 Alert가 뜨고, 담당자는 문서함 탭에서 초안을 검토한 후 '승인' 버튼만 누르면 모든 업무 처리가 완료됩니다.
+## 실제 운영 승인으로 이어지는 순서
 
-## 🧠 프롬프트 및 LangChain 구성
+1. **Source owner 검토:** 원문 file/SHA/locator, 원천 문자열, 물리 센서·episode·기간, 단위와 변환, clock, 관측·수신·QC 가용시각, raw QC codebook을 검토한다. Agent가 기술적으로 확인한 부분과 담당자 미확정 부분을 같은 packet에서 구분한다.
+2. **Source contract 결정:** `/api/source-contracts/request`로 PENDING packet을 만들고, reviewer가 예상 packet SHA를 확인하여 decision을 기록한다. 승인 receipt는 실제 ledger와 현재 상태에 묶인다. Receipt와 DB의 requester/reviewer/hash 불일치, 현재 승인 철회·변조는 차단된다. Ingest operator가 원요청자와 동일해야 한다는 뜻은 아니다.
+3. **승인 원천 ingest:** receipt와 원문을 다시 검증하고 Raw/Standard와 source binding을 저장한다. 사건·라벨·Feature는 각각의 근거·검토가 이어져야 한다. 보고일, 실제 고장 구간, 조치일, 관측일을 구분한다.
+4. **Dataset 고정:** 승인된 source 의존성과 split/evaluation/acceptance 프로토콜, 실제 membership을 snapshot v2에 동결한다. Feature 입력 원천의 as-of까지 검증한다. 승인 없는 파일 후보는 draft 경로에 남는다.
+5. **학습·독립 검토:** 고정 분할 manifest를 preflight 후 worker 큐에 넣는다. 후보 metric·artifact를 독립 replay하고 registry에 등록한다. 운영 배포·rollback 결정은 별도 reviewer와 무결성 검증을 요구한다.
 
-각 에이전트는 `app/agents/` 디렉토리 내에 독립된 클래스로 구현되어 있습니다. 
-에이전트들은 LangChain의 `PromptTemplate`을 상속받거나 활용하여, 관측망 전문 도메인 지식에 맞게 미세 조정(Tuning)된 지시문(System Prompt)을 LLM에 전달합니다. 
+Agent 간 최적화는 이 공통 grain, raw literal, 파일 hash, 기간·가용시각, receipt 인터페이스를 맞추고 상대 산출물을 재검토하는 것이다. 채널 수·문서 추출 수·모듈 시험 통과 수를 의미 승인 수로 바꾸지 않는다. [source authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), [dataset bridge](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py), [model runner](../ocean-ai-platform/backend/app/ml/comparison_runner.py)가 실행 경계를 강제한다.
 
-```python
-# 예시: DailyInspectionAgent의 프롬프트 구조
-"""
-당신은 국가해양관측망의 일일 점검 로그를 분석하는 전문가입니다.
-주어진 텍스트를 분석하여, 단순한 확인(정상)인지, 아니면 즉각적인 조치가 필요한 심각한 이슈(Critical)인지 분류하십시오.
-반드시 JSON 형식으로 응답하십시오. {"status": "Critical", "summary": "...", "reason": "..."}
-"""
-```
+## 현재 남은 검토
 
-이러한 모듈식 에이전트 구조는 향후 새로운 유형의 보고서나 센서가 추가되더라도, **기존 코드를 건드리지 않고 새 에이전트 클래스만 추가**함으로써 쉽게 시스템을 확장할 수 있도록 돕습니다.
+2026-10-08 13:09 KST 운영 DB의 source 계약·결정·binding, 승인, dataset, model, retraining, 사건·근거·alias는 모두 0이며 인증 Actor도 아직 미설정이다. 2026-10-07 전수 검토 파일의 66,190 월 grain, 152 기간 충돌, 40 미연결 보고서 행은 기술 검토 분모와 후보 상태다. 인간의 전수 승인이나 운영 DB 등록 수가 아니다.
+
+AIR_PRES 500행의 원문·Parquet 일치는 확인했으나 18,502 미확정 오류로 승인 준비도가 차단된다. Source/물리 sensor/기간/clock/단위/QC 담당자의 실제 결정, 사건·라벨·Feature 검토, 고정 split 승인 이후에 모델 비교가 가능하다. 72개 업무의 표현별 baseline 구현 상태는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이며 업무별 승인 운영 모델 완수 상태가 아니다.

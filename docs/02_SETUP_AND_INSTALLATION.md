@@ -1,86 +1,111 @@
-# 02. 설치 및 실행 가이드 (Setup and Installation)
+# 02. 설치 및 실행
 
-새로운 개발 환경이나 운영 서버에 플랫폼을 구축하기 위한 가이드입니다. 
-본 프로젝트는 로컬 개발 시 **Windows 환경** 및 **PowerShell**을 기준으로 작성되었습니다.
+기준일: 2026-10-08. Windows PowerShell 기준이며, [현재 문서 안내](README.md)와 [구현 경계](01_SYSTEM_ARCHITECTURE.md)를 함께 읽는다. 아래 기본 절차는 Oracle 수집, 운영 DDL, seed, 모델 학습을 자동으로 시작하지 않는다.
 
-## 🛠️ 1. 사전 요구 사항 (Prerequisites)
+## 요구 환경과 가져오기
 
-시스템을 구동하기 위해 아래 프로그램들이 설치되어 있어야 합니다.
-* **Node.js**: v18.x 이상 (프론트엔드 구동용)
-* **Python**: 3.10 이상 (백엔드 구동 및 AI 모델 실행용)
-* **Git**: 소스 코드 관리용
-* **Ollama**: 로컬 LLM 실행을 위한 필수 플랫폼 ([Ollama 다운로드](https://ollama.com/download))
-
-## 📦 2. 프로젝트 가져오기
+게시 tree는 Python 3.14.2와 Node 24.13.0에서 backend 345 passed/1 skipped, 깨끗한 `npm ci --ignore-scripts` 후 TypeScript/Vite build 통과를 검증했다. Backend requirements는 완전한 버전 lock 파일이 아니므로 재설치한 dependency 조합은 다시 검증한다. 다른 Python 버전의 호환성도 별도 확인한다. [잠금 파일](../ocean-ai-platform/frontend/package-lock.json)의 Vite 요구사항은 Node.js `^20.19.0 || >=22.12.0`이다. Node 18은 현재 설치 기준이 아니다. PostgreSQL 15와 Git이 필요하다. Ollama와 Chroma는 문서 검색을 사용할 때 추가한다.
 
 ```powershell
-# Git 저장소 클론 (원격 저장소가 연결된 경우)
-git clone https://github.com/juno6379/Develop.git AI_Observation
-cd AI_Observation/ocean-ai-platform
+git clone https://github.com/juno6379-hue/Ocean-AI.git
+Set-Location .\Ocean-AI\ocean-ai-platform
 ```
 
-## 🧠 3. AI 모델 준비 (Ollama)
+저장소에는 원천 데이터, 운영 비밀값, 승인 receipt, 대용량 문서·벡터·학습 artifact가 포함되지 않는다. 소스를 받은 것만으로 기존 운영 데이터나 모델이 복원되지 않는다.
 
-플랫폼은 추론에 LLM을 사용하며, 텍스트 임베딩 모델은 LangChain을 통해 자동으로 다운로드됩니다. 
-가장 먼저 Ollama를 실행하여 사용할 LLM 모델을 설치해 주세요.
+## PostgreSQL과 backend 환경파일
+
+[Compose 파일](../ocean-ai-platform/docker-compose.yml)은 PostgreSQL만 기동한다. 사용할 로컬 비밀번호를 현재 PowerShell 세션의 `POSTGRES_PASSWORD`에 안전하게 설정한 후 실행한다. 저장소에 비밀번호를 쓰거나 commit하지 않는다. 동일한 값으로 backend의 `DATABASE_URL`을 설정한다. 이미 5432에서 DB가 실행 중이면 별도 인스턴스의 포트와 데이터 볼륨을 먼저 구분한다.
 
 ```powershell
-# 터미널 창을 열고 Llama3 모델(또는 권장 모델) 다운로드
-ollama run llama3
-# 다운로드가 완료되면 'ctrl+d' 또는 '/bye'로 빠져나옵니다.
+# 현재 세션에 POSTGRES_PASSWORD를 설정한 뒤 실행한다.
+docker compose up -d db
+Set-Location .\backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+
+# 예제의 POSTGRES_PASSWORD는 Compose 전용이다. backend Settings 입력에서 제외한다.
+Get-Content .env.example |
+  Where-Object { $_ -notmatch '^\s*POSTGRES_PASSWORD=' } |
+  Set-Content -Encoding utf8 .env
 ```
 
-## ⚙️ 4. 백엔드 (Backend) 설정 및 실행
+현재 [`.env.example`](../ocean-ai-platform/backend/.env.example)에 있는 `POSTGRES_PASSWORD`를 그대로 backend `.env`에 복사하면 [Settings](../ocean-ai-platform/backend/app/core/config.py)가 `extra_forbidden`으로 거부한다. Compose 비밀번호는 shell 환경 또는 Compose가 읽는 별도 로컬 환경파일로 관리한다. Backend `.env`에는 설정 모델에 정의된 키만 넣는다. `DATABASE_URL`의 placeholder를 실제 개발 DB 주소와 URL-encoded 비밀번호로 바꾼다.
 
-FastAPI 백엔드를 설정합니다.
+| 설정 | 기본값 또는 역할 |
+|---|---|
+| `DATABASE_URL` | PostgreSQL 업무 DB. 예제 `change-me`는 교체해야 하는 placeholder다. |
+| `TEST_DATABASE_URL` | 격리 시험용 `sqlite://`. 운영 DB를 시험 대상으로 지정하지 않는다. |
+| `DATA_MODE` | `live`. Demo prototype을 쓰려면 별도의 demo 환경을 명시한다. |
+| `MDC_SYNC_ENABLED` | `false`. Oracle 권한·clock·단위·수집 계획 검토 후 명시적으로 켠다. |
+| `AUTO_CREATE_TABLES` | `false`. 서버 시작으로 운영 스키마를 수정하지 않는다. |
+| `API_IDENTITIES` | `{}`. 쓰기와 승인에는 실제 사용자별 token과 role 등록이 필요하다. |
+| `DATASET_SNAPSHOT_DIR` | `data/dataset_snapshots`. 불변 dataset/dependency 파일 저장소다. |
+| `DOCUMENT_CHROMA_HOST/PORT/SSL` | Chroma 서버 연결. 기본 `127.0.0.1:8001`, SSL false. |
+| `MDC_DSN/MDC_USER/MDC_PWD` | Oracle 연결 정보. 기본은 비어 있다. |
+| `ORACLE_CLIENT_LIB_DIR` | 지정 시 Oracle thick client 사용. 비어 있으면 thin 모드다. |
+
+`API_IDENTITIES`의 role은 viewer/operator/reviewer/admin이며 token은 서버에만 둔다. 화면은 사용자가 제공한 bearer를 메모리에서 사용한다. Frontend 환경파일에 운영 token을 넣지 않는다. `API_IDENTITIES={}`인 상태에서 인증이 필요한 요청의 503은 의도된 차단이다. [인증 구현](../ocean-ai-platform/backend/app/core/security.py)을 참조한다.
+
+## 스키마 준비
+
+기존 운영 DB는 백업·스키마 대조·DDL 검토 후 개별 migration을 적용한다. `AUTO_CREATE_TABLES=true`, seed 또는 `migrate_process_schema.py`를 공통 설치 단계로 사용하지 않는다. 특히 [기존 중복 정리 script](../ocean-ai-platform/backend/app/scripts/migrate_process_schema.py)는 관측 중복을 삭제하므로 [검토 절차 07](07_MDC_DEDUPLICATION_MIGRATION.md)가 먼저다.
+
+새로 만든 **비어 있는 개발 DB**에서는 연결 대상이 개발 DB인지 확인한 후 아래처럼 현재 ORM 테이블을 명시 생성할 수 있다. 이 작업은 DDL을 수행한다. 기존 테이블의 열·제약 변경을 해결하는 migration 대용으로 사용하지 않는다.
 
 ```powershell
-# 1. 백엔드 디렉토리로 이동
-cd backend
-
-# 2. Python 가상환경 생성 및 활성화
-python -m venv venv
-.\venv\Scripts\activate
-
-# 3. 의존성 패키지 설치
-pip install -r requirements.txt
-
-# 4. 데이터베이스 초기화 및 시드 데이터 주입
-# (최초 1회만 실행 - SQLite 및 ChromaDB 초기화)
-python -m app.scripts.seed_db
-python -m app.scripts.seed_part_a
-
-# 5. 백엔드 서버 실행 (포트 8080)
-# 테스트 모드로 실행할 경우 환경변수 설정 적용
-$env:TEST_MODE="1"
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8080 --reload
+python -c "from app.core.database import Base,engine; from app.models import domain,source_contracts,source_observation_binding; Base.metadata.create_all(bind=engine)"
 ```
-> [!TIP]
-> 백엔드가 정상 구동되면 `http://localhost:8080/docs` 에서 Swagger API 문서를 확인하실 수 있습니다.
 
-## 🎨 5. 프론트엔드 (Frontend) 설정 및 실행
+기존 DB에 필요한 추가 스키마는 [event/evidence migration](../ocean-ai-platform/backend/app/scripts/migrate_event_evidence.py), [source contract migration](../ocean-ai-platform/backend/app/scripts/migrate_source_contracts.py), [source binding SQL](../ocean-ai-platform/backend/migrations/20261007_source_observation_binding.sql), [registry migration](../ocean-ai-platform/backend/app/scripts/migrate_mlops_registry.py)을 각각 검토한다. Source contract script는 기본 dry-run, `--apply`일 때 두 테이블만 생성한다. Binding은 Standard/SourcePacket/ApprovalHistory FK를 먼저 요구한다. `mdc_sensor_catalog`는 [카탈로그 reconcile](../ocean-ai-platform/backend/app/scripts/reconcile_mdc_sensors.py)의 별도 명시 적용 경로이며 현재 운영에 미생성이다.
 
-React 대시보드를 설정합니다. (백엔드를 실행해둔 상태로 새 터미널 창을 열어주세요.)
+## API와 화면 실행
+
+Backend 디렉터리에서 실행한다. [run_local.ps1](../ocean-ai-platform/backend/run_local.ps1)은 loopback을 사용한다. 정상 설치에서는 requirements의 DuckDB를 사용하며 로컬 vendor fallback을 준비할 필요가 없다.
 
 ```powershell
-# 1. 프론트엔드 디렉토리로 이동
-cd frontend
-
-# 2. NPM 패키지 설치
-npm install
-
-# 3. 개발 서버 실행 (포트 5173 기본값)
-npm run dev
+.\run_local.ps1 -Port 8000
+# 또는
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-> [!NOTE]
-> 프론트엔드가 실행되면 `http://localhost:5173` 링크를 클릭하여 브라우저에서 플랫폼에 접속하실 수 있습니다.
+별도 PowerShell에서 `ocean-ai-platform/frontend`로 이동한다.
 
-## ⚠️ 문제 해결 (Troubleshooting)
+```powershell
+npm ci --ignore-scripts
+npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
+```
 
-1. **`[Errno 10048] Address already in use` 에러 발생 시**
-   * 이미 8080 포트가 사용 중인 경우입니다. `taskkill /F /PID <포트점유PID>` 명령을 통해 기존 백엔드 프로세스를 종료한 뒤 다시 실행하세요.
-2. **`HuggingFaceEmbeddings` 경고 메시지**
-   * 백엔드 실행 시 LangChain 버전 관련 Deprecation 경고가 뜰 수 있으나, 플랫폼 구동 자체에는 영향을 미치지 않으므로 무시하셔도 무방합니다.
-3. **API 응답 지연 (Timeout)**
-   * 처음 AI 분석 API를 호출할 때, 모델 로딩으로 인해 다소 시간이 걸릴 수 있습니다. (첫 1회 이후에는 빨라집니다.)
+Frontend 기본 `/api`는 [Vite proxy](../ocean-ai-platform/frontend/vite.config.ts)로 `http://127.0.0.1:8000`에 전달한다. `API_PROXY_TARGET`으로 개발 proxy 대상을 바꿀 수 있고, 배포용 API base는 `VITE_API_BASE_URL`이다. 기본 화면은 `http://127.0.0.1:5173`, Swagger는 `http://127.0.0.1:8000/docs`다. `/health`는 프로세스, `/readiness`는 DB 연결을 확인한다. 둘 다 모델 배포나 실제 원천 승인 완료를 뜻하지 않는다.
+
+상위 [start_web_local.ps1](../ocean-ai-platform/start_web_local.ps1)은 기존 문서 contract를 요구하는 운영 편의 wrapper다. `DocumentDataRoot` 기본값은 기존 C 드라이브 경로이므로 보존된 실제 문서 저장소를 명시해야 한다. 없는 contract를 새 빈 벡터 저장소로 대체하지 않는다. 원천 검토와 lake 기본 경로에는 `D:\AI_Observation` 의존성이 남아 있으므로 새 개발 환경에서는 해당 데이터·보존 계보를 별도로 준비해야 한다.
+
+## 문서 검색과 모델 worker
+
+Ollama endpoint는 기본 `http://localhost:11434`, chat 모델 기본은 `llama3`다. 활성 문서 인덱스는 [문서 contract](../ocean-ai-platform/backend/app/rag/document_contract.py)에 기록된 embedding 모델·digest·dimension·버전을 따른다. 신규 contract 기본 모델은 `mxbai-embed-large:latest`이며 HuggingFace 임베딩을 자동으로 다운로드하는 설치 흐름이 아니다. 기존 contract가 있으면 그 모델을 먼저 확인하고 보존한다. 모델 부재 시 일부 chat 경로의 명시적 Mock 응답을 실제 진단으로 사용하지 않는다.
+
+Chroma는 기존 데이터 디렉터리를 소유하는 **한 서버**로 실행하고 API는 HttpClient로 연결한다. Backend에서 `OCEAN_APP_DATA_DIR`/`DOCUMENT_PIPELINE_DIR`과 Chroma 설정을 실제 보존 위치에 맞춘 뒤 다음 실행 경로를 사용한다.
+
+```powershell
+python -m app.scripts.serve_document_vectors
+```
+
+인덱스 삭제, `rag_initializer`, reindex/ingest는 설치 확인 명령이 아니다. [문서 검색](15_DOCUMENT_INDEX_INGESTION.md)과 기존 contract·원문 hash를 먼저 대조한다.
+
+Worker는 API와 별도 프로세스다. `OCEAN_TRAINING_WORKER_ENABLED=1`을 명시한 운영 환경에서 `python -m app.scripts.model_training_worker --once` 또는 `--poll-seconds 10`으로 실행한다. 승인 원천·dataset·프로토콜이 없으면 실행 preflight가 차단한다. 로컬 serving은 `OCEAN_LOCAL_MODEL_SERVING_ENABLED=1`과 별도 배포 승인·artifact 무결성을 요구한다. 단순 flag 설정으로 모델을 만들거나 승인하지 않는다.
+
+## 설치 확인
+
+시험은 별도 PowerShell에서 backend로 이동하고 아래 임시 파일 저장소를 설정한 뒤 실행한다. 이 세 키는 Settings 필드가 아니므로 backend `.env`에 추가하지 않고 `$env:`로 설정한다. 시험 파일과 운영 큐·문서 원장을 분리한다.
+
+```powershell
+$testRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('ocean-ai-tests-' + [guid]::NewGuid().ToString('N'))
+$env:OCEAN_MLOPS_ROOT = Join-Path $testRoot 'mlops'
+$env:OCEAN_APP_DATA_DIR = Join-Path $testRoot 'app-data'
+$env:DOCUMENT_PIPELINE_DIR = Join-Path $testRoot 'document-pipeline'
+New-Item -ItemType Directory -Force -Path $env:OCEAN_MLOPS_ROOT, $env:OCEAN_APP_DATA_DIR, $env:DOCUMENT_PIPELINE_DIR | Out-Null
+python -B -m pytest tests -q -p no:cacheprovider
+```
+
+Frontend에서는 `npm run build`를 실행한다. [test conftest](../ocean-ai-platform/backend/tests/conftest.py)는 DB를 격리하고 sync/자동 DDL을 끈다. API 조회와 UI 확인 후 실제 source owner/센서 구간/clock/단위/QC 승인, 사건·라벨·Feature, 고정 분할을 준비해야 학습 운영으로 이어진다. 현재 운영 현황은 [docs 안내](README.md)에서 확인한다.

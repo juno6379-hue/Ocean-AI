@@ -1,0 +1,98 @@
+{
+  "schema_version": "ocean-ai-documentation-status-1",
+  "as_of": "2026-10-08T04:10:55.581022+00:00",
+  "code_revision": "35f86cf8a7cbf0d5e5f538e3ce835649548b945b",
+  "scope": "repository-root docs/01 through docs/24",
+  "verification": {
+    "backend_tests": {
+      "date": "2026-10-08",
+      "passed": 345,
+      "skipped": 1
+    },
+    "frontend_clean_install": "PASS",
+    "frontend_production_build": "PASS",
+    "method": "Previously verified unchanged implementation tree; fresh read-only PostgreSQL and runtime GET checks"
+  },
+  "runtime": {
+    "backend_health": "OK",
+    "database_readiness": "OK",
+    "frontend_http": "OK",
+    "data_mode": "live",
+    "mdc_sync_enabled": false,
+    "auto_create_tables": false,
+    "configured_identity_count": 0,
+    "training_worker_running": true,
+    "training_queue_job_count": 0,
+    "mlops_readiness": "BLOCKED",
+    "approved_input_ready": false,
+    "acceptance_criteria_status": "NOT_DEFINED",
+    "serving_health": {
+      "http_status": 409,
+      "code": "NO_ACTIVE_LOCAL_MODEL"
+    },
+    "runtime_is_canonical_workstation_copy": true,
+    "session_http_status": 503
+  },
+  "database_counts": {
+    "source_contract_packets": 0,
+    "source_contract_decisions": 0,
+    "source_observation_binding": 0,
+    "approval_history": 0,
+    "dataset_registry": 0,
+    "model_registry": 0,
+    "retraining_history": 0,
+    "event_registry": 0,
+    "event_evidence": 0,
+    "sensor_alias": 0,
+    "mdc_sensor_catalog": null
+  },
+  "schema_not_applied": [
+    "mdc_sensor_catalog"
+  ],
+  "model_scope": {
+    "task_keys": 72,
+    "representations": 6,
+    "task_algorithms": 3,
+    "scope_status": "REPRESENTATION_BASELINE_SCOPE_PARTIAL",
+    "registered_models": 0,
+    "operating_models": 0,
+    "operational_completion": false
+  },
+  "source_review": {
+    "last_evidence_verification": "2026-10-07",
+    "review_grains": 66190,
+    "verified_air_pres_rows": 500,
+    "unresolved_review_fields": 18502,
+    "unlinked_event_candidates": 40,
+    "period_conflicts": 1,
+    "period_conflict_affected_grains": 152,
+    "owner_approval_record_count": 0,
+    "raw_materials_committed": false
+  },
+  "limitations": [
+    "Source semantics, units, scale, datum, time zone, QC revisions and physical sensor validity need owner evidence and approval.",
+    "Legacy v1 snapshots have no automatic conversion to source-bound v2 snapshots.",
+    "Representation baselines do not complete all 72 task-specific production models.",
+    "Prototype agent workflows and heuristic insights are distinct from approved model execution.",
+    "Historical migration and document ingestion reports are not fresh completion evidence."
+  ],
+  "document_ingestion": {
+    "files": 71960,
+    "eligible_files": 4958,
+    "counts": {
+      "DUPLICATE": 1513,
+      "SUCCEEDED": 1603,
+      "EXCLUDED": 67002,
+      "PENDING": 1697,
+      "FAILED": 145
+    },
+    "success_percent": 62.85,
+    "accounted_percent": 97.64,
+    "eligible_processed_percent": 65.77,
+    "unique_successful_documents": 1603,
+    "indexed_chunks": 244680,
+    "is_demo": false,
+    "checked_at": "2026-10-08T04:15:21.273811+00:00",
+    "latest_run_status": "PARTIAL"
+  }
+}

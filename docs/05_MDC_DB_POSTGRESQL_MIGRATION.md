@@ -1,53 +1,41 @@
-# 05. MDC DB 실시간 연동 및 PostgreSQL 마이그레이션 가이드
+# 05. MDC Oracle와 PostgreSQL 연계
 
-본 문서는 플랫폼의 데이터베이스를 기본 SQLite에서 운영용 **PostgreSQL**로 교체하고, 외부 관측망 오라클 DB(MDC)와 백엔드를 실시간으로 연동(ETL)하도록 수정한 개발 내역을 기록한 문서입니다.
+기준일: 2026-10-08. 현재 [sync_mdc_db.py](../ocean-ai-platform/backend/app/scripts/sync_mdc_db.py)는 Oracle에서 기준정보·관측 행을 읽어 PostgreSQL 조회 모델에 적재하는 기존 연계다. 승인 source contract 기반 운영 학습 ingest는 [별도 bridge](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py)다. Oracle 수집에 성공한 사실만으로 물리 센서·clock·단위·QC·기간이 승인되지 않는다.
 
----
+## 접속과 기동 조건
 
-## 🚀 1. 주요 변경 내역 요약
+Backend `.env`의 `MDC_DSN`, `MDC_USER`, `MDC_PWD`는 실제 허가된 읽기 전용 연결 정보로 설정한다. 소스에 접속 주소·비밀번호를 넣지 않는다. `oracledb`는 [requirements](../ocean-ai-platform/backend/requirements.txt)에 포함된다. `ORACLE_CLIENT_LIB_DIR`를 지정하면 thick 모드 client library를 초기화하고, 비어 있으면 thin 모드를 사용한다. Instant Client가 모든 환경의 필수 조건인 것은 아니다.
 
-1. **DB 엔진 교체 (SQLite ➡️ PostgreSQL 15)**
-   - 대규모 시계열 관측 데이터 수용을 위해 도커(Docker) 기반의 PostgreSQL 15 컨테이너를 도입했습니다.
-   - `docker-compose.yml`이 프로젝트 루트에 추가되었습니다.
-2. **동기화 파이프라인 자동화 (APScheduler 연동)**
-   - 수동으로 실행되던 `sync_mdc_db.py` 스크립트를 리팩토링(`sync_job` 함수 추가)했습니다.
-   - 백엔드(FastAPI) 구동 시 `main.py`의 `lifespan` 이벤트를 통해 매 5분마다 백그라운드에서 오라클 DB의 데이터를 긁어와 로컬 PostgreSQL에 적재하도록 스케줄러를 연동했습니다.
+Oracle 조회는 읽기 전용 transaction과 connect/call timeout을 사용한다. 원격 연결·권한·table/column 오류를 시험 데이터로 대체하지 않는다. 선택 열이 없는 Oracle ORA-00904일 때만 해당 조회의 선택 열 없는 fallback을 사용한다. 이 경우 missing QC/receive를 승인된 값으로 채우지 않는다.
 
----
+[main.py](../ocean-ai-platform/backend/app/main.py)의 scheduler는 `MDC_SYNC_ENABLED=true`일 때만 시작하며 `DATA_MODE=live`를 요구한다. 기본값은 false다. 활성화 시 시작 시점에 metadata와 당일 관측을 수집하고, 이후 **10초마다** `sync_job()`을 호출한다. `max_instances=1`, `coalesce=true`로 같은 scheduler의 작업 중첩을 제한한다. API worker를 여러 개 띄우면 각 프로세스의 scheduler가 별도로 시작할 수 있으므로 수집 소유 프로세스를 하나로 정해야 한다.
 
-## 🛠️ 2. 상세 변경 파일 및 역할
+## 조회 범위와 적재
 
-### 1) `docker-compose.yml` (신규 추가)
-- 로컬 또는 서버 환경에서 명령어 한 번(`docker-compose up -d`)으로 PostgreSQL DB를 띄울 수 있도록 구성했습니다.
-- 기본 접속 정보: `postgresql://ocean_ai_user:ocean_ai_password@localhost:5432/ocean_ai_db`
+| 작업 | Oracle 자료 | 현재 범위 | PostgreSQL 반영 |
+|---|---|---|---|
+| `sync_metadata` | `WEB_STATION` | 관측소 기준정보 | 허용된 관측망·유효 코드와 이름만 StationMetadata에 upsert |
+| `sync_station_data` | `WEB_OBS_ST` | `(window_start, window_end]` | Raw 자연키 충돌 무시 후 Standard 변환 |
+| `sync_buoy_data` | `WEB_OBS_VBU` | 같은 시간 창, 수심 열 포함 | 깊이별 기술 채널 ID로 Raw/Standard |
+| `sync_tide_data` | `TP_OBS_SO` | 같은 시간 창 | 조위 항목 Raw/Standard |
+| `sync_today_bulk` | 위 세 관측 table | 현재 KST 날짜 00:00부터 실행 시각 | 시작 시 당일 범위 적재 |
 
-### 2) `backend/app/core/config.py`
-- 기존 `sqlite:///./ocean_ai.db` 였던 `DATABASE_URL`을 위 PostgreSQL 접속 URI로 변경했습니다.
+기본 증분 창은 현재 시각 기준 약 10초다. 과거 문서의 5분 scheduler·1시간 조회·8년 timestamp 이동은 현재 동작이 아니다. `shift_time_to_present()`는 timestamp를 변경하지 않는다. 이름이 남아 있는 `get_simulated_time_range()`도 현재 시각 기반 조회 창을 만든다. 기존 `SIMULATED` DB 행은 이 변경으로 자동 정정되거나 실제 source 행으로 승격되지 않는다.
 
-### 3) `backend/app/core/database.py`
-- SQLite 환경에서만 필요했던 `check_same_thread=False` 옵션을 제거했습니다.
-- 끊어진 커넥션을 방지하기 위해 `pool_pre_ping=True` 옵션을 적용하여 안정성을 높였습니다.
+현재 수집기는 durable watermark/replay checkpoint가 없다. 수집 중단 기간과 이전 OBS_TIME을 가진 지연 도착 행은 짧은 다음 창에서 빠질 수 있다. backfill 범위·원문 중복/변경·late arrival·재처리 정책을 검토해야 한다. 1,000행 배치의 Raw와 Standard commit은 별도이므로 전체 수집이 하나의 원자적 transaction인 것으로 가정하지 않는다. [멱등·중복 검토](07_MDC_DEDUPLICATION_MIGRATION.md)를 참조한다.
 
-### 4) `backend/requirements.txt`
-- 백그라운드 스케줄러 구현을 위해 `apscheduler` 패키지 의존성을 추가했습니다. (`psycopg2-binary`는 이미 포함되어 있었습니다.)
+## 기준정보와 변환의 한계
 
-### 5) `backend/app/scripts/sync_mdc_db.py`
-- 기존에는 `main()`을 통해서만 실행되던 코드를 `sync_job()` 이라는 별도의 함수로 분리했습니다.
-- 이를 통해 백엔드 서버에서 스크립트를 독립적으로 모듈화하여 호출할 수 있게 되었습니다.
+`station_metadata.id`가 PK이고 `station_id`는 원천 코드 기반 unique key다. `sensor_metadata.sensor_id`는 기술 채널 ID다. 현재 `map_mdc_item()`과 KST→UTC 변환은 기존 수집 정책이며 원문별 업무 승인의 대용이 아니다. 특히 WAVE 계열을 묶는 coarse mapping과 UNKNOWN 단위가 있다. [실제 query/단위 매핑](06_MDC_QUERY_MAPPING.md), [분류와 표시](08_MDC_STATION_CODE_MAPPING.md)를 확인한다.
 
-### 6) `backend/app/main.py`
-- FastAPI의 최신 `lifespan` 관리자를 통해, 서버가 `startup` 될 때 `BackgroundScheduler` 인스턴스를 생성하고 5분 주기로 `sync_job`을 실행하도록 등록했습니다.
-- 서버가 멈출 때 스케줄러도 우아하게(graceful) 종료되도록 처리했습니다.
+원천 QC/MQC, source item/system, depth, receive time을 보존하지만 선택 query가 모든 원천 QC 열·단위를 수집하는 것은 아니다. 고정 split 학습에는 원문 locator와 source receipt가 연결된 `SourceObservationBinding`이 추가로 필요하다. Raw/Standard 자연키에 들어갔다고 Dataset approval에 바로 사용할 수 없다.
 
----
+## 변경과 적용 절차
 
-## ⚠️ 3. 연동 시 주의사항 (사전 준비)
+1. Oracle schema·원문 sample·query 범위와 source clock/단위를 읽기 전용으로 확인한다. 접속 정보는 로그와 문서에 노출하지 않는다.
+2. 대상 PostgreSQL의 기존 schema·row count·자연키 중복·FK와 데이터 보존 계획을 검토한다. 자동 DDL과 demo seed는 끈다.
+3. 신규 source review/binding과 사건 계보는 개별 additive migration을 검토한다. [source contract DDL](../ocean-ai-platform/backend/app/scripts/migrate_source_contracts.py)은 dry-run이 기본이고 [source binding SQL](../ocean-ai-platform/backend/migrations/20261007_source_observation_binding.sql)은 참조 table을 먼저 요구한다.
+4. 승인된 수집 범위에서만 명시 실행한다. Backend의 `python -m app.scripts.sync_mdc_db`는 Oracle 조회와 PostgreSQL 쓰기를 수행하는 명령이며 일반 설치 검증이 아니다.
+5. 원문 기준 count/자연키·source literal·time/depth/단위/QC를 대조하고 실제 source contract 검토로 연결한다. 등록 metadata count와 예상 관측수 대비 수집률을 구분한다.
 
-실제 오라클 DB(MDC)와 성공적으로 통신하려면 아래 조건이 반드시 충족되어야 합니다.
-
-1. **Oracle Instant Client 23.0**
-   - 현재 백엔드가 구동되는 PC/서버의 `C:\Oracle\instantclient_23_0` 경로에 오라클 클라이언트가 설치되어 있어야 Thick Mode 접속이 가능합니다.
-2. **PostgreSQL 컨테이너 실행**
-   - 백엔드를 구동하기 전, 반드시 루트 폴더에서 `docker-compose up -d`를 실행하여 DB를 먼저 띄워주세요.
-3. **네트워크/방화벽 확인**
-   - MDC DB IP (`119.195.114.103:31000`)와의 통신이 사내 망이나 방화벽에 의해 차단되지 않았는지 확인해야 합니다.
+2026-10-08 13:09 KST 운영 설정은 live/sync false/자동 DDL false다. Source contract·binding·승인 dataset·운영 model은 0이다. `mdc_sensor_catalog`는 코드 정의가 있으나 운영 table은 없다. 이 문서가 Oracle 재수집·DDL·운영 승인 수행 완료를 뜻하지 않는다.

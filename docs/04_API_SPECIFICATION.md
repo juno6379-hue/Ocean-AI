@@ -1,112 +1,321 @@
-# 04. API 명세서 (API Specification)
+# 04. API 명세
 
-본 문서는 프론트엔드 UI 대시보드와 통신하는 백엔드(FastAPI) 주요 REST API 엔드포인트를 요약합니다.
-(더 자세한 스펙 및 테스트는 백엔드 구동 후 `http://localhost:8080/docs` 에서 Swagger UI로 확인 가능합니다.)
+기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **135 경로·142 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 기본 API 주소는 `http://127.0.0.1:8000`이다.
 
----
+## 인증·오류·운영 경계
 
-## 📊 1. 통계 및 대시보드 (Dashboard)
+[security.py](../ocean-ai-platform/backend/app/core/security.py)는 일반 쓰기 요청에 bearer Actor의 operator/reviewer/admin 권한을 요구한다. 승인·검토·발행 등 reviewer dependency가 있는 경로는 reviewer/admin만 허용한다. 요청 body의 `user_id`는 서버 인증 Actor를 대신하지 않는다. GET은 대체로 공개 조회이나 `/api/session`은 인증을 요구한다. `GET /api/integrations`와 `POST /api/integrations/{source_id}/test`는 별도의 administrator dependency로 admin만 허용한다. SourceContract GET은 공개 조회이며 serving은 loopback을 요구한다.
 
-### `GET /api/dashboard/stats`
-메인 통합 대시보드의 최상단 KPI(핵심 성과 지표) 위젯 데이터를 반환합니다.
-- **Response (200 OK)**
-  ```json
-  {
-    "stats": [
-      { "title": "정상 가동 관측소", "value": "134/138", "trend": "+2", "status": "good" },
-      { "title": "품질 경고 (최근 24시간)", "value": "3건", "trend": "-1", "status": "warning" },
-      ...
-    ]
-  }
-  ```
+분석 POST인 `/api/rag/chat`, `/api/rag/hybrid-search`, `/api/qc/copilot/analyze`, `/api/forecasting/baseline`은 일반 쓰기 인증 예외다. `/api/agents/workflow`도 분석 예외지만 demo 전용이다. `/api/qc/run-copilot`, `/api/qc/ai-insights-summary`, `/api/test-auto/run`, `/api/agents/workflow`는 live에서 409로 막힌다. 이 경로를 실제 승인·학습 자동화로 사용하지 않는다.
 
----
+| 응답 | 의미 |
+|---|---|
+| 401 / 403 | token 부재·불일치 또는 역할 부족 |
+| 404 | 해당 대상·근거·dataset 없음 |
+| 409 | 상태·hash·원천/승인 무결성·demo 경계 등 충돌. route별 `detail`을 확인한다. |
+| 422 | 필수 입력/형식 또는 dependency/protocol 검증 실패 |
+| 503 | 인증 Actor 미설정, DB readiness 실패 또는 packet 무결성 실패 등 |
+| 500 | 처리 실패. 빈 목록·mock 성공으로 취급하지 않는다. |
 
-## 📑 2. 보고서 및 문서 (Reports & Documents)
+2026-10-08 13:09 KST의 운영 `API_IDENTITIES`는 비어 있어 쓰기·승인은 아직 사용할 수 없다. Source/approval/dataset/model/event 계보 table은 0이다. `/api/mlops/readiness`는 BLOCKED, worker는 빈 큐 대기, `/api/mlops/serving/health`는 활성 모델이 없어 409다. `mdc_sensor_catalog` table은 미생성이므로 관련 API 정의가 운영 적재 완료를 뜻하지 않는다.
 
-### `GET /api/reports/list`
-Agent가 자동 생성했거나 시스템에 등록된 운영보고서 목록을 조회합니다.
-- **Response (200 OK)**
-  ```json
-  {
-    "reports": [
-      {
-        "id": "REP-001",
-        "title": "국가해양관측망_일일상황보고_20260915",
-        "type": "상황보고",
-        "author": "ReportAgent",
-        "status": "대기중",
-        "createdAt": "2026-09-15T09:00:00Z"
-      }
-    ]
-  }
-  ```
+## 주요 요청과 상태 전이
 
-### `POST /api/reports/{id}/approve`
-특정 보고서를 검토 후 '최종 승인' 처리합니다.
-- **Path Parameter**: `id` (문서 ID)
-- **Response (200 OK)**
-  ```json
-  {
-    "message": "Report approved successfully",
-    "report_id": "REP-001",
-    "new_status": "승인완료"
-  }
-  ```
+문서 검색은 `question`이 아닌 **query**를 보낸다. Hybrid search에는 station/sensor/variable·기간·문서/사건 필터와 `top_k`를 추가할 수 있다. Keyword/vector 결합 상태와 실제 evidence locator를 함께 확인한다. 검색 결과나 similarity가 인간 승인 또는 확정 원인이라는 뜻은 아니다.
 
----
+```json
+{"query":"기압 자료의 점검 근거","top_k":5}
+```
 
-## 🤖 3. AI 분석 인사이트 (AI Insights & RAG)
+위 payload는 `/api/rag/hybrid-search` 예시다. `/api/rag/chat`의 최소 body는 `{"query":"기압 자료의 점검 근거"}`다. 검색·chat은 [RAG route](../ocean-ai-platform/backend/app/api/routes_rag.py), 문서 기반 필터는 [hybrid retrieval](16_HYBRID_RETRIEVAL.md)를 기준으로 한다.
 
-### `GET /api/ai-insights/summary`
-RAG 및 멀티 에이전트가 도출한 최신 AI 진단 결과 목록을 반환합니다.
-- **Response (200 OK)**
-  ```json
-  {
-    "insights": [
-      {
-        "id": 1,
-        "type": "장비 이상",
-        "title": "목포 관측소 수온 센서 결측 원인 진단",
-        "description": "최근 3일간의 로그와 과거 3년치 점검보고서를 분석한 결과, 통신 모듈 오류 또는 해조류 얽힘으로 판단됨.",
-        "confidence": 88
-      }
-    ]
-  }
-  ```
+| 경로 / 입력 | 검증 또는 결과 |
+|---|---|
+| `/api/qc/copilot/analyze`: station_id와 선택 sensor_id/variable_code/timestamp/query/top_k | 근거 분석·후보를 반환한다. 원문 QC·원인·label 최종 승인은 수행하지 않는다. |
+| `/api/source-contracts/request`: `{"packet":{...}}` | source_contract_v2 미확정 packet도 PENDING 검토 요청으로 보존한다. packet은 파일 SHA/locator, source literal, 물리 identity/period, 단위·clock/QC·availableAt 근거를 포함해야 한다. |
+| `/{contract_id}/decision`: expected_packet_sha256, decision, comment | reviewer가 정확 packet SHA와 현재 원장을 확인해 APPROVED/REJECTED/REVOKED 결정. 누락 근거로 APPROVED 불가. |
+| `/{contract_id}/receipt` | 승인 export의 정확 canonical JSON bytes. X-Content-SHA256과 현재 ledger·source를 재검증한다. |
+| `/api/datasets/source-candidates`: parquet_path, manifest_path/sha256, source_group, scopes, limit | draft 파일 후보. DatasetRegistry/membership에 승인 레코드를 우회 등록하지 않는다. |
+| `/api/datasets/source-ingest`: receipt_path/sha256, register_metadata | 승인 원문과 receipt를 재검증한 뒤 exact binding을 적재한다. register_metadata는 검증된 물리 identity의 명시 등록이다. |
+| `/api/datasets`: DatasetRegistry schema | 새 대상은 DRAFT/unbuilt이며 기간·scope·분할·counts를 검증한다. Legacy 등록은 strict leakage 정책을 유지한다. |
+| `/api/datasets/register-reviewed`: dataset, split_protocol | 실제 승인 split protocol로 station_holdout/temporal_with_purge/sensor_transition_holdout 전략을 검증한다. |
+| `/{dataset_id}/build`: 선택 dependencies[]의 role/path/sha256 | SOURCE_CONTRACT 및 SPLIT_PROTOCOL/EVALUATION_PROTOCOL/ACCEPTANCE_POLICY를 불변 복사하고 실제 membership을 snapshot v2에 동결한다. |
+| `/{dataset_id}/validate`, `/approve`, `/lineage` | 현재 원장·파일·membership·as-of·분할을 재검증한다. v1은 운영 입력으로 자동 승격되지 않는다. |
+| `/api/mlops/protocols/draft`: body 객체 | 버전별 split/evaluation/acceptance 정책 초안. 임의 필드·threshold를 승인 정책으로 꾸미지 않는다. |
+| `/api/mlops/protocols/{sha256}/decision`: decision | MODEL_PROTOCOL 원장에 정확 SHA를 reviewer가 결정한다. |
+| `/api/mlops/training/enqueue`: manifest_path | 승인 snapshot·고정 split/protocol과 worker flag를 preflight 후 durable queue에 넣는다. |
+| `/api/mlops/candidates/review` 또는 `/register`: receipt_path, model_version | 독립 replay/검토와 후보 등록은 별도 단계다. 등록이 운영 배포 승인은 아니다. |
+| `/api/mlops/models/{model_version}/decision`: decision, 선택 rollback query | 현재 candidate/deployment identity에 배포 또는 rollback 검토를 묶는다. |
+| `/api/mlops/serving/predict`: scope_key, features[], 선택 typed_payload | loopback, serving flag, 활성 배포 승인·artifact 무결성을 요구한다. |
+| `/api/reports/generate`: report_type, period_start/end **query** | 현재 API는 DRAFT 초기 레코드를 만든다. 완성된 분석 보고서를 자동 생성했다고 해석하지 않는다. |
+| `/api/reports/{report_id}/review → approve/reject → publish` | 상태 전이와 reviewer를 검증한다. 일부 호환 body의 user_id는 인증 권한이 아니다. |
 
-### `POST /api/rag/ask`
-기 구축된 벡터 DB(ChromaDB) 내의 문헌(운영보고서, 점검일지 등)을 기반으로 자연어 질의응답을 수행합니다.
-- **Request Body**
-  ```json
-  {
-    "question": "대조기 침수 위험 시 어떤 절차로 보고해야 하나요?"
-  }
-  ```
-- **Response (200 OK)**
-  ```json
-  {
-    "answer": "대조기 모니터링 매뉴얼(2025년 판)에 따르면, 1차적으로 조위 편차 에이전트가 경고를 발생시키면...",
-    "source_documents": ["대조기모니터링보고서_매뉴얼.pdf"]
-  }
-  ```
+Source 계약 세부 schema는 [authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), dataset payload는 [routes_datasets](../ocean-ai-platform/backend/app/api/routes_datasets.py), 모델 요청은 [routes_mlops_execution](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py)와 [구현 기록 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다. Worker enqueue가 차단된 상태에서 legacy `/api/mlops/retrain`을 우회 실행 경로로 사용하지 않는다.
 
----
+## 전체 경로 목록
 
-## ⚡ 4. 자동화 테스트 (Test Automation)
+표의 body는 OpenAPI request schema 이름이다. `*`는 필수 body, `—`는 body 없는 요청이다. 표에 없는 선택 query·enum·response 필드는 실행 서버의 OpenAPI를 따른다. Path parameter는 경로의 `{...}` 이름을 사용한다. 필수 query는 마지막 열에 표시한다.
 
-### `POST /api/test-auto/run`
-프론트엔드의 '테스트 자동화' 메뉴에서 E2E(End-to-End) 시스템 검증을 수동으로 트리거합니다.
-- **Request Body**
-  ```json
-  {
-    "test_type": "E2E"
-  }
-  ```
-- **Response (200 OK)**
-  ```json
-  {
-    "message": "E2E Test Execution Started",
-    "job_id": "TEST-JOB-992"
-  }
-  ```
+### stations
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/stations](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
+| [/api/stations/catalog/classifications](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
+| [/api/stations/{station_id}](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
+| [/api/stations/{station_id}/profile](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
+
+### observations
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/observations](../ocean-ai-platform/backend/app/api/routes_observations.py) | GET | — | — |
+| [/api/observations/standard](../ocean-ai-platform/backend/app/api/routes_observations.py) | GET | — | — |
+| [/api/observations/summary](../ocean-ai-platform/backend/app/api/routes_observations.py) | GET | — | — |
+
+### qc
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/qc/rule-definitions](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET, POST | POST: QCRuleDefinitionCreate* | — |
+| [/api/qc/rules/execute](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: ExecuteRulesRequest* | — |
+| [/api/qc/rule-results](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET, POST | POST: QCRuleResultCreate* | — |
+| [/api/qc/ai-labels](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET, POST | POST: AILabelCreate* | — |
+| [/api/qc/review-candidates](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: ReviewCandidateRequest* | — |
+| [/api/qc/copilot/analyze](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: CopilotAnalyzeRequest* | — |
+| [/api/qc/run-copilot](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: RunCopilotRequest* | — |
+| [/api/qc/generate-report](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: ReportGenerateRequest* | — |
+| [/api/qc/alerts](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET | — | — |
+| [/api/qc/summary](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET | — | — |
+| [/api/qc/ai-insights-summary](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET | — | — |
+
+### dashboard
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/dashboard/summary](../ocean-ai-platform/backend/app/api/routes_dashboard.py) | GET | — | — |
+| [/api/dashboard/performance](../ocean-ai-platform/backend/app/api/routes_dashboard.py) | GET | — | — |
+
+### rag
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/rag/ingest](../ocean-ai-platform/backend/app/api/routes_rag.py) | POST | POST: IngestRequest* | — |
+| [/api/rag/reindex](../ocean-ai-platform/backend/app/api/routes_rag.py) | POST | POST: IngestRequest* | — |
+| [/api/rag/documents](../ocean-ai-platform/backend/app/api/routes_rag.py) | GET | — | — |
+| [/api/rag/chunks/{document_id}](../ocean-ai-platform/backend/app/api/routes_rag.py) | GET | — | — |
+| [/api/rag/documents/{document_id}](../ocean-ai-platform/backend/app/api/routes_rag.py) | DELETE | — | — |
+| [/api/rag/hybrid-search](../ocean-ai-platform/backend/app/api/routes_rag.py) | POST | POST: HybridSearchRequest* | — |
+| [/api/rag/chat](../ocean-ai-platform/backend/app/api/routes_rag.py) | POST | POST: ChatRequest* | — |
+| [/api/rag/ingestion/status](../ocean-ai-platform/backend/app/api/routes_rag.py) | GET | — | — |
+| [/api/rag/ingestion/files](../ocean-ai-platform/backend/app/api/routes_rag.py) | GET | — | — |
+
+### mlops
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/mlops/summary](../ocean-ai-platform/backend/app/api/routes_mlops.py) | GET | — | — |
+| [/api/mlops/readiness](../ocean-ai-platform/backend/app/api/routes_mlops.py) | GET | — | — |
+| [/api/mlops/retrain-history](../ocean-ai-platform/backend/app/api/routes_mlops.py) | GET | — | — |
+| [/api/mlops/models](../ocean-ai-platform/backend/app/api/routes_mlops.py) | POST | POST: ModelRegistrationRequest* | — |
+| [/api/mlops/models/{model_version}/deploy](../ocean-ai-platform/backend/app/api/routes_mlops.py) | POST | POST: DeployRequest* | — |
+| [/api/mlops/models/{model_version}/rollback](../ocean-ai-platform/backend/app/api/routes_mlops.py) | POST | — | — |
+| [/api/mlops/champion-challenger](../ocean-ai-platform/backend/app/api/routes_mlops.py) | GET | — | GET: champion_version<br>GET: challenger_version |
+| [/api/mlops/retrain](../ocean-ai-platform/backend/app/api/routes_mlops.py) | POST | POST: RetrainRequest* | — |
+| [/api/mlops/adapters](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | GET | — | — |
+| [/api/mlops/protocols/draft](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: ProtocolDraft* | — |
+| [/api/mlops/protocols/{sha256}/decision](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: Decision* | — |
+| [/api/mlops/training/enqueue](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: ManifestRequest* | — |
+| [/api/mlops/training/jobs](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | GET | — | — |
+| [/api/mlops/candidates/review](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: CandidateRequest* | — |
+| [/api/mlops/candidates/register](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: CandidateRequest* | — |
+| [/api/mlops/models/{model_version}/decision](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: Decision* | — |
+| [/api/mlops/serving/health](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | GET | — | — |
+| [/api/mlops/serving/predict](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | POST | POST: PredictionRequest* | — |
+
+### reports
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/reports](../ocean-ai-platform/backend/app/api/routes_reports.py) | GET | — | — |
+| [/api/reports/generate](../ocean-ai-platform/backend/app/api/routes_reports.py) | POST | — | POST: report_type<br>POST: period_start<br>POST: period_end |
+| [/api/reports/{report_id}/review](../ocean-ai-platform/backend/app/api/routes_reports.py) | POST | — | — |
+| [/api/reports/{report_id}/approve](../ocean-ai-platform/backend/app/api/routes_reports.py) | POST | POST: ReportUpdateStatusRequest* | — |
+| [/api/reports/{report_id}/reject](../ocean-ai-platform/backend/app/api/routes_reports.py) | POST | POST: ReportUpdateStatusRequest* | — |
+| [/api/reports/{report_id}/publish](../ocean-ai-platform/backend/app/api/routes_reports.py) | POST | — | — |
+| [/api/reports/list](../ocean-ai-platform/backend/app/api/routes_reports.py) | GET | — | — |
+| [/api/reports/stats](../ocean-ai-platform/backend/app/api/routes_reports.py) | GET | — | — |
+| [/api/reports/{report_id}](../ocean-ai-platform/backend/app/api/routes_reports.py) | GET | — | — |
+
+### equipment
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/equipment/status](../ocean-ai-platform/backend/app/api/routes_equipment.py) | GET | — | — |
+
+### test-auto
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/test-auto/run](../ocean-ai-platform/backend/app/api/routes_test_auto.py) | POST | POST: TestRunRequest* | — |
+| [/api/test-auto/results](../ocean-ai-platform/backend/app/api/routes_test_auto.py) | GET | — | — |
+| [/api/test-auto/results/{test_id}](../ocean-ai-platform/backend/app/api/routes_test_auto.py) | GET | — | — |
+
+### alerts
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/alerts](../ocean-ai-platform/backend/app/api/routes_alerts.py) | GET | — | — |
+| [/api/alerts/{issue_id}/resolve](../ocean-ai-platform/backend/app/api/routes_alerts.py) | POST | — | — |
+| [/api/alerts/events](../ocean-ai-platform/backend/app/api/routes_alerts.py) | GET | — | — |
+
+### tide
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/tide/tide-residual/analyze](../ocean-ai-platform/backend/app/api/routes_tide_analysis.py) | POST | POST: WeeklyTideRequest* | — |
+| [/api/tide/spring-tide/analyze](../ocean-ai-platform/backend/app/api/routes_tide_analysis.py) | POST | POST: SpringTideRequest* | — |
+
+### service-monitoring
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/service-monitoring/overview](../ocean-ai-platform/backend/app/api/routes_service_monitoring.py) | GET | — | — |
+| [/api/service-monitoring/check](../ocean-ai-platform/backend/app/api/routes_service_monitoring.py) | POST | POST: ServiceCheckRequest* | — |
+| [/api/service-monitoring/logs](../ocean-ai-platform/backend/app/api/routes_service_monitoring.py) | GET | — | — |
+
+### features
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/features/definitions](../ocean-ai-platform/backend/app/api/routes_features.py) | GET, POST | POST: FeatureDefinition* | — |
+| [/api/features/values](../ocean-ai-platform/backend/app/api/routes_features.py) | GET, POST | POST: FeatureValue* | — |
+
+### approvals
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/approvals/pending](../ocean-ai-platform/backend/app/api/routes_approvals.py) | GET | — | — |
+| [/api/approvals/approve](../ocean-ai-platform/backend/app/api/routes_approvals.py) | POST | POST: ApprovalRequest* | — |
+| [/api/approvals/reject](../ocean-ai-platform/backend/app/api/routes_approvals.py) | POST | POST: ApprovalRequest* | — |
+| [/api/approvals/modify](../ocean-ai-platform/backend/app/api/routes_approvals.py) | POST | POST: ApprovalRequest* | — |
+| [/api/approvals/comment](../ocean-ai-platform/backend/app/api/routes_approvals.py) | POST | POST: CommentRequest* | — |
+| [/api/approvals/history](../ocean-ai-platform/backend/app/api/routes_approvals.py) | GET | — | — |
+
+### datasets
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/datasets/register-reviewed](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | POST: ReviewedDatasetRegistration* | — |
+| [/api/datasets/source-ingest](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | POST: SourceIngestRequest* | — |
+| [/api/datasets/source-candidates](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | POST: SourceCandidateRequest* | — |
+| [/api/datasets](../ocean-ai-platform/backend/app/api/routes_datasets.py) | GET, POST | POST: DatasetRegistry* | — |
+| [/api/datasets/{dataset_id}](../ocean-ai-platform/backend/app/api/routes_datasets.py) | GET | — | — |
+| [/api/datasets/{dataset_id}/build](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | POST: DatasetBuildRequest / null | — |
+| [/api/datasets/{dataset_id}/validate](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | — | — |
+| [/api/datasets/{dataset_id}/approve](../ocean-ai-platform/backend/app/api/routes_datasets.py) | POST | — | — |
+| [/api/datasets/{dataset_id}/lineage](../ocean-ai-platform/backend/app/api/routes_datasets.py) | GET | — | — |
+
+### ai-insights
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/ai-insights/long-term](../ocean-ai-platform/backend/app/api/routes_ai_insights.py) | GET | — | — |
+| [/api/ai-insights/summary](../ocean-ai-platform/backend/app/api/routes_ai_insights.py) | GET | — | — |
+
+### agents
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/agents/workflow](../ocean-ai-platform/backend/app/api/routes_agents.py) | POST | POST: WorkflowRequest* | — |
+| [/api/agents/workflow/stages](../ocean-ai-platform/backend/app/api/routes_agents.py) | GET | — | — |
+
+### events
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/events](../ocean-ai-platform/backend/app/api/routes_events.py) | GET, POST | POST: EventCreate* | — |
+| [/api/events/{event_id}/status](../ocean-ai-platform/backend/app/api/routes_events.py) | PATCH | — | PATCH: status |
+| [/api/events/sensor-aliases](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: AliasCreate* | — |
+| [/api/events/resolve-sensor](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: SensorResolve* | — |
+| [/api/events/reference-catalog](../ocean-ai-platform/backend/app/api/routes_events.py) | GET | — | — |
+| [/api/events/mdc-sensor-catalog](../ocean-ai-platform/backend/app/api/routes_events.py) | GET | — | — |
+| [/api/events/from-document](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: DocumentEventCreate* | — |
+| [/api/events/{event_id}/evidence](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: EvidenceCreate* | — |
+| [/api/events/{event_id}/link-observations](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | — | — |
+| [/api/events/{event_id}/lineage](../ocean-ai-platform/backend/app/api/routes_events.py) | GET | — | — |
+| [/api/events/evidence/{kind}/{target_id}](../ocean-ai-platform/backend/app/api/routes_events.py) | GET | — | — |
+| [/api/events/{event_id}/label-candidates](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: CandidateCreate* | — |
+| [/api/events/{event_id}/features](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | — | — |
+| [/api/events/feature-lineage/{observation_id}/{feature_id}/{feature_version}](../ocean-ai-platform/backend/app/api/routes_events.py) | GET | — | — |
+| [/api/events/{event_id}/close](../ocean-ai-platform/backend/app/api/routes_events.py) | POST | POST: EventClose* | — |
+
+### data-lake
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/data-lake/stats](../ocean-ai-platform/backend/app/api/routes_datalake.py) | GET | — | — |
+| [/api/data-lake/summary](../ocean-ai-platform/backend/app/api/routes_datalake.py) | GET | — | — |
+| [/api/data-lake/foundation/workflow](../ocean-ai-platform/backend/app/api/routes_foundation.py) | GET | — | — |
+| [/api/data-lake/foundation/summary](../ocean-ai-platform/backend/app/api/routes_foundation.py) | GET | — | — |
+| [/api/data-lake/foundation/channels](../ocean-ai-platform/backend/app/api/routes_foundation.py) | GET | — | — |
+| [/api/data-lake/foundation/observations](../ocean-ai-platform/backend/app/api/routes_foundation.py) | GET | — | GET: source<br>GET: month<br>GET: station<br>GET: item |
+| [/api/data-lake/foundation/review-receipt](../ocean-ai-platform/backend/app/api/routes_technical_review.py) | GET | — | — |
+
+### source-contracts
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/source-contracts](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | — |
+| [/api/source-contracts/request](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | POST | POST: ReviewRequest* | — |
+| [/api/source-contracts/{contract_id}](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | — |
+| [/api/source-contracts/{contract_id}/decision](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | POST | POST: ReviewDecision* | — |
+| [/api/source-contracts/{contract_id}/receipt](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | — |
+
+### integrations
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/integrations](../ocean-ai-platform/backend/app/api/routes_integrations.py) | GET | — | — |
+| [/api/integrations/{source_id}/test](../ocean-ai-platform/backend/app/api/routes_integrations.py) | POST | — | — |
+
+### imputation
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/imputation/long-gap/detect](../ocean-ai-platform/backend/app/api/routes_imputation.py) | GET | — | GET: station_id<br>GET: sensor_id |
+| [/api/imputation/run](../ocean-ai-platform/backend/app/api/routes_imputation.py) | POST | POST: ImputeRequest* | — |
+| [/api/imputation](../ocean-ai-platform/backend/app/api/routes_imputation.py) | GET | — | — |
+| [/api/imputation/long-gap/plan](../ocean-ai-platform/backend/app/api/routes_imputation.py) | POST | — | — |
+
+### forecasting
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/forecasting/baseline](../ocean-ai-platform/backend/app/api/routes_forecasting.py) | POST | POST: ForecastRequest* | — |
+| [/api/forecasting/models](../ocean-ai-platform/backend/app/api/routes_forecasting.py) | GET | — | — |
+
+### 서비스·세션
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/health](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+| [/readiness](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+| [/](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+| [/api/session](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+| [/api/runtime](../ocean-ai-platform/backend/app/main.py) | GET | — | — |
+
+### lake
+
+| 경로 / 구현 | Method | Request body | 필수 query |
+|---|---|---|---|
+| [/api/lake/monitoring](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/daily-reports](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/equipment-evidence](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/summary](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/stations/{station}](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/series](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | GET: source<br>GET: month<br>GET: station<br>GET: item |
+
+## 검증 범위
+
+위 135개 경로·142개 operation은 2026-10-08 읽기 전용 OpenAPI와 게시 tree의 route/prefix AST가 일치했다. 이는 API 등록·입력 계약 확인이다. 실원천 승인, 전체 endpoint 쓰기 성공, 모델 학습·배포 완료를 뜻하지 않는다. 상태를 변경하는 endpoint는 실제 검토 자료와 권한·현재 승인 원장이 준비된 뒤 사용한다.

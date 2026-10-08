@@ -1,5 +1,10 @@
 # 승인 원천 계약과 모델 실행 연결 — 2026-10-08 게시
 
+현행 설치·API·운영 상태는 [루트 문서 안내](../../docs/README.md)를 기준으로 확인한다.
+2026-10-08 읽기 전용 확인에서 기존 canonical worker는 실행 중이고 큐는 비어 있으며,
+실제 원천 계약·승인·dataset·학습 이력·registry·운영 모델은 모두 0이다.
+API identities도 0이고 운영 수용 기준은 `NOT_DEFINED`, serving은 `409 NO_ACTIVE_LOCAL_MODEL`이다.
+
 이 변경은 검증된 원천 계약을 dataset snapshot과 모델 비교·배포 근거로 이어 준다.
 원천의 의미·단위·시간대·QC·센서 유효기간이나 실제 운영 승인을 만들어 내지는 않는다.
 
@@ -36,7 +41,7 @@ trajectory는 명시된 position endpoint 기준선이다. 업무 고유 adapter
 scope matrix의 72개 업무 행은 그대로이며 provenance 경로만 정리했다.
 줄바꿈·provenance·설정 기본값의 공개 정리로 execution fingerprint는 canonical 검증본과 달라질 수 있다.
 기존 학습 영수증을 새 코드의 승인 근거로 재사용하지 말고 새 fingerprint로 다시 비교·검토해야 한다.
-공개 복사본 자체의 시험 결과는 커밋 설명의 검증 기록을 확인한다.
+공개 복사본 자체의 시험 결과는 커밋 설명의 검증 기록과 [현행 상태 요약](../../docs/current_status.json)을 확인한다.
 
 ## 로컬 자료와 설정
 
@@ -44,8 +49,10 @@ Git에는 `.env`, 실제 담당자 token, 원문/Parquet, DB·Chroma, 실제 sou
 dataset snapshot·model artifact, 검토 묶음·로그를 포함하지 않는다. clone만으로 운영 자료가 생성되지 않는다.
 환경변수와 보존된 로컬 자료를 연결하고 해당 원천의 실제 담당 승인을 확보해야 한다.
 
-`backend/.env.example`을 별도 로컬 `.env`로 복사하여 DATABASE_URL 및 실제 reviewer/operator identities를 설정한다.
-예제 `change-me`는 실제 비밀번호가 아니다. Docker의 POSTGRES_PASSWORD는 로컬 환경에 별도 지정한다.
+`backend/.env.example`에서 Compose용 `POSTGRES_PASSWORD` 항목을 제외한 서버 설정만 별도 backend `.env`로 준비한다.
+현재 `Settings`에는 `POSTGRES_PASSWORD` 필드가 없어 예제 전체를 복사하면 `extra_forbidden` 오류가 발생한다.
+DATABASE_URL 및 실제 reviewer/operator identities를 설정하는 명령은 [현행 설치 문서](../../docs/02_SETUP_AND_INSTALLATION.md)를 따른다.
+예제 `change-me`는 실제 비밀번호가 아니다. Docker의 POSTGRES_PASSWORD는 shell 또는 Compose용 별도 환경에 지정한다.
 MDC_DSN/MDC_USER/MDC_PWD는 비어 있고 자동 수집과 자동 전체 DDL은 기본 꺼져 있다.
 토큰과 인증 정보는 Git이나 frontend env에 넣지 않는다.
 
