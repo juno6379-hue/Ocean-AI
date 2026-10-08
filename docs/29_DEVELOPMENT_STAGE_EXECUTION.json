@@ -65,8 +65,8 @@
       ],
       "evidence": [
         {
-          "path": "identity-events/preservation/migration-review.json",
-          "sha256": "c49bddc7c9801644b9b5467bce6d7d56ad6c7333692c1b1df160f731a3704eb0"
+          "path": "identity-events/preservation/migration-review-v2.json",
+          "sha256": "4ef520a7032f9fd3b58bbf2359260bbbfd6cb1af05515829828f5703177655af"
         },
         {
           "path": "identity-events/preservation/july-extent-review.json",
@@ -137,8 +137,12 @@
           "sha256": "6fe7968a542bd4bcfbe8c6b451054e6a5c603b4a47f970d0dd376eb0481c738f"
         },
         {
-          "path": "identity-events/documents/retrieval-verification.json",
-          "sha256": "050a0809499bc75462046b41c28a697043f2265a7b36b1a8ba9c226ba1b7c7d4"
+          "path": "identity-events/documents/retrieval-final-verification.json",
+          "sha256": "b3372e117d4b8efe180fb171cb819eab5fb7e0bbb96bdd110c31f3ec7e73b0be"
+        },
+        {
+          "path": "identity-events/documents/promotion-dry-run.json",
+          "sha256": "309df32f6f575f62719413902c6cd4b413ac7811f3a047d73283dfc7ed4b5f73"
         },
         {
           "path": "parent-verification/recovery-counts.json",
@@ -286,7 +290,7 @@
         },
         {
           "path": "model-comparison/actual-task-readiness.json",
-          "sha256": "c778f13127ca895fb2e1fc5682332651a98d92eb6d93e93301042c833184762a"
+          "sha256": "1a28860dd3a568fd77bd86d05681a4c43566b4195cae3e2fed9cbb00f73fd433"
         }
       ]
     },
@@ -483,5 +487,18 @@
   "accounts": "DEFERRED_BY_USER",
   "source_and_acceptance_facts_complete": false,
   "private_artifact_root": "D:/AI_Observation/outputs/development-stages-20261008",
-  "private_backup_never_committed": true
+  "private_backup_never_committed": true,
+  "agent_delivery_validation": {
+    "status": "PASS",
+    "failed": 0,
+    "passed": 113,
+    "nonfunctional_normalizations": [
+      {
+        "path": "D:\\AI_Observation\\work\\ocean-ai-publish-20261008\\ocean-ai-platform\\backend\\tests\\test_model_development.py",
+        "reason": "PARENT_TRAILING_BLANK_REMOVAL_AST_IDENTICAL",
+        "before_sha256": "9c0384c025c230c5cba6caaba73c73d7b496b562c4799d2703fc06611bd84f6c",
+        "after_sha256": "77cebe90f8ccca6b48db9c308b73ace6a18c3556ce382bcafe2710fd6578b2fd"
+      }
+    ]
+  }
 }
