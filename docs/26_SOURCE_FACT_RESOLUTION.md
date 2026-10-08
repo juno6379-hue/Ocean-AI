@@ -32,3 +32,6 @@
 Rule·AI·Fusion의 개발 분석은 명시적인 입력·조건·참조 근거로 실행하고, 필요한 문맥이 없으면 `NOT_EVALUATED` 또는 근거 누락을 반환한다. 기술 검증된 입력과 사용자가 선언한 입력을 분리한다. 입력·정책·근거 hash를 남겨 이후 같은 조건을 재현할 수 있게 한다.
 
 실제 승인 계정은 이후 설정한다. 그때 원천 계약·QC 최종값·학습 데이터셋·배포에 대한 각 판정을 실제 actor와 원장에 기록한다. workflow의 추천 승인으로 이 별도 승인들을 대신하지 않는다. 현재 단계와 운영 조건은 [구현 감사](10_IMPLEMENTATION_AUDIT.md), [진행 현황](24_P0_END_TO_END_PROGRESS.md)을 참조한다.
+## 10/8 단계별 보완 결과
+
+66,190 typedgrain 전수 packet와 현재 메타데이터/4SQL SHA를 재검증했다. naïve MDC 날짜는 UTCnull·원문보존·DATE_TIMEZONE_UNVERIFIED이며 명시 offset만 변환한다. HWP serial5claims에 원문/date/header/station locator를 보존했고 40사건/152기간 scope를 전수 기술 검토했다. serial문자열이나 재고날짜는 실물 연속 유효기간의 승인이 아니다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

@@ -117,3 +117,8 @@ python -B -m pytest tests -q -p no:cacheprovider
 ```
 
 Frontend에서는 `npm run build`를 실행한다. [test conftest](../ocean-ai-platform/backend/tests/conftest.py)는 DB를 격리하고 sync/자동 DDL을 끈다. API 조회와 UI 확인 후 실제 source owner/센서 구간/clock/단위/QC 승인, 사건·라벨·Feature, 고정 분할을 준비해야 학습 운영으로 이어진다. 현재 운영 현황은 [docs 안내](README.md)에서 확인한다.
+## 10/8 단계별 보완 결과
+
+`DEVELOPMENT_STAGES_ROOT` 기본값은 `D:/AI_Observation/outputs/development-stages-20261008`이다. root stage-index와 receipt SHA가 있어야 기술 현황을 확인할 수 있다. 공개 clone만으로 로컬 증거를 생성하지 않으며 누락은 UNKNOWN이다.
+
+backend CLI: `python -m app.scripts.review_document_backlog --help`, `resume_document_recovery --help`, `promote_document_recovery --help`, `operational_state_backup --help`, `review_actual_analysis --help`, `run_raw_model_comparison --help`. 각각 `app.scripts.` 접두를 사용한다. source/config와 private output을 명시하며 원문·token·DB dump는 저장소 밖에 보존한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md), [복구85](85_OPERATIONS_RECOVERY_REVIEW.md).

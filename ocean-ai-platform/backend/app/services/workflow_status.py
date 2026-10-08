@@ -16,7 +16,7 @@ def status(db,source,start,end,network='',sea=''):
     if not row:raise HTTPException(503,'No published facility review registry')
     rid=row['run_id'];params={'r':rid,'s':source,'a':start,'b':end}
     predicate='run_id=:r AND source_group=:s AND month>=:a AND month<=:b'
-    scope=resolve_scope(db,network,sea)
+    scope=resolve_scope(db,network,sea,'2026-07' if start==end=='2026-07' else None)
     if scope is not None:
         key='include' if 'include' in scope else 'exclude'
         params['codes']=scope[key]

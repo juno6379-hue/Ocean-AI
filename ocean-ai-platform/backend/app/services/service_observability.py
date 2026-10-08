@@ -57,6 +57,7 @@ def batch_record(name,path,now):
 
 
 def overview(db,start,end):
+    from app.services.http_request_metrics import request_metrics
     now=datetime.now(timezone.utc)
     services=[{'id':'api','name':'데이터 API','state':'RESPONDING','basis':'현재 API 요청 응답','latency_ms':None}]
     started=time.perf_counter();database_ok=False
@@ -99,9 +100,12 @@ def overview(db,start,end):
                 if r['check_time']:r['check_time']=r['check_time'].replace(tzinfo=timezone.utc).isoformat()
             log_state='AVAILABLE'
         except Exception:db.rollback();log_state='QUERY_FAILED'
+    http_requests=request_metrics.overview(start,end,now)
     return {'checked_at':now.isoformat(),'from_time':start.isoformat(),'to_time':end.isoformat(),
             'services':services,'batches':batches,'logs':logs,'log_count':log_count,'level_counts':level_counts,'log_state':log_state,
-            'uptime_rate':None,'error_rate':None,'active_users':None,'average_api_latency_ms':None,
-            'note':'상태 점검은 현재의 단일 응답입니다. 기간 가동률·전체 요청 오류율·동시 접속자 집계는 미연결입니다.',
+            'http_requests':http_requests,
+            'uptime_rate':None,'error_rate':http_requests['error_rate_percent'],'active_users':None,
+            'average_api_latency_ms':http_requests['average_latency_ms'],
+            'note':'현재 연결 점검과 API 응답 기록 구간을 구분합니다. 요청 오류율은 현재 프로세스가 완료한 HTTP 응답 기준이며 기간 가동률·동시 접속자 집계는 미연결입니다.',
             'log_note':'최대 100건의 업무 점검 기록. 작성 당시 입력된 지연값 기반 기록이며 HTTP 접근 로그·자동 수집 상태의 증명은 아닙니다. 저장된 UTC 시각을 사용합니다.',
             'batch_note':'원장 상태·갱신시각·PID/시작시각 확인을 구분합니다. OS lock 미검사이므로 독점 실행이나 작업 진척을 단정하지 않습니다.'}

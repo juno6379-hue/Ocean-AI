@@ -1,6 +1,10 @@
 import StationClassifications, { DatasetSourceSelect } from '../components/StationClassifications';
 import OSMBaseLayer from '../components/OSMBaseLayer';
 import EvidenceMonitor from '../components/EvidenceMonitor';
+import MonthlyReportComparison from '../components/MonthlyReportComparison';
+import MetricCompletionPanel, { useMetricCompletion } from '../components/MetricCompletionPanel';
+import { gridPercent, percentMetric, qcPresencePercent } from '../data/metricPresentation';
+import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
 // 파일 역할: 관측 및 품질관리 통합 현황을 표시합니다.
 import { apiFetch } from '../api/client';
 import { API_BASE_URL } from '../api/client';
@@ -27,9 +31,10 @@ const Dashboard: React.FC = () => {
   const [lastSynced, setLastSynced] = useState<Date | null>(null);
   const navigate = useNavigate();
   const [search, setSearch] = useSearchParams();
-  const source = search.get('source') || 'GD_OBS_ST_MONTHLY';
-  const from = search.get('from') || (source === 'HISTORICAL_RECONCILED' ? '2011-01' : '2023-01');
-  const to = search.get('to') || (source === 'HISTORICAL_RECONCILED' ? '2021-12' : '2026-07');
+  const { source, from, to } = observationPeriod(search);
+  const julyReference = from === CURRENT_OBSERVATION_MONTH && to === CURRENT_OBSERVATION_MONTH;
+  const metadataQuery = new URLSearchParams({limit:'10000'});
+  if (julyReference) metadataQuery.set('as_of_month', CURRENT_OBSERVATION_MONTH);
   const query = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from_month: from, to_month: to}).toString();
   const linkQuery = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from, to}).toString();
   const [stationFilter, setStationFilter] = useState('');
@@ -38,6 +43,11 @@ const Dashboard: React.FC = () => {
   const network = search.get('network') || '';
   const chooseFacility = (value: string) => { setStationFilter(''); setItemFilter(''); update({network:value, station:'', item:''}); };
   const [revision, setRevision] = useState(0);
+  const completion = useMetricCompletion(query, revision, summaryData?.snapshot);
+  const tableMetricQuery = new URLSearchParams({...Object.fromEntries(new URLSearchParams(query)),station:stationFilter,item:itemFilter}).toString();
+  const scopedCompletion = useMetricCompletion(tableMetricQuery, revision, summaryData?.snapshot, Boolean(stationFilter || itemFilter));
+  const tableCompletion = stationFilter || itemFilter ? scopedCompletion : completion;
+  const stationMetrics = new Map(tableCompletion.data?.raw?.stations.map(row=>[row.station_code,row])||[]);
   const [metadataError, setMetadataError] = useState('');
   const [reportError, setReportError] = useState('');
   const [reportCount, setReportCount] = useState<number | null>(null);
@@ -84,7 +94,7 @@ const Dashboard: React.FC = () => {
     Promise.all([
       read(`/lake/summary?${query}`),
       read(`/lake/monitoring?${query}`).catch(() => { if(!control.signal.aborted)setMonitorError('문서·품질 집계 조회 실패'); return null; }),
-      read('/stations?limit=10000').catch(() => { if (!control.signal.aborted) setMetadataError('시설 분류·지도 좌표 조회 실패'); return null; }),
+      read(`/stations?${metadataQuery}`).catch(() => { if (!control.signal.aborted) setMetadataError('시설 분류·지도 좌표 조회 실패'); return null; }),
       network ? read(`/lake/summary?${new URLSearchParams({...Object.fromEntries(new URLSearchParams(query)),network:''})}`).catch(() => null) : Promise.resolve(null),
     ]).then(([lake, monitoring, metadata, allFacilities]) => {
       if (control.signal.aborted) return;
@@ -108,7 +118,7 @@ const Dashboard: React.FC = () => {
         const ref = candidates.length === 1 ? candidates[0] : null;
         const coordinatesValid = Number.isFinite(ref?.latitude) && Number.isFinite(ref?.longitude)
           && Math.abs(ref.latitude) <= 90 && Math.abs(ref.longitude) <= 180;
-        return {...row, station_id: row.station_code, name: row.station_name || row.station_code,
+        return {...row, station_id: row.station_code, name: row.station_name || row.reference_name || ref?.reference_name || ref?.station_name || row.station_code,
           latitude: coordinatesValid ? ref.latitude : null, longitude: coordinatesValid ? ref.longitude : null,
           facility_type: ref?.network_type || null,
           network_type: !metadata ? '분류 조회 실패' : candidates.length > 1 ? '분류 대응 미확정' : ref ? (ref.network_type || 'DB 분류값 없음') : 'DB 기준정보 미등록', sea_area: ref ? (ref.sea_area || 'DB 해역값 없음') : 'DB 기준정보 미등록',
@@ -123,7 +133,7 @@ const Dashboard: React.FC = () => {
     }).catch(error => { if (!control.signal.aborted) setLoadError(`실측자료 조회 실패: ${error.message}`); })
       .finally(() => { if (!control.signal.aborted) setLoading(false); });
     return () => control.abort();
-  }, [query, revision]);
+  }, [query, metadataQuery.toString(), revision]);
 
   useEffect(() => {
     const control = new AbortController();
@@ -148,6 +158,7 @@ const Dashboard: React.FC = () => {
   const selectStation = (value: string) => { setStationFilter(value); setItemFilter(''); };
   const detailQuery = new URLSearchParams({network,sea:search.get('sea')||'',source,from,to,station:stationFilter,item:itemFilter}).toString();
   const mappedCount = displayedStations.filter((r: any) => r.latitude != null && r.longitude != null).length;
+  const metricWaiting = completion.loading ? '조회 중' : completion.error ? '조회 실패' : completion.data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음';
 
   return (
     <div className="p-4 md:p-6 space-y-5 bg-gradient-to-br from-blue-50/60 via-white to-indigo-50/40 min-h-full">
@@ -180,13 +191,15 @@ const Dashboard: React.FC = () => {
       </div>
 
     <StationClassifications/>
+      <MonthlyReportComparison source={source} from={from} to={to}/>
+      <MetricCompletionPanel {...completion}/>
       {/* Top 6 Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
         {[
           { title: '보유 관측소', val: summaryData?.total_stations ?? '—', unit: '개소', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50', sub1: '보유 기준', sub1V: '', sub2: '운영 상태', sub2V: '미확정' },
-          { title: '수집률', val: summaryData?.data_collection_rate ?? '미산정', unit: '', icon: Activity, color: 'text-blue-600', bg: 'bg-blue-50', diffText: '예정 수집건수 필요', diffVal: '-', diffColor: 'text-emerald-500' },
-          { title: 'QC 정상 비율', val: '미산정', unit: '', icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50', diffText: '승인 QC 집계 필요', diffVal: '-', diffColor: 'text-emerald-500' },
-          { title: 'BAD 비율', val: '미산정', unit: '', icon: Bug, color: 'text-red-500', bg: 'bg-red-50', diffText: '승인 QC 집계 필요', diffVal: '-', diffColor: 'text-red-500' },
+          { title: '시간격자 보유율 (참고)', val: completion.data?.raw ? gridPercent(completion.data.raw.grid) : metricWaiting, unit: '', icon: Activity, color: 'text-blue-600', bg: 'bg-blue-50', diffText: '원시 유일 슬롯 · 실제 수집률 아님', diffVal: '', diffColor: 'text-slate-500' },
+          { title: '원시 결측표현율', val: completion.data?.raw ? percentMetric(completion.data.raw.missing_value_rate,completion.data.raw.held_rows) : metricWaiting, unit: '', icon: CheckCircle, color: 'text-slate-600', bg: 'bg-slate-50', diffText: '결측 표현 / 원천 보유 행', diffVal: '', diffColor: 'text-slate-500' },
+          { title: '원천 QC 표기율', val: completion.data?.raw ? qcPresencePercent(completion.data.raw) : metricWaiting, unit: '', icon: Bug, color: 'text-blue-600', bg: 'bg-blue-50', diffText: '기본 QC 코드 표기 · 정상/BAD 비율 아님', diffVal: '', diffColor: 'text-slate-500' },
           { title: '문서 검토 후보', val: monitor?.events.length ?? '—', unit: '건', icon: AlertTriangle, color: 'text-amber-500', bg: 'bg-amber-50', diffText: '기간 대응 · 원인 미승인', diffVal: '', diffColor: 'text-slate-600' },
           { title: 'AI 분석 리포트', val: reportCount ?? '—', unit: '건', icon: FileText, color: 'text-purple-500', bg: 'bg-purple-50', diffText: '전체 등록부 · 초안 포함', diffVal: '', diffColor: 'text-slate-600' },
         ].map((card, i) => (
@@ -227,6 +240,7 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="text-[10px] text-slate-600 mb-2 space-y-1">
             <p>범례 수: 선택 원천·기간·해역의 자료 보유 시설 · 운영 시설 수 아님</p>
+            <p>{julyReference ? '7월 보고서 대조 참조 및 기존 DB 기준정보' : '기존 DB 기준정보 참조'} · 운영 상태 미확정</p>
             <p><span className="inline-block w-2 h-2 rounded-full bg-slate-500 mr-1"/>회색: 운영 미확정 / QC 미승인 · 기호: 시설 유형</p>
             {!!facilityCounts?.__UNREGISTERED__ && <button aria-pressed={network === '__UNREGISTERED__'} onClick={() => chooseFacility('__UNREGISTERED__')} className="underline text-blue-700">기준정보 미등록 {facilityCounts.__UNREGISTERED__}개소 포함</button>}
             {!!facilityCounts?.__UNASSIGNED__ && <p>분류 미지정·대응 미확정 {facilityCounts.__UNASSIGNED__}개소 · 전체에서 확인</p>}
@@ -268,15 +282,16 @@ const Dashboard: React.FC = () => {
             <label className="text-[10px] text-slate-500">관측 항목<select disabled={!monitor?.observation_metrics_available} value={itemFilter} onChange={e => setItemFilter(e.target.value)} className="block w-full border border-slate-200 rounded-lg p-2 mt-1 text-xs text-slate-700 disabled:bg-slate-50"><option value="">{monitor?.observation_metrics_available ? '전체 항목' : '항목별 집계 미조회'}</option>{itemOptions.map(item => <option key={item} value={item}>{item}</option>)}</select></label>
             <button onClick={() => {setStationFilter(''); setItemFilter('');}} className="self-end p-2 text-xs text-blue-700 rounded-lg border border-blue-100 hover:bg-blue-50">관측소·항목 해제</button>
           </div>
-          <p className="text-[10px] text-slate-500 mb-2">지도·표에 동일 적용 · 상단 KPI와 QC 집계는 시설 유형·해역 전체</p>
-          <details className="text-[11px] text-slate-600 mb-2 rounded-lg bg-slate-50 p-2"><summary className="cursor-pointer font-medium">수집률 미산정 사유</summary><p className="mt-1">{collectionReason}. 보유 행 수는 중복 제거된 관측 건수가 아니므로 수집률의 분자로 사용하지 않습니다.</p><Link className="underline text-blue-700" to={`/data-lake?${detailQuery}`}>월별 원천 검증 보기</Link></details>
+          <p className="text-[10px] text-slate-500 mb-2">지도·표에 동일 적용 · 상단 KPI와 QC 집계는 시설 유형·해역 전체 · 표의 격자 참고 값은 선택 관측소·항목 범위</p>
+          <details className="text-[11px] text-slate-600 mb-2 rounded-lg bg-slate-50 p-2"><summary className="cursor-pointer font-medium">실제 수집률 · 산정 근거 미확정</summary><p className="mt-1">{collectionReason}. 보유 행 수는 중복 제거된 관측 건수가 아니므로 수집률의 분자로 사용하지 않습니다.</p><Link className="underline text-blue-700" to={`/data-lake?${detailQuery}`}>월별 원천 검증 보기</Link></details>
           <div className="flex-1 overflow-auto">
             <table className="w-full text-xs text-left min-w-[300px]">
               <thead className="text-slate-500 bg-slate-50 border-b border-slate-200 sticky top-0">
                 <tr>
                   <th className="py-2.5 px-2 font-medium">관측소</th>
                   <th className="py-2.5 px-2 font-medium">보유 행 수</th>
-                  <th className="py-2.5 px-2 font-medium">수집률</th>
+                  <th className="py-2.5 px-2 font-medium">시간격자 보유율 (참고)</th>
+                  <th className="py-2.5 px-2 font-medium">실제 수집률</th>
                   <th className="py-2.5 px-2 font-medium">QC 상태</th>
                   <th className="py-2.5 px-2 font-medium text-right">최종 관측시각</th>
                 </tr>
@@ -286,13 +301,14 @@ const Dashboard: React.FC = () => {
                   <tr key={i} className="hover:bg-slate-50 transition-colors">
                     <td className="py-2.5 px-2"><button onClick={() => selectStation(row.station_id)} className="text-blue-700 hover:underline text-left">{row.name}</button><Link aria-label={`${row.name} 상세 보기`} className="block text-blue-700 hover:underline" to={`/profile/${encodeURIComponent(row.station_id)}?${linkQuery}`}><span className="block text-[10px] text-slate-500">{row.station_id} · 상세</span></Link></td>
                     <td className="py-2.5 px-2 font-bold">{row.val}</td>
-                    <td className="py-2.5 px-2" title={collectionReason}>근거 필요</td>
+                    <td className="py-2.5 px-2" title={stationMetrics.get(row.station_id)?.grid.reason}>{tableCompletion.data?.raw?gridPercent(stationMetrics.get(row.station_id)?.grid):tableCompletion.loading?'조회 중':tableCompletion.error?'조회 실패':tableCompletion.data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음'}</td>
+                    <td className="py-2.5 px-2" title={collectionReason}>산정 근거 미확정</td>
                     <td className="py-2.5 px-2"><span className={`px-2 py-0.5 border rounded-full text-[10px] font-bold ${row.qcColor}`}>{row.qc}</span></td>
                     <td className={`py-2.5 px-2 text-right font-medium ${row.diffColor}`}>{row.diff}</td>
                   </tr>
                 ))}
                 {(displayedStations.length === 0) && (
-                   <tr><td colSpan={5} className="text-center py-4 text-slate-400">{loading ? '조회 중…' : loadError ? '자료 조회 실패' : '선택 범위에 보유 자료가 없습니다.'}</td></tr>
+                   <tr><td colSpan={6} className="text-center py-4 text-slate-400">{loading ? '조회 중…' : loadError ? '자료 조회 실패' : '선택 범위에 보유 자료가 없습니다.'}</td></tr>
                 )}
               </tbody>
             </table>
@@ -401,13 +417,13 @@ const Dashboard: React.FC = () => {
             <div className="flex flex-row sm:flex-col justify-between sm:justify-start gap-4 sm:w-1/3">
               <div>
                 <p className="text-[10px] text-slate-500 font-medium">RMSE (평균)</p>
-                <p className="text-2xl font-black text-slate-800">미평가</p>
-                <p className="text-[10px] font-bold text-emerald-500">검증 데이터셋 평가 후 표시</p>
+                <p className="text-xl font-black text-slate-800">평가대상 없음</p>
+                <p className="text-[10px] font-bold text-emerald-500">동일 단위·고정 test pair 평가 필요</p>
               </div>
               <div>
                 <p className="text-[10px] text-slate-500 font-medium">F1 Score (평균)</p>
-                <p className="text-2xl font-black text-slate-800">미평가</p>
-                <p className="text-[10px] font-bold text-emerald-500">검토 라벨 평가 후 표시</p>
+                <p className="text-xl font-black text-slate-800">평가대상 없음</p>
+                <p className="text-[10px] font-bold text-emerald-500">같은 task·label·split 평가 필요</p>
               </div>
             </div>
             <div className="flex-1 h-32 sm:h-full relative">

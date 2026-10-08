@@ -21,10 +21,13 @@ from app.api import routes_technical_review
 from app.api import routes_source_contracts
 from app.api import routes_integrations
 from app.api import routes_anomaly_analysis
+from app.api import routes_model_development
+from app.api import routes_development_stages
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.models import domain  # Ensure models are loaded before create_all
 from app.models import agent_workflow  # Durable recommendation approval boundary
+from app.services.http_request_metrics import request_metrics
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -91,6 +94,8 @@ app.include_router(routes_technical_review.router)
 app.include_router(routes_source_contracts.router)
 app.include_router(routes_integrations.router)
 app.include_router(routes_anomaly_analysis.router)
+app.include_router(routes_model_development.router)
+app.include_router(routes_development_stages.router)
 app.include_router(routes_imputation.router)
 app.include_router(routes_forecasting.router)
 
@@ -102,9 +107,11 @@ async def request_logging(request: Request, call_next):
     started = time.perf_counter()
     try:
         response = await call_next(request)
+        request_metrics.record(response.status_code, (time.perf_counter()-started)*1000)
         logger.info(json.dumps({"event":"http_request", "method":request.method, "path":request.url.path, "status":response.status_code, "duration_ms":round((time.perf_counter()-started)*1000, 2)}))
         return response
     except Exception:
+        request_metrics.record(500, (time.perf_counter()-started)*1000)
         logger.exception(json.dumps({"event":"http_exception", "method":request.method, "path":request.url.path}))
         raise
 

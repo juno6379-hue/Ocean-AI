@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { apiFetch, API_BASE_URL } from '../api/client';
+import { observationPeriod, selectObservationSource } from '../data/observationPeriod';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ScatterChart, Scatter, CartesianGrid } from 'recharts';
 
 const sources: Record<string,string> = {
-  GD_OBS_ST_MONTHLY: '월별 정형 기준자료 (2023~2026.07)',
+  GD_OBS_ST_MONTHLY: '월별 정형 기준자료 · 현황 기준월 / 과거 기간 선택',
   GD_OBS_BU: '해양관측부이 원천 · GD_OBS_BU',
   GD_OBS_VBU: '부이 원천 · GD_OBS_VBU',
   GR_OBS_ST: 'GR_OBS_ST 원천',
@@ -24,9 +25,7 @@ const field = 'rounded border border-slate-300 bg-white px-3 py-2 text-sm';
 
 export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'observations'|'detail';station?:string}) {
   const [search,setSearch] = useSearchParams();
-  const source = search.get('source') || 'GD_OBS_ST_MONTHLY';
-  const from = search.get('from') || (source==='HISTORICAL_RECONCILED'?'2011-01':'2023-01');
-  const to = search.get('to') || (source==='HISTORICAL_RECONCILED'?'2021-12':'2026-07');
+  const { source, from, to } = observationPeriod(search);
   const network = search.get('network') || '';
   const sea = search.get('sea') || '';
   const requestedItem = search.get('item') || '';
@@ -104,7 +103,7 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
       <p>관측값은 D: Parquet에서 읽습니다. PostgreSQL 전체 관측값 적재가 완료되었다는 의미는 아닙니다.</p>
     </div>
     <div className="flex flex-wrap gap-3 items-end rounded-xl bg-white border p-4">
-      <label className="text-sm">원천<select aria-label="원천" className={`${field} block mt-1`} value={source} onChange={e=>{const h=e.target.value==='HISTORICAL_RECONCILED';update({source:e.target.value,from:h?'2011-01':'2023-01',to:h?'2021-12':'2026-07'});}}>{Object.entries(sources).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select></label>
+      <label className="text-sm">원천<select aria-label="원천" className={`${field} block mt-1`} value={source} onChange={e=>setSearch(selectObservationSource(search,e.target.value))}>{Object.entries(sources).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select></label>
       <label className="text-sm">시작월<input aria-label="시작월" type="month" className={`${field} block mt-1`} value={from} onChange={e=>e.target.value&&update({from:e.target.value})}/></label>
       <label className="text-sm">종료월<input aria-label="종료월" type="month" className={`${field} block mt-1`} value={to} onChange={e=>e.target.value&&update({to:e.target.value})}/></label>
       <Link className="text-blue-700 underline p-2" to={`/observations?${linkQuery}`}>관측소 목록</Link>
@@ -119,7 +118,7 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
         ['보유 관측소',number(totals?.stations)],['원천 항목 코드',number(totals?.items)],
         ['보유 원천 행 수',number(totals?.held_rows)],['자료가 있는 월',number(totals?.held_months)],
       ].map(([label,value])=><div key={label} className="rounded-xl border bg-white p-5"><p className="text-sm text-slate-600">{label}</p><p className="text-2xl font-bold mt-2">{value}</p></div>)}</div>
-      <p className="text-sm">최초·최종 원천 시각: {shown(totals?.first_clock)} ~ {shown(totals?.last_clock)} · 시간대 미확정<br/>{summary.note}</p>
+      <p className="text-sm">선택 기간의 자료 보유 수 · 현재 운영 시설 수 아님<br/>최초·최종 원천 시각: {shown(totals?.first_clock)} ~ {shown(totals?.last_clock)} · 시간대 미확정<br/>{summary.note}</p>
       {source==='HISTORICAL_RECONCILED'&&<p className="border border-amber-300 rounded p-3 text-sm">{summary.legacy_status}. 현재 선택 결과가 과거 전체 보유량을 뜻하지 않습니다.</p>}
       {mode!=='detail'&&<div className="bg-white border rounded-xl p-5"><h2 className="font-bold mb-3">월별 보유 관측 행 수</h2><div className="h-56"><ResponsiveContainer width="100%" height="100%"><BarChart data={summary.monthly}><XAxis dataKey="month" tickFormatter={v=>String(v).slice(0,7)}/><YAxis tickFormatter={v=>Number(v).toLocaleString()}/><Tooltip/><Bar dataKey="held_rows" name="원천 보유 행" fill="#2563eb"/></BarChart></ResponsiveContainer></div></div>}
       {mode!=='detail'&&<div className="bg-white border rounded-xl p-5"><div className="flex justify-between mb-3"><h2 className="font-bold">관측소별 기간과 항목</h2><input aria-label="관측소 검색" className={field} placeholder="코드·관측소명 검색" value={filter} onChange={e=>setFilter(e.target.value)}/></div><div className="overflow-auto max-h-[550px]"><table className="w-full text-sm text-left"><thead><tr>{['관측소','항목 수','보유 행 수','최초 시각','최종 시각','상세'].map(s=><th className="p-2 border-b" key={s}>{s}</th>)}</tr></thead><tbody>{stations.map((s:any)=><tr key={s.station_code} className="border-b"><td className="p-2">{s.station_name||'이름 미확정'}<br/><span className="text-slate-500">{s.station_code}</span></td><td>{s.items}</td><td>{number(s.held_rows)}</td><td>{shown(s.first_clock)}</td><td>{shown(s.last_clock)}</td><td><Link className="text-blue-700 underline" to={`/profile/${encodeURIComponent(s.station_code)}?${linkQuery}`}>실측·QC 근거 보기</Link></td></tr>)}</tbody></table></div>{!stations.length&&<p className="p-3">선택 범위에 등록된 보유 자료가 없습니다. 관측 중단 여부는 미확정입니다.</p>}</div>}

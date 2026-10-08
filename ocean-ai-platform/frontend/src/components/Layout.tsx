@@ -11,13 +11,12 @@ import OperatorSession from './OperatorSession';
 import WorkflowStatus from './WorkflowStatus';
 import MenuPurpose from './MenuPurpose';
 import { menuPurposeFor } from '../data/menuPurposes';
+import { observationContext } from '../data/observationPeriod';
 
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-  const context = new URLSearchParams();
-  const current = new URLSearchParams(location.search);
-  for (const key of ['source','from','to','network','sea']) { const value=current.get(key); if(value)context.set(key,value); }
+  const context = observationContext(new URLSearchParams(location.search));
   const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -134,4 +133,3 @@ const Layout: React.FC = () => {
 };
 
 export default Layout;
-

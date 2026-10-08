@@ -1,0 +1,184 @@
+{
+  "as_of": "2026-10-08T09:17:54.754743+00:00",
+  "schema_version": "metric-completion-review-1",
+  "status": "IMPLEMENTED_VERIFIED_DIAGNOSTIC_ONLY",
+  "report_month": "2026-07",
+  "approved": false,
+  "sources": [
+    {
+      "source": "GD_OBS_ST_MONTHLY",
+      "channels": 768,
+      "held_rows": 23694337,
+      "grid": {
+        "status": "DIAGNOSTIC_AVAILABLE",
+        "holding_fraction_percent": 92.142,
+        "held_slots": 23681750,
+        "expected_slots": 25701480,
+        "eligible_channel_months": 609,
+        "excluded_channel_months": 159,
+        "excluded_reasons": {
+          "CATALOG_REFERENCE_ONLY_NO_JULY_HELD_ROWS; SOURCE_SCHEDULE_UNAPPROVED": 158,
+          "PHASE_UNSTABLE_MULTIPLE_REMAINDERS": 1
+        },
+        "approved_sampling_contract": false,
+        "reason": "실제 시각의 유일 최빈 간격·일정 위상으로 만든 전체 월 참고 격자입니다. 보유기간만으로 분모를 줄이지 않으며 간격·위상 미확정 채널은 제외합니다."
+      },
+      "missing_value_rate": 0.0,
+      "qc_presence_rate": 100.0,
+      "report_mean": 97.841,
+      "report_numeric_cells": 263
+    },
+    {
+      "source": "GD_OBS_BU",
+      "channels": 337,
+      "held_rows": 3205316,
+      "grid": {
+        "status": "DIAGNOSTIC_AVAILABLE",
+        "holding_fraction_percent": 98.238,
+        "held_slots": 2047947,
+        "expected_slots": 2084688,
+        "eligible_channel_months": 301,
+        "excluded_channel_months": 36,
+        "excluded_reasons": {
+          "PHASE_UNSTABLE_MULTIPLE_REMAINDERS": 26,
+          "CATALOG_REFERENCE_ONLY_NO_JULY_HELD_ROWS; SOURCE_SCHEDULE_UNAPPROVED": 10
+        },
+        "approved_sampling_contract": false,
+        "reason": "실제 시각의 유일 최빈 간격·일정 위상으로 만든 전체 월 참고 격자입니다. 보유기간만으로 분모를 줄이지 않으며 간격·위상 미확정 채널은 제외합니다."
+      },
+      "missing_value_rate": 0.0,
+      "qc_presence_rate": 100.0,
+      "report_mean": 94.049,
+      "report_numeric_cells": 70
+    },
+    {
+      "source": "GD_OBS_VBU",
+      "channels": 328,
+      "held_rows": 427278,
+      "grid": {
+        "status": "DIAGNOSTIC_AVAILABLE",
+        "holding_fraction_percent": 82.752,
+        "held_slots": 427278,
+        "expected_slots": 516336,
+        "eligible_channel_months": 283,
+        "excluded_channel_months": 45,
+        "excluded_reasons": {
+          "CATALOG_REFERENCE_ONLY_NO_JULY_HELD_ROWS; SOURCE_SCHEDULE_UNAPPROVED": 45
+        },
+        "approved_sampling_contract": false,
+        "reason": "실제 시각의 유일 최빈 간격·일정 위상으로 만든 전체 월 참고 격자입니다. 보유기간만으로 분모를 줄이지 않으며 간격·위상 미확정 채널은 제외합니다."
+      },
+      "missing_value_rate": 0.0,
+      "qc_presence_rate": 100.0,
+      "report_mean": null,
+      "report_numeric_cells": 0
+    },
+    {
+      "source": "GR_OBS_ST",
+      "channels": 672,
+      "held_rows": 25268257,
+      "grid": {
+        "status": "DIAGNOSTIC_AVAILABLE",
+        "holding_fraction_percent": 97.922,
+        "held_slots": 25254758,
+        "expected_slots": 25790760,
+        "eligible_channel_months": 611,
+        "excluded_channel_months": 61,
+        "excluded_reasons": {
+          "CATALOG_REFERENCE_ONLY_NO_JULY_HELD_ROWS; SOURCE_SCHEDULE_UNAPPROVED": 60,
+          "PHASE_UNSTABLE_MULTIPLE_REMAINDERS": 1
+        },
+        "approved_sampling_contract": false,
+        "reason": "실제 시각의 유일 최빈 간격·일정 위상으로 만든 전체 월 참고 격자입니다. 보유기간만으로 분모를 줄이지 않으며 간격·위상 미확정 채널은 제외합니다."
+      },
+      "missing_value_rate": 0.0,
+      "qc_presence_rate": null,
+      "report_mean": 99.187,
+      "report_numeric_cells": 164
+    }
+  ],
+  "verification": {
+    "parent": "PASS",
+    "live_scopes": "PASS",
+    "source_file_count": 146,
+    "direct_raw_samples": 7,
+    "backend_full_tests": {
+      "passed": 548,
+      "skipped": 1,
+      "seconds": 100.78
+    },
+    "backend_final_metric_tests": {
+      "passed": 17
+    },
+    "frontend_tests": {
+      "passed": 14,
+      "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
+    },
+    "frontend_build": {
+      "status": "PASS",
+      "log_sha256": "9dd156b89ddcd179285c18fa616030dcb7e48e659f7d4e132febd3a303c4e709",
+      "chunk_size_warning": true
+    },
+    "browser": "PASS"
+  },
+  "held_grains": 1832,
+  "catalog_only_grains": 273,
+  "computed_grid_grains": 1804,
+  "unstable_phase_grains": 28,
+  "legacy_unique_timestamp_nulls_filled": 610,
+  "report_unique_cells_in_held_scopes": 333,
+  "evidence_files": {
+    "published.json": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\published.json",
+      "sha256": "8514161c5d15da01fd5a2a08d25fe911ef7a1bb9c52fe5c9ad925be46f265f26"
+    },
+    "parent-verification.json": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\parent-verification.json",
+      "sha256": "b028fa4c679b43cb36cd9383e30c590cd55ab07b6aeb96bcfdddd409ce7b92d0"
+    },
+    "live-verification.json": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\live-verification.json",
+      "sha256": "f5c27b96c223c55124094de515d8b8562bfa0c2eb2a2ff61885d34651d729497"
+    },
+    "diagnostic-channel-metrics.json": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\diagnostic-channel-metrics.json",
+      "sha256": "d7ebb9abc656f734f7a512fcbb6494efa1a1ada1ba156137ef313fa082323d32"
+    },
+    "backend-tests-final.log": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\backend-tests-final.log",
+      "sha256": "8b1d42fdde64f23e9b074e1e78f8bc0651ca2e0876b200355b0de8cd753c19f5"
+    },
+    "metric-tests-final.log": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\metric-tests-final.log",
+      "sha256": "7ea80cb90d57c52dbdc61e44494fe0d5605fc5654e242aa20f7c997fa326ef37"
+    },
+    "frontend-tests.log": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\frontend-tests.log",
+      "sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
+    },
+    "frontend-build-final.log": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\frontend-build-final.log",
+      "sha256": "9dd156b89ddcd179285c18fa616030dcb7e48e659f7d4e132febd3a303c4e709"
+    },
+    "browser-verification.json": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\browser-verification.json",
+      "sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a"
+    },
+    "metric-completion-ui.png": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\metric-completion-ui.png",
+      "sha256": "2c729957a6959482ddc0aeb6da4eb71c55fd747f7226832a304f135e4bad9f2b"
+    },
+    "service-metrics-ui.png": {
+      "path": "D:\\AI_Observation\\outputs\\monthly-report-matching\\202607\\metric-enrichment\\service-metrics-ui.png",
+      "sha256": "2318a9d33900eef5e826e089c6e4a429f6777b9e00b18579c8a09619a4a80531"
+    }
+  },
+  "remaining_inputs": [
+    "SOURCE_SCHEDULE_AND_SENSOR_EFFECTIVE_PERIOD",
+    "SOURCE_CLOCK_TIMEZONE",
+    "QC_CODEBOOK_EFFECTIVE_PERIOD_AND_COUNTS",
+    "UPTIME_HEARTBEAT_HISTORY",
+    "MAINTENANCE_TARGET_COMPLETION_LEDGER",
+    "MODEL_EVALUATION_TASK_LABEL_SPLIT"
+  ]
+}

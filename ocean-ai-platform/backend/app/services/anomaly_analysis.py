@@ -270,8 +270,11 @@ def source_requirements(series):
     Useful for real-source read-only smoke checks: preserve unresolved clocks and
     units rather than inventing a UTC mapping or a training split to run fit.
     """
+    from app.services.qc_analysis_readiness import inspect_source_inputs
+    requirements=inspect_source_inputs(series)
+    errors=list(requirements["blocker_counts"])
     try:
-        errors=_fact_errors(series)
+        errors+=_fact_errors(series)
         try:
             rows=_rows(series)
             errors+=sorted({reason for row in rows for reason in row["errors"]})
@@ -280,11 +283,23 @@ def source_requirements(series):
         return {"status":"NOT_EVALUATED" if errors else "CONDITIONAL_INPUT_READY",
             "source_authority":"DECLARED_DEVELOPMENT_CONTRACT","approved":False,
             "production_eligible":False,"input_sha256":sha256(series),
-            "blockers":sorted(set(errors)),"training_executed":False}
+            "blockers":sorted(set(errors)),"requirements":requirements,"training_executed":False}
     except (AnomalyContractError,KeyError,TypeError,ValueError,AttributeError,OverflowError) as exc:
         return {"status":"NOT_EVALUATED","source_authority":"DECLARED_DEVELOPMENT_CONTRACT",
             "approved":False,"production_eligible":False,"training_executed":False,
-            "blockers":[exc.code if isinstance(exc,AnomalyContractError) else "MALFORMED_ANOMALY_INPUT"]}
+            "blockers":sorted(set(errors+[exc.code if isinstance(exc,AnomalyContractError) else "MALFORMED_ANOMALY_INPUT"])),
+            "requirements":requirements}
+
+
+def fit_raw_diagnostic(series, policy):
+    """Explicit raw native-clock experiment; never a physical analysis artifact."""
+    from app.services.qc_raw_diagnostic import fit_raw_diagnostic as fit
+    return fit(series, policy)
+
+
+def analyze_raw_diagnostic(series, artifact):
+    from app.services.qc_raw_diagnostic import analyze_raw_diagnostic as analyze
+    return analyze(series, artifact)
 
 
 def _fit_analysis(series, policy):

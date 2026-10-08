@@ -1,17 +1,18 @@
 import { useEffect,useState } from 'react';
 import { Link,useLocation } from 'react-router-dom';
 import { API_BASE_URL,apiFetch } from '../api/client';
+import { observationContext, observationPeriod } from '../data/observationPeriod';
 const count=(value:unknown)=>typeof value==='number'&&Number.isFinite(value)?value.toLocaleString('ko-KR'):'미조회';
 
 /** A shared source/period contract, with global model totals explicitly labelled. */
 export default function WorkflowStatus(){
  const {search}=useLocation(),[data,setData]=useState<any>(null),[error,setError]=useState('');
- const context=new URLSearchParams(),current=new URLSearchParams(search);
- for(const key of ['source','from','to','network','sea']){const value=current.get(key);if(value)context.set(key,value);}
+ const current=new URLSearchParams(search),context=observationContext(current);
  const contextQuery=context.size?`?${context}`:'';
  useEffect(()=>{
   const abort=new AbortController(),s=new URLSearchParams(search);
-  const q=new URLSearchParams({source:s.get('source')||'GD_OBS_ST_MONTHLY',from_month:s.get('from')||'2023-01',to_month:s.get('to')||'2026-07',network:s.get('network')||'',sea:s.get('sea')||''});
+  const {source,from,to}=observationPeriod(s);
+  const q=new URLSearchParams({source,from_month:from,to_month:to,network:s.get('network')||'',sea:s.get('sea')||''});
   let busy=false;setData(null);setError('');
   async function refresh(){if(busy)return;busy=true;try{const r=await apiFetch(`${API_BASE_URL}/data-lake/foundation/workflow?${q}`,{signal:abort.signal});if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();if(!abort.signal.aborted){setData(d);setError('');}}catch(e){if(!abort.signal.aborted){setData(null);setError(`연결·진행 상태 조회 실패: ${String(e)}`);}}finally{busy=false;}}
   refresh();const t=setInterval(refresh,60000);return()=>{abort.abort();clearInterval(t);};

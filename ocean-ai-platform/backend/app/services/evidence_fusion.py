@@ -1,5 +1,5 @@
 """Deterministic evidence support; no probability, QC decision or approval authority."""
-from collections import defaultdict
+from collections import defaultdict, Counter
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -138,3 +138,45 @@ def ai_evidence(result):
         'provenance':{'analysis_result':result,'source_records':result.get('source_records',[]),
             'calibration_rank':result.get('calibration_rank'),'source_authority':'DECLARED_DEVELOPMENT_CONTRACT'},
         'score_kind':result.get('score_kind'),'approved':False}
+
+
+def fuse_raw_diagnostics(series, artifact, ai_report, rule_report):
+    """Separate native-clock review. It cannot authorize physical Fusion/QC.
+
+    Recompute fixed held-out predictions and verify whole reports, preserving
+    rule non-evaluation. No fabricated canonical scope or UTC is needed here.
+    """
+    from app.services.qc_raw_diagnostic import (analyze_raw_diagnostic,
+        digest as raw_digest, REPORT as raw_schema, unevaluated_rule_report)
+    if not isinstance(ai_report,dict) or ai_report.get('schema_version')!=raw_schema or ai_report!=analyze_raw_diagnostic(series,artifact):
+        raise FusionError('RAW_DIAGNOSTIC_PREDICTION_MISMATCH')
+    if not isinstance(rule_report,dict) or rule_report.get('schema_version')!='guide-qc-report-v1' or rule_report.get('result_sha256')!=digest({k:v for k,v in rule_report.items() if k!='result_sha256'}):
+        raise FusionError('RULE_REPORT_CHECKSUM_MISMATCH')
+    # This path has no physical source facts. Conditional evaluated Rule results
+    # may not be silently relabelled as raw diagnostics for the same raw grain.
+    if any(r.get('evaluation_status')!='NOT_EVALUATED' for r in rule_report.get('results',[])):
+        raise FusionError('RAW_FUSION_REQUIRES_UNEVALUATED_PHYSICAL_RULES')
+    try:
+        executed_at=rule_report['results'][0]['provenance_json']['executed_at_utc']
+        if rule_report!=unevaluated_rule_report(series,executed_at):
+            raise FusionError('RAW_RULE_GRAIN_MEMBERSHIP_OR_RECIPE_MISMATCH')
+    except (KeyError,IndexError,TypeError,ValueError) as exc:
+        if isinstance(exc,FusionError):raise
+        raise FusionError('RAW_RULE_GRAIN_MEMBERSHIP_OR_RECIPE_MISMATCH') from None
+    results=ai_report['results'];eligible=[r for r in results if r['result_status']=='RAW_DIAGNOSTIC_EVALUATED']
+    candidates=[r for r in eligible if r['candidate']]
+    result={'schema_version':'raw-native-diagnostic-fusion-1','status':'RAW_DIAGNOSTIC_ONLY',
+        'grain':series['grain'],'source_series_sha256':raw_digest(series),'artifact_sha256':artifact['sha256'],
+        'ai_report_sha256':ai_report['result_sha256'],'rule_report_sha256':rule_report['result_sha256'],
+        'raw_numeric_candidate_count':len(candidates),'raw_evaluated_count':len(eligible),
+        'raw_support':max((r['calibration_rank'] for r in candidates),default=None),
+        'score_kind':'RAW_EMPIRICAL_RANK_NOT_PROBABILITY_NOT_PHYSICAL_FUSION_SCORE',
+        'physical_rule_status':'NOT_EVALUATED','physical_fusion_status':'NOT_EVALUATED',
+        'physical_scope':None,'unit':None,'timezone':None,'source_qc_interpreted':False,
+        'approved':False,'production_eligible':False,'cause_attribution':'NOT_ESTABLISHED',
+        'rule_blocker_counts':dict(sorted(Counter(r['result_reason'] for r in rule_report.get('results',[])).items())),
+        'coverage':{'RAW_AI':'EVALUATED' if eligible else 'NOT_EVALUATED','PHYSICAL_RULE':'NOT_EVALUATED',
+            'METADATA':'UNRESOLVED','OPERATION':'UNRESOLVED','RAG':'NOT_LINKED'},
+        'operational_evidence_eligible':False,'training_registry_writes':0}
+    result['result_sha256']=digest(result)
+    return result

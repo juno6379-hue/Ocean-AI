@@ -66,3 +66,6 @@ rerank score는 정렬용 값이며 cosine·원인 신뢰도·QC 정확도가 �
 [test_document_pipeline](../ocean-ai-platform/backend/tests/test_document_pipeline.py)은 station/sensor/type 필터, 실 cosine과 rerank score 분리, keyword-only의 `similarity=None`을 시험한다. [verify_document_retrieval](../ocean-ai-platform/backend/app/scripts/verify_document_retrieval.py)은 로컬 연결에서 active-version 색인·embedding ID·원문 존재, 보고서 유형별 HTTP 검색과 잘못된 station의 빈 결과를 점검한다. 그 실행 결과도 시각·계약·corpus 범위가 있는 근거다.
 
 이번 문서 갱신은 코드·기존 시험 근거와 수집 상태 GET을 확인했으며 새 embedding·vector 검색 배치를 실행하지 않았다. 실제 corpus/contract·Chroma 원장이 Git에 없으므로 clone의 시험 통과로 현재 vector 검색이나 전 문서 근거 승인이 완료됐다고 표시하지 않는다. 수집·정산의 현재 분모는 [DocumentIndex와 수집](15_DOCUMENT_INDEX_INGESTION.md)의 2026-10-08 13:14 KST 기록을 참고한다.
+## 10/8 단계별 보완 결과
+
+별도 복구 SQLite에서 현재 loopback Ollama 모델 digest/차원 계약에 맞는 vector와 citation·source/page/document filter를 시험했다. 완성 문서만 조회하고 PARTIAL은 제외한다. self-query7건 성공은 전체 도메인 QA 정확도가 아니다. 이후 수정된 SQL postimage는 재실행/rollback이 거부한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

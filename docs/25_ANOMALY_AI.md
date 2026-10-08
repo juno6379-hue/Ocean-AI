@@ -63,3 +63,6 @@ POST /api/anomaly-analysis/analyze
 2026-10-08 읽기 전용 smoke에서 보존 `GR_OBS_ST_202609` Parquet의 전체 bytes SHA가 manifest와 일치했고 DT_0001 WATER_TEMP 500행의 유한 값을 읽었다. 원문 시각은 offset 없는 문자열이며 과거 기간 단위·QC 코드북·물리 센서 구간이 미확정이다. 요구조건 점검은 NOT_EVALUATED였고 실제 원천 fitting·Registry 등록·운영 배포는 수행하지 않았다. 삭제된 원본 CSV를 현재 보존 원본으로 표시하지 않는다.
 
 운영 전에는 실제 source/reference 근거, 장비 점검·세척·교체 사건, 고정 검증 모집단과 수용 정책을 확정해야 한다. [72업무](19_MLOPS_VERSION_AND_EVALUATION.md)의 기존 representation baseline partial 상태를 이 개발 엔진만으로 운영 완료로 바꾸지 않는다.
+## 10/8 단계별 보완 결과
+
+이전9월 WATER_TEMP requirements-only smoke와 별도로, 2023-01 DT_0001 native3항목에서 raw schema로300/100/100고정 fit/calibration/test를 실행했다. 600예측 중552평가/48warm-up, 후보0/14/0이다. 원문 시각을 명시적 NATIVE_CLOCK_ASCENDING으로 정렬하되 물리 단위/UTC/센서/QC/availability를 확정하지 않는다. exact row/manifest SHA와 독립 재산정 및 raw Fusion3건을 보존했다. production 물리 fit0, cause/accuracy미산정. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

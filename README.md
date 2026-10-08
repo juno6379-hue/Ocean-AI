@@ -4,6 +4,8 @@
 
 **현재 구현과 운영 상태는 [현행 문서 안내](docs/README.md)에서 확인한다.** 2026-10-08 QC12종·fitted anomaly6모드·Evidence Fusion·PostgreSQL stop/resume 승인 gate를 추가했으며 최종 시험과 웹 실행 결과는 현행 문서에 기록한다. 운영 DB의 원천 승인·dataset·학습 이력·model registry는 모두 0건이고 운영 모델도 0개다. 기존 작업본의 worker가 실행 중이어도 승인된 학습 입력이 없으면 모델을 생성하지 않는다. 72개 업무 키는 자료형 기준선의 부분 구현이며 업무별 운영 모델 72개 완료를 뜻하지 않는다.
 
+10/8 단계별 보완은 [13단계 실행·최종 검증](docs/29_DEVELOPMENT_STAGE_EXECUTION.md)에 기록했다. 최종 backend668·frontend17시험과 PostgreSQL48테이블 backup/restore를 통과했다. System에 단계별 상태, MLOps에 legacy→새 v2·고정 정책·승인 입력 검토를 연결했다. 문서1,842경로를 전수 검사하고81개/8,761chunks를 별도 복구했으며 남은705개 임베딩과 원천 사실·실제 운영 승인을 미완료로 구분한다. 현황 기본월은2026-07이고 [월간보고서 대조](docs/27_JULY_REPORT_PARQUET_MATCH.md)와 [지표 보완](docs/28_METRIC_COMPLETION.md)을 따른다.
+
 ## 구현 범위
 
 - 원문/Parquet hash와 행·열 locator, 의미·단위·시간대·QC·센서 유효기간을 재검증하는 source 계약·인증된 판정·불변 영수증.

@@ -1,5 +1,7 @@
 // 파일 역할: 모델·데이터셋 버전과 학습·배포 상태를 표시합니다.
 import { API_BASE_URL } from '../api/client';
+import TrainingWorkbench from '../components/TrainingWorkbench';
+import { observationContext, observationPeriod } from '../data/observationPeriod';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { apiClient as axios } from '../api/client';
@@ -16,8 +18,8 @@ import {
 const MLOps: React.FC = () => {
   const {search}=useLocation();
   const scope=new URLSearchParams(search);
-  const context=new URLSearchParams();
-  for(const key of ['source','from','to','network','sea']){const value=scope.get(key);if(value)context.set(key,value);}
+  const context=observationContext(scope);
+  const period=observationPeriod(scope);
   const contextQuery=context.size?`?${context}`:'';
   const [query,setQuery]=useState(''),[targetFilter,setTargetFilter]=useState(''),[statusFilter,setStatusFilter]=useState('');
   const [loading,setLoading]=useState(true),busy=useRef(false);
@@ -110,9 +112,7 @@ const MLOps: React.FC = () => {
     return () => {abort.abort();busy.current=false;clearInterval(interval);};
   }, []);
 
-  const handleRetrain = async (_modelId: string) => {
-    setLoadError('원천·데이터셋·고정 분할·평가 기준의 승인과 실제 작업 입력 명세 선택이 필요합니다. 이 조회 버튼에서는 학습을 실행하지 않았습니다.');
-  };
+  const handleRetrain = () => document.getElementById('training-input-review')?.scrollIntoView({behavior:'smooth',block:'start'});
 
   const mlopsAlerts: any[] = [];
   const filteredModels=modelList.filter(row=>(!targetFilter||row.target===targetFilter)&&(!statusFilter||row.registryStatus===statusFilter)&&`${row.name} ${row.target} ${row.version}`.toLowerCase().includes(query.trim().toLowerCase()));
@@ -126,6 +126,7 @@ const MLOps: React.FC = () => {
   return (
     <div className="p-4 md:p-6 space-y-4 bg-[#F8FAFC] min-h-full font-sans overflow-x-hidden">
       {loadError && <p role="alert" className="text-red-700 text-sm">{loadError}</p>}
+      <TrainingWorkbench workerConfigured={readiness?.execution?.worker_configured===true} models={modelList}/>
       {/* Top Header */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-4 border-b border-slate-200 pb-4">
         <div>
@@ -150,7 +151,7 @@ const MLOps: React.FC = () => {
         </div>
       </div>
 
-      <p className="text-xs leading-relaxed text-slate-500">관측 조회 문맥: {scope.get('source')||'GD_OBS_ST_MONTHLY'} · {scope.get('from')||'2023-01'} ~ {scope.get('to')||'2026-07'} · 관측망 {scope.get('network')||'전체'} · 해역 {scope.get('sea')||'전체'}. 아래 모델·평가·승인 건수는 이 필터와 별도의 전체 등록부입니다.</p>
+      <p className="text-xs leading-relaxed text-slate-500">관측 조회 문맥: {period.source} · {period.from} ~ {period.to} · 관측망 {scope.get('network')||'전체'} · 해역 {scope.get('sea')||'전체'}. 아래 모델·평가·승인 건수는 이 필터와 별도의 전체 등록부입니다.</p>
       <section aria-label="운영 준비 검증" className="bg-white border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
         <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-bold text-slate-800">운영 준비 검증</h3><span className={`rounded-full px-2.5 py-1 text-xs font-medium ${loadError?'bg-red-50 text-red-700':readiness?.operational_model_count>0?'bg-emerald-50 text-emerald-800':readiness?'bg-amber-50 text-amber-800':'bg-slate-100 text-slate-600'}`}>{readiness?deploymentLabel:unknown}</span></div>
         {readiness && <>
@@ -186,8 +187,8 @@ const MLOps: React.FC = () => {
           { title: '운영 검증 모델', val: readiness?.operational_model_count==null?'—':String(readiness.operational_model_count), unit: '개', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-100', diff: readiness?'실행 근거 기준':unknown, diffColor: 'text-slate-500' },
           { title: '검증 상태 모델', val: counts?.VALIDATING==null?'—':String(counts.VALIDATING), unit: '개', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50', diff: '등록 상태 기준', diffColor: 'text-slate-500' },
           { title: '재학습 필요 모델', val: counts?.RETRAIN_REQUIRED==null?'—':String(counts.RETRAIN_REQUIRED), unit: '개', icon: RefreshCw, color: 'text-amber-600', bg: 'bg-amber-50', diff: '등록 상태 기준', diffColor: 'text-slate-500' },
-          { title: '최근 배포 성공률', val: '미평가', unit: '', icon: CheckCircle, color: 'text-slate-500', bg: 'bg-slate-100', diff: '실행 결과 미연결', diffColor: 'text-slate-500' },
-          { title: '평균 F1 Score', val: '미평가', unit: '', icon: Search, color: 'text-blue-600', bg: 'bg-blue-100', diff: '전기 비교 미평가', diffColor: 'text-blue-500' },
+          { title: '최근 배포 성공률', val: '필요입력 없음', unit: '', icon: CheckCircle, color: 'text-slate-500', bg: 'bg-slate-100', diff: '기간·시도 ID·실제 완료/실패 receipt 원장 필요', diffColor: 'text-slate-500' },
+          { title: '동일 평가범위 F1 평균', val: totalModels===0?'평가대상 없음':'필요입력 없음', unit: '', icon: Search, color: 'text-slate-600', bg: 'bg-slate-100', diff: '같은 과업·라벨·고정 split·평가 모집단 필요', diffColor: 'text-slate-500' },
         ].map((card, i) => (
           <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-between">
             <div className="flex items-center gap-3 mb-2">
@@ -231,7 +232,7 @@ const MLOps: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <button onClick={()=>{setQuery('');setTargetFilter('');setStatusFilter('');}} className="flex items-center gap-1.5 text-slate-500 hover:text-slate-800 px-2 py-1.5 mr-2"><Filter className="w-3.5 h-3.5"/> 표 필터 초기화</button>
-          <button disabled title="원천·분할·평가 기준의 승인 및 실제 작업 입력 명세 선택 필요" className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-200 text-slate-500 rounded font-bold cursor-not-allowed">
+          <button onClick={handleRetrain} title="고정 승인 입력 선택·검증으로 이동" className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 rounded font-bold">
             <Plus className="w-3.5 h-3.5"/> 학습 입력 검토 필요
           </button>
           <button onClick={exportRegistry} disabled={totalModels==null||loading} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 shadow-sm transition-colors disabled:bg-slate-200 disabled:text-slate-500 disabled:cursor-not-allowed">
@@ -279,7 +280,7 @@ const MLOps: React.FC = () => {
                       <span className={`px-2 py-0.5 border rounded text-[10px] font-bold ${row.deployColor}`}>{row.deploy}</span>
                     </td>
                     <td className="py-2.5 px-2 text-slate-400 flex items-center justify-center gap-1.5">
-                      <button className="cursor-not-allowed" disabled onClick={() => handleRetrain(row.id)} title="학습 worker 미연결"><Play className="w-3.5 h-3.5" /></button>
+                      <button onClick={handleRetrain} title="고정 승인 입력과 기준 모델을 선택하여 재학습 검토"><Play className="w-3.5 h-3.5" /></button>
                       <button disabled title="모델 파일 다운로드 미연결" aria-label="모델 파일 다운로드 미연결" className="cursor-not-allowed"><DownloadCloud className="w-3.5 h-3.5" /></button>
                       <Link to={`/data-lake${contextQuery}`} title="데이터셋 근거 확인" aria-label={`${row.name} 데이터셋 검토 화면`} className="hover:text-blue-600 focus-visible:ring-2 focus-visible:ring-blue-500"><FileText className="w-3.5 h-3.5" /></Link>
                     </td>

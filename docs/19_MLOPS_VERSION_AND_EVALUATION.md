@@ -59,7 +59,7 @@ GET  /api/mlops/serving/health?scope_key=...
 POST /api/mlops/serving/predict
 ```
 
-`POST /api/mlops/retrain`은 worker 사용이 꺼져 있으면 501이다. 켜져 있어도 고정 승인 manifest가 없으면 `FIXED_APPROVED_MANIFEST_REQUIRED` 409이며 임의 split이나 가짜 PENDING 학습 이력을 만들지 않는다. manifest가 있으면 승인 입력 큐 경로로 위임한다. 현재 MLOps 화면의 재학습 버튼은 입력 선택·승인 연결 UI가 없어 비활성화돼 있다.
+`POST /api/mlops/retrain`은 worker 사용이 꺼져 있으면 501이다. 켜져 있어도 고정 승인 manifest가 없으면 `FIXED_APPROVED_MANIFEST_REQUIRED` 409이며 임의 split이나 가짜 PENDING 학습 이력을 만들지 않는다. manifest가 있으면 승인 입력 큐 경로로 위임한다. 현재 MLOps 화면은 고정 승인3Dataset 선택→manifest 생성·SHA preflight→큐/재학습 요청을 연결한다. 실제 승인 입력0·계정 미설정·worker 사용 미설정 때문에 요청 버튼은 비활성화된다.
 
 worker CLI는 backend에서 `python -m app.scripts.model_training_worker --poll-seconds 10`이다. `OCEAN_TRAINING_WORKER_ENABLED` 기본값은 0이며 운영자가 명시적으로 설정해야 한다. worker는 application DB를 읽기 전용으로 사용하고 승인·등록·배포를 하지 않는다. 자동 학습 일정·신규 자료/drift trigger는 별도 운영 연결이며 main의 MDC scheduler와 다르다.
 
@@ -78,3 +78,6 @@ worker CLI는 backend에서 `python -m app.scripts.model_training_worker --poll-
 근거 코드: [routes_mlops.py](../ocean-ai-platform/backend/app/api/routes_mlops.py), [실행 route](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py), [candidate 권위](../ocean-ai-platform/backend/app/ml/candidate_authority.py), [serving](../ocean-ai-platform/backend/app/ml/serving.py). 최신 전체 회귀는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)와 [current_status.json](current_status.json)을 따른다.
 
 새 [fitted anomaly6모드](25_ANOMALY_AI.md)는 별도 개발 JSON artifact이며 실제 source 승인·72업무 비교·ModelRegistry를 우회하지 않는다. workflow resume 역시 MLOps 추천만 반환하고 training_enqueued/model_registered/deployment_performed는 false다. 실제 계정 설정은 사용자 지시로 운영 시점에 수행한다.
+## 10/8 단계별 보완 결과
+
+실제3 native 원천의 동일 TEST각97쌍 비교에서 persistence가 세 TEST오차 모두 낮지만 VALIDATION으로 선정한 WATER_TEMP Ridge를 사후 변경하지 않는다. 격리 정상 권한 E2E는 source→v2→fixedpolicy→worker→독립 reviewer replay→registry→authenticated prediction→배포2회→approved rollback을 완주했다. fixture 모델2건과 원시 artifact는 운영 등록이 아니다. 현재 source/task 학습 준비0이며 source inventory의 운영 수null은 별도 serving readiness에서 검증한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

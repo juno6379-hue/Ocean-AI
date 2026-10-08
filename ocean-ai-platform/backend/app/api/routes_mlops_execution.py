@@ -47,6 +47,7 @@ class Decision(BaseModel):
 
 class ManifestRequest(BaseModel):
     manifest_path: str
+    expected_sha256: str | None = Field(default=None,pattern='^[0-9a-f]{64}$')
 
 
 class CandidateRequest(BaseModel):
@@ -104,7 +105,11 @@ def enqueue(req: ManifestRequest, db: Session = Depends(get_db)):
         from app.ml.job_queue import DurableQueue
         path = exact_path(req.manifest_path, "requests")
         with db.no_autoflush:
-            return DurableQueue(runtime_root() / "worker").enqueue(path, DatabaseAuthority(db, settings.DATASET_SNAPSHOT_DIR))
+            from app.ml.comparison_runner import preflight
+            prepared=preflight(path,DatabaseAuthority(db,settings.DATASET_SNAPSHOT_DIR))
+            if req.expected_sha256 is not None and prepared['manifest_sha256']!=req.expected_sha256:
+                raise ComparisonBlocked('REVIEWED_MANIFEST_CHANGED')
+            return DurableQueue(runtime_root() / "worker").enqueue(path, DatabaseAuthority(db, settings.DATASET_SNAPSHOT_DIR), req.expected_sha256)
     except ComparisonBlocked as exc: raise blocked(exc)
 
 

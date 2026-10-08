@@ -2,6 +2,10 @@
 
 현행화: 2026-10-08. 9/16 최초 감사 이후의 코드와 이번 QC·AI·Fusion·승인 gate를 실제 구현에 대조한다. 구현 시험, 원천 사실 확인, 실제 담당 승인, 운영 모델은 각각 별도 판정이다.
 
+7월 현황 추가 검증: 기본2026-07,공식 시설/보유 원천 분리,7월 문서 참조와 과거 조회를 구현했다. 최신 전체 backend **668 passed,1 skipped**, 마지막 산정 경계 시험 **17 passed**다. 프런트엔드 기간·지표 시험과 build 최종 결과는 current_status.json을 따른다. 146개7월 Parquet hash·행 정산,70개 유일 시설 대응,수치14개 중 조건부7일치/7차이와 미확정 QC를 [27](27_JULY_REPORT_PARQUET_MATCH.md)에 기록했다. 실제 운영 승인을 수행하지 않았다.
+
+미산정 지표 보완: 원천 전체2,105채널·월 중1,804개의 참고 시간격자 보유율을 계산하고 과거 보유0채널273개와 위상 불안정28개를 분리했다. GDST 고유 시각NULL610개를 실제값으로 보완했다. 보고서 인쇄값과 현재 API 처리 응답 오류율은 각각의 분모로 연결했다. [28](28_METRIC_COMPLETION.md)을 따른다.
+
 ## 현재 구현
 
 | 항목 | 검증된 실행 경로 | 현재 적용 범위 |
@@ -11,7 +15,7 @@
 | Evidence Fusion | [fusion](../ocean-ai-platform/backend/app/services/evidence_fusion.py) | Rule/AI/Metadata/Operation/RAG를 Recommendation score로 결합한다. exact scope·기간·availability·원본 checksum을 확인하고 중복/충돌/누락을 표시한다. 개발 recipe이며 고장 확률·승인 운영 기준이 아니다. |
 | Human Approval | [영속 workflow](../ocean-ai-platform/backend/app/agents/multi_agent_workflow.py), [API](../ocean-ai-platform/backend/app/api/routes_agents.py) | PENDING에서 중단한다. reviewer 결정 이후 별도 resume, hash/revision 재확인과 입력 변경·재요청·경합 차단. PostgreSQL에 상태·전이·승인 연결을 보존한다. |
 | 화면 | [WorkflowReviewPanel](../ocean-ai-platform/frontend/src/components/WorkflowReviewPanel.tsx) | QC Copilot에서 scope 분석·상태 조회·승인/반려·재개. 실제 계정 미설정이면 조회/분석만 가능하다. |
-| 원천 계약·production bridge | [authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), [snapshot](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py) | 승인 원천 재검증·ingest binding·v2 source dependency freeze 구현. legacy v1 자동 전환은 미지원이다. |
+| 원천 계약·production bridge | [authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py), [snapshot](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py) | 승인 원천 재검증·ingest binding·v2 source dependency freeze 구현. 명시적 승인 의존성으로 새 미승인 BUILT v2를 재구축하는 경로를 구현했다. 자동 승인 전환은 지원하지 않는다. |
 | 고정 비교·worker·registry·serving | [model runner](../ocean-ai-platform/backend/app/ml/comparison_runner.py), [실행 API](../ocean-ai-platform/backend/app/api/routes_mlops_execution.py) | 승인 source/dataset/protocol과 독립 검토를 요구한다. 자료형 기준선 부분 구현이며 72업무의 실제 선정/배포 완료가 아니다. |
 | 문서 검색·Feature·사건 | [문서](15_DOCUMENT_INDEX_INGESTION.md), [feature](14_FEATURE_STORE.md), [라벨](13_AI_LABEL_SEPARATION.md) | 기존 계보·contract·as-of 검증을 유지한다. 문서 검색 결과는 물리 고장 또는 원천 의미 승인 증거로 자동 승격하지 않는다. |
 
@@ -29,8 +33,8 @@
 
 업무 DB는 PostgreSQL이다. SQLite는 격리 단위시험과 기존 로컬 worker/file queue에만 남는다. 실제 계정 설정은 사용자 지시로 DEFERRED_BY_USER이며 새 계정·token·인간 승인 기록을 발명하지 않았다. source packet/decision/binding, ApprovalHistory, DatasetRegistry, ModelRegistry, RetrainingHistory는 확인 시각에 모두 0이다.
 
-[원천 사실 재확인](26_SOURCE_FACT_RESOLUTION.md)에서 가이드 판본·현재 항목 literal/단위·캡처 SQL은 확인했다. 과거 행의 배율/기준면·시계·QC 코드북 시행기간·물리 센서 유효기간을 확정할 증거는 부족하다. 기존 미확정 18,502개 항목, 미연결 사건 후보 40개, 기간 충돌 1건/152 scope의 담당 판정도 남아 있다. 실제 source fit·registry·운영 모델은 0이며 P0 전체 운영 완료로 판정하지 않는다.
+[원천 사실 재확인](26_SOURCE_FACT_RESOLUTION.md)에서 가이드 판본·현재 항목 literal/단위·캡처 SQL은 확인했다. 과거 행의 배율/기준면·시계·QC 코드북 시행기간·물리 센서 유효기간을 확정할 증거는 부족하다. 기존 미확정 18,502개 항목, 미연결 사건 후보 40개, 기간 충돌 1건/152 scope의 담당 판정도 남아 있다. 승인 물리 source fit·registry·운영 모델은 0이며 별도 원시 숫자 적합3개와 구분한다. P0 전체 운영 완료로 판정하지 않는다.
 
 다음 순서는 근거 보완 → 원천/기간/사건 기술 판정 → 실제 업무 수행 시 계정 설정과 source 승인 → 승인 ingest/v2 snapshot·고정 분할/수용 정책 승인 → 업무별 실제 비교·독립 검토·registry·배포 검증이다. [현재 단계](24_P0_END_TO_END_PROGRESS.md), [QC](12_QC_RULE_RESULT_LAYER.md), [AI](25_ANOMALY_AI.md), [승인](17_HUMAN_IN_THE_LOOP.md)을 따른다.
 
-최종 검증: 2026-10-08 backend **512 passed / 1 skipped**(46.36초), frontend TypeScript/Vite build PASS. 실제 PostgreSQL 임시 schema의 migration·session 재개·입력 변경 차단 PASS와 최신 backend8010의 QC/AI→Fusion 읽기 전용 HTTP 연결을 확인했다. 실제 source fit·model registry·배포는0이다.
+최종 검증: backend **668 passed / 1 skipped**(229.35초), frontend17 tests·TypeScript/Vite build PASS, 실제 PostgreSQL gate8건·48table 전체backup/restore·liveHTTP13건 PASS. 원시 숫자 적합3개와 격리 모델2건은 실제 물리 fit·model registry·배포0과 구분한다. [13단계 실행 결과](29_DEVELOPMENT_STAGE_EXECUTION.md)를 따른다.

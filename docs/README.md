@@ -1,6 +1,6 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-08**. 이 폴더의 01~26 문서는 10/8 QC·AI·Fusion·승인 gate 확장을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-08**. 이 폴더의 01~29 문서는 10/8 QC·AI·Fusion·승인 gate 확장과 7월 현황·월간보고서 대조를 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
@@ -40,13 +40,18 @@
 | 22 | [프런트엔드 운영 감사](22_FRONTEND_OPERATIONS_AUDIT.md) | 실 API, 인증, 미확정·오류·빈 상태 표시 |
 | 23 | [업무 절차 대응](23_PROCESS_ALIGNMENT.md) | 원천 담당·사건 담당·업무 담당의 결정과 실행 순서 |
 | 24 | [현재 단계와 다음 작업](24_P0_END_TO_END_PROGRESS.md) | 미확정 원천·승인·업무별 모델 운영의 완료 조건 |
-
 | 25 | [이상탐지 AI](25_ANOMALY_AI.md) | fixed fit/calibration·6모드·actual source 미평가 |
 | 26 | [원천 사실 재확인](26_SOURCE_FACT_RESOLUTION.md) | 확인된 근거와 historical 미확정 항목 |
+| 27 | [7월 월간보고서·Parquet 대조](27_JULY_REPORT_PARQUET_MATCH.md) | 7월 기본 화면,146개 파일 검증,시설·항목 대응과 통계 차이 |
+| 28 | [미산정 지표 보완](28_METRIC_COMPLETION.md) | 전수 시간격자·결측 표현·QC 코드·보고서 참조값·실제 요청 오류율과 산정 근거 |
+| 29 | [단계별 실행·최종 검증](29_DEVELOPMENT_STAGE_EXECUTION.md) | 13단계·세 에이전트·부모 검증·실원천 실험과 미완료 조건 |
+| 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
+
+현황의 기본 관측기간은 **2026년7월 단일 월**이다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.
 
 ## 10/8 확장과 실행 웹
 
-12종 Rule QC, fitted 통계 이상탐지6모드,5종 Evidence Fusion과 PostgreSQL PENDING stop/resume을 구현했다. 실제 조건이 없으면 NOT_EVALUATED이며 score는 운영 확률이 아니다. 최신 개발 웹은 `http://127.0.0.1:5174`, backend는8010이다. 기존 canonical5173/8000과 worker는 유지한다. 현재 분석/조회는 가능하고 실제 계정 승인·source fit·등록/운영 모델은0이다.
+12종 Rule QC, fitted 통계 이상탐지6모드,5종 Evidence Fusion과 PostgreSQL PENDING stop/resume을 구현했다. 실제 조건이 없으면 NOT_EVALUATED이며 score는 운영 확률이 아니다. 최신 개발 웹은 `http://127.0.0.1:5174`, backend는8010이다. 기존 canonical5173/8000과 worker는 유지한다. 현재 분석/조회는 가능하고 실제 계정 승인·물리 source fit·등록/운영 모델은0이다. 별도 원시 숫자 적합3개는 [29](29_DEVELOPMENT_STAGE_EXECUTION.md)에 기록했다.
 
 ## 운영 완료까지 필요한 순서
 

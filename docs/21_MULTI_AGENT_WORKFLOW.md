@@ -54,3 +54,6 @@ Evidence Collection
 `COMPLETED`의 `result`는 `{report_draft, mlops, workflow_approval_history_id, recommendation_sha256, source_qc_dataset_model_approval_granted:false}`이다. 보고서는 `DRAFT`, MLOps는 `RECOMMENDATION`이고 학습 queue·모델 등록·배포를 실행하지 않는다. Recommendation 승인과 원천/QC/Label/Dataset/보고서/모델 승인은 다른 업무다. 최종 QC·학습·배포는 [승인](17_HUMAN_IN_THE_LOOP.md), [Dataset](18_DATASET_REGISTRY.md), [MLOps](19_MLOPS_VERSION_AND_EVALUATION.md)의 실제 승인 경로를 계속 따른다.
 
 개발 시험은 SQLite/temp 원문을 사용한 격리 승인·ingest·Rule·AI 연결, 실제 동시 resume, stale/replay/tamper/cancel를 검증한다. 별도 PostgreSQL 임시 schema에서는 migration, 세션 재시작, 실제 ledger와 승인 전/후 재개 경계를 검증했다. 이 결과가 운영 데이터나 담당자 승인을 만들어 주지는 않는다. 2026-10-08 13:09 KST 운영 확인은 원천·승인·Dataset·Model Registry 0, `API_IDENTITIES` 0이며 72 업무는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이다. 이후 운영과 웹 상태는 [P0 진행 현황](24_P0_END_TO_END_PROGRESS.md)에 기록한다.
+## 10/8 단계별 보완 결과
+
+단계별 세 에이전트가 코드·원천·격리 실행을 맡고 서로 malformed shape/API500, receipt locator, 문서 rollback postimage 문제를 재현·수정했다. 부모가 최종 전체 회귀·PostgreSQL8gate·원문/수치·실API/브라우저를 검증했다. root stage-index는 human authority가 아니며 Recommendation 승인은 source/QC/Dataset/Model 승인을 부여하지 않는다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

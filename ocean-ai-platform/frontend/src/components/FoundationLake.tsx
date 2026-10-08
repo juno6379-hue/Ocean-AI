@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { API_BASE_URL, apiClient } from '../api/client';
 import TechnicalReviewReceipt from './TechnicalReviewReceipt';
+import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
 
 export default function FoundationLake() {
   const {search}=useLocation();
@@ -11,7 +12,7 @@ export default function FoundationLake() {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState('');
   const [source, setSource] = useState('');
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState(CURRENT_OBSERVATION_MONTH);
   const [station, setStation] = useState('');
   const [item, setItem] = useState('');
   const [sample, setSample] = useState<any>(null);
@@ -25,7 +26,7 @@ export default function FoundationLake() {
   useEffect(()=>{
     const params=new URLSearchParams(search), selected=params.get('source')||'';
     setSource(['GD_OBS_BU','GD_OBS_VBU','GR_OBS_ST'].includes(selected)?selected:'');
-    setMonth(params.get('to')||'');setStation(params.get('station')||'');setItem(params.get('item')||'');
+    setMonth(observationPeriod(params).to);setStation(params.get('station')||'');setItem(params.get('item')||'');
     setSample(null);setChannels([]);setChannelSnapshot('');
   },[search]);
   useEffect(() => {
@@ -48,7 +49,8 @@ export default function FoundationLake() {
     finally { if(requestId===requestSequence.current)setBusy(false); }
   };
   return <section className="mt-6 space-y-4">
-    <h2 className="text-xl font-bold">월별자료 · 파일 레이크 검증</h2>
+    <h2 className="text-xl font-bold">월별자료 · 파일 레이크 전체 보존·변환 검증</h2>
+    <p className="text-xs text-slate-600">아래 파일·행 수는 보존 레이크 전체의 누적 집계이며 선택 관측기간의 현황·현재 운영 시설 수와 별도입니다. 개별 표본 조회 월은 관측 조회 문맥을 따릅니다.</p>
     <p className="border border-amber-200 bg-amber-50 p-4 rounded">월별 원천에서 변환한 Parquet를 조회합니다. 변환 완료는 원본 CSV의 현재 보존, 센서·단위·시간대·QC 승인이나 학습 데이터셋 확정을 뜻하지 않습니다. 원천별 중복 가능성이 있어 행 수를 유일 관측 건수로 합산하지 않습니다.</p>
     {error && <p role="alert" className="text-red-700">{error}</p>}
     {data ? <div className="bg-white border rounded-xl p-5 space-y-2">

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --configLoader native",
     "build": "tsc -b && vite build --configLoader native",
+    "test": "node --test tests/*.test.mjs",
     "lint": "oxlint",
     "preview": "vite preview --configLoader native"
   },

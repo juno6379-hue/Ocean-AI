@@ -21,7 +21,7 @@
 
 원문 ID와 canonical ID, SQLPLUS padding 변환, 타입을 보존한 수심·scope key, 원문 QC·수신 시각을 유지한다. typed 관측은 승인된 성분별 binding과 payload를 그대로 동결하며 scalar 값을 발명하지 않는다. source reviewer와 Dataset reviewer는 각자의 실제 승인 이력에 결합된다.
 
-기존 `event-evidence-dataset-1` 구조는 원천 의존성을 동결하지 않는다. 현재 승인 경로는 v2와 실제 승인 source/protocol 의존성을 요구하므로 v1에 `APPROVED` 문자열만 넣어 사용할 수 없다. 실제 legacy 자동 전환은 수행하지 않았다.
+기존 `event-evidence-dataset-1` 구조는 원천 의존성을 동결하지 않는다. 현재 승인 경로는 v2와 실제 승인 source/protocol 의존성을 요구하므로 v1에 `APPROVED` 문자열만 넣어 사용할 수 없다. 명시적 승인 dependency를 검사하여 legacy 원본을 보존하고 새 미승인 BUILT v2를 재구축하는 경로를 구현했다. 과거 승인 복사는 금지하며 실제 운영 전환은 수행하지 않았다.
 
 ## 고정 분할과 누수 검사
 
@@ -55,3 +55,6 @@ GET  /api/datasets/{dataset_id}/lineage
 신규 등록은 `DRAFT`만 허용한다. 정상 경로는 `DRAFT → BUILT → VALIDATED → APPROVED`다. validate가 반환하는 `INVALID`는 오류 응답 상태이고, 이미 `VALIDATED`였던 행은 오류 발생 시 `BUILT`로 되돌린다. approval 이력의 `snapshot_sha256=<data_hash>`와 snapshot 파일 bytes·DB membership이 모두 일치해야 한다.
 
 2026-10-08 13:09 KST 운영 읽기 전용 확인에서 Dataset Registry와 source binding·approval 이력은 모두 0이다. 구현된 freeze/검증 경로와 실제 승인 Dataset 보유는 구분한다. 코드 근거: [routes_datasets.py](../ocean-ai-platform/backend/app/api/routes_datasets.py), [source_contract_snapshot.py](../ocean-ai-platform/backend/app/services/source_contract_snapshot.py), [binding 모델](../ocean-ai-platform/backend/app/models/source_observation_binding.py). 이어지는 학습·배포는 [19번 문서](19_MLOPS_VERSION_AND_EVALUATION.md)에 있다.
+## 10/8 단계별 보완 결과
+
+`dataset_migration.py`와 model-development API는 기존 v1을 변경하지 않고 정확 source/protocol dependency를 동결한 새 BUILT v2를 만든다. 원본 membership·bytes 보존, 과거 승인 복사 금지, 현재 REVOKED source 차단, expected legacy/review SHA, 실패 복구를 검사한다. 별도 dataset reviewer 승인이 계속 필요하다. 실DB Dataset0이며 격리 승인 경로에서만 세 분할을 완주했다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

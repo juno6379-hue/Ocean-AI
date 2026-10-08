@@ -22,6 +22,8 @@
 
 `/api/stations/catalog/classifications`는 DB에 등록된 관측망/해역과 등록 관측소 분모를 제공한다. 등록이 없는 코드는 `__UNREGISTERED__`, 등록 station의 분류 필드가 비어 있으면 `__UNASSIGNED__`로 구별한다. 해당 범위의 station 필터를 먼저 적용하므로 미분류 선택이 전체 관측 조회로 확대되지 않는다. [분류 scope 시험](../ocean-ai-platform/backend/tests/test_station_classification_scope.py)을 참조한다.
 
+`as_of_month=2026-07`은 공식7월 보고서와 코드·명칭·유형·공개좌표가 유일하게 대응한70개를 읽기 전용으로 참조한다. 물리센서 승인이나 PostgreSQL수정이 아니다. 해역은 직접 근거52개만 반영하고 미명시는 기존 값을 유지한다. 다른 기간과 검증 당시 등록값이 달라진 레코드에는 적용하지 않는다. [7월 대응 검토](27_JULY_REPORT_PARQUET_MATCH.md)를 참조한다.
+
 기존 `/api/observations/summary`는 등록 StationMetadata로 table/typeStatus/mapMarkers를 구성한다. ACTIVE는 정상, MAINTENANCE/DELAY/DEGRADED는 지연, ERROR/INACTIVE/OFFLINE/STOPPED는 중단으로 표시한다. 현재 legacy fallback에서는 그 외 상태도 정상으로 묶일 수 있으므로 미확인 상태가 검증된 정상이라는 뜻은 아니다.
 
 `station_operating_rate`는 등록 관측소 중 표시상 정상 비율이다. 예상 관측수·관측 주기·전체 원천 coverage가 없으면 `collection_rate`는 NULL이다. 일별 Raw count는 UTC 날짜 기준 SQL 행 수이며 기존 SIMULATED 행이 포함될 수 있다. 빈 `chart_data`를 가짜 추이로 채우지 않는다. 지도에서 좌표 없는 station을 빼더라도 표의 등록 count와 이유를 구분한다. 실제 lake 조회는 별도 `/api/lake/*` 경로를 사용한다. [observations API](../ocean-ai-platform/backend/app/api/routes_observations.py), [lake API](../ocean-ai-platform/backend/app/api/routes_lake_browser.py)를 참조한다.

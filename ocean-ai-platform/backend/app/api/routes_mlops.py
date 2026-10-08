@@ -8,7 +8,7 @@ from app.core.database import get_db
 from app.core.security import Actor, require_reviewer
 from app.models.domain import ModelRegistry, RetrainingHistory, AIPredictionResult
 from app.services.mlops_readiness import get_mlops_readiness, model_readiness
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import datetime
 import uuid
 import asyncio
@@ -65,6 +65,7 @@ class RetrainRequest(BaseModel):
     model_id: str | None = None
     triggered_by: str = "admin"
     manifest_path: str | None = None
+    expected_sha256: str | None = Field(default=None,pattern='^[0-9a-f]{64}$')
 
 @router.get("/summary")
 def get_mlops_summary(db: Session = Depends(get_db)):
@@ -231,7 +232,7 @@ def queue_retraining(req: RetrainRequest, db: Session = Depends(get_db)):
         provenance = (model.metrics_json or {}).get("provenance", {})
         if manifest.get("target_variable") != model.target_variable or any(manifest.get(k) != provenance.get(k) for k in ("domain", "item_id", "task")):
             raise HTTPException(409, {"code": "BASE_MODEL_COMPARISON_SCOPE_MISMATCH", "mutation_performed": False})
-    return enqueue(ManifestRequest(manifest_path=req.manifest_path), db)
+    return enqueue(ManifestRequest(manifest_path=req.manifest_path,expected_sha256=req.expected_sha256), db)
 
 
 from app.api.routes_mlops_execution import router as execution_router

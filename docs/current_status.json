@@ -1,37 +1,223 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-08T05:14:55.296058+00:00",
+  "as_of": "2026-10-08T11:44:28.046011+00:00",
   "code_revision": null,
-  "scope": "repository-root docs/01 through docs/26 and platform implementation docs/82-84",
+  "scope": "repository docs/01 through docs/29 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
       "date": "2026-10-08",
-      "passed": 512,
+      "passed": 668,
       "skipped": 1,
-      "warnings": 18,
-      "seconds": 46.36,
-      "log_sha256": "e3ee7c6f8984c918c8428cb27058c3df649512cf4018665b08700aa798e44e25"
+      "warnings": 21,
+      "seconds": 229.355,
+      "log_sha256": "1ad67ead60a191c6d58e42d4980ee22c64e2be45117e511fd28289bc8939951e"
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
     "postgresql_gate": {
+      "checked_at": "2026-10-08T11:28:45.302670+00:00",
       "status": "PASS",
-      "checked_at": "2026-10-08T05:12:18.552485+00:00",
+      "passed": 8,
+      "failed": 0,
+      "backend": "PostgreSQL",
       "isolated_schema_removed": true,
       "cases": [
         "EXACT_ADDITIVE_MIGRATIONS_AND_IDEMPOTENT_REAPPLY",
         "POSTGRES_SESSION_REOPEN_PRESERVES_PENDING_AND_STOPS_DOWNSTREAM",
         "REVIEWER_DECISION_DURABLE_RESUME_AND_IDEMPOTENT_REPLAY",
-        "CHANGED_POSTGRES_SCOPE_MEMBERSHIP_BLOCKS_APPROVAL_WITHOUT_WRITE"
+        "CHANGED_POSTGRES_SCOPE_MEMBERSHIP_BLOCKS_APPROVAL_WITHOUT_WRITE",
+        "POSTGRES_VIEWER_CANNOT_START",
+        "POSTGRES_OPERATOR_ROLE_STALE_HASH_AND_REVISION_BLOCKED",
+        "POSTGRES_REJECTION_DURABLE_REPLAY_CONFLICT_AND_DOWNSTREAM_STOP",
+        "POSTGRES_LATEST_REVOKED_APPROVAL_BLOCKS_RESUME"
       ],
-      "public_ledger_unchanged": true
+      "public_ledger_before": {
+        "approval_history": 0,
+        "source_contract_packets": 0,
+        "source_contract_decisions": 0,
+        "source_observation_binding": 0,
+        "dataset_registry": 0,
+        "model_registry": 0,
+        "retraining_history": 0
+      },
+      "public_ledger_after": {
+        "approval_history": 0,
+        "source_contract_packets": 0,
+        "source_contract_decisions": 0,
+        "source_observation_binding": 0,
+        "dataset_registry": 0,
+        "model_registry": 0,
+        "retraining_history": 0
+      },
+      "public_ledger_unchanged": true,
+      "actual_accounts_configured": false,
+      "public_approvals_generated": 0,
+      "credentials_printed": false
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Full isolated backend regression, clean frontend build, disposable PostgreSQL migration/session/replay verification, latest loopback API/browser checks"
+    "method": "Full isolated backend regression, clean frontend build, disposable PostgreSQL migration/session/replay verification, latest loopback API/browser checks",
+    "frontend_period_tests": {
+      "passed": 7,
+      "date": "2026-10-08"
+    },
+    "july_live_scope": "PASS",
+    "backend_metric_tests": {
+      "passed": 17,
+      "log_sha256": "7ea80cb90d57c52dbdc61e44494fe0d5605fc5654e242aa20f7c997fa326ef37"
+    },
+    "metric_parent_raw_and_live": "PASS",
+    "frontend_metric_tests": {
+      "passed": 7,
+      "date": "2026-10-08",
+      "combined_passed": 14,
+      "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
+    },
+    "frontend_build_log_sha256": "d9f04ddaabc5230ba7bc8693a770efd5546d5e23aa8790b0b86bdd4ffaeeac23",
+    "metric_browser": "PASS",
+    "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
+    "frontend_tests": {
+      "passed": 17,
+      "failed": 0,
+      "date": "2026-10-08"
+    },
+    "postgresql_full_restore": {
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "archive_sha256": "6b21de90fc2d523a4c140ab9ff27cfcf6e6c83a42a041a3a948d9ab3683c2003",
+      "archive_bytes": 100037494,
+      "schema_sha256": "4baa015ad43df5ed6eaa33229a0164e66518a33d57055fe344353b9dfd2ed44b",
+      "indexes_sha256": "55350696613347f64e237f8ff09eedbe28a083fc3adb5a7c6709681d7c2f1ba8",
+      "disposable_database_removed": true
+    },
+    "live_http": {
+      "status": "PASS",
+      "failed": 0,
+      "passed": 13,
+      "checked_at": "2026-10-08T11:44:17.003424+00:00",
+      "checks": [
+        {
+          "name": "GET /health",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "62e77a4b7564b968e91336745de7846ad463fb1562bd23b2c5dd9473e4845984"
+        },
+        {
+          "name": "GET /readiness",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "73e573da2efaf67ddace5634462c1b4ce582cfca36176d691a81f2d834a7218c"
+        },
+        {
+          "name": "GET /api/model-development/task-readiness",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "1a28860dd3a568fd77bd86d05681a4c43566b4195cae3e2fed9cbb00f73fd433"
+        },
+        {
+          "name": "GET /api/model-development/training-manifests",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "1408847e294c413926728f66ab36c2b4d13faf81c5429b941fa60bbd0dc482eb"
+        },
+        {
+          "name": "GET /api/model-development/policy-bundle",
+          "passed": true,
+          "status": 409,
+          "body_sha256": "6ad876acfed0e2babd41c5c31bc269d18679621031f7bab01e231f5b7996459c"
+        },
+        {
+          "name": "GET /api/model-development/training-preflight",
+          "passed": true,
+          "status": 409,
+          "body_sha256": "9164c8a45d8f8a6692ea624d3bfb3f7976fe29c849fec146b8dc8e4f60565a0c"
+        },
+        {
+          "name": "POST /api/model-development/training-manifests",
+          "passed": true,
+          "status": 503,
+          "body_sha256": "0f9261d5466ba0baa56aaa4f7735199a454193530fbd8babc23baa811a553ae9"
+        },
+        {
+          "name": "POST /api/model-development/datasets/absent/migrate-v2",
+          "passed": true,
+          "status": 503,
+          "body_sha256": "0f9261d5466ba0baa56aaa4f7735199a454193530fbd8babc23baa811a553ae9"
+        },
+        {
+          "name": "POST /api/mlops/training/enqueue",
+          "passed": true,
+          "status": 503,
+          "body_sha256": "0f9261d5466ba0baa56aaa4f7735199a454193530fbd8babc23baa811a553ae9"
+        },
+        {
+          "name": "GET /api/mlops/serving/health",
+          "passed": true,
+          "status": 409,
+          "body_sha256": "8c86dc7f87aa8ddd32ae5205abb89a6b718902abad6800dc6541f1d40f3186b9"
+        },
+        {
+          "name": "GET /api/development-stages/review",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "9c3934225a96e67b90d50ddf811ffce27a9b4392f1c5ebe352cb8ab6ffc4e439"
+        },
+        {
+          "name": "GET /api/lake/metric-completion",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "1aa58258caa69604d209386507b13a44377fffe2f64b98564711082052d5a34c"
+        },
+        {
+          "name": "GET /openapi.json",
+          "passed": true,
+          "status": 200,
+          "body_sha256": "88d80630d62e6c97797f9e389f36ce3ed17bf9285c8452c84bca4a9d006bbb38"
+        }
+      ],
+      "openapi_paths": 154,
+      "openapi_operations": 163,
+      "configured_accounts": 0,
+      "production_models": 0,
+      "source_task_training_ready": 0,
+      "source_inventory_operating_count": null,
+      "scope": "CURRENT_LOOPBACK_REVIEW_BACKEND_8010_NO_AUTHORITY_WRITES"
+    },
+    "browser_stage_and_training_review": "PASS",
+    "production_unchanged": {
+      "status": "PASS",
+      "failed": 0,
+      "passed": 4,
+      "checked_at": "2026-10-08T11:44:11.027922+00:00",
+      "checks": [
+        {
+          "name": "ALL_14_CRITICAL_PUBLIC_TABLE_COUNTS_EXISTENCE_AND_ROW_DIGESTS_UNCHANGED",
+          "passed": true
+        },
+        {
+          "name": "CANONICAL_SERVICES_AND_FRONTEND_PROCESS_IDENTITIES_PRESERVED",
+          "passed": true
+        },
+        {
+          "name": "ACTUAL_AUTHORITY_IDENTITIES_STILL_ZERO",
+          "passed": true
+        },
+        {
+          "name": "CANONICAL_DOCUMENT_LEDGER_SNAPSHOT_UNCHANGED",
+          "passed": true
+        }
+      ],
+      "tables_checked": 14,
+      "database_writes_performed": 0,
+      "configured_identity_count": 0,
+      "public_mdc_catalog_applied": false,
+      "canonical_processes_preserved": 5,
+      "document_ledger_snapshot_unchanged": true
+    }
   },
   "runtime": {
-    "checked_at": "2026-10-08T05:14:55.296058+00:00",
+    "checked_at": "2026-10-08T11:44:11.027922+00:00",
     "runtime_is_canonical_workstation_copy": false,
     "runtime_source": "public_worktree",
     "backend_url": "http://127.0.0.1:8010",
@@ -52,7 +238,9 @@
     "new_backend_starts_training_worker": false,
     "new_backend_local_serving_enabled": false,
     "approved_input_ready": false,
-    "operating_models": 0
+    "operating_models": 0,
+    "stage_review_url": "http://127.0.0.1:5174/system",
+    "model_input_review_url": "http://127.0.0.1:5174/mlops"
   },
   "database_counts": {
     "source_contract_packets": 0,
@@ -94,7 +282,14 @@
     "raw_materials_committed": false,
     "historical_source_facts_complete": false,
     "current_metadata_and_captured_sql_rechecked": true,
-    "actual_water_temp_requirements": "NOT_EVALUATED"
+    "actual_water_temp_requirements": "NOT_EVALUATED",
+    "actual_native_source_rows": 1500,
+    "actual_native_items": [
+      "AIR_PRES",
+      "WATER_TEMP",
+      "SALINITY"
+    ],
+    "native_hwp_claims_reverified": 5
   },
   "limitations": [
     "Source semantics, units, scale, datum, time zone, QC revisions and physical sensor validity need owner evidence and approval.",
@@ -127,7 +322,7 @@
   },
   "base_revision": "5829e891a4af39da1829f10ce2c9da9116e4a789",
   "revision_resolution": "The Git commit containing this file identifies the release; runtime fingerprints are recorded below.",
-  "implementation_release": "2026-10-08_QC12_ANOMALY6_FUSION_APPROVAL_GATE",
+  "implementation_release": "2026-10-08_STAGE_REVIEW_NATIVE_EXPERIMENTS_INPUT_BRIDGE_AND_RECOVERY",
   "previous_verification": {
     "base_tree": "35f86cf",
     "backend_tests": {
@@ -135,7 +330,53 @@
       "passed": 345,
       "skipped": 1
     },
-    "superseded_by_current_release": true
+    "superseded_by_current_release": true,
+    "before_stage_completion_20261008": {
+      "backend_tests": {
+        "date": "2026-10-08",
+        "passed": 548,
+        "skipped": 1,
+        "warnings": 21,
+        "seconds": 100.78,
+        "log_sha256": "8b1d42fdde64f23e9b074e1e78f8bc0651ca2e0876b200355b0de8cd753c19f5"
+      },
+      "frontend_clean_install": "PASS",
+      "frontend_production_build": "PASS",
+      "postgresql_gate": {
+        "status": "PASS",
+        "checked_at": "2026-10-08T05:12:18.552485+00:00",
+        "isolated_schema_removed": true,
+        "cases": [
+          "EXACT_ADDITIVE_MIGRATIONS_AND_IDEMPOTENT_REAPPLY",
+          "POSTGRES_SESSION_REOPEN_PRESERVES_PENDING_AND_STOPS_DOWNSTREAM",
+          "REVIEWER_DECISION_DURABLE_RESUME_AND_IDEMPOTENT_REPLAY",
+          "CHANGED_POSTGRES_SCOPE_MEMBERSHIP_BLOCKS_APPROVAL_WITHOUT_WRITE"
+        ],
+        "public_ledger_unchanged": true
+      },
+      "live_readonly_api": "PASS",
+      "browser_qc_panel": "PASS",
+      "method": "Full isolated backend regression, clean frontend build, disposable PostgreSQL migration/session/replay verification, latest loopback API/browser checks",
+      "frontend_period_tests": {
+        "passed": 7,
+        "date": "2026-10-08"
+      },
+      "july_live_scope": "PASS",
+      "backend_metric_tests": {
+        "passed": 17,
+        "log_sha256": "7ea80cb90d57c52dbdc61e44494fe0d5605fc5654e242aa20f7c997fa326ef37"
+      },
+      "metric_parent_raw_and_live": "PASS",
+      "frontend_metric_tests": {
+        "passed": 7,
+        "date": "2026-10-08",
+        "combined_passed": 14,
+        "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
+      },
+      "frontend_build_log_sha256": "9dd156b89ddcd179285c18fa616030dcb7e48e659f7d4e132febd3a303c4e709",
+      "metric_browser": "PASS",
+      "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a"
+    }
   },
   "previous_canonical_runtime": {
     "checked_at": "2026-10-08T04:10:55.581022+00:00",
@@ -158,7 +399,7 @@
     "runtime_is_canonical_workstation_copy": true,
     "session_http_status": 503
   },
-  "database_counts_checked_at": "2026-10-08T05:07:26.153330+00:00",
+  "database_counts_checked_at": "2026-10-08T11:44:11.027922+00:00",
   "additive_schema_application": {
     "checked_at": "2026-10-08T05:07:26.153330+00:00",
     "files": [
@@ -194,9 +435,10 @@
       "guide_edition": "2023.12",
       "status": "CONDITIONAL_ENGINE_IMPLEMENTED",
       "matrix_cells_verified": 180,
-      "actual_sample_rows": 500,
-      "actual_sample_not_evaluated_results": 6000,
-      "complete_actual_source_qc": false
+      "actual_sample_rows": 1500,
+      "actual_sample_not_evaluated_results": 18000,
+      "complete_actual_source_qc": false,
+      "actual_sample_scope": "3_NATIVE_SOURCE_ITEMS_500_ROWS_EACH_NO_PHYSICAL_QC_AUTHORITY"
     },
     "anomaly_analysis": {
       "modes": [
@@ -211,13 +453,18 @@
       "source_authority": "DECLARED_DEVELOPMENT_CONTRACT",
       "synthetic_validation": "PASS",
       "actual_source_fits": 0,
-      "production_eligible": false
+      "production_eligible": false,
+      "actual_source_fits_definition": "PHYSICAL_PRODUCTION_SCHEME_ONLY",
+      "raw_native_fits": 3,
+      "actual_physical_fits": 0
     },
     "evidence_fusion": {
       "status": "IMPLEMENTED",
       "score_kind": "WEIGHTED_EVIDENCE_SUPPORT_NOT_PROBABILITY",
       "rule_and_ai_report_checksum_required": true,
-      "categories": 5
+      "categories": 5,
+      "raw_diagnostic_reports": 3,
+      "actual_physical_reports": 0
     },
     "workflow": {
       "status": "IMPLEMENTED_AND_POSTGRESQL_VERIFIED",
@@ -232,9 +479,105 @@
   "implementation_fingerprints": {
     "app/services/qc_rule_engine.py": "431bcc4cb04bcfc4b8048da8d91e7fb83881527173cc5033726c2a08fedc3ffc",
     "app/services/qc_rule_catalog.json": "7d30ad39f1ff40bbfb2224866f869ffd53782e958a94f3e71bf767b35e8d4889",
-    "app/services/anomaly_analysis.py": "aef8e9424119c83894f71674a004a6b19892a220a5304a52befc406af506310f",
+    "app/services/anomaly_analysis.py": "773919d6fd36e130c79ad26aef666e0d04200e2af20c0a4ba87512ac19040646",
     "app/ml/anomaly_artifact.py": "ec7e3000297d9ec4e0ed277b9f61050e4b5080808f6c2f4040242f95f989b745",
-    "app/services/evidence_fusion.py": "a579dc0f8961f3465eced3597c77ad8645d372731add1e933603cc51e913abd1",
-    "app/agents/multi_agent_workflow.py": "a4e94d8b98603c79e5ad5e0489387ebfb0a167c02dba24bd07051b2ecd659ce0"
-  }
+    "app/services/evidence_fusion.py": "df61afe9d94cc679c14db0d94e8eb0189f17fccf21f07e35a29fd0e3eab53630",
+    "app/agents/multi_agent_workflow.py": "a4e94d8b98603c79e5ad5e0489387ebfb0a167c02dba24bd07051b2ecd659ce0",
+    "raw_diagnostic": "af451ab81f161e410fc119e5637ce1ccb08a3647a25b5b4e333805c64c81c371",
+    "raw_model_comparison": "919dbf70918afc03b7a351f613fbff86a66120eb54ca1e2d7620120b08d79bdd",
+    "recovery_promotion": "4c616d8395aff3e782c4c526dc30f889acaf2f03ff941fe99419b58966531351"
+  },
+  "observation_current_month": "2026-07",
+  "july_report_match": {
+    "report_month": "2026-07",
+    "publication_sha256": "7b7f1f7d9a90ca659d61ee436121f88cb52c22db45de6bbe7429c4beb5c4bb7f",
+    "snapshot": "validation-20261006T134056Z",
+    "match_status": "MATCH_WITH_EXPLICIT_EXCEPTIONS",
+    "approval_status": "UNAPPROVED",
+    "verification": {
+      "all_july_file_hashes_and_footers_pass": true,
+      "july_files": 146,
+      "api_literal_sample_rows": 40,
+      "station_reference_codes": 70,
+      "report_coast_reference_codes": 52,
+      "legacy_coast_reference_differences": 22,
+      "original_csv_rehash": false,
+      "whole_report_numeric_reproduction": false
+    },
+    "numeric_comparison_summary": {
+      "numeric_comparisons": 14,
+      "conditional_rounded_agreements": 7,
+      "conditional_numeric_differences": 7,
+      "normal_rate_diagnostics": 10,
+      "reproduced_report_normal_rates": 0,
+      "source_semantic_approvals": 0
+    },
+    "review_document": "docs/27_JULY_REPORT_PARQUET_MATCH.md"
+  },
+  "metric_completion": {
+    "as_of": "2026-10-08T09:10:48.803201+00:00",
+    "schema_version": "metric-completion-review-1",
+    "status": "IMPLEMENTED_VERIFIED_DIAGNOSTIC_ONLY",
+    "report_month": "2026-07",
+    "approved": false,
+    "held_grains": 1832,
+    "catalog_only_grains": 273,
+    "computed_grid_grains": 1804,
+    "unstable_phase_grains": 28,
+    "legacy_unique_timestamp_nulls_filled": 610,
+    "report_unique_cells_in_held_scopes": 333,
+    "remaining_inputs": [
+      "SOURCE_SCHEDULE_AND_SENSOR_EFFECTIVE_PERIOD",
+      "SOURCE_CLOCK_TIMEZONE",
+      "QC_CODEBOOK_EFFECTIVE_PERIOD_AND_COUNTS",
+      "UPTIME_HEARTBEAT_HISTORY",
+      "MAINTENANCE_TARGET_COMPLETION_LEDGER",
+      "MODEL_EVALUATION_TASK_LABEL_SPLIT"
+    ],
+    "browser_verified": true,
+    "reference_doc": "28_METRIC_COMPLETION.md"
+  },
+  "development_stages": {
+    "document": "29_DEVELOPMENT_STAGE_EXECUTION.md",
+    "machine_readable": "29_DEVELOPMENT_STAGE_EXECUTION.json",
+    "index_sha256": "473513eee60224ba996997a14003a47f5c19b63c0d5c1ddd8dfe9c7feb58bcbe",
+    "all_operating_stages_complete": false,
+    "task_training_ready": 0,
+    "source_inventory_operating_count": null,
+    "source_inventory_operating_status": "NOT_EVALUATED_IN_SOURCE_INVENTORY"
+  },
+  "document_recovery": {
+    "paths": 1842,
+    "hash_match_paths": 1842,
+    "parser_parseable_paths": 1584,
+    "partial_font_paths": 113,
+    "encrypted_pdf_paths": 144,
+    "damaged_pdf_paths": 1,
+    "unique_content": 951,
+    "parseable_unique_content": 786,
+    "isolated_complete_documents": 81,
+    "isolated_publishable_chunks": 8761,
+    "isolated_partial_documents": 1,
+    "isolated_partial_chunks": 138,
+    "isolated_total_stored_chunks": 8899,
+    "canonical_published": 0
+  },
+  "actual_raw_experiments": {
+    "items": [
+      "AIR_PRES",
+      "WATER_TEMP",
+      "SALINITY"
+    ],
+    "source_cells": 1500,
+    "anomaly_predictions": 600,
+    "evaluated": 552,
+    "warmup_not_evaluated": 48,
+    "water_temp_candidates": 14,
+    "forecast_test_pairs_per_item": 97,
+    "forecast_total_test_predictions": 291,
+    "selection": "VALIDATION_ONLY_TEST_NOT_USED_FOR_SELECTION",
+    "physical_qc_evaluated": 0,
+    "production_models": 0
+  },
+  "verification_base_revision": "10833c3fe84b7b762a88ab96b6c6df26fe4ede42"
 }

@@ -238,13 +238,15 @@ def overlay_proofs(db,snapshot):
     return snapshot
 
 
-def protocol_binding_errors(snapshot):
+def protocol_binding_errors(snapshot,bodies=None):
     """Bind fixed membership and periods to this exact split, before approval."""
     from app.ml.comparison_runner import digest,clock
-    errors=[];bodies={};root=Path(snapshot['source_contract_root'])
-    for dep in snapshot.get('frozen_protocol_dependencies',[]):
-        body,_,_=read_bounded(root/dep['path'],[root],dep['sha256'])
-        bodies[dep['role']]=body
+    errors=[]
+    if bodies is None:
+        bodies={};root=Path(snapshot['source_contract_root'])
+        for dep in snapshot.get('frozen_protocol_dependencies',[]):
+            body,_,_=read_bounded(root/dep['path'],[root],dep['sha256'])
+            bodies[dep['role']]=body
     split=snapshot.get('split');protocol=bodies.get('SPLIT_PROTOCOL')
     if protocol:
         try:

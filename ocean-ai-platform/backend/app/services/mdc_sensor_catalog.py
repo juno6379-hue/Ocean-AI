@@ -2,10 +2,12 @@
 import hashlib
 import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from collections import defaultdict
 from app.models.domain import StationMetadata, SensorMetadata
 from app.models.evidence import MDCSensorCatalog
+
+CATALOG_INTERPRETATION_VERSION = 'mdc-channel-reference-explicit-clock-v2'
 
 
 def checksum(value):
@@ -49,13 +51,30 @@ def item_semantics(code, unit):
 
 
 def source_datetime(value):
-    # MDC 메타데이터 시각은 KST로 해석한다. 임의의 시작일을 만들지 않는다.
+    # Only an explicit offset establishes an instant. Naive source dates remain
+    # in source_payload; a session timezone is not a metadata-clock contract.
     if not value: return None
-    value = datetime.fromisoformat(str(value))
-    if value.tzinfo is not None:
-        from datetime import timezone
-        return value.astimezone(timezone.utc).replace(tzinfo=None)
-    return value - timedelta(hours=9)
+    try:
+        parsed = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except (ValueError, TypeError):
+        return None
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        return None
+    return parsed.astimezone(timezone.utc).replace(tzinfo=None)
+
+
+def source_date_issue(value):
+    if not value: return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except (ValueError, TypeError):
+        return 'SOURCE_DATE_INVALID'
+    return 'DATE_TIMEZONE_UNVERIFIED' if parsed.tzinfo is None or parsed.utcoffset() is None else None
+
+
+def catalog_version(records):
+    return checksum({'interpretation_version': CATALOG_INTERPRETATION_VERSION,
+        'source_records': [(r['sensor_id'], r['source_hash']) for r in records]})
 
 
 def catalog_records(source, station_ids):
@@ -78,6 +97,8 @@ def catalog_records(source, station_ids):
         if len(equips) != 1: issues.append('EQUIPMENT_MISSING_OR_AMBIGUOUS')
         if not station or not te_code or not item: issues.append('SOURCE_KEY_INCOMPLETE')
         start, end = source_datetime(row.get('use_start_date')), source_datetime(row.get('use_end_date'))
+        issues.extend(issue for key in ('use_start_date', 'use_end_date')
+                      if (issue := source_date_issue(row.get(key))))
         if start is None: issues.append('HISTORICAL_VALIDITY_UNKNOWN')
         if start and end and end <= start: issues.append('INVALID_VALIDITY_INTERVAL')
         # 사용여부 코드의 의미는 소스 그대로 보존하고 운영중이라고 단정하지 않는다.
@@ -91,7 +112,8 @@ def catalog_records(source, station_ids):
 
 def sync_catalog(db, source, station_ids):
     records = catalog_records(source, set(station_ids))
-    version = checksum([(r['sensor_id'], r['source_hash']) for r in records])
+    # A parser-policy change must not silently reuse immutable legacy versions.
+    version = catalog_version(records)
     # 전체 목록을 검증한 뒤 기록하여 일부 성공만 커밋되는 일을 막는다.
     missing = sorted({r['station_id'] for r in records if not db.query(StationMetadata).filter_by(station_id=r['station_id']).first()})
     if missing: raise ValueError('Shared station metadata missing: ' + ','.join(missing))
@@ -107,11 +129,12 @@ def sync_catalog(db, source, station_ids):
         saved = db.get(MDCSensorCatalog, (record['sensor_id'], version))
         if saved is None:
             db.add(MDCSensorCatalog(catalog_version=version, **record)); inserted += 1
-        elif saved.source_hash != record['source_hash']:
+        elif any(getattr(saved,key) != value for key,value in record.items()):
             raise ValueError('Immutable catalog content conflict')
     db.flush()
     return {'catalog_version': version, 'source_channel_count': len(records), 'inserted_catalog_rows': inserted,
-            'review_required': len(records), 'records': records}
+            'review_required': len(records), 'records': records,
+            'interpretation_version': CATALOG_INTERPRETATION_VERSION}
 
 
 def resolve_catalog(db, version, station_id, item_code, timestamp):

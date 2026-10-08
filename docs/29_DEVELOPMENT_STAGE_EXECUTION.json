@@ -1,0 +1,487 @@
+{
+  "schema_version": "development-stage-execution-summary-1",
+  "checked_at": "2026-10-08T11:44:28.046011+00:00",
+  "authority": "TECHNICAL_REVIEW_NOT_APPROVAL",
+  "workers": {
+    "identity_events": [
+      1,
+      2,
+      4,
+      5
+    ],
+    "semantic_qc": [
+      3,
+      6,
+      7,
+      8
+    ],
+    "model_comparison": [
+      10,
+      11,
+      12
+    ],
+    "parent_verifier": [
+      9,
+      13
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": 1,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "READY",
+      "approval": "NOT_APPLICABLE",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "PostgreSQL 전체 snapshot 백업을 임시 DB에 복원하여 48개 테이블 건수·스키마·인덱스·주요 원장 digest 일치를 확인했습니다."
+      ],
+      "next_required": [
+        "운영 이관 시 백업 보존주기와 자동 복구 책임자 설정"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/postgres-backup-restore.json",
+          "sha256": "618cc35b701b8ef33839a48734db0b4d36b9edb888d6349ccc914dd134a881ee"
+        },
+        {
+          "path": "identity-events/operations/summary.json",
+          "sha256": "0c76312c48d084a8e01c101f38db53605de278fd934007a818852fecf1b6289c"
+        }
+      ]
+    },
+    {
+      "stage_id": 2,
+      "implementation": "IMPLEMENTED",
+      "verification": "PARTIAL",
+      "data_readiness": "PARTIAL",
+      "approval": "NOT_APPLICABLE",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "917,943파일 보존은 이전 복사 SHA 원장과 inventory 재검사 기준입니다. 이번에 1.89TB를 다시 해싱한 것은 아니며, 7월 146파일은 새로 검사했습니다."
+      ],
+      "next_required": [
+        "GD 7월 말 누락과 GR 대체 가능성의 원천 계약 검토; 검증 없이 중복 합산·자동 backfill 금지"
+      ],
+      "evidence": [
+        {
+          "path": "identity-events/preservation/migration-review.json",
+          "sha256": "c49bddc7c9801644b9b5467bce6d7d56ad6c7333692c1b1df160f731a3704eb0"
+        },
+        {
+          "path": "identity-events/preservation/july-extent-review.json",
+          "sha256": "dd3605166621d501e9f02a8112d6796badae377f752a82e0c952afe1ed607754"
+        }
+      ]
+    },
+    {
+      "stage_id": 3,
+      "implementation": "IMPLEMENTED",
+      "verification": "PARTIAL",
+      "data_readiness": "BLOCKED",
+      "approval": "PENDING",
+      "operational_status": "BLOCKED",
+      "reasons": [
+        "66,190개 원천 단위의 검토 패킷을 작성했습니다. 과거 원천의 의미·단위·시각·QC 계약은 미확정입니다."
+      ],
+      "next_required": [
+        "원천별 의미·단위·배율·기준면·저장 시간대·QC 판본/시행기간의 기록 확인"
+      ],
+      "evidence": [
+        {
+          "path": "semantic-qc/stage-execution-summary.json",
+          "sha256": "5d63230c26ab4c4993d049f5a21a8d731ce2fc9eaeb30b8e1ddbae6da989eab1"
+        }
+      ]
+    },
+    {
+      "stage_id": 4,
+      "implementation": "IMPLEMENTED",
+      "verification": "PARTIAL",
+      "data_readiness": "PARTIAL",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "사건 후보 40건과 HWP 원문 이력 5건을 다시 검토했습니다. 152개 월 단위에 영향을 주는 기간 충돌과 serial 연속성은 미확정입니다."
+      ],
+      "next_required": [
+        "인천 2019 재고날짜와 2021 교체의 충돌, 군산 동일 serial의 실물 동일성·연속 유효기간 검토"
+      ],
+      "evidence": [
+        {
+          "path": "identity-events/events/summary.json",
+          "sha256": "9985896a8d9ee30fe47261f8e39ad1bc787678338eb78c7848e2f27304945db4"
+        },
+        {
+          "path": "parent-verification/event-history.json",
+          "sha256": "001eaca1c916328cc9588d2cd96194f3dcc14a229be8f31551197bfbdb9ee53a"
+        }
+      ]
+    },
+    {
+      "stage_id": 5,
+      "implementation": "IMPLEMENTED",
+      "verification": "PARTIAL",
+      "data_readiness": "PARTIAL",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "대기·실패 1,842경로의 원본/보존본 SHA와 parser를 전수 검사했습니다. 복구 임베딩은 별도 저장소이며 운영 원장에는 승격하지 않았습니다."
+      ],
+      "next_required": [
+        "암호 PDF 144·손상 1·font partial 113의 재제공/검토; resume CLI로 남은 본문 embedding; 운영 시 operator로 승격 검토"
+      ],
+      "evidence": [
+        {
+          "path": "identity-events/documents/summary.json",
+          "sha256": "6fe7968a542bd4bcfbe8c6b451054e6a5c603b4a47f970d0dd376eb0481c738f"
+        },
+        {
+          "path": "identity-events/documents/retrieval-verification.json",
+          "sha256": "050a0809499bc75462046b41c28a697043f2265a7b36b1a8ba9c226ba1b7c7d4"
+        },
+        {
+          "path": "parent-verification/recovery-counts.json",
+          "sha256": "8978b62af4bf8483b9d4854956c10e84ecc0d1dd69a253abaa92832dfc71f116"
+        }
+      ]
+    },
+    {
+      "stage_id": 6,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "BLOCKED",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "조건부 Rule 12종의 구현·차단 시험을 통과했습니다. 실제 18,000결과는 물리 조건 미확정으로 미평가입니다."
+      ],
+      "next_required": [
+        "항목별 승인 단위·시각·정상 범위·교정/검교정 자료·QC 조건 입력"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/regression.json",
+          "sha256": "b5fc213a2f3241feb09f0d055f57aacc351cd8420d80a331129c47bb6fb54efc"
+        },
+        {
+          "path": "semantic-qc/stage-execution-summary.json",
+          "sha256": "5d63230c26ab4c4993d049f5a21a8d731ce2fc9eaeb30b8e1ddbae6da989eab1"
+        }
+      ]
+    },
+    {
+      "stage_id": 7,
+      "implementation": "IMPLEMENTED",
+      "verification": "PARTIAL",
+      "data_readiness": "PARTIAL",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "원시 숫자 3항목을 적합하고 600개 예측 중 552개를 평가했습니다. 수온 후보 14건은 확인된 고장이나 정확도 지표가 아닙니다."
+      ],
+      "next_required": [
+        "조위 예측/기준면·paired 센서·장비 오염/열화 근거·truth와 업무 수용 기준 확보"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/native-experiments.json",
+          "sha256": "8e4720bbe2fddd0e8fe1dccbf5a2bdd6d29a2bc45a7ecaccb14d057c684cd852"
+        },
+        {
+          "path": "semantic-qc/stage-execution-summary.json",
+          "sha256": "5d63230c26ab4c4993d049f5a21a8d731ce2fc9eaeb30b8e1ddbae6da989eab1"
+        }
+      ]
+    },
+    {
+      "stage_id": 8,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "BLOCKED",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "보고서·정확 원천 단위·행 참여 목록·Rule12·적합 재현을 묶는 검증을 구현했습니다. 원시 Fusion 3건은 물리 QC 승인과 다릅니다."
+      ],
+      "next_required": [
+        "physical Rule/AI + 사건 범위 Metadata/Operation/RAG 연결 후 수용 기준 평가"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/regression.json",
+          "sha256": "b5fc213a2f3241feb09f0d055f57aacc351cd8420d80a331129c47bb6fb54efc"
+        },
+        {
+          "path": "semantic-qc/stage-execution-summary.json",
+          "sha256": "5d63230c26ab4c4993d049f5a21a8d731ce2fc9eaeb30b8e1ddbae6da989eab1"
+        }
+      ]
+    },
+    {
+      "stage_id": 9,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "READY",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "실제 PostgreSQL 임시 schema에서 영속 중단·재개·반려·철회·역할·hash/revision 차단 8건을 검증했습니다."
+      ],
+      "next_required": [
+        "사용자 지시에 따라 실제 업무 수행 시 담당 계정 연결과 별도 승인"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/parent-postgres-verification.json",
+          "sha256": "c255bd6550f9623a798dd4cae08c0d4483665405c32b0b09ee27a050397643c8"
+        }
+      ]
+    },
+    {
+      "stage_id": 10,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "BLOCKED",
+      "approval": "PENDING",
+      "operational_status": "BLOCKED",
+      "reasons": [
+        "승인 근거를 명시하면 v1 원본을 보존하고 새 미승인 BUILT v2를 만듭니다. 실제 운영 Dataset은 아직 없습니다."
+      ],
+      "next_required": [
+        "실제 승인 source/protocol로 TRAIN/VALIDATION/TEST dataset 세 버전 생성·독립 승인"
+      ],
+      "evidence": [
+        {
+          "path": "model-comparison/isolated-e2e.json",
+          "sha256": "d58adf50debc686fefe4024548ea182355e957959ee2a94ba005af0bd836c9bc"
+        },
+        {
+          "path": "model-comparison/verification.json",
+          "sha256": "031d3c909bc13c96230245e65f3db866474fa7e29820b100bd2b0e5b75ffad77"
+        }
+      ]
+    },
+    {
+      "stage_id": 11,
+      "implementation": "PARTIAL",
+      "verification": "PARTIAL",
+      "data_readiness": "PARTIAL",
+      "approval": "PENDING",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "72개 업무 키는 6자료형 기준선의 부분 범위입니다. 실제 3원천에서 TEST 각97쌍을 비교했고 선정에는 VALIDATION만 사용했습니다."
+      ],
+      "next_required": [
+        "승인된 업무별 실제 원천 어댑터/고정 protocol/지평/수용 기준으로 72개를 개별 검증"
+      ],
+      "evidence": [
+        {
+          "path": "model-comparison/verification.json",
+          "sha256": "031d3c909bc13c96230245e65f3db866474fa7e29820b100bd2b0e5b75ffad77"
+        },
+        {
+          "path": "semantic-qc/peer-review/independent-raw-model-oracle.json",
+          "sha256": "642d58cd2570df01ddbc25c42fa6804579ab71bfdf5cf0c02dd9527ab2e658c4"
+        },
+        {
+          "path": "model-comparison/actual-task-readiness.json",
+          "sha256": "c778f13127ca895fb2e1fc5682332651a98d92eb6d93e93301042c833184762a"
+        }
+      ]
+    },
+    {
+      "stage_id": 12,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "BLOCKED",
+      "approval": "PENDING",
+      "operational_status": "BLOCKED",
+      "reasons": [
+        "격리 환경의 학습·독립 재현·등록·인증 예측·두 번 배포·승인 rollback을 검증했습니다. 실제 운영 모델은 0개입니다."
+      ],
+      "next_required": [
+        "업무별 비교/독립 검토/모델 승인 후 실제 registry/serving/배포 연결; 감시 trigger와 운영 SLA 이관"
+      ],
+      "evidence": [
+        {
+          "path": "model-comparison/isolated-e2e.json",
+          "sha256": "d58adf50debc686fefe4024548ea182355e957959ee2a94ba005af0bd836c9bc"
+        },
+        {
+          "path": "model-comparison/verification.json",
+          "sha256": "031d3c909bc13c96230245e65f3db866474fa7e29820b100bd2b0e5b75ffad77"
+        }
+      ]
+    },
+    {
+      "stage_id": 13,
+      "implementation": "IMPLEMENTED",
+      "verification": "VERIFIED",
+      "data_readiness": "PARTIAL",
+      "approval": "NOT_APPLICABLE",
+      "operational_status": "ANALYSIS_ONLY",
+      "reasons": [
+        "부모가 전체 회귀·실제 DB gate·원문·웹 화면을 검증하고 문서를 현행화했습니다. 업무 이관에는 원천과 수용 입력 보완이 필요합니다."
+      ],
+      "next_required": [
+        "확정되지 않은 원천 사실과 운영 입력을 채운 후 수용 시험·업무 이관"
+      ],
+      "evidence": [
+        {
+          "path": "parent-verification/regression.json",
+          "sha256": "b5fc213a2f3241feb09f0d055f57aacc351cd8420d80a331129c47bb6fb54efc"
+        },
+        {
+          "path": "parent-verification/parent-postgres-verification.json",
+          "sha256": "c255bd6550f9623a798dd4cae08c0d4483665405c32b0b09ee27a050397643c8"
+        },
+        {
+          "path": "parent-verification/live-http.json",
+          "sha256": "6c4bb0f823ecc7264f7e6ab792e7481de2015ec5ffe851192f2c474a19f4901a"
+        },
+        {
+          "path": "parent-verification/production-unchanged.json",
+          "sha256": "219140237ae20dd8845fe3da2143f2ab19b6da8d963179bf7fb88a00c6adb8e6"
+        }
+      ]
+    }
+  ],
+  "parent_verification": {
+    "status": "PASS",
+    "passed": 668,
+    "failed": 0,
+    "skipped": 1,
+    "elapsed_seconds": 229.355,
+    "checked_at": "2026-10-08T11:38:16.524105+00:00",
+    "scope": "FINAL_FROZEN_CODE_FULL_ISOLATED_BACKEND_REGRESSION",
+    "frontend": {
+      "tests": 17,
+      "failed": 0,
+      "build": "PASS",
+      "asset": "index-B19tJ8Jg.js"
+    },
+    "logs": {
+      "backend-final.log": "1ad67ead60a191c6d58e42d4980ee22c64e2be45117e511fd28289bc8939951e",
+      "backend-final-junit.xml": "720078376fb9f608f219f5c35c50844412b93970c878e23b759481a0a314a109",
+      "frontend-tests.log": "473d582093c3c62d63a49b089603ae94e132d9876eabae8adc80fc48cadc91aa",
+      "frontend-build.log": "d9f04ddaabc5230ba7bc8693a770efd5546d5e23aa8790b0b86bdd4ffaeeac23"
+    }
+  },
+  "postgres_full_restore": {
+    "status": "PASS",
+    "passed": 5,
+    "failed": 0,
+    "archive_sha256": "6b21de90fc2d523a4c140ab9ff27cfcf6e6c83a42a041a3a948d9ab3683c2003",
+    "archive_bytes": 100037494,
+    "schema_sha256": "4baa015ad43df5ed6eaa33229a0164e66518a33d57055fe344353b9dfd2ed44b",
+    "indexes_sha256": "55350696613347f64e237f8ff09eedbe28a083fc3adb5a7c6709681d7c2f1ba8",
+    "disposable_database_removed": true
+  },
+  "postgres_workflow": {
+    "status": "PASS",
+    "passed": 8,
+    "failed": 0,
+    "cases": [
+      "EXACT_ADDITIVE_MIGRATIONS_AND_IDEMPOTENT_REAPPLY",
+      "POSTGRES_SESSION_REOPEN_PRESERVES_PENDING_AND_STOPS_DOWNSTREAM",
+      "REVIEWER_DECISION_DURABLE_RESUME_AND_IDEMPOTENT_REPLAY",
+      "CHANGED_POSTGRES_SCOPE_MEMBERSHIP_BLOCKS_APPROVAL_WITHOUT_WRITE",
+      "POSTGRES_VIEWER_CANNOT_START",
+      "POSTGRES_OPERATOR_ROLE_STALE_HASH_AND_REVISION_BLOCKED",
+      "POSTGRES_REJECTION_DURABLE_REPLAY_CONFLICT_AND_DOWNSTREAM_STOP",
+      "POSTGRES_LATEST_REVOKED_APPROVAL_BLOCKS_RESUME"
+    ],
+    "public_ledger_unchanged": true
+  },
+  "document_recovery": {
+    "paths": 1842,
+    "hash_match_paths": 1842,
+    "parser_parseable_paths": 1584,
+    "partial_font_paths": 113,
+    "encrypted_pdf_paths": 144,
+    "damaged_pdf_paths": 1,
+    "unique_content": 951,
+    "parseable_unique_content": 786,
+    "isolated_complete_documents": 81,
+    "isolated_publishable_chunks": 8761,
+    "isolated_partial_documents": 1,
+    "isolated_partial_chunks": 138,
+    "isolated_total_stored_chunks": 8899,
+    "canonical_published": 0
+  },
+  "actual_raw_experiments": {
+    "items": [
+      "AIR_PRES",
+      "WATER_TEMP",
+      "SALINITY"
+    ],
+    "source_cells": 1500,
+    "anomaly_predictions": 600,
+    "evaluated": 552,
+    "warmup_not_evaluated": 48,
+    "water_temp_candidates": 14,
+    "forecast_test_pairs_per_item": 97,
+    "forecast_total_test_predictions": 291,
+    "selection": "VALIDATION_ONLY_TEST_NOT_USED_FOR_SELECTION",
+    "physical_qc_evaluated": 0,
+    "production_models": 0
+  },
+  "production_counts": {
+    "source_contract_packets": 0,
+    "source_contract_decisions": 0,
+    "source_observation_binding": 0,
+    "approval_history": 0,
+    "dataset_registry": 0,
+    "model_registry": 0,
+    "retraining_history": 0,
+    "event_registry": 0,
+    "event_evidence": 0,
+    "sensor_alias": 0,
+    "mdc_sensor_catalog": null,
+    "agent_workflow_run": 0,
+    "agent_workflow_transition": 0,
+    "qc_rule_result": 0
+  },
+  "production_unchanged": {
+    "status": "PASS",
+    "failed": 0,
+    "passed": 4,
+    "checked_at": "2026-10-08T11:44:11.027922+00:00",
+    "checks": [
+      {
+        "name": "ALL_14_CRITICAL_PUBLIC_TABLE_COUNTS_EXISTENCE_AND_ROW_DIGESTS_UNCHANGED",
+        "passed": true
+      },
+      {
+        "name": "CANONICAL_SERVICES_AND_FRONTEND_PROCESS_IDENTITIES_PRESERVED",
+        "passed": true
+      },
+      {
+        "name": "ACTUAL_AUTHORITY_IDENTITIES_STILL_ZERO",
+        "passed": true
+      },
+      {
+        "name": "CANONICAL_DOCUMENT_LEDGER_SNAPSHOT_UNCHANGED",
+        "passed": true
+      }
+    ],
+    "tables_checked": 14,
+    "database_writes_performed": 0,
+    "configured_identity_count": 0,
+    "public_mdc_catalog_applied": false,
+    "canonical_processes_preserved": 5,
+    "document_ledger_snapshot_unchanged": true
+  },
+  "api": {
+    "paths": 154,
+    "operations": 163,
+    "review_port": 8010,
+    "frontend_port": 5174
+  },
+  "operating_completion": false,
+  "accounts": "DEFERRED_BY_USER",
+  "source_and_acceptance_facts_complete": false,
+  "private_artifact_root": "D:/AI_Observation/outputs/development-stages-20261008",
+  "private_backup_never_committed": true
+}

@@ -1,5 +1,8 @@
 import StationClassifications, { DatasetSourceSelect } from './StationClassifications';
 import OSMBaseLayer from './OSMBaseLayer';
+import MetricCompletionPanel, { useMetricCompletion } from './MetricCompletionPanel';
+import { percentMetric, qcPresencePercent } from '../data/metricPresentation';
+import { observationPeriod } from '../data/observationPeriod';
 /** Evidence-led QC / insight views. Never infer fault, confidence or approval from document overlap. */
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -10,8 +13,8 @@ import 'leaflet/dist/leaflet.css';
 import { API_BASE_URL, apiFetch } from '../api/client';
 
 const panel = 'bg-white rounded-2xl border border-blue-100 shadow-sm p-5 min-w-0';
-const fmt = (v:any) => v == null ? '미산정' : Number(v).toLocaleString('ko-KR');
-const pct = (v:any) => v == null ? '미산정' : `${fmt(v)}%`;
+const fmt = (v:any) => typeof v==='number'&&Number.isFinite(v) ? v.toLocaleString('ko-KR') : '필요입력 없음';
+const pct = (v:any) => typeof v==='number'&&Number.isFinite(v) ? `${fmt(v)}%` : '필요입력 없음';
 const colors = ['#2563eb', '#cbd5e1'];
 async function read(path:string, signal:AbortSignal) {
   const r=await apiFetch(`${API_BASE_URL}${path}`,{signal});
@@ -43,9 +46,7 @@ export function EvidenceCase({event, linkQuery}: {event:any;linkQuery:string}) {
 
 export default function AnalysisWorkspace({insights=false}:{insights?:boolean}) {
   const [search,setSearch]=useSearchParams();
-  const source=search.get('source')||'GD_OBS_ST_MONTHLY';
-  const from=search.get('from')||(source==='HISTORICAL_RECONCILED'?'2011-01':'2023-01');
-  const to=search.get('to')||(source==='HISTORICAL_RECONCILED'?'2021-12':'2026-07');
+  const { source, from, to } = observationPeriod(search);
   const station=search.get('station')||'', item=search.get('item')||'';
   const baseQuery=new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source,from_month:from,to_month:to}).toString();
   const query=new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source,from_month:from,to_month:to,station,item}).toString();
@@ -55,6 +56,8 @@ export default function AnalysisWorkspace({insights=false}:{insights?:boolean}) 
   const [metadata,setMetadata]=useState<any[]>([]),[referenceError,setReferenceError]=useState('');
   const [error,setError]=useState(''),[loading,setLoading]=useState(false),[revision,setRevision]=useState(0);
   const [selected,setSelected]=useState('');
+  const completion=useMetricCompletion(query,revision,data?.snapshot);
+  const metricWaiting=completion.loading?'조회 중':completion.error?'조회 실패':completion.data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음';
   useEffect(()=>{
     const control=new AbortController();setLoading(true);setError('');setData(null);setOverview(null);setSelected('');
     if(from>to){setError('시작월은 종료월보다 늦을 수 없습니다.');setLoading(false);return()=>control.abort();}
@@ -78,12 +81,12 @@ export default function AnalysisWorkspace({insights=false}:{insights?:boolean}) 
   const cards=insights ? [
     ['문서 검토 후보',data?fmt(events.length):'—','선택 범위와 기간 대응',FileText],
     ['연결 관측소',data?fmt(ranked.length):'—','위험도 순위 아님',Activity],
-    ['AI 예측 결과','미평가','평가 데이터셋·모델 필요',BrainCircuit],
-    ['설명가능성 점수','미평가','근거 충실도 평가 전',ShieldCheck],
-    ['재학습 후보','미평가','운영 모델·드리프트 평가 전',RefreshCw],
+    ['AI 예측 결과','평가대상 없음','동일 기간·항목의 평가된 모델 결과 필요',BrainCircuit],
+    ['설명가능성 점수','필요입력 없음','근거 충실도 평가셋·채점 규칙 필요',ShieldCheck],
+    ['재학습 후보','평가대상 없음','운영 모델·고정 reference와 드리프트 평가 필요',RefreshCw],
   ]:[
-    ['QC 정상률','미산정','승인된 QC 분류 집계 필요',ShieldCheck],['BAD 비율','미산정','원천 플래그와 승인 QC 구분',AlertTriangle],
-    ['원천 QC 표기율',pct(obs?.source_qc_presence_rate),'QC 표기 행 / 보유 행',Activity],['원천 값 결측률',pct(obs?.missing_value_rate),'결측 값 행 / 보유 행',Database],
+    ['승인 QC 정상률','필요입력 없음','승인 최종 QC와 동일 평가 범위·분모 원장 필요',ShieldCheck],['승인 BAD 비율','필요입력 없음','원천 코드와 최종 QC 승인 집계는 별도',AlertTriangle],
+    ['원천 QC 표기율',completion.data?.raw?qcPresencePercent(completion.data.raw):metricWaiting,'기본 QC 코드 표기 행 / 보유 행 · 승인 정상률 아님',Activity],['원시 결측표현율',completion.data?.raw?percentMetric(completion.data.raw.missing_value_rate,completion.data.raw.held_rows):metricWaiting,'원시 결측 표현 / 보유 행 · 미수집 결측률 아님',Database],
     ['문서 검토 후보',data?fmt(events.length):'—','승인 대기 건수와 별개',FileText],['보유 행 수',fmt(obs?.held_rows),'중복 제거 전 원천 행',Database],
   ];
   return <div className="p-4 md:p-6 space-y-5 min-h-full bg-gradient-to-br from-blue-50/60 via-white to-indigo-50/40">
@@ -99,6 +102,7 @@ export default function AnalysisWorkspace({insights=false}:{insights?:boolean}) 
     <p className="text-xs text-slate-500">{data?`검증본 ${data.snapshot} · ${source} · ${from} ~ ${to}`:'조회 대기'} · 원천 시각의 시간대 미확정 · {data?.limitations}</p>
     {data&&!data.observation_metrics_available&&<p className="bg-amber-50 p-3 rounded-xl text-sm">과거 정산 자료의 품질 집계·문서 연결은 아직 이 화면에 등록되지 않았습니다. 아래 0건은 등록된 검토 기록 기준입니다.</p>}
     <div className={`grid grid-cols-2 md:grid-cols-3 ${insights?'2xl:grid-cols-5':'2xl:grid-cols-6'} gap-3`}>{cards.map(([label,value,note,Icon]:any)=><article key={label} className={panel}><Icon className="w-6 h-6 text-blue-600 mb-3"/><h2 className="text-xs font-bold">{label}</h2><p className="text-2xl font-extrabold text-slate-900 my-2 break-words">{value}</p><p className="text-[11px] text-slate-500">{note}</p></article>)}</div>
+    <MetricCompletionPanel {...completion}/>
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
       <section className={panel}><h2 className="font-bold mb-3">{insights?'관측자료 보유 추이':'원천 QC 표기 분포'}</h2>{insights?<div className="h-56"><ResponsiveContainer width="100%" height="100%"><LineChart data={monthly}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="month" tick={{fontSize:10}}/><YAxis width={50} tickFormatter={v=>Intl.NumberFormat('ko-KR',{notation:'compact'}).format(v)} tick={{fontSize:10}}/><Tooltip/><Line dataKey="held_rows" name="보유 원천 행" stroke="#6366f1" dot={false} connectNulls={false}/></LineChart></ResponsiveContainer></div>:<><div className="h-48">{distribution.length?<ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={distribution} dataKey="value" innerRadius={55} outerRadius={85}>{distribution.map((_:any,i:number)=><Cell key={i} fill={colors[i]}/>)}</Pie><Tooltip/></PieChart></ResponsiveContainer>:<p className="py-12 text-center text-slate-400">집계 없음</p>}</div>{distribution.map((d:any,i:number)=><div key={d.name} className="text-xs flex justify-between py-1"><span style={{color:colors[i]}}>{d.name}</span><span>{fmt(d.value)}행</span></div>)}</>}<p className="text-xs text-slate-500 mt-3">{insights?'미등록 월은 공백입니다. 보유량의 변화는 이상 탐지 결과가 아닙니다.':'QC 표기가 있어도 정상·BAD 판정 또는 승인 완료를 뜻하지 않습니다.'}</p></section>
       <section className={panel}><h2 className="font-bold mb-3">{insights?'예측값과 관측값 비교':'월별 원천 QC·결측 추이'}</h2>{insights?<div className="h-56 flex flex-col justify-center items-center text-center gap-3 bg-indigo-50 rounded-xl"><BrainCircuit className="w-10 h-10 text-indigo-400"/><p className="font-bold">동일 기간의 평가된 예측 결과 미등록</p><p className="text-xs text-slate-500 px-5">데이터셋·모델 버전·항목·단위·시간대 계약을 갖춘 비교 결과가 필요합니다.</p><Link to={`/forecasting?${linkQuery}`} className="text-blue-700 text-sm underline">예측 기준선 실험 보기 →</Link></div>:<div className="h-56"><ResponsiveContainer width="100%" height="100%"><LineChart data={monthly}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="month" tick={{fontSize:10}}/><YAxis domain={[0,100]} unit="%" width={40} tick={{fontSize:10}}/><Tooltip/><Legend wrapperStyle={{fontSize:10}}/><Line dataKey="source_qc_presence_rate" name="QC 표기율" stroke="#2563eb" dot={false} connectNulls={false}/><Line dataKey="missing_value_rate" name="원천 값 결측률" stroke="#a855f7" dot={false} connectNulls={false}/></LineChart></ResponsiveContainer></div>}<p className="text-xs text-slate-500 mt-3">{insights?'예측선·신뢰도·인접 관측소 이상을 임의 생성하지 않습니다.':'분모: 해당 월 보유 행 수. 미수집 기간의 결측률과 다릅니다.'}</p></section>

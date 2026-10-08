@@ -10,10 +10,10 @@
 |---|---|---|
 | 미확정 원천 사실 확정 | 가이드 원문/판본·현재 metadata literal·captured SQL·실제 표본 hash를 재확인 | historical 배율/기준면/시계/QC 판본·시행기간/물리 센서 episode를 확정할 근거 부족. 현재 metadata를 과거 전체에 소급하지 않는다. |
 | 12종 Rule QC | WT/LO/ER/GR/GD/RL/SP/RR/SR/ST/DE/PO 엔진·catalog·API·결과 계보 구현 | 실제 조건/보조자료가 빠지면 NOT_EVALUATED. 실제500행×12=6,000건도 미평가로 유지한다. |
-| 실제 이상탐지 AI | fixed TRAIN/CALIBRATION, causal spike/persistence/tide residual/TEMP-SAL drift/biofouling/degradation 후보 구현 | 합성 held-out 검증은 완료. 실제 WATER_TEMP 원천 조건 미확정으로 source fit 0이며 운영 성능 수용도 남는다. |
+| 실제 이상탐지 AI | fixed TRAIN/CALIBRATION, causal spike/persistence/tide residual/TEMP-SAL drift/biofouling/degradation 후보 구현 | 합성 held-out 검증 및 별도 raw 숫자3항목 적합을 완료했다. 실제 물리 원천 조건 미확정으로 물리 fit 0이며 운영 성능 수용도 남는다. |
 | Evidence Fusion | Rule+AI+Metadata+Operation+RAG의 단일 recommendation_score·coverage·충돌·누락 구현 | 개발 가중 recipe. 실제 업무 수용 기준이나 고장 확률이 아니다. |
 | Human Approval | PostgreSQL 영속 PENDING 중단, reviewer 결정 후 explicit resume·hash/revision/membership 검증 | 실제 계정 설정은 DEFERRED_BY_USER. 승인 후에도 보고서 초안/MLOps 추천이며 학습/registry/배포를 수행하지 않는다. |
-| source→snapshot→모델 | 승인 binding, v2 freeze·고정 비교·worker·독립 등록·serving 코드 유지 | legacy v1 자동 변환 미구현. 실제 source/사건/기간/고정 split·수용 정책 승인과 업무별 모델 비교가 필요하다. |
+| source→snapshot→모델 | 승인 binding, v2 freeze·고정 비교·worker·독립 등록·serving 코드 유지 | legacy v1 원본 보존·새 v2 재구축 구현. 실제 source/사건/기간/고정 split·수용 정책 승인과 업무별 모델 비교가 필요하다. |
 
 ## 실제 자료 확인과 운영 수치
 
@@ -36,4 +36,7 @@
 
 [설치](02_SETUP_AND_INSTALLATION.md), [API](04_API_SPECIFICATION.md), [QC](12_QC_RULE_RESULT_LAYER.md), [AI](25_ANOMALY_AI.md), [승인](17_HUMAN_IN_THE_LOOP.md), [Dataset](18_DATASET_REGISTRY.md), [MLOps](19_MLOPS_VERSION_AND_EVALUATION.md)를 따른다.
 
-최종 검증: 2026-10-08 backend **512 passed / 1 skipped**(46.36초), frontend TypeScript/Vite build PASS. 실제 PostgreSQL 임시 schema의 migration·session 재개·입력 변경 차단 PASS와 최신 backend8010의 QC/AI→Fusion 읽기 전용 HTTP 연결을 확인했다. 실제 source fit·model registry·배포는0이다.
+최종 검증: backend **668 passed / 1 skipped**(229.35초), frontend17 tests·TypeScript/Vite build PASS, 실제 PostgreSQL gate8건·48table 전체backup/restore·liveHTTP13건 PASS. 원시 숫자 적합3개와 격리 모델2건은 실제 물리 fit·model registry·배포0과 구분한다. [13단계 실행 결과](29_DEVELOPMENT_STAGE_EXECUTION.md)를 따른다.
+## 10/8 단계별 보완 결과
+
+각 단계의 현재 완료 범위와 남은 조건은 [29의13행 표](29_DEVELOPMENT_STAGE_EXECUTION.md)를 따른다. 원천 사실/암호·font자료/전량embedding/실제 업무별 수용/계정·승인이 남아 전체 운영 완료가 아니다. 단위·시각을 임의 보완하거나 NOT_EVALUATED·72부분범위를 운영 성공으로 바꾸지 않는다.

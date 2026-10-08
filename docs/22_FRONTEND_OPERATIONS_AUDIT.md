@@ -2,6 +2,10 @@
 
 현행화: 2026-10-08
 
+관측 기본 조회는 **2026-07 ~ 2026-07**이다. Dashboard·관측 현황에 공식7월 월간해양정보와 원천별Parquet 대조를 연결했다. 지정한 과거 기간을 유지하고 공식 현황과 선택 기간을 구분한다. 단일7월에는 `as_of_month=2026-07`의 유일 명칭·좌표 참조를 필터·지도에 반영하며 해역 직접 근거가 없으면 기존 값을 유지한다. [7월 검증](27_JULY_REPORT_PARQUET_MATCH.md)에 근거와 수치 차이를 기록한다.
+
+[MetricCompletionPanel](../ocean-ai-platform/frontend/src/components/MetricCompletionPanel.tsx)은 원시 시간격자·결측표현·수치/시각 해석·기본 QC 표기와 원문 코드 분포·보고서 고유 셀 평균을 구분해 표시한다. Dashboard/Observations/QC/Insights가 동일 snapshot·원천·선택 기간의 `/api/lake/metric-completion`을 조회한다. 보유0/미확정/실패/조회 중을 실제0%와 구분하며 운영 지표에는 필요한 근거를 표시한다. Service는 현재 프로세스의 응답 수·오류 수·기록 구간을 표시한다. [28 산정 경계](28_METRIC_COMPLETION.md)를 확인한다.
+
 ## 현재 화면이 조회하는 경로
 
 | 화면 | 실제 연결 | 해석 범위와 남은 연결 |
@@ -43,3 +47,6 @@ JSON HTTP 요청 로그와 승인 이력은 목적이 다르다. `ApprovalHistor
 실제 운영 검증에는 담당 인증, 원천·기간·사건 검토, 승인 입력, 실패/반려 화면, 모델 실행과 identity 검증이 필요하다. [설치 문서](02_SETUP_AND_INSTALLATION.md), [승인 경로](17_HUMAN_IN_THE_LOOP.md), [현재 진행 상태](24_P0_END_TO_END_PROGRESS.md)를 따른다.
 
 최신 개발 UI는 `http://127.0.0.1:5174`이며 backend8010에 연결한다. 기존 canonical5173/8000·Chroma8001·worker는 유지한다. [WorkflowReviewPanel](../ocean-ai-platform/frontend/src/components/WorkflowReviewPanel.tsx)은 새 흐름의 상태/권한별 버튼을 제공하며 실제 담당 계정은 아직 설정하지 않았다.
+## 10/8 단계별 보완 결과
+
+System의 DevelopmentStageReview는13단계×구현/시험/자료/승인/운영을 표시하고 SHA증거·남은 입력을 펼친다. MLOps의 TrainingWorkbench/InputPreparationReview는 legacy 검토·정책 양식·세 승인Dataset 선택·manifest preflight·학습 큐를 연결한다. 입력/권한/worker가 없으면 변경 버튼을 비활성화하고 async응답을 revision guard로 차단한다. frontend17시험/build와 부모 실제 브라우저를 통과했다. 7월 기본 기간과 미산정 지표 경계를 유지한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

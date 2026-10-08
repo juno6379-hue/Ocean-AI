@@ -29,8 +29,10 @@ class DurableQueue:
         db.execute("PRAGMA journal_mode=WAL")
         return db
 
-    def enqueue(self, manifest_path, authority):
+    def enqueue(self, manifest_path, authority, expected_sha256=None):
         prepared = preflight(manifest_path, authority)
+        if expected_sha256 is not None and prepared['manifest_sha256'] != expected_sha256:
+            raise ComparisonBlocked('REVIEWED_MANIFEST_CHANGED')
         protocols = prepared.get("protocols")
         if not protocols:
             raise ComparisonBlocked("APPROVED_TRAINING_PROTOCOLS_REQUIRED")

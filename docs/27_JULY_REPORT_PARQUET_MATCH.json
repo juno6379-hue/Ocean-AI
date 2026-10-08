@@ -1,0 +1,777 @@
+{
+  "schema_version": "monthly-publication-match-1",
+  "report_month": "2026-07",
+  "publication_title": "국가해양관측망 월간해양정보(2026년 7월)",
+  "publication_sha256": "7b7f1f7d9a90ca659d61ee436121f88cb52c22db45de6bbe7429c4beb5c4bb7f",
+  "publication_pages": 304,
+  "snapshot": "validation-20261006T134056Z",
+  "generated_at": "2026-10-08T08:13:03.346096+00:00",
+  "match_status": "MATCH_WITH_EXPLICIT_EXCEPTIONS",
+  "approval_status": "UNAPPROVED",
+  "official_totals": {
+    "public_count": 120,
+    "restricted_count": 20,
+    "total_count": 140
+  },
+  "official_counts": [
+    {
+      "category": "조위관측소",
+      "subcategory": null,
+      "public_count": 51,
+      "restricted_count": 4,
+      "total_count": 55,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "25(3)",
+          "public_count": 25,
+          "restricted_count": 3,
+          "total_count": 28,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "18(1)",
+          "public_count": 18,
+          "restricted_count": 1,
+          "total_count": 19,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "8",
+          "public_count": 8,
+          "restricted_count": 0,
+          "total_count": 8,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "합계",
+          "display_raw": "51(4)",
+          "public_count": 51,
+          "restricted_count": 4,
+          "total_count": 55,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해양관측소",
+      "subcategory": null,
+      "public_count": 2,
+      "restricted_count": 0,
+      "total_count": 2,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "-",
+          "public_count": 0,
+          "restricted_count": 0,
+          "total_count": 0,
+          "public_display_is_dash": true,
+          "dash_policy": "COUNT_TABLE_DASH_ZERO_FOR_AGGREGATION_ONLY"
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "1",
+          "public_count": 1,
+          "restricted_count": 0,
+          "total_count": 1,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "1",
+          "public_count": 1,
+          "restricted_count": 0,
+          "total_count": 1,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "합계",
+          "display_raw": "2",
+          "public_count": 2,
+          "restricted_count": 0,
+          "total_count": 2,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해양관측부이 (주요해역)",
+      "subcategory": "주요해역",
+      "public_count": 6,
+      "restricted_count": 4,
+      "total_count": 10,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "-(3)",
+          "public_count": 0,
+          "restricted_count": 3,
+          "total_count": 3,
+          "public_display_is_dash": true,
+          "dash_policy": "COUNT_TABLE_DASH_ZERO_FOR_AGGREGATION_ONLY"
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "4",
+          "public_count": 4,
+          "restricted_count": 0,
+          "total_count": 4,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "2(1)",
+          "public_count": 2,
+          "restricted_count": 1,
+          "total_count": 3,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "합계",
+          "display_raw": "6(4)",
+          "public_count": 6,
+          "restricted_count": 4,
+          "total_count": 10,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해양관측부이 (이안류)",
+      "subcategory": "이안류",
+      "public_count": 10,
+      "restricted_count": 0,
+      "total_count": 10,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "1",
+          "public_count": 1,
+          "restricted_count": 0,
+          "total_count": 1,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "2",
+          "public_count": 2,
+          "restricted_count": 0,
+          "total_count": 2,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "7",
+          "public_count": 7,
+          "restricted_count": 0,
+          "total_count": 7,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "합계",
+          "display_raw": "10",
+          "public_count": 10,
+          "restricted_count": 0,
+          "total_count": 10,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해양관측부이 (주요항로)",
+      "subcategory": "주요항로",
+      "public_count": 16,
+      "restricted_count": 0,
+      "total_count": 16,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "7",
+          "public_count": 7,
+          "restricted_count": 0,
+          "total_count": 7,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "9",
+          "public_count": 9,
+          "restricted_count": 0,
+          "total_count": 9,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "-",
+          "public_count": 0,
+          "restricted_count": 0,
+          "total_count": 0,
+          "public_display_is_dash": true,
+          "dash_policy": "COUNT_TABLE_DASH_ZERO_FOR_AGGREGATION_ONLY"
+        },
+        {
+          "coast": "합계",
+          "display_raw": "16",
+          "public_count": 16,
+          "restricted_count": 0,
+          "total_count": 16,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해양과학기지",
+      "subcategory": null,
+      "public_count": 3,
+      "restricted_count": 0,
+      "total_count": 3,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "2",
+          "public_count": 2,
+          "restricted_count": 0,
+          "total_count": 2,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "1",
+          "public_count": 1,
+          "restricted_count": 0,
+          "total_count": 1,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "-",
+          "public_count": 0,
+          "restricted_count": 0,
+          "total_count": 0,
+          "public_display_is_dash": true,
+          "dash_policy": "COUNT_TABLE_DASH_ZERO_FOR_AGGREGATION_ONLY"
+        },
+        {
+          "coast": "합계",
+          "display_raw": "3",
+          "public_count": 3,
+          "restricted_count": 0,
+          "total_count": 3,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    },
+    {
+      "category": "해수유동관측소",
+      "subcategory": null,
+      "public_count": 32,
+      "restricted_count": 12,
+      "total_count": 44,
+      "source_table": "1-1",
+      "pdf_page": 30,
+      "printed_page": 2,
+      "regional_cells": [
+        {
+          "coast": "서해안",
+          "display_raw": "14(10)",
+          "public_count": 14,
+          "restricted_count": 10,
+          "total_count": 24,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "남해안",
+          "display_raw": "12",
+          "public_count": 12,
+          "restricted_count": 0,
+          "total_count": 12,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "동해안",
+          "display_raw": "6(2)",
+          "public_count": 6,
+          "restricted_count": 2,
+          "total_count": 8,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        },
+        {
+          "coast": "합계",
+          "display_raw": "32(12)",
+          "public_count": 32,
+          "restricted_count": 12,
+          "total_count": 44,
+          "public_display_is_dash": false,
+          "dash_policy": null
+        }
+      ]
+    }
+  ],
+  "source_summaries": [
+    {
+      "source": "GD_OBS_BU",
+      "station_count": 32,
+      "held_rows": 3205316,
+      "item_codes": 28,
+      "first_clock": "2026-07-01 00:00:00",
+      "last_clock": "2026-07-31 23:59:00",
+      "channel_depth_month_grains": 327,
+      "coordinate_corroborated_report_codes": 19
+    },
+    {
+      "source": "GD_OBS_ST_MONTHLY",
+      "station_count": 61,
+      "held_rows": 23694337,
+      "item_codes": 141,
+      "first_clock": "2026-07-01 00:00:00",
+      "last_clock": "2026-07-30 03:34:00",
+      "channel_depth_month_grains": 610,
+      "coordinate_corroborated_report_codes": 51
+    },
+    {
+      "source": "GD_OBS_VBU",
+      "station_count": 10,
+      "held_rows": 427278,
+      "item_codes": 28,
+      "first_clock": "2026-07-01 00:00:00",
+      "last_clock": "2026-07-31 23:30:00",
+      "channel_depth_month_grains": 283,
+      "coordinate_corroborated_report_codes": 0
+    },
+    {
+      "source": "GR_OBS_ST",
+      "station_count": 61,
+      "held_rows": 25268257,
+      "item_codes": 143,
+      "first_clock": "2026-07-01 00:00:00",
+      "last_clock": "2026-07-31 23:59:00",
+      "channel_depth_month_grains": 612,
+      "coordinate_corroborated_report_codes": 51
+    }
+  ],
+  "findings": [
+    {
+      "code": "PARQUET_BYTES_PASS",
+      "severity": "INFO",
+      "message": "7월 Parquet 146개 전부의 SHA256·파일 행 수 정산 통과. 선택 API 원문 40행도 직접 Parquet와 일치합니다."
+    },
+    {
+      "code": "MARINE_STATIONS_MATCH",
+      "severity": "INFO",
+      "message": "7월 해양관측소는 교본초·왕돌초 2개로 일치합니다. 복사초는 과거 조회에만 포함됩니다."
+    },
+    {
+      "code": "REPORT_REFERENCE_SCOPE",
+      "severity": "REVIEW",
+      "message": "명칭·공개 좌표가 유일하게 대응한 70개 코드를 7월 문서 참조로 표시합니다. 직접 해역 근거가 있는 52개 중 기존 해역 참조와 22개 차이가 있습니다. 문서에 해역이 없으면 기존 값을 유지하며 과거 기간에 소급 적용하지 않습니다."
+    },
+    {
+      "code": "GDST_PARTIAL_MONTH",
+      "severity": "MISMATCH",
+      "message": "GD_OBS_ST_MONTHLY는 7월 30일 03:34까지만 보유합니다. 월말 통계의 완전 일치는 확인되지 않았습니다."
+    },
+    {
+      "code": "HF_SCOPE_MISSING",
+      "severity": "UNRESOLVED",
+      "message": "보고서의 해수유동관측소 44개에 해당하는 원천은 이번 4개 관측자료 범위에서 확인되지 않았습니다. 같은 이름의 조위관측소를 HF 자료로 연결하지 않습니다."
+    },
+    {
+      "code": "QC_STATISTICS_UNVERIFIED",
+      "severity": "UNRESOLVED",
+      "message": "보고서는 2차 품질처리 및 정상자료율 기준으로 통계를 산출합니다. 원시 값·QC 코드 존재만으로 보고서 정상자료율과 통계의 일치를 판정하지 않습니다."
+    },
+    {
+      "code": "MARINE_NUMERIC_DIFFERENCES",
+      "severity": "MISMATCH",
+      "message": "교본초·왕돌초의 14개 수치 비교 중 7개는 반올림 조건에서 일치하고 7개는 차이가 있습니다. 원시 조위·파고에는 보고서와 다른 값이 있으며 승인된 QC 마스크는 적용하지 않았습니다."
+    },
+    {
+      "code": "ITEM_LABEL_REFERENCE",
+      "severity": "REVIEW",
+      "message": "유일 대응한 70개 시설의 보고서 항목 433개 중 428개에 보유 항목명 참조가 있습니다. 2개는 대응 미확정, 3개는 개별 항목을 열거하지 않은 설명입니다. 항목명 참조는 의미·단위·QC 승인이 아닙니다."
+    }
+  ],
+  "verification": {
+    "all_july_file_hashes_and_footers_pass": true,
+    "july_files": 146,
+    "api_literal_sample_rows": 40,
+    "station_reference_codes": 70,
+    "report_coast_reference_codes": 52,
+    "legacy_coast_reference_differences": 22,
+    "original_csv_rehash": false,
+    "whole_report_numeric_reproduction": false
+  },
+  "numeric_comparison_summary": {
+    "numeric_comparisons": 14,
+    "conditional_rounded_agreements": 7,
+    "conditional_numeric_differences": 7,
+    "normal_rate_diagnostics": 10,
+    "reproduced_report_normal_rates": 0,
+    "source_semantic_approvals": 0
+  },
+  "item_reference_summary": {
+    "scope": "ITEM_LABEL_REFERENCE_REVIEW_FOR_70_UNIQUE_NAME_COORDINATE_CODE_ROWS_ONLY",
+    "month": "2026-07",
+    "generated_at": "2026-10-08T08:05:21.657655+00:00",
+    "station_mapping_rows": 70,
+    "report_item_rows": 433,
+    "states": {
+      "HELD_EXACT_OR_LEXICAL_LABEL_REFERENCE_UNAPPROVED": 428,
+      "NO_HELD_LABEL_REFERENCE_MATCH_UNRESOLVED_NOT_PROVEN_ABSENT": 2,
+      "REPORT_GROUP_DESCRIPTION_UNRESOLVED_NOT_ATOMIC": 3
+    },
+    "held_grains_with_report_label_reference": 771,
+    "held_grains_not_lexically_covered_by_report_item_list": 528,
+    "approved_semantics": 0,
+    "approved_unit_scale_datum": 0,
+    "approved_QC": 0,
+    "approved_clock": 0,
+    "proven_missing_semantic_items": 0,
+    "report_code_pairs_sha256": "d48242c0ba4cab33815449092eca73b8d9b8d8f6965365ff83eb973e6c911b72",
+    "source_files": {
+      "report_inventory_sha256": "c8e14ac541d2b63a3df7366237511f727d2674e2fdf5a8a94ba6e8fe1c820bb2",
+      "admissible_mapping_sha256": "89aef1155787fc9838334f6d04370cb8c9cf3f3096d13b411fc62b5dd721bd94",
+      "candidate_audit_sha256": "350747d28c9fe7083544c719672a49c39ba7d3ee454bf77e96db143902f396ff"
+    },
+    "notes": [
+      "A report item family can correspond to multiple raw source item codes and depths; no physical channel deduplication is asserted.",
+      "No label reference match is unresolved, not proof that the physical quantity was not observed.",
+      "Station-science lists containing N items are partial report group descriptions and do not enumerate all individual variables.",
+      "Held extra codes can be diagnostics, additional sensor channels or unresolved mappings; they are not unexpected/fault labels.",
+      "GR item-name/unit metadata references lack source namespace and effective history; they are never upgraded to GD dictionary approval."
+    ]
+  },
+  "report_methods": {
+    "period": "2026년 7월",
+    "historical_baseline": "2016~2025년 7월,10년 미만 관측소는 관측개시~2025년",
+    "month_mean": "당월1일0시0분~말일23시59분 관측자료의 산술평균",
+    "day_statistics": "당일0시0분~23시59분",
+    "observation_timestamp_timezone": "NOT_EXPLICITLY_ESTABLISHED_BY_STATISTICAL_TABLES",
+    "harmonic_phase_reference": "한국표준시(KST) 기준자오선 동경135°",
+    "tide_input": "결측보간 완료 공식1시간조위; 시계열1분보간; 조화분해29일+1시간",
+    "normal_data_rate": "(실제수집-결측-오류)/이론수집*100",
+    "normal_data_denominator": "이론수집자료수,실제수집자료수가아님",
+    "collection_rate": "실제수집/이론수집*100",
+    "missing_data_rate": "(결측+미수집)/이론수집*100",
+    "error_data_rate": "오류/이론수집*100",
+    "monthly_inclusion": "월정상자료율80%이상;품질이상/80%미만 제외,HF정점50%미만제외",
+    "day_low_rate_typography": "일정상자료율80%미만 굵은기울임",
+    "secondary_qc": "2차품질처리완료자료,추후품질처리에따라정상자료율/통계달라질수있음",
+    "wind_direction": "진북 기준 불어오는방향,calm<=0.4m/s제외 주풍향16방위",
+    "wave_direction": "진북 기준 진행해오는방향",
+    "current_direction": "진북 기준 흘러가는방향,평균류U/V평균합성",
+    "source_pages": [
+      {
+        "pdf_page": 41,
+        "printed_page": 11
+      },
+      {
+        "pdf_page": 42,
+        "printed_page": 12
+      },
+      {
+        "pdf_page": 55,
+        "printed_page": 23
+      },
+      {
+        "pdf_page": 57,
+        "printed_page": 25
+      },
+      {
+        "pdf_page": 58,
+        "printed_page": 26
+      }
+    ]
+  },
+  "method_note": "공식 시설 수·원시 관측 코드·기술 대응·운영 승인을 구분합니다. 단위·배율·기준면·시각·QC 계약 확정은 별도로 필요합니다.",
+  "evidence_files": [
+    {
+      "name": "pdf_inventory\\source.json",
+      "sha256": "48b79bd937f202771401f31f79044ce78eada6cb1601b5598bdc2eebada48262"
+    },
+    {
+      "name": "pdf_inventory\\station-inventory.json",
+      "sha256": "c8e14ac541d2b63a3df7366237511f727d2674e2fdf5a8a94ba6e8fe1c820bb2"
+    },
+    {
+      "name": "pdf_inventory\\facility-counts.json",
+      "sha256": "dec372a908def198ad87549399de9792fca2287de90e3d0515524f22f9a46da2"
+    },
+    {
+      "name": "pdf_inventory\\table-catalog.json",
+      "sha256": "f2977e1e774690a98d2767cd82bb6361aedbe96d874366a21332132c0f780f7d"
+    },
+    {
+      "name": "parquet_audit\\july-full-parquet-byte-audit.json",
+      "sha256": "0721f2d0c535b3ba6dce6e399e12c9df90f02a126651597438b1a7ab93c1e382"
+    },
+    {
+      "name": "parquet_audit\\report-parquet-matching-summary.json",
+      "sha256": "3d7c99625928ae138b2c0695f0f47471730bc237dc0b385d9e3e959962370de1"
+    },
+    {
+      "name": "parquet_audit\\admissible-july-report-code-mapping.json",
+      "sha256": "89aef1155787fc9838334f6d04370cb8c9cf3f3096d13b411fc62b5dd721bd94"
+    },
+    {
+      "name": "parquet_audit\\selected-raw-api-parquet-verification.json",
+      "sha256": "951f086cdabcd17f5f40a43fd24bc69b8339819c9eabf85910e6b9054bc566e5"
+    },
+    {
+      "name": "pdf_inventory\\numeric-summary.json",
+      "sha256": "c48bc121fa2c589f223452d84e825aa948f3f89880789b4f09e5339daf0247fa"
+    },
+    {
+      "name": "pdf_inventory\\analysis-methods.json",
+      "sha256": "18bb7efbe419b60082b8d5e9442ae5b768915b8a2dbd74263dd511baf8e24928"
+    },
+    {
+      "name": "pdf_inventory\\station-sea-supplement.json",
+      "sha256": "69bf0adad19cff4bbaf0f506ede6ee5e2ec24a098688c2fe59a1165584331fc1"
+    },
+    {
+      "name": "parquet_audit\\marine-conditional-numeric-comparison.json",
+      "sha256": "b0b47b330f9a9f3899c00816098955598d87392802b8e67c0afc15f0c7779129"
+    },
+    {
+      "name": "parquet_audit\\item-reference-state-summary.json",
+      "sha256": "2f618d606fb36782381cee2533f5edbd2409d6d4c9f40daf7db0889242468766"
+    }
+  ],
+  "publication_match_sha256": "e3db6576e2dfa836c2ad26f73c4c12201a7602c6fb8334a0d49874dbb4d57ba0",
+  "live_verification": {
+    "checked_at": "2026-10-08T08:13:45.999494+00:00",
+    "status": "PASS",
+    "default_month": "2026-07",
+    "source_default_stations": 61,
+    "july_marine_codes": [
+      "DT_0039",
+      "DT_0042"
+    ],
+    "july_south_marine_codes": [
+      "DT_0042"
+    ],
+    "july_east_marine_codes": [
+      "DT_0039"
+    ],
+    "historical_marine_count": 3,
+    "report_reference_codes": 70,
+    "report_coast_reference_codes": 52,
+    "legacy_coast_reference_differences": 22,
+    "legacy_registry_response_unchanged": true,
+    "all_four_source_counts_equal": true,
+    "report_audit_state": "CURRENT",
+    "configured_approval_writes_performed": false,
+    "backend_health": {
+      "status": "ok",
+      "environment": "development"
+    },
+    "backend_readiness": {
+      "status": "ready",
+      "database": "ok"
+    }
+  },
+  "numeric_examples": [
+    {
+      "station_name": "교본초",
+      "report_metric": "관측평균해수면",
+      "report_value": 162.9,
+      "report_unit": "cm",
+      "raw_value": 163.89758884698892,
+      "raw_value_rounded_to_report_precision": "163.9",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "고극조위",
+      "report_value": 319.0,
+      "report_unit": "cm",
+      "raw_value": 1125.0,
+      "raw_value_rounded_to_report_precision": "1125.0",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "저극조위",
+      "report_value": 24.0,
+      "report_unit": "cm",
+      "raw_value": -51.0,
+      "raw_value_rounded_to_report_precision": "-51.0",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "기압",
+      "report_value": 1007.4,
+      "report_unit": "hPa",
+      "raw_value": 1007.4410051540677,
+      "raw_value_rounded_to_report_precision": "1007.4",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "기온",
+      "report_value": 25.3,
+      "report_unit": "℃",
+      "raw_value": 25.30217244484472,
+      "raw_value_rounded_to_report_precision": "25.3",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "풍속",
+      "report_value": 3.9,
+      "report_unit": "m/s",
+      "raw_value": 3.860110310670871,
+      "raw_value_rounded_to_report_precision": "3.9",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "교본초",
+      "report_metric": "유의파고",
+      "report_value": 0.34,
+      "report_unit": "m",
+      "raw_value": 1.9912773722627826,
+      "raw_value_rounded_to_report_precision": "1.99",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 155,
+      "report_table_id": "3-98"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "관측평균해수면",
+      "report_value": 27.7,
+      "report_unit": "cm",
+      "raw_value": 27.699645533270516,
+      "raw_value_rounded_to_report_precision": "27.7",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "고극조위",
+      "report_value": 52.0,
+      "report_unit": "cm",
+      "raw_value": 1306.0,
+      "raw_value_rounded_to_report_precision": "1306.0",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "저극조위",
+      "report_value": 6.0,
+      "report_unit": "cm",
+      "raw_value": -9.0,
+      "raw_value_rounded_to_report_precision": "-9.0",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "기압",
+      "report_value": 1006.0,
+      "report_unit": "hPa",
+      "raw_value": 1006.0468344774936,
+      "raw_value_rounded_to_report_precision": "1006.0",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "기온",
+      "report_value": 24.0,
+      "report_unit": "℃",
+      "raw_value": 24.020160656988335,
+      "raw_value_rounded_to_report_precision": "24.0",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "풍속",
+      "report_value": 5.5,
+      "report_unit": "m/s",
+      "raw_value": 5.506159265824505,
+      "raw_value_rounded_to_report_precision": "5.5",
+      "rounded_numeric_agreement": true,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    },
+    {
+      "station_name": "왕돌초",
+      "report_metric": "유의파고",
+      "report_value": 0.42,
+      "report_unit": "m",
+      "raw_value": 0.44709066305818607,
+      "raw_value_rounded_to_report_precision": "0.45",
+      "rounded_numeric_agreement": false,
+      "report_pdf_page": 171,
+      "report_table_id": "3-114"
+    }
+  ],
+  "artifact_scope_note": "Frozen technical evidence. Raw source, physical sensor periods, QC and operational decisions are unapproved. All 259 tables and 275 figures are not numerically reproduced.",
+  "pdf_inventory_verification_sha256": "d3266aa19a8ffd2aeb5271ab7e7933cc544a46020bf92305f31dca1aeb35eadc",
+  "independent_parquet_cross_review_sha256": "b2a1b5eecf7fcc91b7de8f26fed5af998e3911cd0f036d1d0cb492c94e712c60"
+}

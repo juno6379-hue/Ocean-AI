@@ -12,7 +12,8 @@ from sqlalchemy import func, text
 from app.core.database import SessionLocal, engine
 from app.models.domain import ObservationRaw, ObservationStandard, StationMetadata, SensorMetadata
 from app.models.evidence import MDCSensorCatalog
-from app.services.mdc_sensor_catalog import sync_catalog, catalog_records, checksum
+from app.services.mdc_sensor_catalog import (sync_catalog, catalog_records, catalog_version,
+    CATALOG_INTERPRETATION_VERSION)
 from app.scripts.sync_mdc_db import init_oracle, fetch_oracle_data
 
 
@@ -40,7 +41,8 @@ def reconcile(source, apply=False):
         records = catalog_records(source, set(station_ids))
         result = {'checked_at': datetime.now(timezone.utc).isoformat(), 'applied': apply,
                   'source_counts': {key: len(value) for key, value in source.items()},
-                  'station_ids': station_ids, 'catalog_version': checksum([(r['sensor_id'], r['source_hash']) for r in records]),
+                  'station_ids': station_ids, 'catalog_version': catalog_version(records),
+                  'interpretation_version': CATALOG_INTERPRETATION_VERSION,
                   'source_channel_count': len(records), 'issue_counts': dict(Counter(issue for r in records for issue in r['issues']))}
         if apply:
             if db.bind.dialect.name == 'postgresql':

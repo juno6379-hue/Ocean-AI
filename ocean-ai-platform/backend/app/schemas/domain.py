@@ -19,6 +19,12 @@ class Station(StationBase):
     install_date: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
+    classification_basis: Optional[str] = None
+    reference_month: Optional[str] = None
+    reference_name: Optional[str] = None
+    reference_document_sha256: Optional[str] = None
+    metadata_network_type: Optional[str] = None
+    metadata_sea_area: Optional[str] = None
 
     class Config:
         from_attributes = True

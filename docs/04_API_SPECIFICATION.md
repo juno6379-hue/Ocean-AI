@@ -1,6 +1,10 @@
 # 04. API 명세
 
-기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **145 경로·153 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 기본 API 주소는 `http://127.0.0.1:8000`이다.
+7월 현황 확장: `/api/lake/summary`, `/monitoring`, `/daily-reports`, `/equipment-evidence`, `/stations/{station}`의 기본 월은2026-07이다. `/api/lake/publication-comparison`은 기준월과 원천별 동결 검증 결과·명시적 예외를 제공한다. `/api/stations`와 `/api/stations/catalog/classifications`의 선택 `as_of_month=2026-07`은 승인과 별개인 읽기 전용 문서 참조다. [검증범위·checksum·STALE응답](27_JULY_REPORT_PARQUET_MATCH.md)을 확인한다.
+
+기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **154 경로·163 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 최신 검증 API 주소는 `http://127.0.0.1:8010`이며 기존 canonical8000을 유지한다.
+
+`GET /api/lake/metric-completion`의 원천·월·관측소·항목·시설·해역 진단과 `GET /api/service-monitoring/overview`의 현재 프로세스 HTTP 집계는 [지표28](28_METRIC_COMPLETION.md)을 따른다. 지표 checksum·월 불일치는409, 손상503, snapshot변경은STALE/null이며 선택 기간 밖 값은 사용하지 않는다.
 
 ## 인증·오류·운영 경계
 
@@ -321,12 +325,14 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | [/api/lake/daily-reports](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/equipment-evidence](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/summary](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/publication-comparison](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
+| [/api/lake/metric-completion](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/stations/{station}](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/series](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | GET: source<br>GET: month<br>GET: station<br>GET: item |
 
 ## 검증 범위
 
-위 145개 경로·153개 operation은 2026-10-08 최신 backend 읽기 전용 OpenAPI와 등록 라우터를 대조했다. 이는 API 등록·입력 계약 확인이다. 실원천 승인, 전체 endpoint 쓰기 성공, 모델 학습·배포 완료를 뜻하지 않는다. 상태를 변경하는 endpoint는 실제 검토 자료와 권한·현재 승인 원장이 준비된 뒤 사용한다.
+위 154개 경로·163개 operation은 2026-10-08 최신 backend 읽기 전용 OpenAPI와 등록 라우터를 대조했다. 이는 API 등록·입력 계약 확인이다. 실원천 승인, 전체 endpoint 쓰기 성공, 모델 학습·배포 완료를 뜻하지 않는다. 상태를 변경하는 endpoint는 실제 검토 자료와 권한·현재 승인 원장이 준비된 뒤 사용한다.
 
 ### 10/8 추가 경로
 
@@ -343,3 +349,16 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | [/api/anomaly-analysis/fit](../ocean-ai-platform/backend/app/api/routes_anomaly_analysis.py) | POST | POST: FitRequest* | — |
 | [/api/qc/rule-catalog](../ocean-ai-platform/backend/app/api/routes_qc.py) | GET | — | — |
 | [/api/qc/rules/evaluate](../ocean-ai-platform/backend/app/api/routes_qc.py) | POST | POST: EvaluateRulesRequest* | — |
+## 10/8 단계별 보완 결과
+
+| 경로 | Method | 입력·권한 |
+|---|---|---|
+| `/api/development-stages/review` | GET | 고정 artifact root·SHA·13축 검토, 운영 승인 아님 |
+| `/api/model-development/task-readiness` | GET | 72 source keys·현재 승인 입력 준비; 실제 serving 원장 별도 |
+| `/api/model-development/training-manifests` | GET, POST | 조회 / operator·reviewer·admin의 승인 TRAIN/VALIDATION/TEST dataset IDs |
+| `/api/model-development/training-preflight` | GET | 허용 manifest_path·expected_sha256·현재 승인 검증 |
+| `/api/model-development/policy-bundle` | GET | selection_json 정책 초안 검토; 잘못된 shape409 |
+| `/api/model-development/datasets/{dataset_id}/migration-review` | GET | new_dataset_id·new_version·dependencies_json, 읽기 전용 |
+| `/api/model-development/datasets/{dataset_id}/migrate-v2` | POST | MigrationRequest·actor·expected legacy/review SHA, 새 BUILT v2만 생성 |
+
+enqueue/retrain은 선택한 manifest expected SHA를 받는다. preflight 실패는 큐 생성 이전에 차단하며 큐가 다시 현재 입력을 검증한다. 실제 계정 미설정503, 범위 밖 경로·malformed nested 입력409를 실검증했다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).

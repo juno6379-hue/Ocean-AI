@@ -1,6 +1,7 @@
 // 파일 역할: 시스템 설정과 운영 상태를 표시합니다.
 import { API_BASE_URL } from '../api/client';
 import SourceConnections from '../components/SourceConnections';
+import DevelopmentStageReview from '../components/DevelopmentStageReview';
 import React, { useState, useEffect } from 'react';
 import { apiClient as axios } from '../api/client';
 import { isAxiosError } from 'axios';
@@ -65,6 +66,7 @@ const System: React.FC = () => {
   return (
     <div className="p-6 bg-[#F8FAFC] min-h-full">
       <SourceConnections />
+      <DevelopmentStageReview />
       {loadError && <p role="alert" className="text-red-700">{loadError}</p>}
       {runtimeError && <p role="alert" className="text-red-700">{runtimeError}</p>}
       {runError && <p role="alert" className="text-red-700">{runError}</p>}
@@ -101,7 +103,7 @@ const System: React.FC = () => {
         <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-center items-center">
           <span className="text-slate-500 text-sm font-medium">성공률</span>
           <span className="text-3xl font-bold text-blue-600 mt-2">
-            {loaded && results.length > 0 ? `${Math.round((successCount / results.length) * 100)}%` : '미산정'}
+            {loaded && results.length > 0 ? `${Math.round((successCount / results.length) * 100)}%` : loadError ? '조회 실패' : loaded ? '평가대상 없음' : '조회 중'}
           </span>
         </div>
       </div>

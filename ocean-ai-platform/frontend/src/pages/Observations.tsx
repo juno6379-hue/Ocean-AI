@@ -1,6 +1,10 @@
 import StationClassifications, { DatasetSourceSelect } from '../components/StationClassifications';
 import OSMBaseLayer from '../components/OSMBaseLayer';
 import StationQuickView from '../components/StationQuickView';
+import MonthlyReportComparison from '../components/MonthlyReportComparison';
+import MetricCompletionPanel, { useMetricCompletion } from '../components/MetricCompletionPanel';
+import { countMetric, gridPercent, percentMetric, qcPresencePercent } from '../data/metricPresentation';
+import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
 // 파일 역할: 관측 현황과 관측소 위치를 표시합니다.
 import { API_BASE_URL, apiFetch } from '../api/client';
 import React, { useState, useEffect } from 'react';
@@ -51,12 +55,16 @@ const Observations: React.FC = () => {
   const [refreshSeconds, setRefreshSeconds] = useState(0);
   const [search, setSearch] = useSearchParams();
   const navigate = useNavigate();
-  const source = search.get('source') || 'GD_OBS_ST_MONTHLY';
-  const from = search.get('from') || (source === 'HISTORICAL_RECONCILED' ? '2011-01' : '2023-01');
-  const to = search.get('to') || (source === 'HISTORICAL_RECONCILED' ? '2021-12' : '2026-07');
+  const { source, from, to } = observationPeriod(search);
+  const julyReference = from === CURRENT_OBSERVATION_MONTH && to === CURRENT_OBSERVATION_MONTH;
+  const metadataQuery = new URLSearchParams({limit:'10000'});
+  if (julyReference) metadataQuery.set('as_of_month', CURRENT_OBSERVATION_MONTH);
   const query = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from_month:from, to_month:to}).toString();
   const linkQuery = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from, to}).toString();
   const update = (changes: Record<string, string>) => setSearch({...Object.fromEntries(search), ...changes});
+  const completion=useMetricCompletion(query,revision,lake?.snapshot);
+  const stationMetrics=new Map(completion.data?.raw?.stations.map(row=>[row.station_code,row])||[]);
+  const metricWaiting=completion.loading?'조회 중':completion.error?'조회 실패':completion.data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음';
   const [stationSearch, setStationSearch] = useState('');
   const [chartData, setChartData] = useState<any[]>([]);
   const [mapMarkers, setMapMarkers] = useState<any[]>([]);
@@ -112,7 +120,7 @@ const Observations: React.FC = () => {
     if (from > to) { setError('시작월은 종료월보다 늦을 수 없습니다.'); setLoading(false); return () => control.abort(); }
     Promise.all([
       read(`/lake/summary?${query}`),
-      read('/stations?limit=10000').catch(() => {if (!control.signal.aborted) setMetadataError('지도 기준정보 조회 실패'); return []; }),
+      read(`/stations?${metadataQuery}`).catch(() => {if (!control.signal.aborted) setMetadataError('지도 기준정보 조회 실패'); return []; }),
     ]).then(([data, metadata]) => {
       if (control.signal.aborted) return;
       const references = new Map<string, any[]>();
@@ -123,11 +131,11 @@ const Observations: React.FC = () => {
         const ref = matches.length === 1 ? matches[0] : null;
         const valid = Number.isFinite(ref?.latitude) && Number.isFinite(ref?.longitude)
           && Math.abs(ref.latitude) <= 90 && Math.abs(ref.longitude) <= 180;
-        return {id:r.station_code, name:r.station_name || r.station_code,
+        return {id:r.station_code, name:r.station_name || r.reference_name || ref?.reference_name || ref?.station_name || r.station_code,
           net:ref ? (ref.network_type || 'DB 분류값 없음') : 'DB 기준정보 미등록', sea:ref ? (ref.sea_area || 'DB 해역값 없음') : 'DB 기준정보 미등록',
           lat:valid ? ref.latitude : null, lng:valid ? ref.longitude : null,
-          rate:'미산정', stat:'미확정', status:'미확정', statColor:'text-slate-500',
-          time:r.last_clock || '미확정', first:r.first_clock, delay:'미산정',
+          rate:'필요입력 없음', stat:'필요입력 없음', status:'미확정', statColor:'text-slate-500',
+          time:r.last_clock || '미확정', first:r.first_clock, delay:'필요입력 없음',
           note:`${r.held_rows.toLocaleString('ko-KR')}행 · ${r.items}항목 · ${r.held_months}개월`,
           held_rows:r.held_rows, items:r.items, months:r.held_months};
       });
@@ -156,7 +164,7 @@ const Observations: React.FC = () => {
     }).catch(e => {if (!control.signal.aborted) setError(`실측자료 조회 실패: ${e.message}`);})
       .finally(() => {if (!control.signal.aborted) setLoading(false);});
     return () => control.abort();
-  }, [query, revision]);
+  }, [query, metadataQuery.toString(), revision]);
 
   useEffect(() => {
     setFilterNet('전체 관측망'); setFilterSea('전체 해역'); setFilterStat('전체 상태');
@@ -194,80 +202,18 @@ const Observations: React.FC = () => {
       {loading && <p role="status" className="text-sm text-blue-600">보유 자료 조회 중…</p>}
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
 
-      {/* 6 Top Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-blue-600 mb-2">
-            <div className="bg-blue-50 p-1.5 rounded-lg"><Building2 className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">보유 관측소</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">{summary.total ?? '—'} <span className="text-sm font-normal text-slate-500">개소</span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>운영중 <span className="font-bold text-slate-700">미확정</span></span>
-            <span>정지 <span className="font-bold text-slate-700">미확정</span></span>
-          </div>
-        </div>
+      <MonthlyReportComparison source={source} from={from} to={to}/>
 
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-blue-600 mb-2">
-            <div className="bg-blue-50 p-1.5 rounded-lg"><Activity className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">수집률</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">미산정 <span className="text-sm font-normal text-slate-500"></span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>수신 이력 검증 전</span>
-            <span className="text-emerald-500 font-bold flex items-center gap-0.5">미산정</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-emerald-500 mb-2">
-            <div className="bg-emerald-50 p-1.5 rounded-lg"><CheckCircle className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">정상 수신 중</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">미확정 <span className="text-sm font-normal text-slate-500">개소</span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>수신 이력 검증 전</span>
-            <span className="text-emerald-500 font-bold">미산정</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-amber-500 mb-2">
-            <div className="bg-amber-50 p-1.5 rounded-lg"><Clock className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">수신 지연</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">미확정 <span className="text-sm font-normal text-slate-500">개소</span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>수신 이력 검증 전</span>
-            <span className="text-amber-500 font-bold">미산정</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-red-500 mb-2">
-            <div className="bg-red-50 p-1.5 rounded-lg"><AlertTriangle className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">수신 중단</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">미확정 <span className="text-sm font-normal text-slate-500">개소</span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>수신 이력 검증 전</span>
-            <span className="text-amber-500 font-bold">미산정</span>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center gap-2 text-blue-600 mb-2">
-            <div className="bg-blue-50 p-1.5 rounded-lg"><Database className="w-5 h-5" /></div>
-            <span className="text-xs font-bold text-slate-700">보유 원천 행 수</span>
-          </div>
-          <p className="text-xl xl:text-2xl font-black break-all text-slate-800">{summary.held_rows?.toLocaleString('ko-KR') ?? '—'} <span className="text-sm font-normal text-slate-500">건</span></p>
-          <div className="flex justify-between mt-3 text-[11px] text-slate-500 border-t border-slate-100 pt-2">
-            <span>원천 보유량</span>
-            <span className="text-slate-500 font-bold">선택 기간 합계</span>
-          </div>
-        </div>
-      </div>
+      <MetricCompletionPanel {...completion}/>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">{[
+        ['자료 보유 관측소',summary.total==null?'조회 중':countMetric(summary.total),'선택 기간 보유 코드 · 운영 시설 수 아님',Building2],
+        ['시간격자 보유율 (참고)',completion.data?.raw?gridPercent(completion.data.raw.grid):metricWaiting,'원시 유일 슬롯 · 실제 수집률 아님',Activity],
+        ['원시 결측표현율',completion.data?.raw?percentMetric(completion.data.raw.missing_value_rate,completion.data.raw.held_rows):metricWaiting,'결측 표현 / 보유 행',AlertTriangle],
+        ['수치 표현율',completion.data?.raw?percentMetric(completion.data.raw.numeric_row_rate,completion.data.raw.held_rows):metricWaiting,'수치 해석 가능 · 정상률 아님',CheckCircle],
+        ['원천 QC 표기율',completion.data?.raw?qcPresencePercent(completion.data.raw):metricWaiting,'QC 코드 표기 · 승인 분류 아님',Clock],
+        ['보유 원천 행 수',summary.held_rows==null?'조회 중':countMetric(summary.held_rows),'중복 제거 전 · 선택 기간 합계',Database],
+      ].map(([label,value,note,Icon]:any)=><article key={label} className="rounded-xl border bg-white p-4 shadow-sm"><Icon className="w-5 h-5 text-blue-600 mb-2"/><h2 className="text-xs font-bold">{label}</h2><p className="text-xl font-black my-2 break-words">{value}</p><p className="text-[11px] text-slate-500">{note}</p></article>)}</div>
+      <p className="text-xs text-slate-600">실제 수집률·정상수신/지연/중단 개소·지연시간: 필요입력 없음. 승인된 관측주기·운영구간·수신 원장과 관측/수신 시각의 시간대·지연 허용 기준이 필요합니다. 자료 보유나 격자 빈칸을 수신 중단으로 판정하지 않습니다.</p>
 
       {/* Main Grid Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -276,7 +222,7 @@ const Observations: React.FC = () => {
         <div className="xl:col-span-1 flex flex-col gap-5">
           {/* Map */}
           <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex flex-col h-[400px]">
-            <h3 className="text-sm font-bold text-slate-800 mb-2">관측소 위치 및 상태 지도</h3><p className="text-[10px] text-slate-500 mb-2">기존 PostgreSQL 좌표·관측망·해역 참조 · 지도 {mapMarkers.length}/{summary.total ?? '—'}개소 · {metadataError || '좌표 누락 관측소는 표에서 조회'}</p>
+            <h3 className="text-sm font-bold text-slate-800 mb-2">관측소 위치 및 상태 지도</h3><p className="text-[10px] text-slate-500 mb-2">{julyReference ? '7월 보고서 대조 참조 및 기존 DB 기준정보' : '기존 DB 좌표·관측망·해역 참조'} · 운영 상태 미확정 · 지도 {mapMarkers.length}/{summary.total ?? '—'}개소 · {metadataError || '좌표 누락 관측소는 표에서 조회'}</p>
             <div className="flex-1 rounded-lg overflow-hidden border border-slate-200 relative">
               <MapContainer center={[36.5, 127.5]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={false}>
                 <OSMBaseLayer/>
@@ -343,7 +289,7 @@ const Observations: React.FC = () => {
                     <th className="py-2.5 px-3 font-medium">관측소명</th>
                     <th className="py-2.5 px-3 font-medium">관측망</th>
                     <th className="py-2.5 px-3 font-medium">해역</th>
-                    <th className="py-2.5 px-3 font-medium text-right">수집률</th>
+                    <th className="py-2.5 px-3 font-medium text-right">시간격자 보유율 (참고)</th>
                     <th className="py-2.5 px-3 font-medium text-center">수신 상태</th>
                     <th className="py-2.5 px-3 font-medium text-center">최종 관측시각(시간대 미확정)</th>
                     <th className="py-2.5 px-3 font-medium text-center">지연 시간</th>
@@ -356,7 +302,7 @@ const Observations: React.FC = () => {
                       <td className="py-2.5 px-3 font-medium text-slate-800"><button aria-pressed={selectedStation===row.id} className="text-blue-700 hover:underline text-left" onClick={()=>setSelectedStation(row.id)}>{row.name}<span className="block text-[10px] text-slate-500">{row.id}</span></button></td>
                       <td className="py-2.5 px-3">{row.net}</td>
                       <td className="py-2.5 px-3">{row.sea}</td>
-                      <td className="py-2.5 px-3 text-right">{row.rate}</td>
+                      <td className="py-2.5 px-3 text-right" title={stationMetrics.get(row.id)?.grid.reason}>{completion.data?.raw?gridPercent(stationMetrics.get(row.id)?.grid):metricWaiting}</td>
                       <td className={`py-2.5 px-3 text-center font-bold ${row.statColor}`}>{row.stat}</td>
                       <td className="py-2.5 px-3 text-center">{row.time}</td>
                       <td className="py-2.5 px-3 text-center">{row.delay}</td>

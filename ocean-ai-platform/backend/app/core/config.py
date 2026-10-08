@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     LAKE_WEB_POSTGRES_CATALOG: bool = True
     INTEGRATED_LAKE_ROOT: str = "D:/AI_Observation/data_lake/spool_2001_2026"
     SHARE_MONTHLY_LAKE_ROOT: str = "D:/AI_Observation/data_lake/share_monthly_2023_2026"
+    MONTHLY_REPORT_MATCHING_ROOT: str = "D:/AI_Observation/outputs/monthly-report-matching"
+    DEVELOPMENT_STAGES_ROOT: str = "D:/AI_Observation/outputs/development-stages-20261008"
     # Additional administrator-registered databases refer to server environment
     # secrets by name. Credentials are never returned to the browser.
     EXTERNAL_SOURCE_CONNECTIONS: Dict[str, Dict[str, str]] = {}

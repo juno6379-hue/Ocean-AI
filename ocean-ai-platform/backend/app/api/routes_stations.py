@@ -1,5 +1,5 @@
 # 파일 역할: 관측소 기준정보 관련 요청을 검증하고 API 응답을 제공합니다.
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -10,14 +10,17 @@ from app.schemas.domain import Station
 router = APIRouter(prefix="/api/stations", tags=["Stations"])
 
 @router.get("", response_model=List[Station])
-def get_stations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_stations(skip: int = 0, limit: int = 100, as_of_month: str|None=Query(None,pattern=r'^(19|20)\d{2}-(0[1-9]|1[0-2])$'), db: Session = Depends(get_db)):
     stations = db.query(StationMetadata).offset(skip).limit(limit).all()
-    return stations
+    if as_of_month is None:return stations
+    from app.services.station_classification import reference_records
+    records=[{column.name:getattr(row,column.name) for column in StationMetadata.__table__.columns} for row in stations]
+    return reference_records(records,as_of_month)
 
 @router.get('/catalog/classifications')
-def classifications(db: Session=Depends(get_db)):
+def classifications(as_of_month: str|None=Query(None,pattern=r'^(19|20)\d{2}-(0[1-9]|1[0-2])$'), db: Session=Depends(get_db)):
     from app.services.station_classification import catalog
-    return catalog(db)
+    return catalog(db,as_of_month)
 
 @router.get("/{station_id}", response_model=Station)
 def get_station(station_id: str, db: Session = Depends(get_db)):

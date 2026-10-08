@@ -166,9 +166,8 @@ class DatabaseAuthority:
                     for r in snapshot.get("records", [])}
         if stored != expected or len(members) != len(snapshot.get("records", [])):
             raise ComparisonBlocked("FROZEN_MEMBERSHIP_MISMATCH", dataset.dataset_id)
-        # The current builder has no reviewed source-contract dependency freeze.
-        # Refusing it here prevents receipt.json's self-declared APPROVED from
-        # becoming human approval of a dataset outside the approved content hash.
+        # Legacy v1 snapshots lack the reviewed dependency freeze now provided
+        # by v2. A receipt's APPROVED string cannot upgrade their authority.
         if not snapshot.get("source_contracts"):
             raise ComparisonBlocked("SOURCE_CONTRACT_NOT_FROZEN_IN_DATASET",
                 "Legacy dataset snapshots lack reviewed unit/QC/physical-sensor/period/as-of dependencies")
@@ -333,6 +332,8 @@ def _preflight(manifest_path, authority):
     reject_reparse(manifest_path)
     manifest_path = Path(manifest_path).resolve()
     manifest, manifest_sha = read_json(manifest_path)
+    if not isinstance(manifest, dict):
+        raise ComparisonBlocked('COMPARISON_MANIFEST_SCHEMA_REQUIRED')
     if manifest.get("schema_version") not in {SCHEMA, "typed-model-comparison-2"} or manifest.get("task") not in {"FORECASTING", "ANOMALY_DETECTION", "QUALITY_REVIEW"}:
         raise ComparisonBlocked("UNSUPPORTED_TASK_ADAPTER")
     if manifest.get("schema_version") == SCHEMA and (manifest.get("data_domain") != "SCALAR" or manifest["task"] != "FORECASTING"):

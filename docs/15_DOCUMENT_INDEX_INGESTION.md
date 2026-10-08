@@ -66,3 +66,6 @@ python -m app.scripts.ingest_document_library --source "$DocumentRoot" --retry-f
 고유 성공 문서는 1,603개, 원장상 indexed chunk는 244,680개였다. 대상 성공률은 62.85%, 전체 정산율은 97.64%, 대상 처리율은 65.77%이며 최근 실행 `20261006T134703`은 PARTIAL이었다. 이 GET은 현재 vector 검색·cosine 실측이나 문서 전수 내용 검토를 수행하지 않았다. 1,603개 색인 성공 문서와 별도 원천 승인 검토 문서 범위를 합쳐 승인 분모를 만들지 않는다.
 
 [document pipeline 시험](../ocean-ai-platform/backend/tests/test_document_pipeline.py)은 문맥/날짜/표 파싱, 중복, idempotency, 벡터 실패 시 SQL 미공개, 검색 score 경계를 확인한다. 남은 대기·실패와 유형별 사유를 정산하고 실제 active contract·SQL/vector ID 대응을 별도 확인해야 한다. 검색 계약은 [Hybrid Retrieval](16_HYBRID_RETRIEVAL.md)을 따른다.
+## 10/8 단계별 보완 결과
+
+전수1,842경로의 원본·별도 보존 SHA가 모두 일치했다. parser는1,584 parseable/113font partial/144encrypted/1damaged다. unique951 중 parseable786이며 별도 local collection에 81개 내용/8,761chunks를 완료했다. exact ordinal 재개와 operator 승격 검토를 구현했다. canonical pending1,697/failed145와 실제 published0을 유지한다. 전량 약358만 semantic blocks의 embedding 완료가 아니다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md), [85](85_OPERATIONS_RECOVERY_REVIEW.md).

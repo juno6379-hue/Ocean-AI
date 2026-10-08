@@ -5,6 +5,7 @@ import { MapContainer, CircleMarker, Popup } from 'react-leaflet';
 import { Settings, Wrench, CalendarDays, ShieldCheck, RefreshCw } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import OSMBaseLayer from './OSMBaseLayer';
+import { observationPeriod } from '../data/observationPeriod';
 import { API_BASE_URL, apiFetch } from '../api/client';
 
 const panel='bg-white border border-blue-100 rounded-2xl p-5 shadow-sm min-w-0';
@@ -13,7 +14,7 @@ function Citation({row}:{row:any}) {return <details className="text-xs mt-2"><su
 
 export default function EquipmentWorkspace() {
   const [search,setSearch]=useSearchParams();
-  const source=search.get('source')||'GD_OBS_ST_MONTHLY',from=search.get('from')||(source==='HISTORICAL_RECONCILED'?'2011-01':'2023-01'),to=search.get('to')||(source==='HISTORICAL_RECONCILED'?'2021-12':'2026-07');
+  const { source, from, to } = observationPeriod(search);
   const station=search.get('station')||'';
   const update=(v:Record<string,string>)=>setSearch({...Object.fromEntries(search),...v});
   const baseQuery=new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source,from_month:from,to_month:to}).toString();
@@ -47,7 +48,7 @@ export default function EquipmentWorkspace() {
     {loading&&<p role="status" className="text-sm text-blue-600">검증된 문서·관측소 연결을 조회하고 있습니다…</p>}{error&&<p role="alert" className="text-red-700">{error}</p>}
     <p className="text-xs text-slate-500">검증본 {data?.snapshot||'조회 대기'} · {data?.limitations} · 현재 운영 중인 장비의 승인된 등록부와는 별도입니다.</p>
     <div className="grid grid-cols-2 xl:grid-cols-5 gap-4">{[
-      ['설치 이력 후보',data?fmt(installs.length):'—','선택 관측소 · 전체 이력',Settings],['점검 문서 행',data?fmt(data.inspections.length):'—','선택 기간 보고서 기준일',CalendarDays],['정비 사건 후보',data?fmt(data.maintenance.length):'—','선택 기간 문서 머리글 월',Wrench],['교체 예정 센서','미확정','승인된 교체 계획 미연결',RefreshCw],['유지보수 완료율','미산정','접수·완료 원장과 분모 필요',ShieldCheck],
+      ['설치 이력 후보',data?fmt(installs.length):'—','선택 관측소 · 전체 이력',Settings],['점검 문서 행',data?fmt(data.inspections.length):'—','선택 기간 보고서 기준일',CalendarDays],['정비 사건 후보',data?fmt(data.maintenance.length):'—','선택 기간 문서 머리글 월',Wrench],['교체 예정 센서','필요입력 없음','대상 센서·계획일·승인된 교체 계획 원장 필요',RefreshCw],['유지보수 완료율','필요입력 없음','접수 작업 ID·대상 기간·완료 시각·취소/제외 정책 원장 필요',ShieldCheck],
     ].map(([t,v,n,Icon]:any)=><section key={t} className={panel}><Icon className="w-6 h-6 text-blue-600 mb-3"/><h2 className="text-xs font-bold">{t}</h2><p className="text-2xl font-extrabold my-2">{v}</p><p className="text-[11px] text-slate-500">{n}</p></section>)}</div>
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
       <section className={panel}><h2 className="font-bold mb-3">관측소·장비 근거 지도</h2><div className="h-72 rounded-xl overflow-hidden"><MapContainer center={[36,127.5]} zoom={6} style={{height:'100%',width:'100%'}}><OSMBaseLayer/>{markers.map((s:any)=><CircleMarker key={s.station_code} center={[s.lat,s.lng]} radius={6} pathOptions={{color:'#64748b'}}><Popup><strong>{s.station_name||s.station_code}</strong><p>운영 상태 미확정</p><button className="text-blue-700 underline" onClick={()=>update({station:s.station_code})}>관측소 근거 조회</button></Popup></CircleMarker>)}</MapContainer></div><p className="text-xs text-slate-500 mt-3">{refError||`기존 PostgreSQL 좌표 참조 · 지도 ${markers.length}/${held.length}개소`} · 회색은 미확정</p></section>
