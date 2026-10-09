@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { apiFetch, API_BASE_URL } from '../api/client';
 import { observationPeriod, selectObservationSource } from '../data/observationPeriod';
+import {matchesLakeSummary,matchesLakeDetail,matchesLakeSeries} from '../data/observationCutoff';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ScatterChart, Scatter, CartesianGrid } from 'recharts';
 
 const sources: Record<string,string> = {
@@ -29,6 +30,8 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
   const network = search.get('network') || '';
   const sea = search.get('sea') || '';
   const requestedItem = search.get('item') || '';
+  const asOfDay=search.get('as_of_day')||undefined,asOfTime=search.get('as_of_time')||undefined;
+  const cutoff=useMemo(()=>({...((asOfDay)?{as_of_day:asOfDay}:{}),...(asOfTime?{as_of_time:asOfTime}:{})}),[asOfDay,asOfTime]);
   const [summary,setSummary] = useState<any>(null);
   const [detail,setDetail] = useState<any>(null);
   const [error,setError] = useState('');
@@ -41,8 +44,8 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
   const [seriesLoading,setSeriesLoading] = useState(false);
   const [offset,setOffset] = useState(0);
   const [revision,setRevision] = useState(0);
-  const query = new URLSearchParams({source,from_month:from,to_month:to,network,sea}).toString();
-  const linkQuery = new URLSearchParams({source,from,to,network,sea,...(requestedItem?{item:requestedItem}:{})}).toString();
+  const query = new URLSearchParams({source,from_month:from,to_month:to,network,sea,...cutoff}).toString();
+  const linkQuery = new URLSearchParams({source,from,to,network,sea,...cutoff,...(requestedItem?{item:requestedItem}:{})}).toString();
   const update = (changes:Record<string,string>) => setSearch({...Object.fromEntries(search),...changes});
 
   useEffect(()=>{
@@ -54,11 +57,11 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
       return r.json();
     };
     Promise.all([read(`/lake/summary?${query}`),station?read(`/lake/stations/${encodeURIComponent(station)}?${query}`):Promise.resolve(null)])
-      .then(([s,d])=>{if(!control.signal.aborted){setSummary(s);setDetail(station && !s.stations.some((r:any)=>r.station_code===station) ? null : d);}})
+      .then(([s,d])=>{if(!control.signal.aborted){const scope={source,from,to,day:asOfDay,time:asOfTime};if(!matchesLakeSummary(s,scope)||(d&&(!station||!matchesLakeDetail(d,scope,station,s.snapshot))))throw new Error('원천·기간·관측소·기준시각 응답 불일치');setSummary(s);setDetail(station && !s.stations.some((r:any)=>r.station_code===station) ? null : d);}})
       .catch(e=>{if(!control.signal.aborted)setError(e.message);})
       .finally(()=>{if(!control.signal.aborted)setLoading(false);});
     return()=>control.abort();
-  },[query,station,revision]);
+  },[query,station,revision,source,from,to,asOfDay,asOfTime]);
 
   const channels = useMemo(()=>{
     const map=new Map<string,any>();
@@ -80,15 +83,15 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
     setSeries(null);setSeriesError('');setSeriesLoading(false);
     if(!station || !channel || !selectedMonth)return;
     const control=new AbortController();setSeriesLoading(true);
-    const p=new URLSearchParams({source,station,item:channel.item,month:selectedMonth,limit:'500',offset:String(offset)});
+    const p=new URLSearchParams({source,station,item:channel.item,month:selectedMonth,limit:'500',offset:String(offset),...cutoff});
     ['depth_step','depth_from','depth_to'].forEach((key,i)=>{if(channel.depth[i]!=null)p.set(key,String(channel.depth[i]));});
     apiFetch(`${API_BASE_URL}/lake/series?${p}`,{signal:control.signal})
       .then(async r=>{if(!r.ok)throw new Error(`실측값 조회 실패 (HTTP ${r.status})`);return r.json();})
-      .then(s=>{if(!control.signal.aborted)setSeries(s);})
+      .then(s=>{if(!control.signal.aborted){if(!matchesLakeSeries(s,{source,from,to,day:asOfDay,time:asOfTime,station,item:channel.item,month:selectedMonth,depth:channel.depth,snapshot:detail.snapshot,limit:500,offset,tail:false}))throw new Error('관측소·항목·수심·기간·기준시각 응답 불일치');setSeries(s);}})
       .catch(e=>{if(!control.signal.aborted)setSeriesError(e.message);})
       .finally(()=>{if(!control.signal.aborted)setSeriesLoading(false);});
     return()=>control.abort();
-  },[source,station,channel,selectedMonth,offset,revision]);
+  },[source,station,channel,selectedMonth,offset,revision,asOfDay,asOfTime,cutoff,from,to,detail]);
 
   const title=mode==='dashboard'?'실측자료 통합 대시보드':mode==='observations'?'관측자료 보유 현황':`${station} 관측 상세`;
   const stations=(summary?.stations||[]).filter((s:any)=>`${s.station_code} ${s.station_name||''}`.toLowerCase().includes(filter.toLowerCase()));
@@ -97,6 +100,7 @@ export default function LakeExplorer({ mode, station }: {mode:'dashboard'|'obser
   return <div className="p-6 space-y-5 bg-slate-50 min-h-full text-slate-800">
     <div className="flex justify-between items-start"><div><h1 className="text-2xl font-bold">{title}</h1><p className="mt-1 text-sm text-slate-600">Parquet 실측 원천 → 공통 조회 API → 대시보드·현황·상세</p></div>
       <button className={field} onClick={()=>setRevision(r=>r+1)}>새로고침</button></div>
+    {asOfDay&&<p className="text-sm font-semibold">관측 기준일시: {asOfDay} {asOfTime||'일 종료'}</p>}
     <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm space-y-1">
       <p><strong>실측 원천 조회 · QC 승인 전</strong> — SIMULATED 자료는 이 화면에 포함하지 않습니다.</p>
       <p>보유 시계열은 확인할 수 있지만, 물리 센서·단위·시간대·QC의 미확정 조건은 남아 있습니다. 자료가 없는 월을 관측 중단으로 단정하지 않습니다.</p>

@@ -172,7 +172,11 @@ def monthly_assets(catalog, modified):
         return records(c.execute('SELECT * FROM source_assets'))
 
 
-def series(source, month, station, item, depth, limit, offset, tail=False):
+def series(source, month, station, item, depth, limit, offset, tail=False,as_of_day=None,as_of_time=None):
+    cutoff_end=None
+    if as_of_day:
+        from app.services.observation_asof import day_bounds,NATIVE_PATTERN
+        _,cutoff_end,_=day_bounds(month,as_of_day,as_of_time)
     view, _ = context()
     catalog = view/'file-only-timeseries.duckdb'
     if source == 'HISTORICAL_RECONCILED':
@@ -182,7 +186,9 @@ def series(source, month, station, item, depth, limit, offset, tail=False):
         assets = [a for a in monthly_assets(str(catalog), catalog.stat().st_mtime_ns)
                   if a['source_group']==source and month.replace('-','') in Path(a['source_path']).name]
     if not assets:
-        return {'rows': [], 'has_more': False, 'source': source, 'month': month, 'approval_status': 'UNAPPROVED'}
+        return {'rows': [], 'has_more': False, 'source': source, 'month': month,'station':station,'item':item,'tail':tail,
+                'offset':offset,'limit':limit,'snapshot':view.name,'as_of_day':as_of_day,'as_of_time':as_of_time,
+                'approval_status': 'UNAPPROVED'}
     root = historical_root() if source in ('HISTORICAL_RECONCILED','GD_OBS_ST_MONTHLY') else Path(settings.SHARE_MONTHLY_LAKE_ROOT)
     paths = [str(inside(root, a['parquet_path'])) for a in assets]
     with connection() as c:
@@ -197,17 +203,21 @@ def series(source, month, station, item, depth, limit, offset, tail=False):
             select = 'station_id_raw station_code,item_code_raw item_code,observed_at_raw observed_time_raw,value_raw,qc1_raw source_qc_raw,qc2_raw source_mq_raw,NULL::VARCHAR source_n1_qc_raw,received_at_raw received_time_raw,NULL::VARCHAR depth_step,NULL::VARCHAR depth_from,NULL::VARCHAR depth_to'
             extra = ''
         else:
-            select = 'trim(OBS_POST_ID) station_code,trim(OBS_ITEM_CODE) item_code,OBS_TIME observed_time_raw,OBS_VALUE value_raw,'+','.join(col(n)+' '+alias for n,alias in [('QC_FLAG','source_qc_raw'),('MQC_FLAG','source_mq_raw'),('N1_AQC_FLAG','source_n1_qc_raw'),('RECEIVE_TIME','received_time_raw'),('WATER_STEP','depth_step'),('FR_DEPTH','depth_from'),('TO_DEPTH','depth_to')])
+            if 'FROM_DEPTH' in cols and 'FR_DEPTH' in cols:raise HTTPException(409,'원천의 수심 별칭이 충돌합니다.')
+            from_depth='FROM_DEPTH' if 'FROM_DEPTH' in cols else 'FR_DEPTH'
+            select = 'trim(OBS_POST_ID) station_code,trim(OBS_ITEM_CODE) item_code,OBS_TIME observed_time_raw,OBS_VALUE value_raw,'+','.join(col(n)+' '+alias for n,alias in [('QC_FLAG','source_qc_raw'),('MQC_FLAG','source_mq_raw'),('N1_AQC_FLAG','source_n1_qc_raw'),('RECEIVE_TIME','received_time_raw'),('WATER_STEP','depth_step'),(from_depth,'depth_from'),('TO_DEPTH','depth_to')])
             extra = ''
         c.execute('CREATE VIEW normalized AS SELECT '+select+',filename,file_row_number FROM raw_files '+extra)
         year, mon = map(int, month.split('-'))
         end = f'{month}-{calendar.monthrange(year,mon)[1]:02d} 23:59:59.999999'
         direction = 'DESC' if tail else 'ASC'
+        cutoff_sql=' AND regexp_full_match(CAST(observed_time_raw AS VARCHAR),?) AND try_cast(observed_time_raw AS TIMESTAMP)<?::TIMESTAMP' if cutoff_end else ''
+        cutoff_args=[NATIVE_PATTERN,str(cutoff_end)] if cutoff_end else []
         rows = records(c.execute(f'''SELECT *,try_cast(value_raw AS DOUBLE) value_numeric FROM normalized
           WHERE station_code=? AND item_code=? AND try_cast(observed_time_raw AS TIMESTAMP) BETWEEN ?::TIMESTAMP AND ?::TIMESTAMP
-          AND depth_step IS NOT DISTINCT FROM ? AND depth_from IS NOT DISTINCT FROM ? AND depth_to IS NOT DISTINCT FROM ?
+          {cutoff_sql} AND depth_step IS NOT DISTINCT FROM ? AND depth_from IS NOT DISTINCT FROM ? AND depth_to IS NOT DISTINCT FROM ?
           ORDER BY try_cast(observed_time_raw AS TIMESTAMP) {direction},filename {direction},file_row_number {direction} LIMIT ? OFFSET ?''',
-          [station,item,month+'-01 00:00:00',end,*depth,limit+1,offset]))
+          [station,item,month+'-01 00:00:00',end,*cutoff_args,*depth,limit+1,offset]))
     by_path = {str(Path(a['parquet_path']).resolve()):a for a in assets}
     # Verify before returning any values. Unknown metadata stays null.
     for filename in {r['filename'] for r in rows}:
@@ -222,6 +232,6 @@ def series(source, month, station, item, depth, limit, offset, tail=False):
     return {'source':source,'month':month,'station':station,'item':item,'rows':rows[:limit],
             'has_more':len(rows)>limit,'offset':offset,'limit':limit,'storage':'PARQUET',
             'approval_status':'UNAPPROVED','snapshot':view.name,
-            'tail':tail,
+            'tail':tail,'as_of_day':as_of_day,'as_of_time':as_of_time,
             'ordering':('descending ' if tail else '')+'observed source clock, filename, file row number',
             'note':'원천 시각·값·QC 보존. 중복 제거·결측 보간·센서 추정·UTC 변환 없음.'}

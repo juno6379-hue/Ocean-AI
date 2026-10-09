@@ -16,6 +16,7 @@ import { observationContext } from '../data/observationPeriod';
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
+  const observationsPage=path==='/observations';
   const context = observationContext(new URLSearchParams(location.search));
   const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -37,7 +38,7 @@ const Layout: React.FC = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden relative">
+    <div className={'flex h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden relative '+(observationsPage?'observations-shell':'')}>
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div
@@ -47,7 +48,7 @@ const Layout: React.FC = () => {
       )}
 
       {/* Left Sidebar (Dark Theme) */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 bg-[#0F172A] border-r border-slate-800 flex flex-col shrink-0 transform transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'w-20' : 'w-64'} ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <aside className={`platform-sidebar fixed lg:static inset-y-0 left-0 z-50 bg-[#0F172A] border-r border-slate-800 flex flex-col shrink-0 transform transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'w-20 collapsed' : 'w-64'} ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-5 flex flex-col items-center justify-center border-b border-slate-800 relative h-32">
           <Waves className={`text-blue-400 transition-all ${isSidebarCollapsed ? 'w-8 h-8 mb-0' : 'w-10 h-10 mb-3'}`} />
           {!isSidebarCollapsed && (
@@ -107,7 +108,7 @@ const Layout: React.FC = () => {
 
       {/* Main Content Area (Light Theme) */}
       <main className="flex-1 flex flex-col overflow-hidden bg-[#F8FAFC] w-full">
-        <OperatorSession />
+        {!observationsPage&&<OperatorSession />}
         {/* Mobile Header */}
         <header className="lg:hidden h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-2">
@@ -119,10 +120,11 @@ const Layout: React.FC = () => {
           </button>
         </header>
 
-        <div className="flex-1 overflow-auto">
-          <WorkflowStatus />
+        <div className="flex-1 overflow-auto platform-content">
+          {!observationsPage&&<WorkflowStatus />}
           <MenuPurpose />
           <Outlet />
+          {observationsPage&&<details className="obs-access-panel"><summary>검토 환경·담당자 연결·업무 단계</summary><OperatorSession/><WorkflowStatus/></details>}
         </div>
       </main>
 

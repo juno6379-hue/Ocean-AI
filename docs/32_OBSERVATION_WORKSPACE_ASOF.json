@@ -1,0 +1,192 @@
+{
+  "schema_version": "observation-workspace-asof-verification-1",
+  "checked_at": "2026-10-09T07:29:44.577808+00:00",
+  "base_revision": "75c5661ae86e9cacf1c71b681d27ca7a88dfabd2",
+  "scope": "Development observation UI, native cutoff, exact values/graphs and station photographs; no operational approval or model deployment",
+  "agents": {
+    "ui_values_graphs": "COMPLETE",
+    "ui_data_review": "COMPLETE",
+    "station_photos": "COMPLETE",
+    "peer_contract_comparison": "PASS",
+    "parent_final_verification": "PASS"
+  },
+  "backend_tests": {
+    "passed": 788,
+    "skipped": 1,
+    "warnings": 21,
+    "seconds": 242.57,
+    "failed": 0,
+    "log_sha256": "0188041f9eafa4c54f6416ebe3d0d382d2db65f4c0b26ce920856a2c206b3344",
+    "database_scope": "isolated regression; no operational database writes"
+  },
+  "frontend_tests": {
+    "passed": 45,
+    "failed": 0,
+    "log_sha256": "941883134d6acc109eeab6a6281f38938850942c51472f10613e3aad4ebc53a0"
+  },
+  "frontend_build": {
+    "status": "PASS",
+    "log_sha256": "e9887cda0bcc4bc9d7fd5511e0e7b2a13135bc180e06d98d3c19c41cb3991f3c",
+    "warning": "existing bundle exceeds 500 kB"
+  },
+  "frontend_lint": {
+    "status": "PASS",
+    "changed_file_warnings": 0,
+    "existing_warnings": 12,
+    "log_sha256": "a6fc106bd21f6a587550724b139c26111ff6cfbabec56490c9619f7bc9161334"
+  },
+  "browser": {
+    "checks": [
+      {
+        "name": "real_five_values_and_temperature_240_points",
+        "passed": true
+      },
+      {
+        "name": "wind_direction_discrete_240_actual_points",
+        "passed": true
+      },
+      {
+        "name": "actual_24_record_switch",
+        "passed": true
+      },
+      {
+        "name": "keyboard_and_24_raw_record_table",
+        "passed": true
+      },
+      {
+        "name": "station_switch_values_photo_and_cutoff",
+        "passed": true
+      },
+      {
+        "name": "detail_profile_preserves_cutoff",
+        "passed": true
+      },
+      {
+        "name": "station_search_and_pagination",
+        "passed": true
+      },
+      {
+        "name": "map_mouse_wheel_zoom",
+        "passed": true
+      },
+      {
+        "name": "mobile_400px_no_document_overflow",
+        "passed": true
+      },
+      {
+        "name": "desktop_actual_graph_visual",
+        "passed": true
+      },
+      {
+        "name": "sea_scope_summary_and_list",
+        "passed": true
+      }
+    ],
+    "passed": 11,
+    "failed": 0,
+    "receipt_sha256": "9f81b9b516516f8d4959dff7361280989c8e2ced632ccae624ad36d68f71cd75"
+  },
+  "actual_scope": {
+    "source": "GD_OBS_ST_MONTHLY",
+    "snapshot": "validation-20261006T134056Z",
+    "as_of_day": "2026-07-09",
+    "as_of_time": "15:41:20",
+    "totals": {
+      "stations": 61,
+      "items": 141,
+      "held_rows": 7126689,
+      "first_clock": "2026-07-01 00:00:00",
+      "last_clock": "2026-07-09 15:41:00",
+      "held_months": 1
+    },
+    "raw_rows_are_unique_observations": false
+  },
+  "independent_arrow": {
+    "files_scanned": 143,
+    "rows_verified": 1200,
+    "checks": 10,
+    "all_passed": true,
+    "receipt_sha256": "412ccc00aa2717381d1c6beb427db48769af4b9d39333a22c6044cf918dce543"
+  },
+  "actual_graph_geometry": {
+    "status": "PASS",
+    "records": 1200,
+    "receipt_sha256": "ac1f42760c8663c0caaed2d1a62b4a86a0f739e012f32784c507a19fca34a78b"
+  },
+  "raw_latest_values": {
+    "WATER_TEMP": {
+      "value_raw": "     21.38",
+      "observed_time_raw": "2026-07-09 15:41:00",
+      "unit": null,
+      "timezone": null
+    },
+    "SALINITY": {
+      "value_raw": "     31.45",
+      "observed_time_raw": "2026-07-09 15:41:00",
+      "unit": null,
+      "timezone": null
+    },
+    "WIND_DIRECT": {
+      "value_raw": "       180",
+      "observed_time_raw": "2026-07-09 15:41:00",
+      "unit": null,
+      "timezone": null
+    },
+    "WIND_SPEED": {
+      "value_raw": "       2.1",
+      "observed_time_raw": "2026-07-09 15:41:00",
+      "unit": null,
+      "timezone": null
+    },
+    "TIDE_LEVEL_VEGA": {
+      "value_raw": "       228",
+      "observed_time_raw": "2026-07-09 15:41:00",
+      "unit": null,
+      "timezone": null
+    }
+  },
+  "photos": {
+    "total": 61,
+    "available": 58,
+    "no_photo": 2,
+    "failed": 1,
+    "historical_capture_date_asserted": false,
+    "official_audit_sha256": "72eb15f9b36c00ff3dda16998431a856a9c5300b73be686fcbb86d995fd7eedb",
+    "local_files": 187,
+    "unique_filenames": 76,
+    "unique_bytes": 181,
+    "local_current_station_candidates": 39,
+    "local_inventory_sha256": "9755230ee2ddf9eff6065b6046149de06c9b4e564e3014f39b25d0277e6888f0",
+    "local_originals_published": false
+  },
+  "operational_metrics": {
+    "status": "UNVERIFIED",
+    "normal": null,
+    "warning": null,
+    "abnormal": null,
+    "collection_rate": null,
+    "reason": "No dated operational decisions, receipt history or expected observation contract verified for July9"
+  },
+  "openapi": {
+    "paths": 155,
+    "operations": 164
+  },
+  "source_sha256": {
+    "ocean-ai-platform/backend/app/services/observation_asof.py": "25019a340920dc641152721a94f2a1a192f1dc718ecdf3b4660d7cd11fdb39cb",
+    "ocean-ai-platform/backend/app/services/lake_browser.py": "a63c490a17b243d14612e6e860b2df2f30d664d7b5ec74020fc1168984787c0e",
+    "ocean-ai-platform/backend/app/services/station_media.py": "9331512f29bf07934b83a3ceb2005c64f84d14d603dc8f66970b2cbe9f4f87f2",
+    "ocean-ai-platform/frontend/src/components/StationQuickView.tsx": "ab19e6c967b49643028ce2badc2212d77f46230c6c505012bcec0cf8d4a1ae95",
+    "ocean-ai-platform/frontend/src/components/ObservationSeriesChart.tsx": "c5e3ea21de0d27e061f89655de90982dc862c58c5ef0b30901e65d7f23270d57",
+    "ocean-ai-platform/frontend/src/components/StationPhoto.tsx": "b6105e4742cca2b61cd088966ce14effed8cf4eacd1ad529f6ad4c891562aae1",
+    "ocean-ai-platform/frontend/src/data/observationCutoff.ts": "0cc94445a2511e1686fd1ebb6aa542baa207dfa1f8660f2fb35a80fedf6e439c",
+    "ocean-ai-platform/frontend/src/data/observationSeries.ts": "74df6d2b5a23f31cc3e9717b852f41a5a30dbf967be0753e57598893fcd7a49d",
+    "ocean-ai-platform/frontend/src/pages/Observations.tsx": "d726f878f116b04053ac60bd22722145a427d4e71ef781a44c326313d3d79f3a",
+    "ocean-ai-platform/frontend/src/styles/observations.css": "233554d746e6ab82239142d0829a66be6789f2fda150e34a4dec0828016dd238"
+  },
+  "screenshots": {
+    "actual-observation-workspace.png": "41e8cfb663f29496858f883d1fe009cc6b91d53ccfb0357d74805770234b4a96",
+    "actual-values-time-series.png": "3221155f213f190dd5d43c81cdf68a47e80753f51d249c700d41a72d13dddd4d"
+  },
+  "production_completed": false,
+  "data_or_credential_files_published": false
+}

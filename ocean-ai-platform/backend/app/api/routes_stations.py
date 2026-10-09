@@ -2,12 +2,18 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
+from datetime import date
 
 from app.core.database import get_db
 from app.models.domain import StationMetadata, SensorMetadata
 from app.schemas.domain import Station
 
 router = APIRouter(prefix="/api/stations", tags=["Stations"])
+
+@router.get('/{station_id}/photograph')
+def station_photograph(station_id:str):
+    from app.services.station_media import photograph
+    return photograph(station_id,date.today().isoformat())
 
 @router.get("", response_model=List[Station])
 def get_stations(skip: int = 0, limit: int = 100, as_of_month: str|None=Query(None,pattern=r'^(19|20)\d{2}-(0[1-9]|1[0-2])$'), db: Session = Depends(get_db)):

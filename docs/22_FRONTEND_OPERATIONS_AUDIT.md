@@ -4,6 +4,8 @@
 
 관측 기본 조회는 **2026-07 ~ 2026-07**이다. Dashboard·관측 현황에 공식7월 월간해양정보와 원천별Parquet 대조를 연결했다. 지정한 과거 기간을 유지하고 공식 현황과 선택 기간을 구분한다. 단일7월에는 `as_of_month=2026-07`의 유일 명칭·좌표 참조를 필터·지도에 반영하며 해역 직접 근거가 없으면 기존 값을 유지한다. [7월 검증](27_JULY_REPORT_PARQUET_MATCH.md)에 근거와 수치 차이를 기록한다.
 
+10/9 관측현황은 사용자 제공 화면의 5개 현황 카드·지도·관측소 목록·사진과 상세정보 배치로 보완했다. 전체 화면은 기본 **2026-07-09**와 캡처한 시스템 동일 시각을 URL에 고정한다. 수온·염분·풍향·풍속 등의 실제 값과 시계열은 정확한 채널·수심과 같은 기준시각을 사용하며, 원문값·시각·중복을 보존한다. 공식 사진은 촬영일 미상으로 표시한다. 운영상태·수집률에 근거가 없으면 숫자를 만들지 않는다. 최신 다중 에이전트 검토와 부모 검증은 [32](32_OBSERVATION_WORKSPACE_ASOF.md)를 따른다.
+
 [MetricCompletionPanel](../ocean-ai-platform/frontend/src/components/MetricCompletionPanel.tsx)은 원시 시간격자·결측표현·수치/시각 해석·기본 QC 표기와 원문 코드 분포·보고서 고유 셀 평균을 구분해 표시한다. Dashboard/Observations/QC/Insights가 동일 snapshot·원천·선택 기간의 `/api/lake/metric-completion`을 조회한다. 보유0/미확정/실패/조회 중을 실제0%와 구분하며 운영 지표에는 필요한 근거를 표시한다. Service는 현재 프로세스의 응답 수·오류 수·기록 구간을 표시한다. [28 산정 경계](28_METRIC_COMPLETION.md)를 확인한다.
 
 ## 현재 화면이 조회하는 경로
@@ -11,7 +13,7 @@
 | 화면 | 실제 연결 | 해석 범위와 남은 연결 |
 |---|---|---|
 | Dashboard | `/api/lake/summary`, `/api/lake/monitoring`, `/api/stations`, `/api/reports` | 선택 원천·기간·관측망과 전체 기준 범위를 구분한다. 보유 관측소·행 수, 원천 QC 존재 비율은 장비 정상·예상 수집률이 아니다. |
-| 관측 현황 | `/api/lake/summary`, `/api/stations`, `/api/lake/metric-completion`, `/api/lake/stations/{station_id}`, `/api/lake/series?tail=true` | 큰 지도·휠 확대/축소와 해역·관측소·기간 선택, exact 항목/수심의 최근 24건과 월별 자료 유무를 제공한다. 원천 행 수와 산정 근거는 하단에서 펼친다. [31 검증](31_OBSERVATION_METRIC_RECALCULATION.md)을 따른다. |
+| 관측 현황 | `/api/lake/summary`, `/api/stations`, `/api/lake/metric-completion`, `/api/lake/stations/{station_id}`, `/api/lake/series?tail=true`, `/api/stations/{station_id}/photograph` | 동일 기준일·시각으로 큰 지도·휠 확대/축소, 해역·관측소·기간 선택, 실제 값과 확대 그래프·공식 사진을 제공한다. 원천 행 수와 산정 근거는 하단에서 펼친다. [32 검증](32_OBSERVATION_WORKSPACE_ASOF.md)을 따른다. |
 | QC Copilot | `WorkflowReviewPanel`의 evidence/analyze·workflows, 기존 `AnalysisWorkspace` lake 조회 | exact scope 분석·score/coverage·누락·충돌·PENDING·승인/반려·재개를 표시한다. 계정 미설정이면 분석/조회만 가능하다. |
 | AI Insights | 같은 `AnalysisWorkspace`의 Insights 모드와 관측소 기준 좌표 | 보유 자료·근거를 비교한다. 기존 `/ai-insights/summary`의 휴리스틱 위험 점수 화면과 구분한다. |
 | Equipment | `/api/lake/equipment-evidence`, lake summary, 관측소 기준 좌표 | 문서의 설치·장비 근거를 표시한다. 설치 문구만으로 센서 운영기간·실시간 health를 확정하지 않는다. |
@@ -41,7 +43,7 @@ JSON HTTP 요청 로그와 승인 이력은 목적이 다르다. `ApprovalHistor
 
 ## 검증과 운영 확인
 
-10/8 감사는 [당시 검증](10_IMPLEMENTATION_AUDIT.md)에 보존한다. 10/9 최신 전체 회귀는 backend 776 passed / 1 skipped, frontend 29 passed와 production build 통과이며 관측현황 브라우저 9개 검증을 [31](31_OBSERVATION_METRIC_RECALCULATION.md)과 [current_status.json](current_status.json)에 기록한다. 깨끗한 `npm ci --ignore-scripts`와 TypeScript/Vite build를 검증했다. 빌드는 모든 화면의 실제 승인·장애·배포 동작을 현장 검증한 결과가 아니다.
+10/8 감사는 [당시 검증](10_IMPLEMENTATION_AUDIT.md)에 보존한다. 10/9 월 재산정 단계의 backend 776 passed / 1 skipped, frontend 29 passed와 production build 및 브라우저 9개 검증은 [31](31_OBSERVATION_METRIC_RECALCULATION.md)에 보존한다. 후속 동일 기준시각·실측 그래프·사진 변경의 최신 시험은 [32의 검증 기록](32_OBSERVATION_WORKSPACE_ASOF.json)을 따른다. 깨끗한 `npm ci --ignore-scripts`와 TypeScript/Vite build를 검증했다. 빌드는 모든 화면의 실제 승인·장애·배포 동작을 현장 검증한 결과가 아니다.
 
 13:09 KST 실제 backend `/health`와 frontend HTTP는 200이었고 API identities는 0이었다. 13:10:55 KST canonical worker는 RUNNING과 fresh heartbeat가 확인됐지만 작업 큐는 비어 있었다. 승인 입력은 없고 모델 readiness는 BLOCKED, 수용 기준은 NOT_DEFINED, serving은 409 NO_ACTIVE_LOCAL_MODEL이었다. 기존 canonical 프로세스의 확인이며 공개 복사본을 기동했다는 의미는 아니다.
 

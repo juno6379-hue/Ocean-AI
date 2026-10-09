@@ -42,6 +42,7 @@ export function validMetricCompletion(value: unknown, query: URLSearchParams) {
   for (const key of ['source','from_month','to_month']) {
     if (response[key]!=null && response[key]!==query.get(key)) return false;
   }
+  for(const key of ['as_of_day','as_of_time'])if(query.has(key)&&response[key]!==query.get(key))return false;
   if (!isNumericMetricState(response.state)) return true;
   return Boolean(response.snapshot && response.source===query.get('source') && response.from_month===query.get('from_month') && response.to_month===query.get('to_month')
     && response.scope?.station===(query.get('station')||'') && response.scope?.item===(query.get('item')||'')

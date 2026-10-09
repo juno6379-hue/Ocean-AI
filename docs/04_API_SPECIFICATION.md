@@ -2,7 +2,9 @@
 
 7월 현황 확장: `/api/lake/summary`, `/monitoring`, `/daily-reports`, `/equipment-evidence`, `/stations/{station}`의 기본 월은2026-07이다. `/api/lake/publication-comparison`은 기준월과 원천별 동결 검증 결과·명시적 예외를 제공한다. `/api/stations`와 `/api/stations/catalog/classifications`의 선택 `as_of_month=2026-07`은 승인과 별개인 읽기 전용 문서 참조다. [검증범위·checksum·STALE응답](27_JULY_REPORT_PARQUET_MATCH.md)을 확인한다.
 
-기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **154 경로·163 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 최신 검증 API 주소는 `http://127.0.0.1:8010`이며 기존 canonical8000을 유지한다.
+현행화: 2026-10-09. 10/8 읽기 전용 `/openapi.json`의 **154 경로·163 HTTP operation**을 게시된 router/prefix AST와 대조했고, 10/9에는 공식 사진 경로를 추가했다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 최신 검증 API 주소는 `http://127.0.0.1:8010`이며 기존 canonical8000을 유지한다.
+
+10/9 관측현황은 `/api/lake/summary`, `/metric-completion`, `/stations/{station}`, `/series`에 선택 query `as_of_day=2026-07-09&as_of_time=15:41:20`을 전달한다. 정확한 원문 관측시각까지 포함하며, 기준일 없이 시각만 전달하거나 offset 시각·기준일 이후 종료월을 요청하면 422다. 기존 월 조회는 두 query를 생략한다. 불변 월 packet을 수정하지 않고 별도 일시 집계를 hash와 source membership으로 검증한다. `/api/stations/{station_id}/photograph`는 실제 공식 사진의 코드·byte SHA·출처와 촬영일 미상을 반환한다. [동일 기준시각·실제 값·사진 검증](32_OBSERVATION_WORKSPACE_ASOF.md)을 따른다.
 
 `GET /api/lake/metric-completion`의 원천·월·관측소·항목·시설·해역 진단과 `GET /api/service-monitoring/overview`의 현재 프로세스 HTTP 집계는 [지표28](28_METRIC_COMPLETION.md)을 따른다. 월별 원천 재산정과 원문 수신·관측 시계차는 [31](31_OBSERVATION_METRIC_RECALCULATION.md)에 기록한다. `calculation_coverage`에 원천 재검사 완료/미완료 월을 제공하고, 부분 계산은 `PARTIAL_CATALOG_COUNTS`, 빈 범위는 `EMPTY_SCOPE`로 구분한다. 지표 checksum·월·원천 변경은409, 손상503이며 선택 기간 밖 값은 사용하지 않는다.
 
@@ -76,6 +78,7 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | [/api/stations/catalog/classifications](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
 | [/api/stations/{station_id}](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
 | [/api/stations/{station_id}/profile](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
+| [/api/stations/{station_id}/photograph](../ocean-ai-platform/backend/app/api/routes_stations.py) | GET | — | — |
 
 ### observations
 
