@@ -1,0 +1,259 @@
+{
+  "schema_version": "qc-sample-validation-release-1",
+  "checked_at_utc": "2026-10-09T13:40:27.903680+00:00",
+  "verification_base_revision": "634c32485c03ad05d5a9065e5094f0c6bb8df911",
+  "revision_resolution": "Resolve containing commit with Git history; no self-referential commit hash",
+  "status": "COMPLETE_ISOLATED_INTERACTIVE_SAMPLE",
+  "production_completed": false,
+  "approved": false,
+  "roles": {
+    "engine": "station_photos",
+    "ui": "ui_values_graphs",
+    "independent_review": "ui_data_review",
+    "integration_and_final_verification": "root"
+  },
+  "sample": {
+    "page": "/qc/sample",
+    "source": "SAMPLE",
+    "transient": true,
+    "fixed_window_start": "2026-07-09T14:40:00+09:00",
+    "fixed_window_end": "2026-07-09T15:40:00+09:00",
+    "as_of": "2026-07-09T15:41:20+09:00",
+    "clock_basis": "EXPLICIT_SYNTHETIC_OFFSET",
+    "cases": 4,
+    "slots_per_series": 61,
+    "planned_slots": 244,
+    "received_slots": 241,
+    "missing_slots": 3,
+    "representative_flags": {
+      "normal": "1",
+      "late": "3",
+      "missing": "9",
+      "spike": "4"
+    },
+    "representative_distribution_percent": {
+      "normal": 25,
+      "suspect": 25,
+      "bad": 25,
+      "missing": 25
+    },
+    "rule_result_count": 2928,
+    "spike_sp_flag": "3",
+    "spike_gr_flag": "4",
+    "late_seconds": 480,
+    "delay_threshold_seconds": 300,
+    "historical_baseline_full_tests_executed": 0,
+    "rr_sr_st_missing_precheck_count_each": 3,
+    "ai": "NOT_RUN",
+    "trained_model": false,
+    "fake_evidence_kind": "SYNTHETIC_CONTRACT_AND_REAL_ENGINE_CALCULATION_REPORT",
+    "reviewer": "SAMPLE_REVIEWER",
+    "operational_writes": 0,
+    "source_reads": 0,
+    "model_training": 0,
+    "final_qc_writes": 0,
+    "real_source_approval": false,
+    "operational_schema_changes": 0
+  },
+  "isolation": {
+    "default_enabled": false,
+    "allowed_environments": [
+      "development",
+      "test",
+      "local"
+    ],
+    "production_and_staging_status": 404,
+    "token_header": "X-QC-Sample-Token",
+    "token_url_or_storage": false,
+    "operational_authorization": false,
+    "cookies": false,
+    "bootstrap_seconds": 300,
+    "bootstrap_capacity": 256,
+    "session_seconds": 14400,
+    "session_capacity": 64,
+    "actions_per_session": 512,
+    "create_idempotency_scope": "PER_BOOTSTRAP_CONTEXT",
+    "cross_session_read_review_reset_status": 401,
+    "previous_revision_or_hash_status": 409,
+    "approved_stops_until_explicit_resume": true,
+    "resume_output": "TRANSIENT_SAMPLE_DRAFT_ONLY",
+    "final_qc_approved": false
+  },
+  "verification": {
+    "backend_tests": {
+      "passed": 1042,
+      "failed": 0,
+      "skipped": 1,
+      "warnings": 18,
+      "seconds": 379.49,
+      "database_scope": "ISOLATED_ONLY",
+      "skip_reason": "Existing Windows symlink privilege unavailable; separate reparse-flag tests passed",
+      "log_sha256": "a65c7967391616832d6aa6cc4486e65bae62146447c9af1c2fcb8d6393e2d07d",
+      "date": "2026-10-09"
+    },
+    "frontend_tests": {
+      "passed": 117,
+      "failed": 0,
+      "skipped": 0,
+      "sample_tests": 13,
+      "sample_react_dom_tests": 9,
+      "build": "PASS",
+      "lint_existing_warnings": 12,
+      "new_qc_lint_warnings": 0,
+      "log_sha256": "77955f379fc756f699a65d95cfe084101d2eee63abedc0ddcd8f285065f2237b",
+      "date": "2026-10-09"
+    },
+    "focused_backend_tests": {
+      "passed": 41,
+      "owned": 12,
+      "independent": 29,
+      "included_in_full_suite": true
+    },
+    "live_http": {
+      "passed": 42,
+      "failed": 0,
+      "receipt": {
+        "file": "parent-qc-sample-http-verification.json",
+        "sha256": "5ffb60b2d7b6b2bd5546a8a8f2e344b49951ece9c4cf4c690c1b9b044fb22a11"
+      }
+    },
+    "independent_isolation": {
+      "file": "qc-sample-independent-isolation-review.json",
+      "sha256": "4726ecaabcce2950c14f859be8e2c33ae7776cb72d09cfad96c61f1db635ba70"
+    },
+    "browser": {
+      "passed": 17,
+      "failed": 0,
+      "viewport": {
+        "width": 890,
+        "height": 836
+      },
+      "receipt": {
+        "file": "parent-qc-sample-browser-verification.json",
+        "sha256": "03b542ad6b1ef205e2d394af2d6e87abc2b5d2b799d65527f7e817df6108d5f0"
+      }
+    },
+    "operational_database": {
+      "tables": 12,
+      "counts": {
+        "observation_raw": 13621,
+        "observation_standard": 4074,
+        "qc_rule_result": 0,
+        "source_observation_binding": 0,
+        "source_contract_packets": 0,
+        "source_contract_decisions": 0,
+        "approval_history": 0,
+        "dataset_registry": 0,
+        "model_registry": 0,
+        "agent_workflow_run": 0,
+        "agent_workflow_transition": 0,
+        "retraining_history": 0
+      },
+      "counts_and_complete_row_fingerprints_unchanged": true,
+      "writes": 0,
+      "before": {
+        "file": "parent-qc-sample-db-before.json",
+        "sha256": "af7a6520e2dca1d45748b3fbdf85e084341a023da267b3805000b2b43029467d"
+      },
+      "after": {
+        "file": "parent-qc-sample-db-after.json",
+        "sha256": "b7d789c3184d4813decb489899aacece828dc9312ca6b15f4225db8662292e16"
+      }
+    },
+    "source_freeze": {
+      "backend": {
+        "files": 275,
+        "unchanged": true,
+        "receipt": {
+          "file": "parent-qc-sample-backend-source-verified.json",
+          "sha256": "1d1c3db5a190adcf70469a646127aafb8e48d7f30ef53b8a37b899153dcd1ea3"
+        }
+      },
+      "frontend": {
+        "files": 98,
+        "unchanged": true,
+        "receipt": {
+          "file": "parent-qc-sample-frontend-source-verified.json",
+          "sha256": "26535731a9a9d18979086cf7db494603bb3b4f9edfe104733f7599f9ba922cb1"
+        }
+      }
+    },
+    "frontend_build": {
+      "file": "parent-qc-sample-frontend-build.log",
+      "sha256": "b42f111a453a50d79bbfaa8345f42e9aba52b0adcd254aee27d6187f33690e2d"
+    },
+    "frontend_lint": {
+      "file": "parent-qc-sample-frontend-lint.log",
+      "sha256": "c7f38fa95e248ed5cb86357831f7114c8d8ec7c221223be6abd3b99b32907b35"
+    },
+    "actual_backend_dto_guard": {
+      "file": "frontend-qc-sample-isolated-api-verification.json",
+      "sha256": "a3b00328bfaf072e5b9284ad82fffc384929fc50020f79fa0ec7bd6f3313cb6b"
+    }
+  },
+  "runtime": {
+    "review_backend_port": 8010,
+    "review_frontend_port": 5174,
+    "sample_enabled": true,
+    "environment": "development",
+    "openapi_paths": 168,
+    "openapi_operations": 177,
+    "sample_paths": 6,
+    "health": "PASS",
+    "readiness": "PASS",
+    "canonical_8000_8001_8011_5173_process_ids_preserved": true,
+    "scope": "LOOPBACK_REVIEW_SERVER_ONLY"
+  },
+  "performance": {
+    "first_context_session_overview_seconds": 0.570169,
+    "warm_overview_seconds": 0.02081,
+    "population_cases": 4,
+    "production_scale_acceptance": false
+  },
+  "screenshots": [
+    {
+      "file": "parent-qc-sample-dashboard-final.png",
+      "sha256": "4235c590ef3f7d385e45ca01c717f766809ecf2b8b895c8ea6248d914a9358ca"
+    },
+    {
+      "file": "parent-qc-sample-spike-detail-final.png",
+      "sha256": "7d68255c81b36fff6421463e81d94a0b6f28c02c5cf6a1b7db37cbe04f9b3df3"
+    },
+    {
+      "file": "parent-qc-sample-missing-detail-final.png",
+      "sha256": "72a401da2f43b30c7fc9ddfe13f08bab6c8ec3fe75b36f2ad39d5b8e978892cb"
+    },
+    {
+      "file": "parent-qc-sample-review-completed-final.png",
+      "sha256": "c6b3db1d12428cb1bf3a986e087519e73b98f8cb183a3c151f3a15151a941683"
+    }
+  ],
+  "code_fingerprints": {
+    "ocean-ai-platform/backend/app/core/config.py": "3c450a35f3f9be5fb7bdb10cd6fd89efa9afba6d427eb261cdecd0961abb8320",
+    "ocean-ai-platform/backend/app/core/security.py": "2a137081b7d118d970dbf1c3e80c0a51e158959679e06671c6c74cf4ae27a1fc",
+    "ocean-ai-platform/backend/app/main.py": "6def101a5303894c54b482ecc14a7935584d427290c1f8181f327bf9c7631b9d",
+    "ocean-ai-platform/backend/app/api/routes_qc_sample.py": "3aa6bd8ea9c9a154e4ede3f9d13f23136d778ef2a63038d7a1f59f34fdafd079",
+    "ocean-ai-platform/backend/app/services/qc_sample.py": "5586177af3aa7e24a221443e1e1622a82aebd456747b249151e7579fdea491d1",
+    "ocean-ai-platform/backend/tests/test_qc_sample.py": "caccbf8e67cdc01fe845170600ba89f107868a81b5560df6bc662cfb070ccb0e",
+    "ocean-ai-platform/backend/tests/test_qc_sample_isolation.py": "d94b9dd7f9a225901a9d0fd370561cd44d2fa9d72d856388e949717a5a2efdb8",
+    "ocean-ai-platform/frontend/src/App.tsx": "f64c285d1ca740f56efa8cb7b682cf3da495ccc3f5ba8a23ccd0024d678ab33a",
+    "ocean-ai-platform/frontend/src/components/Layout.tsx": "254ad11c89d3c136967c6231219368979cc55a0996669dde0c96a0f41af83fea",
+    "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx": "13701058f807c4ddcf00007a41edc3278dfa5a092b9dbe66c10237f295a73a93",
+    "ocean-ai-platform/frontend/src/pages/QCSample.tsx": "f9a9b62028471c79db48d05c7713091e167b477d4385b849b65c6a97194a93d9",
+    "ocean-ai-platform/frontend/src/data/qcSample.ts": "e9c0965b595f35ef7f018173c70352e8ef04ff29079cc28e1d5524200ceefc46",
+    "ocean-ai-platform/frontend/src/styles/qcSample.css": "70b9fcdd4c9ef058bda27b68a4f94d62e8108bd4d3b0387cdcf7f39e84da7399",
+    "ocean-ai-platform/frontend/tests/qc-sample-fixtures.mjs": "388c0732255d1e212e6550ea481291c4540e90c3dc108af4bba953ebd141af81",
+    "ocean-ai-platform/frontend/tests/qc-sample-runtime.mjs": "f1f7f389843e2f83cdf8a38f9f6b9bdafeecd614b6232744f239f5afdaf4f645",
+    "ocean-ai-platform/frontend/tests/qc-sample-ui.test.mjs": "3f8d122c6d4ef20427c0dc9a2674bf150d2437900b6de150afdda019604af609",
+    "ocean-ai-platform/frontend/tests/qc-sample.test.mjs": "64899f26f7812187e7d70b45d3f42c73c10777db0ace7492ac9c5a24a505a692"
+  },
+  "limitations": [
+    "Actual source, QC authority and production models remain unapproved/unregistered",
+    "Sample state machine is separate from operational Final QC/workflow execution",
+    "Missing baseline/location/related evidence is not fabricated",
+    "In-memory review history expires and is lost on backend restart",
+    "Synthetic benchmark does not establish real-source throughput"
+  ],
+  "published_material": "CODE_DOCUMENTATION_AND_AGGREGATE_VERIFICATION_ONLY",
+  "tokens_or_raw_operational_rows_published": false
+}

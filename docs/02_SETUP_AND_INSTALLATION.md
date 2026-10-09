@@ -134,3 +134,9 @@ Frontend에서는 `npm run build`를 실행한다. [test conftest](../ocean-ai-p
 backend CLI: `python -m app.scripts.review_document_backlog --help`, `resume_document_recovery --help`, `promote_document_recovery --help`, `operational_state_backup --help`, `review_actual_analysis --help`, `run_raw_model_comparison --help`. 각각 `app.scripts.` 접두를 사용한다. source/config와 private output을 명시하며 원문·token·DB dump는 저장소 밖에 보존한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md), [복구85](85_OPERATIONS_RECOVERY_REVIEW.md).
 
 개발용 실제 원시 학습·게시 묶음·별도8011 서버의 명령은 [30](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)을 따른다. CLI는 `train_raw_next_row`, `publish_raw_training_release`, `raw_forecast_development_server`이며 Windows background 실행 helper는 `app/scripts/start_raw_forecast_development_server.ps1`이다. 기존8011 listener가 있으면 보존하고 중단한다. 기본5174 Vite의 `/experimental-api` proxy만 새 서버를 사용하고 기존 `/api` 대상은 유지한다. 실제 운영 worker/serving 설정을 활성화하는 절차가 아니다.
+
+## 10/9 별도 QC 샘플 검증
+
+`QC_SAMPLE_ENABLED=false`가 기본이며 `ENVIRONMENT`가 development/test/local이고 명시적으로 true일 때만 `/api/qc-sample/`이 동작한다. 기존 개발 시험 backend 8010에서 활성화하고 프런트 `/qc/sample`을 사용한다. production/staging에서는 flag가 true여도 404다. 운영 DATA_MODE를 demo로 바꾸거나 실제 계정을 등록할 필요가 없다.
+
+샘플 원장·세션·검토는 프로세스 메모리에만 존재하며 DB migration·seed·원천 적재가 없다. 브라우저 새로고침은 새 세션, backend 재시작은 샘플 이력 초기화다. 토큰은 샘플 전용 header와 화면 메모리에서만 사용하며 실제 API 인증으로 전달하지 않는다. [샘플 구성·사용·검증](37_QC_SAMPLE_VALIDATION_MODE.md)을 따른다.

@@ -402,3 +402,20 @@ Overview는 PostgreSQL 읽기 전용 repeatable snapshot에서 500행 keyset으�
 상세는 `qc:{persisted_result_id}` 또는 `archive:{parquet_sha256}:{file_row_number}`를 받는다. `date_from`, `date_to`, `as_of`, `clock_basis`, `offset`, `granularity`, `mode`, `preset`, `window_id`를 Overview 그대로 전달한다. archive에는 snapshot이 추가된다. 변경된 window SHA409·잘못된 query/범위422·없는 후보404·storage 실패503을 빈 성공으로 바꾸지 않는다. 주변 ±2시간 원문 값과 duplicate·gap을 보존하며 prediction을 원문에 덮어쓰지 않는다.
 
 상세 GET은 새 학습·추론·RAG 검색·최종 QC 저장을 실행하지 않는다. 저장 AI가 정확 source/관측/sensor/모델/가용시각에 연결됐을 때만 prediction/residual/score를 반환한다. 현재 serving health를 조회하지 않은 registry 선언 상태를 실제 배포 승인으로 확대하지 않는다. 처리 버튼은 연결된 기존 workflow의 endpoint·추천 SHA·revision과 현재 Actor 역할을 사용한다. source 승인·final QC 변경 권한을 새로 부여하지 않는다.
+
+## 10/9 별도 QC 샘플 검증
+
+샘플 추가 후 시험 서버 8010의 실제 OpenAPI는 **168개 경로·177개 operation**이다. `/qc/sample`은 아래 6개 경로만 사용한다. 기존 `/qc`의 source 선택과 운영 승인 인증은 유지한다. [37 샘플 데이터·처리·검증](37_QC_SAMPLE_VALIDATION_MODE.md)을 따른다.
+
+| 경로 | Method | 입력·결과 |
+|---|---|---|
+| `/api/qc-sample/context` | GET | query 없음. 고정 합성 시간창·판본과 세션 생성용 독립 bootstrap token |
+| `/api/qc-sample/sessions` | POST | `{request_key}`와 `X-QC-Sample-Token` bootstrap. 브라우저별 독립 메모리 세션 |
+| `/api/qc-sample/sessions/{session_id}/overview` | GET | 해당 세션 token. 계산된 4사례 KPI·61분 추이·Rule·행렬·검토 상태 |
+| `/api/qc-sample/sessions/{session_id}/cases/{case_id}` | GET | 해당 세션 token. 원문 합성 값·NULL·지연·Rule 입력/threshold·가상 계약·검토 이력 |
+| `/api/qc-sample/sessions/{session_id}/cases/{case_id}/review` | POST | `{action,comment,expected_revision,recommendation_sha256,request_key}`. COMMENT/APPROVE/HOLD/REJECT/RESUME |
+| `/api/qc-sample/sessions/{session_id}/reset` | POST | `{expected_session_revision,request_key}`. 해당 세션의 generation과 사례만 초기화 |
+
+기본 `QC_SAMPLE_ENABLED=false`이며 development/test/local에서 명시 활성화했을 때만 동작한다. 비활성·production/staging은 404다. 샘플은 PostgreSQL·실제 원천을 읽거나 쓰지 않고 AI 학습·추론·Final QC 승인을 실행하지 않는다. 세션 요청의 다른 세션/잘못된·만료 token·중복 header·실제 Bearer 혼용은 401, 이전 revision·추천 SHA·멱등 키 충돌은 409, 추가 body/query·형식 오류는 422, 초기화 전 사례는 404, 용량 초과는 429다.
+
+bootstrap은 300초, 세션은 4시간이며 각각 최대 256/64개로 제한한다. 세션별 처리 요청은 최대 512개다. 같은 bootstrap·request key는 동일 세션으로 재시도하고 서로 다른 bootstrap은 같은 key라도 별도 세션을 만든다. 샘플 token은 `X-QC-Sample-Token`만 사용하고 URL·브라우저 storage·cookie·운영 Authorization에는 저장하지 않는다. 승인 후에도 중지 상태이며 RESUME만 합성 후속 초안을 완료한다. `approved=false`와 `definitive_qc=false`는 처리 완료 후에도 유지한다.

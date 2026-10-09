@@ -1,18 +1,18 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T11:47:43.005809+00:00",
+  "as_of": "2026-10-09T13:40:27.903680+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/36 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/37 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "passed": 1001,
+      "passed": 1042,
       "failed": 0,
       "skipped": 1,
       "warnings": 18,
-      "seconds": 360.36,
+      "seconds": 379.49,
       "database_scope": "ISOLATED_ONLY",
-      "skip_reason": "Windows symlink privilege unavailable; separate reparse-flag tests passed",
-      "log_sha256": "d037a5dd52d77f993b31783bf5895521a7d4e51603bff445902ba92d65c3392d",
+      "skip_reason": "Existing Windows symlink privilege unavailable; separate reparse-flag tests passed",
+      "log_sha256": "a65c7967391616832d6aa6cc4486e65bae62146447c9af1c2fcb8d6393e2d07d",
       "date": "2026-10-09"
     },
     "frontend_clean_install": "PASS",
@@ -59,7 +59,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Frozen isolated backend/frontend regression; exact read-only runtime + independent Arrow 143 files/121 detail cells + real browser; historical PostgreSQL gate retained separately",
+    "method": "Frozen isolated backend/frontend regression + real HTTP and browser sample review + unchanged operational row fingerprints; historical actual-source QC and PostgreSQL gates retained separately",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -76,18 +76,19 @@
       "combined_passed": 14,
       "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
     },
-    "frontend_build_log_sha256": "786a82c7715ff91e61a5ef4e4727014058a2a808de53befe4038d51e39d8a07b",
+    "frontend_build_log_sha256": "b42f111a453a50d79bbfaa8345f42e9aba52b0adcd254aee27d6187f33690e2d",
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 104,
+      "passed": 117,
       "failed": 0,
       "skipped": 0,
-      "react_dom_tests": 16,
+      "sample_tests": 13,
+      "sample_react_dom_tests": 9,
       "build": "PASS",
       "lint_existing_warnings": 12,
       "new_qc_lint_warnings": 0,
-      "log_sha256": "ae135998aa27d087e502dd50985304a4681efc2773626776e172a7e5699d7686",
+      "log_sha256": "77955f379fc756f699a65d95cfe084101d2eee63abedc0ddcd8f285065f2237b",
       "date": "2026-10-09"
     },
     "postgresql_full_restore": {
@@ -421,6 +422,17 @@
       "sha256": "88e734c5b157e16aff255e49a47cf2a01a394cedb22d0f6dbb47685dbb913e0f",
       "status": "IMPLEMENTED_VERIFIED_WITH_EXPLICIT_LIMITS",
       "production_completed": false
+    },
+    "qc_sample_validation": {
+      "document": "docs/37_QC_SAMPLE_VALIDATION_MODE.json",
+      "sha256": "819595201cff060375a557ab5e83e08575ca14aa76e768aa8fb63640ae6b44fa",
+      "status": "COMPLETE_ISOLATED_INTERACTIVE_SAMPLE",
+      "live_http_checks": 42,
+      "browser_checks": 17,
+      "operational_database_tables": 12,
+      "operational_rows_unchanged": true,
+      "production_completed": false,
+      "approved": false
     }
   },
   "runtime": {
@@ -447,7 +459,20 @@
     "approved_input_ready": false,
     "operating_models": 0,
     "stage_review_url": "http://127.0.0.1:5174/system",
-    "model_input_review_url": "http://127.0.0.1:5174/mlops"
+    "model_input_review_url": "http://127.0.0.1:5174/mlops",
+    "qc_sample_review_server": {
+      "review_backend_port": 8010,
+      "review_frontend_port": 5174,
+      "sample_enabled": true,
+      "environment": "development",
+      "openapi_paths": 168,
+      "openapi_operations": 177,
+      "sample_paths": 6,
+      "health": "PASS",
+      "readiness": "PASS",
+      "canonical_8000_8001_8011_5173_process_ids_preserved": true,
+      "scope": "LOOPBACK_REVIEW_SERVER_ONLY"
+    }
   },
   "database_counts": {
     "source_contract_packets": 0,
@@ -612,6 +637,33 @@
         "log_sha256": "d467eef7fa3f4512e96c4a8403c359e486a2955610aebccc8b1a857c549a2063"
       },
       "frontend_production_build": "PASS"
+    },
+    "before_qc_sample_20261009": {
+      "backend_tests": {
+        "passed": 1001,
+        "failed": 0,
+        "skipped": 1,
+        "warnings": 18,
+        "seconds": 360.36,
+        "database_scope": "ISOLATED_ONLY",
+        "skip_reason": "Windows symlink privilege unavailable; separate reparse-flag tests passed",
+        "log_sha256": "d037a5dd52d77f993b31783bf5895521a7d4e51603bff445902ba92d65c3392d",
+        "date": "2026-10-09"
+      },
+      "frontend_tests": {
+        "passed": 104,
+        "failed": 0,
+        "skipped": 0,
+        "react_dom_tests": 16,
+        "build": "PASS",
+        "lint_existing_warnings": 12,
+        "new_qc_lint_warnings": 0,
+        "log_sha256": "ae135998aa27d087e502dd50985304a4681efc2773626776e172a7e5699d7686",
+        "date": "2026-10-09"
+      },
+      "frontend_build_log_sha256": "786a82c7715ff91e61a5ef4e4727014058a2a808de53befe4038d51e39d8a07b",
+      "verification_base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
+      "containing_release_commit": "634c32485c03ad05d5a9065e5094f0c6bb8df911"
     }
   },
   "previous_canonical_runtime": {
@@ -729,6 +781,21 @@
       "candidate_final_qc_gate": false,
       "actual_source_qc_complete": false,
       "production_completed": false
+    },
+    "qc_sample_validation": {
+      "status": "COMPLETE_ISOLATED_INTERACTIVE_SAMPLE",
+      "page": "/qc/sample",
+      "source": "SAMPLE",
+      "cases": 4,
+      "planned_slots": 244,
+      "received_slots": 241,
+      "missing_slots": 3,
+      "ai": "NOT_RUN",
+      "trained_model": false,
+      "operational_writes": 0,
+      "final_qc_writes": 0,
+      "production_completed": false,
+      "default_enabled": false
     }
   },
   "implementation_fingerprints": {
@@ -743,7 +810,9 @@
     "recovery_promotion": "4c616d8395aff3e782c4c526dc30f889acaf2f03ff941fe99419b58966531351",
     "app/services/qc_analysis_readiness.py": "07ff0df600b021643d46d8b27d7baa7734492a07a22c1bef4e8bb1b49de7cf87",
     "app/services/qc_overview.py": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
-    "app/services/qc_candidate_review.py": "c80417c07a40a3e58840da11d438cbd0b8bd938b1cc80e60360cce983cd74019"
+    "app/services/qc_candidate_review.py": "c80417c07a40a3e58840da11d438cbd0b8bd938b1cc80e60360cce983cd74019",
+    "app/services/qc_sample.py": "5586177af3aa7e24a221443e1e1622a82aebd456747b249151e7579fdea491d1",
+    "app/api/routes_qc_sample.py": "3aa6bd8ea9c9a154e4ede3f9d13f23136d778ef2a63038d7a1f59f34fdafd079"
   },
   "observation_current_month": "2026-07",
   "july_report_match": {
@@ -837,7 +906,7 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
+  "verification_base_revision": "634c32485c03ad05d5a9065e5094f0c6bb8df911",
   "experimental_development_release": {
     "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
     "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",

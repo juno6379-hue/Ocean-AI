@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import StationProfile from './pages/StationProfile';
 import QCCopilot from './pages/QCCopilot';
+import QCSample from './pages/QCSample';
 import Observations from './pages/Observations';
 import AIInsights from './pages/AIInsights';
 import Equipment from './pages/Equipment';
@@ -35,6 +36,7 @@ const App: React.FC = () => {
         
         {/* QC Copilot 메인 ?�면 */}
         <Route path="qc" element={<QCCopilot />} />
+        <Route path="qc/sample" element={<QCSample />} />
         <Route path="copilot" element={<QCCopilot />} />
         
         {/* AI 분석 ?�사?�트 ?�면 */}
@@ -66,5 +68,4 @@ const App: React.FC = () => {
 };
 
 export default App;
-
 

@@ -16,7 +16,7 @@ import { observationContext } from '../data/observationPeriod';
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-  const compactWorkspace=path==='/observations'||path==='/qc'||path==='/copilot';
+  const compactWorkspace=path==='/observations'||path==='/qc'||path==='/qc/sample'||path==='/copilot';
   const context = observationContext(new URLSearchParams(location.search));
   const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

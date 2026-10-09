@@ -2,6 +2,8 @@
 
 기준: 2026-10-09. [사용자 요구사항 19개 영역](35_QC_OPERATIONAL_DASHBOARD_REQUIREMENTS.md), [목적별 데이터셋·모델 준비도 검토](34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.md).
 
+후속 개발: 사용자가 직접 조작하는 별도 [QC 샘플 검증 모드](37_QC_SAMPLE_VALIDATION_MODE.md)를 추가한다. 이 문서의 시험 수치와 원본 대조는 운영 대시보드 release `634c324`의 기록으로 보존하며, 샘플 모드의 최신 검증은 37번 문서에 따로 기록한다.
+
 **목표는 오늘의 1차 QC 문제를 찾고 담당자의 우선 검토와 상세 근거 확인으로 연결하는 화면이다.** 오늘 단위 집계·우선 검토 큐·실제 시계열 상세·저장 AI·장비와 Evidence·기존 workflow 연동을 구현했다. 코드 동결 후 독립 회귀·실제 원본 대조·브라우저 검증을 통과했다. 상세 증거는 [검증 JSON](36_QC_OPERATIONAL_DASHBOARD_VERIFICATION.json)에 남긴다. 기능 구현과 실제 원천·QC·운영 모델 산정의 완료는 구분한다.
 
 ## 1. 현재 코드와 실행 근거
