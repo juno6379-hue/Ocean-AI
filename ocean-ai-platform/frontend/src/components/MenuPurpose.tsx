@@ -9,6 +9,8 @@ export default function MenuPurpose(){
   if(!entry)return null;
   const context=observationContext(new URLSearchParams(search));
   const query=context.size?`?${context}`:'';
+  // The observation workspace has its own period and task controls beside the map.
+  if(pathname==='/observations')return null;
   const basis=entry.basis==='daily'?'업무매뉴얼 제2장 PDF 2–3쪽: 일일점검 → 이상·조치 보고 → 점검 결과 확인'
     :entry.basis==='quality'?'품질관리 가이드북(2023.12) PDF 15·22·35–36쪽: 자동검사와 수동 최종판정 구분'
       :'프로젝트 업무 역할 계약에 따른 화면 구성 제안';

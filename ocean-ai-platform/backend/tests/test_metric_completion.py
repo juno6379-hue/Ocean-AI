@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 
 import pytest
+import pyarrow as pa
+import pyarrow.parquet as pq
+from datetime import date
 from fastapi import HTTPException
 
 from app.core.config import settings
@@ -124,3 +127,48 @@ def test_original_null_and_padded_qc_tokens_are_preserved(audit):
     rows=complete(station='DT1',item='TEMP')['raw']['qc_codes']
     assert next(r for r in rows if r['literal']=='G ')['percent_of_field_rows']==88.889
     assert next(r for r in rows if r['literal'] is None)['count']==10
+
+
+def test_legacy_july_same_snapshot_name_must_match_current_catalog_counts(audit,monkeypatch,tmp_path):
+    _,packet,_=audit
+    view=tmp_path/'verified-july';view.mkdir()
+    rows=[]
+    for row in packet['channels']:
+        rows.append({k:row[k] for k in ('source_group','station_code','item_code','depth_step','depth_from','depth_to')}
+          |dict(month=date(2026,7,1),held_rows=row['raw_rows'],numeric_rows=row['numeric_rows'],missing_value_rows=row['missing_value_rows'],
+            invalid_time_rows=row['invalid_time_rows'],source_qc_present_rows=row['source_qc_present_rows']))
+    rows[0]['held_rows']+=1
+    pq.write_table(pa.Table.from_pylist(rows),view/'station-item-month-validation.parquet')
+    monkeypatch.setattr(service.lake_browser,'context',lambda:(view,view/'station-item-month-validation.parquet'))
+    with pytest.raises(HTTPException) as exc:complete()
+    assert exc.value.status_code==503
+
+
+def test_gr_legacy_catalog_zero_placeholder_does_not_become_qc_zero_percent(audit,monkeypatch,tmp_path):
+    _,packet,_=audit
+    view=tmp_path/'verified-july';view.mkdir()
+    raw=next(r for r in packet['channels'] if r['source_group']=='GR_OBS_ST')
+    catalog={k:raw[k] for k in ('source_group','station_code','item_code','depth_step','depth_from','depth_to')}
+    catalog.update(month=date(2026,7,1),held_rows=4,numeric_rows=4,missing_value_rows=0,
+      invalid_time_rows=0,source_qc_present_rows=0)
+    pq.write_table(pa.Table.from_pylist([catalog]),view/'station-item-month-validation.parquet')
+    monkeypatch.setattr(service.lake_browser,'context',lambda:(view,view/'station-item-month-validation.parquet'))
+    result=service.completion('GR_OBS_ST','2026-07','2026-07')
+    assert result['state']=='AVAILABLE' and result['raw']['held_rows']==4
+    assert result['raw']['source_qc_present_rows'] is None and result['raw']['source_qc_presence_rate'] is None
+    assert result['raw']['source_qc_field_state']=='ABSENT'
+
+
+def test_present_qc_catalog_zero_is_still_strictly_checked(audit,monkeypatch,tmp_path):
+    _,packet,_=audit
+    view=tmp_path/'verified-july';view.mkdir()
+    catalog=[]
+    for raw in packet['channels']:
+        if raw['source_group']!='GD_OBS_ST_MONTHLY':continue
+        catalog.append({k:raw[k] for k in ('source_group','station_code','item_code','depth_step','depth_from','depth_to')}
+          |dict(month=date(2026,7,1),held_rows=raw['raw_rows'],numeric_rows=raw['numeric_rows'],
+            missing_value_rows=0,invalid_time_rows=0,source_qc_present_rows=0))
+    pq.write_table(pa.Table.from_pylist(catalog),view/'station-item-month-validation.parquet')
+    monkeypatch.setattr(service.lake_browser,'context',lambda:(view,view/'station-item-month-validation.parquet'))
+    with pytest.raises(HTTPException) as exc:complete()
+    assert exc.value.status_code==503

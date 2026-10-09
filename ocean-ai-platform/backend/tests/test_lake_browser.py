@@ -70,6 +70,21 @@ def test_summary_and_detail_share_scope_without_simulation(fixture):
     assert client.get('/api/lake/summary',params={**args,'source':'SIMULATED'}).status_code==422
 
 
+def test_tail_reads_latest_valid_native_clocks_without_catalog_offset_inference(fixture):
+    client,_,_=fixture
+    args=dict(source='GD_OBS_VBU',station='TW_1',item='TEMP',month='2026-07',limit=2,tail=True)
+    response=client.get('/api/lake/series',params=args)
+    assert response.status_code==200,response.text
+    newest=response.json()
+    assert [row['value_raw'] for row in newest['rows']]==['NaN','3']
+    assert newest['has_more'] and newest['tail'] is True
+    assert all(row['unit'] is None and row['approval_status']=='UNAPPROVED' for row in newest['rows'])
+    previous=client.get('/api/lake/series',params={**args,'offset':2}).json()
+    assert [row['value_raw'] for row in previous['rows']]==[None,'0'] and not previous['has_more']
+    deep=client.get('/api/lake/series',params={**args,'depth_step':'2'}).json()
+    assert [row['value_raw'] for row in deep['rows']]==['99']
+
+
 def test_bad_hash_is_not_served_and_injection_is_a_literal(fixture):
     client,p,cat=fixture
     args=dict(source='GD_OBS_VBU',station="TW_1' OR 1=1 --",item='TEMP',month='2026-07')

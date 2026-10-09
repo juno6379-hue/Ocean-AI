@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_BASE_URL, apiFetch } from '../api/client';
-import { countMetric, gridPercent, literalMetric, percentMetric, qcPresencePercent, validMetricCompletion } from '../data/metricPresentation';
+import { countMetric, gridCoverageLabel, gridPercent, isNumericMetricState, literalMetric, percentMetric, qcPresencePercent, validMetricCompletion } from '../data/metricPresentation';
 import type { MetricCompletion } from '../data/metricPresentation';
 
 const missingInputLabels: Record<string, string> = {
@@ -12,6 +12,8 @@ const missingInputLabels: Record<string, string> = {
   APPROVED_QC_COUNTS: '승인된 QC 판정 수와 평가 분모',
   APPROVED_BAD_COUNTS: '승인된 BAD 판정 수와 평가 분모',
   RECEIPT_CLOCK_CONTRACT: '확정된 수신 시각 기준',
+  OBSERVATION_CLOCK_CONTRACT: '확정된 관측 시각 기준',
+  ACCEPTABLE_RECEPTION_DELAY_THRESHOLD: '수신 지연 허용 기준',
   EXPECTED_RECEIPT_GRID: '기대 수신 시간격자와 지연 허용 기준',
 };
 
@@ -27,7 +29,7 @@ export function useMetricCompletion(query: string, revision: number, expectedSna
       .then(async response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
       .then(value => {
         const scope = new URLSearchParams(query);
-        const numericState=value?.state==='AVAILABLE'||value?.state==='EMPTY_SCOPE';
+        const numericState=isNumericMetricState(value?.state);
         if (!validMetricCompletion(value,scope)) throw new Error('참고 지표 응답의 범위·형식이 일치하지 않습니다.');
         if (!numericState) {value.raw=null;value.report_reference=null;}
         value.blocked_metrics=Array.isArray(value.blocked_metrics)?value.blocked_metrics:[];
@@ -39,7 +41,7 @@ export function useMetricCompletion(query: string, revision: number, expectedSna
     return () => controller.abort();
   }, [query, revision, enabled]);
   const sameScope = received?.query === query;
-  const numericState=received?.data.state==='AVAILABLE'||received?.data.state==='EMPTY_SCOPE';
+  const numericState=isNumericMetricState(received?.data.state);
   const sameSnapshot = !numericState || !expectedSnapshot || received?.data.snapshot === expectedSnapshot;
   return {data:enabled && sameScope && sameSnapshot ? received?.data ?? null : null,loading,
     error:error || (sameScope && !sameSnapshot ? '검증본 전환 중 · 참고 지표와 관측 집계가 다릅니다. 새로고침하세요.' : '')};
@@ -50,7 +52,9 @@ export default function MetricCompletionPanel({data,loading,error}:{data:MetricC
   const waiting=loading?'조회 중':error?'조회 실패':data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음';
   return <section className="rounded-xl border border-blue-200 bg-white p-4 space-y-3" aria-label="원시 자료 참고 지표 및 산정 조건">
     <div className="flex flex-wrap justify-between gap-2"><h2 className="font-bold">원시 자료 참고 지표 · 운영 판정과 별도</h2><span className="text-xs text-blue-800">미승인 진단 / 보고서 인쇄값 참조</span></div>
-    {data&&data.state!=='AVAILABLE'&&data.state!=='EMPTY_SCOPE'&&<p className="text-sm text-amber-800">{data.state==='STALE'?'검증본 갱신 필요':data.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음'} · {data.reason||'선택 범위의 현재 검증 자료가 없습니다.'}</p>}
+    {data&&!isNumericMetricState(data.state)&&<p className="text-sm text-amber-800">{data.state==='STALE'?'검증본 갱신 필요':data.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음'} · {data.reason||'선택 범위의 현재 검증 자료가 없습니다.'}</p>}
+    {data?.state==='PARTIAL_CATALOG_COUNTS'&&<p className="text-xs text-slate-600">{data.reason}</p>}
+    {gridCoverageLabel(data)&&<p className="text-xs text-slate-600">{gridCoverageLabel(data)}</p>}
     {loading&&<p role="status" className="text-sm">원시 격자·결측 표현·QC 코드 근거 조회 중…</p>}
     {error&&<p role="alert" className="text-sm text-red-700">{error}</p>}
     <div className="grid grid-cols-2 xl:grid-cols-6 gap-2 text-xs">{[
@@ -71,7 +75,7 @@ export default function MetricCompletionPanel({data,loading,error}:{data:MetricC
       <p className="my-2">{reference.reason} · {reference.status}. 가중치·분모·QC 시행 기준이 다른 자료와 평균·비율을 합산하지 않습니다.</p>
       <div className="max-h-64 overflow-auto"><table className="w-full text-left"><thead><tr>{['관측소/항목','원문 표현','수치','문서 위치'].map(label=><th key={label} className="p-2">{label}</th>)}</tr></thead><tbody>{reference.normal_rates.map((row,i)=><tr key={`${row.table_id}:${row.station_code}:${row.item_label}:${i}`} className="border-t"><td className="p-2">{row.station_name||row.station_code} · {row.item_label}</td><td>{row.literal} · {row.status}</td><td>{row.value==null?'필요입력 없음':percentMetric(row.value,1)}</td><td>PDF {row.pdf_page}쪽 · {row.table_id}</td></tr>)}</tbody></table></div>
     </details>}
-    {data&&<details open className="text-xs"><summary className="cursor-pointer font-semibold text-amber-800">실제 운영 지표의 미확정 입력·평가 대상</summary><div className="grid md:grid-cols-2 gap-2 mt-2">{data.blocked_metrics.map(metric=><article key={metric.key} className="rounded-lg bg-amber-50 p-3"><h3 className="font-bold">{metric.label} · {metric.status==='INPUTS_MISSING'?'산정 근거 미확정':metric.status==='NO_TARGETS'?'평가대상 없음':metric.status}</h3><p className="mt-1">{metric.reason}</p><p className="text-slate-600 mt-1">필수 입력: {metric.required_inputs.map(input=>missingInputLabels[input]||input).join(' · ')}</p></article>)}</div></details>}
+    {data&&<details className="text-xs"><summary className="cursor-pointer font-semibold text-slate-600">수집·수신·QC 운영 지표의 산정 조건</summary><div className="grid md:grid-cols-2 gap-2 mt-2">{data.blocked_metrics.map(metric=><article key={metric.key} className="rounded-lg bg-slate-50 p-3"><h3 className="font-bold">{metric.label} · {metric.status==='INPUTS_MISSING'?'추가 근거 필요':metric.status==='NO_TARGETS'?'평가대상 없음':metric.status}</h3><p className="mt-1">{metric.reason}</p><p className="text-slate-600 mt-1">필수 입력: {metric.required_inputs.map(input=>missingInputLabels[input]||input).join(' · ')}</p></article>)}</div></details>}
     {data&&<p className="text-[11px] text-slate-500">{data.source} · {data.from_month} ~ {data.to_month} · 검증본 {data.snapshot}<br/>{data.limitations.join(' · ')}</p>}
   </section>;
 }

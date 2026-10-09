@@ -9,8 +9,22 @@ const { outputText } = ts.transpileModule(source, {
   compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
 });
 const { CURRENT_OBSERVATION_MONTH, observationPeriod, observationContext,
-  selectObservationSource, currentObservationPeriod } = await import(
+  selectObservationSource, currentObservationPeriod, applyObservationPeriod } = await import(
   `data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+
+test('period apply commits both dates atomically and retains the selected station/scope',()=>{
+  const current=new URLSearchParams('source=GD_OBS_BU&sea=S&station=TW_1&from=2026-07&to=2026-07');
+  const next=applyObservationPeriod(current,'2022-12','2023-01');
+  assert.equal(next.get('from'),'2022-12');assert.equal(next.get('to'),'2023-01');
+  assert.equal(next.get('source'),'GD_OBS_BU');assert.equal(next.get('sea'),'S');assert.equal(next.get('station'),'TW_1');
+  assert.equal(current.get('from'),'2026-07');
+});
+test('invalid and reversed period edits cannot replace the current displayed scope',()=>{
+  const current=new URLSearchParams('from=2026-07&to=2026-07');
+  for(const [from,to] of [['','2026-07'],['2026-13','2026-14'],['2026-08','2026-07'],['0000-01','2026-07']])
+    assert.equal(applyObservationPeriod(current,from,to),null);
+  assert.equal(current.get('from'),'2026-07');
+});
 
 test('monthly observation sources default to the July 2026 single month', () => {
   for (const source of ['', 'GD_OBS_ST_MONTHLY', 'GD_OBS_BU', 'GD_OBS_VBU', 'GR_OBS_ST']) {

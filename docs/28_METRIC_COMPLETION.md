@@ -1,6 +1,6 @@
 # 28. 미산정 지표 보완과 산정 경계
 
-기준일: 2026-10-08. 관측 기준월은 2026년 7월이다. 실제 Parquet 전수 진단과 월간해양정보의 인쇄 수치를 조회 API·Dashboard·관측 현황·QC·AI Insights에 연결했다. 모델·장비·서비스는 각자의 평가 대상·원장·요청 기록 범위를 사용한다. 구현 완료와 운영 승인 완료를 구분한다.
+기준일: 2026-10-09. 관측 기본 기준월은 2026년 7월이다. 아래 7월 집계는 10/8 검증 기록이며, 보유 전 기간의 재산정과 관측현황 화면 변경은 [31. 관측현황 재산정](31_OBSERVATION_METRIC_RECALCULATION.md)을 따른다. 실제 Parquet 전수 진단과 월간해양정보의 인쇄 수치를 조회 API·Dashboard·관측 현황·QC·AI Insights에 연결했다. 모델·장비·서비스는 각자의 평가 대상·원장·요청 기록 범위를 사용한다. 구현 완료와 운영 승인 완료를 구분한다.
 
 ## 실제 계산한 값
 
@@ -31,7 +31,7 @@
 
 `GET /api/lake/metric-completion`은 source, from_month, to_month, network, sea, station, item을 받는다. 기본 월은 2026-07이고 Dashboard 상단 KPI는 원천/기간/관측망/해역 기준이다. 관측소·항목의 국소 표 필터와 상단 전체 KPI를 섞지 않는다. QC·Insights는 선택한 exact scope로 조회한다. Observations 표는 관측소별 참고 시간격자 보유율을 제공한다.
 
-2026-07 단일 월 외에는 `UNAVAILABLE_PERIOD`와 NULL을 반환하고 7월 수치를 다른 기간에 재사용하지 않는다. 보유 자료가 없는 범위는 `EMPTY_SCOPE`이며 비율은 0%가 아니다. checksum·기준월 불일치는409, 손상된 기록은503으로 막고 snapshot 변경은 `STALE`로 수치를 폐기한다. 요청 취소와 같은 snapshot 검증으로 화면의 이전 응답이 새 필터를 덮지 않게 한다.
+선택 기간의 월별 불변 원천 진단을 합산한다. 현재 카탈로그의 보유 건수는 있으나 해당 월의 원천 재검사가 없으면 `PARTIAL_CATALOG_COUNTS`와 완료/미완료 월 목록을 반환하고, 계산하지 않은 통계를 0으로 바꾸지 않는다. 보유 자료가 없는 범위는 `EMPTY_SCOPE`이며 비율은 0%가 아니다. 7월 보고서 인쇄값은 7월의 동일 원천·관측소·항목·타입 보존 수심에만 연결한다. checksum·기준월·원천 변경은409, 손상된 기록은503으로 막는다. 요청 취소와 같은 snapshot 검증으로 화면의 이전 응답이 새 필터를 덮지 않게 한다.
 
 구현: [집계 API](../ocean-ai-platform/backend/app/api/routes_lake_browser.py), [산정 서비스](../ocean-ai-platform/backend/app/services/metric_completion.py), [공통 패널](../ocean-ai-platform/frontend/src/components/MetricCompletionPanel.tsx), [표시 규칙](../ocean-ai-platform/frontend/src/data/metricPresentation.ts).
 
@@ -41,6 +41,6 @@
 
 실제 수집률에는 주기·센서 유효기간·시간대·예정 건수가, 승인 정상/BAD 비율에는 QC 판본·시행기간·코드 의미·판정 분모가 필요하다. 장비 가동률과 정비 완료율에는 heartbeat/운영기간 및 정비 대상·완료 원장이 필요하다. RMSE/F1에는 학습·고정 test pair·단위·task/label 정의가 필요하다. 현재 모델0개에서는 ‘평가대상 없음’으로 표시한다. 없는 근거를 가동률100%·오류0%·정비완료·AI 성능으로 채우지 않았다. 실제 계정 설정은 기존 사용자 지시대로 실제 운영 시점에 진행한다.
 
-## 검증 기록
+## 10/8 검증 기록
 
 백엔드 전체548 passed / 1 skipped / 21 warnings, 마지막 산정 경계 검증17 passed. 부모의 원천 파일 재검증·별도 직접 raw 샘플·원천4종/필터7건 실API 검증을 통과했다. OpenAPI147경로·155 operation을 확인했다. 프런트엔드14개 시험 및 최종 TypeScript/Vite build를 통과했다. 빌드의 기존 bundle 크기 경고는 남는다. 브라우저에서 7월 전체·해양2개·국소 항목/상단 분모 분리·GR QC필드없음·다른 기간 진단 미등록·서비스 요청 기록 구간과 평균 지연 표시를 확인했다. 증거는 [current_status.json](current_status.json)과 아래 기계 판독 요약에 기록했다. 기계 판독용 요약은 [28_METRIC_COMPLETION.json](28_METRIC_COMPLETION.json), 전체 동결 근거는 `D:/AI_Observation/outputs/monthly-report-matching/202607/metric-enrichment`에 보존했다.

@@ -51,3 +51,11 @@ test('numeric metrics require the exact request scope and complete numeric/refer
     assert.equal(validMetricCompletion({...response,...change},query),false);
   }
 });
+test('partially recalculated periods expose measured counts only for the exact scope and snapshot',()=>{
+  const partial={...response,state:'PARTIAL_CATALOG_COUNTS',raw:{...response.raw,grid:{holding_fraction_percent:null,expected_slots:null}}};
+  assert.equal(validMetricCompletion(partial,query),true);
+  assert.equal(gridPercent(partial.raw.grid),'필요입력 없음');
+  for(const change of [{source:'GR_OBS_ST'},{from_month:'2023-01'},{snapshot:null},{raw:null},{scope:{station:'OTHER',item:'I'}}]) {
+    assert.equal(validMetricCompletion({...partial,...change},query),false);
+  }
+});

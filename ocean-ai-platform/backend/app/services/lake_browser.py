@@ -172,7 +172,7 @@ def monthly_assets(catalog, modified):
         return records(c.execute('SELECT * FROM source_assets'))
 
 
-def series(source, month, station, item, depth, limit, offset):
+def series(source, month, station, item, depth, limit, offset, tail=False):
     view, _ = context()
     catalog = view/'file-only-timeseries.duckdb'
     if source == 'HISTORICAL_RECONCILED':
@@ -202,10 +202,11 @@ def series(source, month, station, item, depth, limit, offset):
         c.execute('CREATE VIEW normalized AS SELECT '+select+',filename,file_row_number FROM raw_files '+extra)
         year, mon = map(int, month.split('-'))
         end = f'{month}-{calendar.monthrange(year,mon)[1]:02d} 23:59:59.999999'
-        rows = records(c.execute('''SELECT *,try_cast(value_raw AS DOUBLE) value_numeric FROM normalized
+        direction = 'DESC' if tail else 'ASC'
+        rows = records(c.execute(f'''SELECT *,try_cast(value_raw AS DOUBLE) value_numeric FROM normalized
           WHERE station_code=? AND item_code=? AND try_cast(observed_time_raw AS TIMESTAMP) BETWEEN ?::TIMESTAMP AND ?::TIMESTAMP
           AND depth_step IS NOT DISTINCT FROM ? AND depth_from IS NOT DISTINCT FROM ? AND depth_to IS NOT DISTINCT FROM ?
-          ORDER BY try_cast(observed_time_raw AS TIMESTAMP),filename,file_row_number LIMIT ? OFFSET ?''',
+          ORDER BY try_cast(observed_time_raw AS TIMESTAMP) {direction},filename {direction},file_row_number {direction} LIMIT ? OFFSET ?''',
           [station,item,month+'-01 00:00:00',end,*depth,limit+1,offset]))
     by_path = {str(Path(a['parquet_path']).resolve()):a for a in assets}
     # Verify before returning any values. Unknown metadata stays null.
@@ -221,5 +222,6 @@ def series(source, month, station, item, depth, limit, offset):
     return {'source':source,'month':month,'station':station,'item':item,'rows':rows[:limit],
             'has_more':len(rows)>limit,'offset':offset,'limit':limit,'storage':'PARQUET',
             'approval_status':'UNAPPROVED','snapshot':view.name,
-            'ordering':'observed source clock, filename, file row number',
+            'tail':tail,
+            'ordering':('descending ' if tail else '')+'observed source clock, filename, file row number',
             'note':'원천 시각·값·QC 보존. 중복 제거·결측 보간·센서 추정·UTC 변환 없음.'}

@@ -4,7 +4,7 @@
 
 기준일: 2026-10-08. 아래 목록은 읽기 전용 `/openapi.json`의 **154 경로·163 HTTP operation**을 게시된 router/prefix AST와 대조한 것이다. 모든 등록 경로를 포함한다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 최신 검증 API 주소는 `http://127.0.0.1:8010`이며 기존 canonical8000을 유지한다.
 
-`GET /api/lake/metric-completion`의 원천·월·관측소·항목·시설·해역 진단과 `GET /api/service-monitoring/overview`의 현재 프로세스 HTTP 집계는 [지표28](28_METRIC_COMPLETION.md)을 따른다. 지표 checksum·월 불일치는409, 손상503, snapshot변경은STALE/null이며 선택 기간 밖 값은 사용하지 않는다.
+`GET /api/lake/metric-completion`의 원천·월·관측소·항목·시설·해역 진단과 `GET /api/service-monitoring/overview`의 현재 프로세스 HTTP 집계는 [지표28](28_METRIC_COMPLETION.md)을 따른다. 월별 원천 재산정과 원문 수신·관측 시계차는 [31](31_OBSERVATION_METRIC_RECALCULATION.md)에 기록한다. `calculation_coverage`에 원천 재검사 완료/미완료 월을 제공하고, 부분 계산은 `PARTIAL_CATALOG_COUNTS`, 빈 범위는 `EMPTY_SCOPE`로 구분한다. 지표 checksum·월·원천 변경은409, 손상503이며 선택 기간 밖 값은 사용하지 않는다.
 
 ## 인증·오류·운영 경계
 
@@ -328,7 +328,7 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | [/api/lake/publication-comparison](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/metric-completion](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
 | [/api/lake/stations/{station}](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | — |
-| [/api/lake/series](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | GET: source<br>GET: month<br>GET: station<br>GET: item |
+| [/api/lake/series](../ocean-ai-platform/backend/app/api/routes_lake_browser.py) | GET | — | GET: source<br>GET: month<br>GET: station<br>GET: item<br>GET: depth_step/depth_from/depth_to<br>GET: limit/offset<br>GET: tail=true (최근 원문 관측시각 순, 기본 false) |
 
 ## 검증 범위
 

@@ -1,6 +1,6 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-08**. 이 폴더의 01~30 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포를 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-09**. 이 폴더의 01~31 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
@@ -10,7 +10,7 @@
 
 문서 수집 상태는 2026-10-08 조회에서 eligible 4,958개 중 성공 1,603개·중복 1,513개·대기 1,697개·실패 145개이고 최근 실행은 `PARTIAL`이다. 원문 수집 전체 완료나 모든 chunk의 vector 검색 품질 검증을 뜻하지 않는다. 분모와 상태별 해석은 [15](15_DOCUMENT_INDEX_INGESTION.md)를 확인한다.
 
-최신 전체 backend 회귀·frontend build·PostgreSQL gate 검증 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)와 [current_status.json](current_status.json)을 따른다. 이는 구현에 대한 검증이며 실원천 승인이나 운영 성능 수용 결과가 아니다. 현재 실행 중인 canonical 작업본과 공개 복사본은 설정·provenance·줄바꿈 정리 때문에 fingerprint가 다를 수 있다.
+최신 10/9 backend 회귀는 776 passed / 1 skipped, frontend 관측현황 로직은 29 passed이며 production build가 통과했다. 큰 지도·해역/관측소 선택·최근 원천값·월별 자료 공백과 142개 원천 월 재계산은 [관측현황 UX·재산정](31_OBSERVATION_METRIC_RECALCULATION.md), 날짜별 PostgreSQL gate는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md), 기계 판독 결과는 [current_status.json](current_status.json)을 따른다. 이는 구현에 대한 검증이며 실원천 승인이나 운영 성능 수용 결과가 아니다.
 
 ## 문서 목록
 
@@ -46,6 +46,7 @@
 | 28 | [미산정 지표 보완](28_METRIC_COMPLETION.md) | 전수 시간격자·결측 표현·QC 코드·보고서 참조값·실제 요청 오류율과 산정 근거 |
 | 29 | [단계별 실행·최종 검증](29_DEVELOPMENT_STAGE_EXECUTION.md) | 13단계·세 에이전트·부모 검증·실원천 실험과 미완료 조건 |
 | 30 | [실제 원시 학습·시험 배포](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md) | 7월 인천 133,876행·동결 분할·후보 비교와 별도 개발용 예측 서버 |
+| 31 | [관측현황 UX·원천 지표 재산정](31_OBSERVATION_METRIC_RECALCULATION.md) | 큰 지도·해역/관측소 선택·최근 값·월별 자료 유무·142개 원천 월 재계산 |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
 현황의 기본 관측기간은 **2026년7월 단일 월**이다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.

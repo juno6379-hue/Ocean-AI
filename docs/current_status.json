@@ -1,18 +1,18 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-08T14:07:24.773788+00:00",
+  "as_of": "2026-10-09T06:01:22.530211+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/30 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/31 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "passed": 701,
+      "passed": 776,
       "skipped": 1,
       "failed": 0,
+      "seconds": 231.312,
+      "date": "2026-10-09",
       "warnings": 21,
-      "log_sha256": "ef1ba5da7981baa6340d71437599a670b625217b876dde275ec091d0d20423ab",
-      "junit_sha256": "5c51c65c4277e038d3456a0a93651b5884dd06b18e665ad9d17ca1e9478f5ed9",
-      "date": "2026-10-08",
-      "seconds": 225.27
+      "log_sha256": "b250d8a3bbc9e5ca5e00213de40b8df9a98cbccb91d4e52927c7fec2e3a5076d",
+      "junit_sha256": "d9dd504b7d5631cfce38400a51920177f2fc1140061ea51efec551f0a24d1d19"
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
@@ -58,7 +58,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Full isolated backend regression, clean frontend build, disposable PostgreSQL migration/session/replay verification, latest loopback API/browser checks",
+    "method": "2026-10-09 full isolated backend regression, frontend tests/build, actual loopback metrics/preview and browser UX; inherited dated PostgreSQL gate proof retained separately",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -227,6 +227,76 @@
       "warnings": 21,
       "seconds": 229.355,
       "log_sha256": "1ad67ead60a191c6d58e42d4980ee22c64e2be45117e511fd28289bc8939951e"
+    },
+    "frontend_observation_tests": {
+      "passed": 29,
+      "failed": 0,
+      "log_sha256": "f073af1b84108e2fa51fec06f0c561ac0281def7d1000c68fc53aac806c4384c"
+    },
+    "observation_recalculation_release": {
+      "backend_tests": {
+        "passed": 776,
+        "skipped": 1,
+        "failed": 0,
+        "seconds": 231.312,
+        "date": "2026-10-09",
+        "warnings": 21,
+        "log_sha256": "b250d8a3bbc9e5ca5e00213de40b8df9a98cbccb91d4e52927c7fec2e3a5076d",
+        "junit_sha256": "d9dd504b7d5631cfce38400a51920177f2fc1140061ea51efec551f0a24d1d19"
+      },
+      "frontend_tests": {
+        "passed": 29,
+        "failed": 0,
+        "log_sha256": "f073af1b84108e2fa51fec06f0c561ac0281def7d1000c68fc53aac806c4384c"
+      },
+      "frontend_production_build": {
+        "status": "PASS",
+        "log_sha256": "929b405fd4c8272785d083204dac9a3ed3164011adc1771176660c59848c8770"
+      },
+      "independent_native_packet_accounting": {
+        "status": "PASS",
+        "checks": 932050,
+        "sha256": "b0da4cfca598025659a21ac23c53a2d851c75dd9170e02079b9d351d3aaa43e1",
+        "checked_at": "2026-10-09T03:22:30.098104+00:00"
+      },
+      "independent_actual_gr_reader": {
+        "status": "PASS",
+        "checks": 136,
+        "sha256": "7fe936e74cd4f3cd5e6424c0924843e4d9dbb10fc4316bed94dbfd49bd8d3726",
+        "checked_at": "2026-10-09T03:24:05.691051+00:00"
+      },
+      "actual_http_metrics": {
+        "status": "PASS",
+        "checks": 485,
+        "sha256": "9a553c7e2abaad71305f738e74f588b321aad66875cab382620454f4277ba277",
+        "checked_at": "2026-10-09T05:49:24.719236+00:00"
+      },
+      "independent_native_clock_arithmetic": {
+        "status": "PASS",
+        "checks": 33,
+        "sha256": "63afd0f1047e0ca6588acede7e80aa716615702b264d9a996355964cc39ddfbb",
+        "checked_at": "2026-10-09T05:42:00.822333+00:00"
+      },
+      "independent_latest_observation_preview": {
+        "status": "PASS",
+        "checks": 148,
+        "sha256": "f70b75c647fd76c5a543ce909b363197ab9dbd8a9706ff7a98544bdf99bf563b",
+        "checked_at": "2026-10-09T05:41:26.142253+00:00"
+      },
+      "browser_ux": {
+        "status": "PASS",
+        "checks": 9,
+        "sha256": "2c4f90c97b370f40edcd70242e4689a40776d6b9d7822cfa326007e7e73d5068",
+        "checked_at": "2026-10-09T06:00:20.499Z"
+      },
+      "production_readonly_invariance": {
+        "status": "PASS",
+        "tables": 14,
+        "unchanged": true,
+        "configured_identity_count": 0,
+        "before_sha256": "b64c2bc3fe729e455ced280fd7382504d21d118fa960e3255d0ffce14eeb4e05",
+        "after_sha256": "c10b272796e2ad3e537732b8b1f27533d5b8fbac6266fe835613d44a0391dcd7"
+      }
     }
   },
   "runtime": {
@@ -602,5 +672,17 @@
     "operating_model_count": 0,
     "approved": false,
     "production_eligible": false
+  },
+  "observation_metric_recalculation": {
+    "document": "31_OBSERVATION_METRIC_RECALCULATION.json",
+    "sha256": "b636e87dfa9036979a8d6d272cf1743a97aa106e6737743c8899da39fa3d55f2",
+    "source_months": 142,
+    "typed_grain_months": 66190,
+    "files": 6248,
+    "native_receipt_packets": 155,
+    "application_db_mutations": 0,
+    "approved": false,
+    "operational_delay": false,
+    "default_observation_month": "2026-07"
   }
 }

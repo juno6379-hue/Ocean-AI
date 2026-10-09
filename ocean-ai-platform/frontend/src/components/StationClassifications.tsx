@@ -3,18 +3,19 @@ import { useSearchParams } from 'react-router-dom';
 import { API_BASE_URL, apiFetch } from '../api/client';
 import { CURRENT_OBSERVATION_MONTH, observationPeriod, selectObservationSource } from '../data/observationPeriod';
 
-export default function StationClassifications(){
+export default function StationClassifications({compact=false}:{compact?:boolean}){
  const [search,setSearch]=useSearchParams(),[data,setData]=useState<any>(null),[error,setError]=useState('');
  const {from,to}=observationPeriod(search);
  const julyReference=from===CURRENT_OBSERVATION_MONTH&&to===CURRENT_OBSERVATION_MONTH;
  const referenceQuery=julyReference?`?as_of_month=${CURRENT_OBSERVATION_MONTH}`:'';
  const update=(key:string,value:string)=>setSearch({...Object.fromEntries(search),[key]:value,station:'',item:''});
  useEffect(()=>{const c=new AbortController();setData(null);setError('');apiFetch(`${API_BASE_URL}/stations/catalog/classifications${referenceQuery}`,{signal:c.signal}).then(async r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json();}).then(d=>{if(!c.signal.aborted)setData(d);}).catch(()=>{if(!c.signal.aborted)setError('ocean_ai_db 관측망·해역 분류 조회 실패');});return()=>c.abort();},[referenceQuery]);
- return <section className="flex flex-wrap items-end gap-3 border border-blue-100 bg-white rounded-xl p-3 text-xs" aria-label="DB 관측소 분류">
-  <label>관측망·시설 유형<select aria-label="관측망·시설 유형" value={search.get('network')||''} onChange={e=>update('network',e.target.value)} className="block border border-blue-200 rounded-lg p-2 mt-1 min-w-44"><option value="">전체 관측망</option>{(data?.networks||[]).map((n:any)=><option key={n.value} value={n.value}>{n.label}</option>)}<option value="__UNREGISTERED__">DB 기준정보 미등록</option></select></label>
-  <label>해역<select aria-label="해역" value={search.get('sea')||''} onChange={e=>update('sea',e.target.value)} className="block border border-blue-200 rounded-lg p-2 mt-1 min-w-32"><option value="">전체 해역</option>{(data?.seas||[]).map((s:any)=><option key={s.value} value={s.value}>{s.label}</option>)}</select></label>
-  <p className="text-slate-500 pb-1">{error||`ocean_ai_db 등록 코드 ${data?.total_registered??'조회 중'}개 · 과거 자료 포함`}<br/>현재 운영 관측소 수가 아닙니다. 사업·시설 분류와 운영·폐지 기간 대조 중입니다.<br/>{julyReference?'7월 보고서 대조 참조 및 기존 DB 기준정보':'기존 DB 기준정보 참조'} · 운영 상태 미확정. 카드·지도·표는 선택 기간의 자료 보유 수를 표시합니다.</p>
-  <button className="text-blue-700 p-2" onClick={()=>setSearch({...Object.fromEntries(search),network:'',sea:'',station:'',item:''})}>분류 초기화</button>
+ return <section className={`flex flex-wrap items-end gap-3 text-xs ${compact?'':'border border-blue-100 bg-white rounded-xl p-3'}`} aria-label="DB 관측소 분류">
+  <label className={compact?'order-2':''}>{compact?'관측망':'관측망·시설 유형'}<select aria-label="관측망·시설 유형" value={search.get('network')||''} onChange={e=>update('network',e.target.value)} className="block border border-slate-200 rounded-lg p-2 mt-1 min-w-36 bg-white"><option value="">전체 관측망</option>{(data?.networks||[]).map((n:any)=><option key={n.value} value={n.value}>{n.label}</option>)}<option value="__UNREGISTERED__">DB 기준정보 미등록</option></select></label>
+  <label className={compact?'order-1':''}>해역<select aria-label="해역" value={search.get('sea')||''} onChange={e=>update('sea',e.target.value)} className="block border border-slate-200 rounded-lg p-2 mt-1 min-w-28 bg-white"><option value="">전체 해역</option>{(data?.seas||[]).map((s:any)=><option key={s.value} value={s.value}>{s.label}</option>)}</select></label>
+  {!compact&&<p className="text-slate-500 pb-1">{error||`ocean_ai_db 등록 코드 ${data?.total_registered??'조회 중'}개 · 과거 자료 포함`}<br/>현재 운영 관측소 수가 아닙니다. 사업·시설 분류와 운영·폐지 기간 대조 중입니다.<br/>{julyReference?'7월 보고서 대조 참조 및 기존 DB 기준정보':'기존 DB 기준정보 참조'} · 운영 상태 미확정. 카드·지도·표는 선택 기간의 자료 보유 수를 표시합니다.</p>}
+  {compact&&error&&<p role="alert" className="order-4 text-red-700">{error}</p>}
+  {!compact&&<button className="text-blue-700 p-2" onClick={()=>setSearch({...Object.fromEntries(search),network:'',sea:'',station:'',item:''})}>분류 초기화</button>}
  </section>;
 }
 

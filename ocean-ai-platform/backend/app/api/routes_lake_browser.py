@@ -64,5 +64,5 @@ def station_detail(station: str, source: Source='GD_OBS_ST_MONTHLY', from_month:
 @router.get('/series')
 def series(source: Source, month: str=Query(...,pattern=MONTH_PATTERN), station: str=Query(...,min_length=1,max_length=40), item: str=Query(...,min_length=1,max_length=80),
            depth_step: str|None=None,depth_from: str|None=None,depth_to: str|None=None,
-           limit: int=Query(500,ge=1,le=2000),offset: int=Query(0,ge=0,le=1000000)):
-    return lake.series(source,month,station,item,[depth_step,depth_from,depth_to],limit,offset)
+           limit: int=Query(500,ge=1,le=2000),offset: int=Query(0,ge=0,le=1000000),tail: bool=False):
+    return lake.series(source,month,station,item,[depth_step,depth_from,depth_to],limit,offset,tail=tail)

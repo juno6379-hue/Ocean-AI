@@ -6,6 +6,14 @@ export const HISTORICAL_OBSERVATION_SOURCE = 'HISTORICAL_RECONCILED';
 
 type SearchValues = Pick<URLSearchParams, 'get'>;
 
+/** Commit both dates together so partially edited inputs do not relabel results. */
+export function applyObservationPeriod(search:URLSearchParams,from:string,to:string) {
+  const month=/^[0-9]{4}-(0[1-9]|1[0-2])$/;
+  if(!month.test(from)||!month.test(to)||from.startsWith('0000')||to.startsWith('0000')||from>to)return null;
+  const next=new URLSearchParams(search);next.set('from',from);next.set('to',to);
+  return next;
+}
+
 export function observationPeriod(search: SearchValues) {
   const source = search.get('source') || DEFAULT_OBSERVATION_SOURCE;
   const isHistorical = source === HISTORICAL_OBSERVATION_SOURCE;

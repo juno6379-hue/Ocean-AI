@@ -1,404 +1,173 @@
-import StationClassifications, { DatasetSourceSelect } from '../components/StationClassifications';
+import StationClassifications,{DatasetSourceSelect} from '../components/StationClassifications';
 import OSMBaseLayer from '../components/OSMBaseLayer';
 import StationQuickView from '../components/StationQuickView';
+import ObservationMonthGrid from '../components/ObservationMonthGrid';
 import MonthlyReportComparison from '../components/MonthlyReportComparison';
-import MetricCompletionPanel, { useMetricCompletion } from '../components/MetricCompletionPanel';
-import { countMetric, gridPercent, percentMetric, qcPresencePercent } from '../data/metricPresentation';
-import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
-// 파일 역할: 관측 현황과 관측소 위치를 표시합니다.
-import { API_BASE_URL, apiFetch } from '../api/client';
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Building2, CheckCircle, Clock, AlertTriangle,
-  Database, RefreshCw, Bell, Activity,
-  Menu
-} from 'lucide-react';
-import { MapContainer, Marker, Popup } from 'react-leaflet';
+import MetricCompletionPanel,{useMetricCompletion} from '../components/MetricCompletionPanel';
+import {countMetric,gridCoverageLabel,gridPercent} from '../data/metricPresentation';
+import {observationAvailability} from '../data/observationAvailability';
+import {CURRENT_OBSERVATION_MONTH,observationPeriod,applyObservationPeriod} from '../data/observationPeriod';
+import {API_BASE_URL,apiFetch} from '../api/client';
+import {useState,useEffect} from 'react';
+import {Link,useSearchParams} from 'react-router-dom';
+import {Building2,RefreshCw,Layers,CalendarDays,Activity,Maximize2,ArrowUpRight} from 'lucide-react';
+import {MapContainer,Marker,Popup,Tooltip,useMap} from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend
-} from 'recharts';
 
-const createCustomIcon = (status: string, name: string) => {
-  let bgColor = 'bg-slate-500';
-  // Escape source names before passing them to Leaflet's HTML icon renderer.
-  const safeName = name.replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]!));
-  if (status === '지연') bgColor = 'bg-amber-500';
-  if (status === '중단') bgColor = 'bg-red-500';
+function markerIcon(name:string,selected:boolean) {
+  const safe=name.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+  return L.divIcon({className:'observation-marker',
+    html:'<div style="transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center"><span style="display:block;width:'+(selected?'22':'13')+'px;height:'+(selected?'22':'13')+'px;background:'+(selected?'#f97316':'#2563eb')+';border:2px solid white;border-radius:100%;box-shadow:0 1px 5px #33415580"></span>'+(selected?'<span style="margin-top:4px;padding:2px 6px;background:white;border-radius:5px;box-shadow:0 1px 5px #33415540;white-space:nowrap;font-size:12px;font-weight:700">'+safe+'</span>':'')+'</div>',
+    iconSize:[0,0],iconAnchor:[0,0]});
+}
 
-  return L.divIcon({
-    className: 'custom-leaflet-icon',
-    html: `
-      <div class="flex flex-col items-center" style="transform: translate(-50%, 0);">
-        <div class="w-4 h-4 rounded-full ${bgColor} border-2 border-white shadow-md"></div>
-        <div class="text-[10px] font-bold text-slate-800 bg-white/90 px-1.5 py-0.5 rounded shadow-sm mt-0.5 whitespace-nowrap border border-slate-100">
-          ${safeName}
-        </div>
-      </div>
-    `,
-    iconSize: [0, 0],
-    iconAnchor: [0, 8],
-  });
-};
+function MapFocus({markers,selected,scope,resetKey}:{markers:any[];selected:any;scope:string;resetKey:number}) {
+  const map=useMap();
+  useEffect(()=>{
+    map.invalidateSize();
+    if(markers.length)map.fitBounds(L.latLngBounds(markers.map(m=>[m.lat,m.lng] as [number,number])),{padding:[32,32],maxZoom:7});
+    else map.setView([36.3,127.5],6);
+  },[map,markers,scope,resetKey]);
+  useEffect(()=>{
+    if(selected?.lat!=null&&selected?.lng!=null)map.flyTo([selected.lat,selected.lng],9,{duration:.5});
+  },[map,selected?.id,selected?.lat,selected?.lng]);
+  return null;
+}
 
-const Observations: React.FC = () => {
-  const [summary, setSummary] = useState<{total: number | null; held_rows: number | null; items: number | null}>({total:null, held_rows:null, items:null});
-  const [selectedStation, setSelectedStation] = useState('');
-  const [lake, setLake] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [metadataError, setMetadataError] = useState('');
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [revision, setRevision] = useState(0);
-  const [refreshSeconds, setRefreshSeconds] = useState(0);
-  const [search, setSearch] = useSearchParams();
-  const navigate = useNavigate();
-  const { source, from, to } = observationPeriod(search);
-  const julyReference = from === CURRENT_OBSERVATION_MONTH && to === CURRENT_OBSERVATION_MONTH;
-  const metadataQuery = new URLSearchParams({limit:'10000'});
-  if (julyReference) metadataQuery.set('as_of_month', CURRENT_OBSERVATION_MONTH);
-  const query = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from_month:from, to_month:to}).toString();
-  const linkQuery = new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source, from, to}).toString();
-  const update = (changes: Record<string, string>) => setSearch({...Object.fromEntries(search), ...changes});
+export default function Observations() {
+  const [search,setSearch]=useSearchParams();
+  const {source,from,to}=observationPeriod(search);
+  const [periodDraft,setPeriodDraft]=useState({from,to}),[periodError,setPeriodError]=useState('');
+  useEffect(()=>{setPeriodDraft({from,to});setPeriodError('');},[from,to]);
+  const selectedStation=search.get('station')||'';
+  const [lake,setLake]=useState<any>(null),[tableData,setTableData]=useState<any[]>([]),[mapMarkers,setMapMarkers]=useState<any[]>([]);
+  const [loading,setLoading]=useState(false),[error,setError]=useState(''),[metadataError,setMetadataError]=useState('');
+  const [revision,setRevision]=useState(0),[lastUpdated,setLastUpdated]=useState<Date|null>(null),[refreshSeconds,setRefreshSeconds]=useState(0);
+  const [stationSearch,setStationSearch]=useState(''),[mapReset,setMapReset]=useState(0);
+  const july=from===CURRENT_OBSERVATION_MONTH&&to===CURRENT_OBSERVATION_MONTH;
+  const metadataQuery=new URLSearchParams({limit:'10000',...(july?{as_of_month:CURRENT_OBSERVATION_MONTH}:{})}).toString();
+  const query=new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source,from_month:from,to_month:to}).toString();
+  const linkQuery=new URLSearchParams({network:search.get('network')||'',sea:search.get('sea')||'',source,from,to}).toString();
+  const update=(changes:Record<string,string>)=>setSearch({...Object.fromEntries(search),...changes});
+  const chooseStation=(id:string)=>update({station:id,item:''});
   const completion=useMetricCompletion(query,revision,lake?.snapshot);
   const stationMetrics=new Map(completion.data?.raw?.stations.map(row=>[row.station_code,row])||[]);
-  const metricWaiting=completion.loading?'조회 중':completion.error?'조회 실패':completion.data?.state==='UNAVAILABLE_PERIOD'?'해당 기간 진단 미등록':'필요입력 없음';
-  const [stationSearch, setStationSearch] = useState('');
-  const [chartData, setChartData] = useState<any[]>([]);
-  const [mapMarkers, setMapMarkers] = useState<any[]>([]);
-  const [tableData, setTableData] = useState<any[]>([]);
-  const [typeStatus, setTypeStatus] = useState<any[]>([]);
-  const [recentData, setRecentData] = useState<any[]>([]);
-  const [notifications] = useState<any[]>([]);
+  const selected=tableData.find(row=>row.id===selectedStation);
+  const filtered=tableData.filter(row=>(row.name+' '+row.id).toLowerCase().includes(stationSearch.toLowerCase()));
+  const months=observationAvailability(lake?.monthly||[],from,to);
+  const metricWaiting=completion.loading?'조회 중':completion.error?'조회 실패':'산정 근거 확인';
 
-  // Table Filters
-  const [filterNet, setFilterNet] = useState('전체 관측망');
-  const [filterSea, setFilterSea] = useState('전체 해역');
-  const [filterStat, setFilterStat] = useState('전체 상태');
-
-  const uniqueStats = Array.from(new Set(tableData.map(row => row.stat))).filter(Boolean);
-
-  const filteredTableData = tableData.filter(row => {
-    if (!`${row.name} ${row.id}`.toLowerCase().includes(stationSearch.toLowerCase())) return false;
-    if (filterNet !== '전체 관측망' && row.net !== filterNet) return false;
-    if (filterSea !== '전체 해역' && row.sea !== filterSea) return false;
-    if (filterStat !== '전체 상태' && row.stat !== filterStat) return false;
-    return true;
-  });
-
-  // Map Filters
-  const [filterMapSea, setFilterMapSea] = useState('전체 해역');
-  const [filterMapNet, setFilterMapNet] = useState('전체 관측망');
-
-
-  const filteredMapMarkers = mapMarkers.filter(m => {
-    if (filterMapSea !== '전체 해역' && m.sea !== filterMapSea) return false;
-    if (filterMapNet !== '전체 관측망' && m.net !== filterMapNet) return false;
-    return true;
-  });
-
-  useEffect(() => {
-    if (!refreshSeconds) return;
-    const timer = setInterval(() => setRevision(r => r + 1), refreshSeconds * 1000);
-    return () => clearInterval(timer);
-  }, [refreshSeconds]);
-
-  useEffect(() => {
-    const control = new AbortController();
-    // Never leave values from the previous source/period visible under new filters.
-    setSelectedStation('');
-    setLoading(true); setError(''); setMetadataError(''); setLake(null); setLastUpdated(null);
-    setSummary({total:null, held_rows:null, items:null}); setChartData([]); setMapMarkers([]);
-    setTableData([]); setTypeStatus([]); setRecentData([]);
-    const read = async (path: string) => {
-      const r = await apiFetch(`${API_BASE_URL}${path}`, {signal:control.signal});
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.json();
+  useEffect(()=>{
+    if(!refreshSeconds)return;
+    const timer=setInterval(()=>setRevision(r=>r+1),refreshSeconds*1000);
+    return()=>clearInterval(timer);
+  },[refreshSeconds]);
+  useEffect(()=>{
+    const c=new AbortController();
+    setLake(null);setTableData([]);setMapMarkers([]);setError('');setMetadataError('');setLastUpdated(null);setLoading(true);setStationSearch('');
+    if(from>to){setError('시작월은 종료월보다 늦을 수 없습니다.');setLoading(false);return()=>c.abort();}
+    const read=async(path:string)=>{
+      const response=await apiFetch(API_BASE_URL+path,{signal:c.signal});
+      if(!response.ok)throw new Error('HTTP '+response.status);
+      return response.json();
     };
-    if (from > to) { setError('시작월은 종료월보다 늦을 수 없습니다.'); setLoading(false); return () => control.abort(); }
-    Promise.all([
-      read(`/lake/summary?${query}`),
-      read(`/stations?${metadataQuery}`).catch(() => {if (!control.signal.aborted) setMetadataError('지도 기준정보 조회 실패'); return []; }),
-    ]).then(([data, metadata]) => {
-      if (control.signal.aborted) return;
-      const references = new Map<string, any[]>();
-      for (const m of metadata) references.set(m.station_id, [...(references.get(m.station_id) || []), m]);
-      const rows = data.stations.map((r: any) => {
-        // Codes are selected from the Parquet catalog. Existing SQL metadata only supplies reference coordinates.
-        const matches = references.get(r.station_code) || [];
-        const ref = matches.length === 1 ? matches[0] : null;
-        const valid = Number.isFinite(ref?.latitude) && Number.isFinite(ref?.longitude)
-          && Math.abs(ref.latitude) <= 90 && Math.abs(ref.longitude) <= 180;
-        return {id:r.station_code, name:r.station_name || r.reference_name || ref?.reference_name || ref?.station_name || r.station_code,
-          net:ref ? (ref.network_type || 'DB 분류값 없음') : 'DB 기준정보 미등록', sea:ref ? (ref.sea_area || 'DB 해역값 없음') : 'DB 기준정보 미등록',
-          lat:valid ? ref.latitude : null, lng:valid ? ref.longitude : null,
-          rate:'필요입력 없음', stat:'필요입력 없음', status:'미확정', statColor:'text-slate-500',
-          time:r.last_clock || '미확정', first:r.first_clock, delay:'필요입력 없음',
-          note:`${r.held_rows.toLocaleString('ko-KR')}행 · ${r.items}항목 · ${r.held_months}개월`,
-          held_rows:r.held_rows, items:r.items, months:r.held_months};
-      });
-      setLake(data); setSummary({total:data.totals.stations, held_rows:data.totals.held_rows, items:data.totals.items});
-      setSelectedStation(rows[0]?.id || '');
-      setTableData(rows); setMapMarkers(rows.filter((r:any) => r.lat != null && r.lng != null));
-      const monthRows = new Map<string, number>(data.monthly.map((m:any) => [String(m.month).slice(0,7), m.held_rows]));
-      const months = [];
-      const [year, month] = from.split('-').map(Number);
-      let cursor = new Date(Date.UTC(year, month-1, 1));
-      // Missing months remain null so the chart does not imply continuous observation or zero observations.
-      while (cursor.toISOString().slice(0,7) <= to && months.length < 1200) {
-        const key = cursor.toISOString().slice(0,7);
-        months.push({time:key, total:monthRows.get(key) ?? null});
-        cursor.setUTCMonth(cursor.getUTCMonth()+1);
-      }
-      setChartData(months);
-      const maxItems = Math.max(1, ...rows.map((r:any) => r.items));
-      setTypeStatus([...rows].sort((a:any,b:any) => b.items-a.items).map((r:any) => ({
-        id:r.id, name:r.name, rate:r.items/maxItems*100, stat:`${r.items}개`, color:'bg-blue-500', statColor:'text-slate-600',
-      })));
-      setRecentData([...rows].filter((r:any) => r.time !== '미확정').sort((a:any,b:any) => b.time.localeCompare(a.time)).slice(0,10).map((r:any) => ({
-        ...r, network_type:r.net, color:'text-slate-500', status:'보유',
-      })));
-      setLastUpdated(new Date());
-    }).catch(e => {if (!control.signal.aborted) setError(`실측자료 조회 실패: ${e.message}`);})
-      .finally(() => {if (!control.signal.aborted) setLoading(false);});
-    return () => control.abort();
-  }, [query, metadataQuery.toString(), revision]);
+    Promise.all([read('/lake/summary?'+query),read('/stations?'+metadataQuery).catch(()=>{if(!c.signal.aborted)setMetadataError('위치 기준정보 조회 실패');return [];})])
+      .then(([data,metadata])=>{
+        if(c.signal.aborted)return;
+        const refs=new Map<string,any[]>();
+        for(const m of metadata)refs.set(m.station_id,[...(refs.get(m.station_id)||[]),m]);
+        const rows=data.stations.map((r:any)=>{
+          const matches=refs.get(r.station_code)||[],ref=matches.length===1?matches[0]:null;
+          const valid=Number.isFinite(ref?.latitude)&&Number.isFinite(ref?.longitude)&&Math.abs(ref.latitude)<=90&&Math.abs(ref.longitude)<=180;
+          return {id:r.station_code,name:r.station_name||r.reference_name||ref?.reference_name||ref?.station_name||r.station_code,
+            net:ref?.network_type||'분류 정보 없음',sea:ref?.sea_area||'해역 정보 없음',lat:valid?ref.latitude:null,lng:valid?ref.longitude:null,
+            stat:r.held_rows>0?'자료 보유':'자료 없음',time:r.last_clock||'시각 기록 없음',first:r.first_clock,
+            held_rows:r.held_rows,items:r.items,months:r.held_months,
+            note:r.items+'개 항목 · '+r.held_months+'개월 자료'};
+        });
+        setLake(data);setTableData(rows);setMapMarkers(rows.filter((r:any)=>r.lat!=null&&r.lng!=null));setLastUpdated(new Date());
+      }).catch(e=>{if(!c.signal.aborted)setError('관측자료 조회 실패: '+e.message);})
+      .finally(()=>{if(!c.signal.aborted)setLoading(false);});
+    return()=>c.abort();
+  },[query,metadataQuery,revision]);
 
-  useEffect(() => {
-    setFilterNet('전체 관측망'); setFilterSea('전체 해역'); setFilterStat('전체 상태');
-    setFilterMapSea('전체 해역'); setFilterMapNet('전체 관측망'); setStationSearch('');
-  }, [query]);
-
-  const resetTable = () => {setFilterNet('전체 관측망'); setFilterSea('전체 해역'); setFilterStat('전체 상태'); setStationSearch(''); document.getElementById('observation-table')?.scrollIntoView({behavior:'smooth'});};
-
-  return (
-    <div className="p-6 space-y-5 bg-gradient-to-br from-blue-50/60 via-white to-indigo-50/40 min-h-full">
-      {/* Top Header */}
-      <div className="flex flex-wrap gap-3 justify-between items-end border-b border-slate-200 pb-4">
-        <div className="flex flex-wrap items-end gap-4">
-          <h2 className="text-3xl font-extrabold text-slate-900">관측 현황</h2>
-          <p className="text-sm text-slate-500 mb-0.5">국가해양관측망의 보유 자료와 관측기간을 확인합니다.</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-          <span>{lastUpdated ? `조회 ${lastUpdated.toLocaleTimeString('ko-KR', {timeZone:'Asia/Seoul'})} KST` : '조회 대기'}</span>
-          <button aria-label="새로고침" onClick={() => setRevision(r=>r+1)} disabled={loading} className="p-1.5 border border-slate-200 rounded hover:bg-slate-100"><RefreshCw className="w-4 h-4"/></button>
-          <label>화면 갱신 <select aria-label="자동 갱신" value={refreshSeconds} onChange={e=>setRefreshSeconds(Number(e.target.value))} className="border border-slate-200 rounded px-2 py-1.5 bg-white"><option value={0}>수동</option><option value={60}>1분</option><option value={300}>5분</option></select></label>
-          <button aria-label="알림 메뉴" onClick={()=>navigate('/alerts')} className="p-1.5"><Bell className="w-5 h-5"/></button>
-        </div>
+  return <div className="p-4 lg:p-5 space-y-4 bg-slate-50 min-h-full text-slate-800">
+    <header className="flex flex-wrap justify-between items-center gap-3">
+      <div><div className="flex gap-3 items-center"><h2 className="text-2xl font-bold text-slate-900">관측 현황</h2><span className="text-[11px] text-blue-700 rounded-full bg-blue-50 border border-blue-100 px-2 py-1">{july?'2026년 7월 현황':'기간별 자료 조회'}</span></div>
+      <p className="text-xs text-slate-500 mt-1.5">관측소를 선택해 관측항목, 최근 자료와 기간별 공백을 확인하세요.</p></div>
+      <div className="flex items-center gap-2 text-[11px] text-slate-500">
+        <span>{lastUpdated?'조회 '+lastUpdated.toLocaleTimeString('ko-KR',{timeZone:'Asia/Seoul'}):'조회 대기'}</span>
+        <button aria-label="새로고침" disabled={loading} onClick={()=>setRevision(r=>r+1)} className="border rounded-lg bg-white p-2 hover:bg-slate-50"><RefreshCw className={'w-4 h-4 '+(loading?'animate-spin':'')}/></button>
+        <select aria-label="자동 갱신" value={refreshSeconds} onChange={e=>setRefreshSeconds(Number(e.target.value))} className="border rounded-lg p-2 bg-white"><option value={0}>수동 갱신</option><option value={60}>1분마다</option><option value={300}>5분마다</option></select>
       </div>
-    <StationClassifications/>
-      <div className="flex flex-wrap gap-3 items-center text-xs">
-        <label>원천 <DatasetSourceSelect source={source}/></label>
-        <label>시작월 <input aria-label="시작월" type="month" value={from} onChange={e=>e.target.value && update({from:e.target.value})} className="border border-slate-200 rounded p-2"/></label>
-        <label>종료월 <input aria-label="종료월" type="month" value={to} onChange={e=>e.target.value && update({to:e.target.value})} className="border border-slate-200 rounded p-2"/></label>
-        <Link className="text-blue-700 underline" to={`/?${linkQuery}`}>종합 대시보드</Link>
-      </div>
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-slate-600">
-        실측 원천 보유 현황 · QC 승인 전 · 자료가 없는 기간을 관측 중단으로 단정하지 않습니다. 수집률·수신 상태는 수신 이력과 예정 관측건수 확인이 필요합니다.
-        {lake && <p className="mt-1">원천 관측시각: {lake.totals.first_clock || '미확정'} ~ {lake.totals.last_clock || '미확정'} · 시간대 미확정 · {lake.totals.held_months}개월 보유<br/>검증본: {lake.snapshot} · {lake.legacy_status || lake.note}</p>}
-      </div>
-      {loading && <p role="status" className="text-sm text-blue-600">보유 자료 조회 중…</p>}
-      {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
-
-      <MonthlyReportComparison source={source} from={from} to={to}/>
-
-      <MetricCompletionPanel {...completion}/>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">{[
-        ['자료 보유 관측소',summary.total==null?'조회 중':countMetric(summary.total),'선택 기간 보유 코드 · 운영 시설 수 아님',Building2],
-        ['시간격자 보유율 (참고)',completion.data?.raw?gridPercent(completion.data.raw.grid):metricWaiting,'원시 유일 슬롯 · 실제 수집률 아님',Activity],
-        ['원시 결측표현율',completion.data?.raw?percentMetric(completion.data.raw.missing_value_rate,completion.data.raw.held_rows):metricWaiting,'결측 표현 / 보유 행',AlertTriangle],
-        ['수치 표현율',completion.data?.raw?percentMetric(completion.data.raw.numeric_row_rate,completion.data.raw.held_rows):metricWaiting,'수치 해석 가능 · 정상률 아님',CheckCircle],
-        ['원천 QC 표기율',completion.data?.raw?qcPresencePercent(completion.data.raw):metricWaiting,'QC 코드 표기 · 승인 분류 아님',Clock],
-        ['보유 원천 행 수',summary.held_rows==null?'조회 중':countMetric(summary.held_rows),'중복 제거 전 · 선택 기간 합계',Database],
-      ].map(([label,value,note,Icon]:any)=><article key={label} className="rounded-xl border bg-white p-4 shadow-sm"><Icon className="w-5 h-5 text-blue-600 mb-2"/><h2 className="text-xs font-bold">{label}</h2><p className="text-xl font-black my-2 break-words">{value}</p><p className="text-[11px] text-slate-500">{note}</p></article>)}</div>
-      <p className="text-xs text-slate-600">실제 수집률·정상수신/지연/중단 개소·지연시간: 필요입력 없음. 승인된 관측주기·운영구간·수신 원장과 관측/수신 시각의 시간대·지연 허용 기준이 필요합니다. 자료 보유나 격자 빈칸을 수신 중단으로 판정하지 않습니다.</p>
-
-      {/* Main Grid Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5">
-
-        {/* Left Col - Map & Line Chart */}
-        <div className="xl:col-span-1 flex flex-col gap-5">
-          {/* Map */}
-          <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex flex-col h-[400px]">
-            <h3 className="text-sm font-bold text-slate-800 mb-2">관측소 위치 및 상태 지도</h3><p className="text-[10px] text-slate-500 mb-2">{julyReference ? '7월 보고서 대조 참조 및 기존 DB 기준정보' : '기존 DB 좌표·관측망·해역 참조'} · 운영 상태 미확정 · 지도 {mapMarkers.length}/{summary.total ?? '—'}개소 · {metadataError || '좌표 누락 관측소는 표에서 조회'}</p>
-            <div className="flex-1 rounded-lg overflow-hidden border border-slate-200 relative">
-              <MapContainer center={[36.5, 127.5]} zoom={6} style={{ height: '100%', width: '100%' }} zoomControl={false}>
-                <OSMBaseLayer/>
-                {filteredMapMarkers.map((marker, i) => (
-                  <Marker key={i} position={[marker.lat, marker.lng]} icon={createCustomIcon(marker.status, marker.name)} eventHandlers={{click:()=>{setSelectedStation(marker.id);setStationSearch('');}}}>
-                    <Popup>
-                      <div className="text-xs font-bold">{marker.name}</div>
-                      <div className="text-[10px] text-slate-500">{marker.sea} | {marker.net} ({marker.id})</div>
-                      <div className="text-[10px] font-bold mt-1">수신 상태: {marker.status}</div><Link className="text-blue-700 underline" to={`/profile/${encodeURIComponent(marker.id)}?${linkQuery}`}>실측·근거 상세</Link>
-                    </Popup>
-                  </Marker>
-                ))}
-              </MapContainer>
-              {/* Legend overlay */}
-              <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-sm p-2 rounded border border-slate-700 text-[10px] text-slate-300 z-[400]">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-slate-500"></div> 수신 상태 미확정</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-3 text-xs">
-
-
-              <button onClick={resetTable} className="text-blue-600 font-medium px-2 py-1.5 hover:bg-blue-50 rounded">전체 목록 보기</button>
-            </div>
-          </div>
-
-          {/* Line Chart */}
-          <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 h-[300px] flex flex-col">
-            <h3 className="text-sm font-bold text-slate-800 mb-4">월별 보유 원천 행 수 <span className="text-xs font-normal text-slate-500">(선택 기간 · 미등록 월은 공백)</span></h3>
-            <div className="flex-1 w-full text-xs">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                  <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{fill: '#64748B'}} />
-                  <YAxis domain={[0, 'auto']} tickFormatter={v => Intl.NumberFormat('ko-KR', {notation:'compact'}).format(v)} axisLine={false} tickLine={false} tick={{fill: '#64748B'}} width={30} />
-                  <RechartsTooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                  <Legend iconType="plainline" wrapperStyle={{ fontSize: '11px', top: -10 }} />
-                  <Line type="monotone" dataKey="total" name="보유 행 수" stroke="#3B82F6" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+    </header>
+    <form aria-label="관측소와 기간 선택" onSubmit={e=>{e.preventDefault();const fields=new FormData(e.currentTarget);const next=applyObservationPeriod(search,String(fields.get('from')||''),String(fields.get('to')||''));if(next){setSearch(next);setPeriodError('');}else setPeriodError('시작월과 종료월을 올바르게 선택하세요.');}} className="flex flex-wrap gap-3 items-end rounded-xl border border-slate-200 bg-white p-3">
+      <StationClassifications compact/>
+      <label className="text-xs font-semibold flex-1 min-w-44 max-w-72">관측소 선택
+        <select aria-label="관측소 선택" value={selected?.id||''} disabled={loading} onChange={e=>chooseStation(e.target.value)} className="block mt-1 border border-slate-200 rounded-lg p-2 w-full bg-white font-normal">
+          <option value="">지도로 전체 보기</option>{tableData.map(row=><option key={row.id} value={row.id}>{row.name+' · '+row.id}</option>)}
+        </select>
+      </label>
+      <label className="text-xs">시작월<input name="from" required aria-label="시작월" type="month" value={periodDraft.from} onInput={e=>{const value=e.currentTarget.value;setPeriodDraft(p=>({...p,from:value}));}} onChange={e=>{const value=e.target.value;setPeriodDraft(p=>({...p,from:value}));}} className="block border border-slate-200 rounded-lg p-2 mt-1 bg-white"/></label>
+      <label className="text-xs">종료월<input name="to" required aria-label="종료월" type="month" value={periodDraft.to} onInput={e=>{const value=e.currentTarget.value;setPeriodDraft(p=>({...p,to:value}));}} onChange={e=>{const value=e.target.value;setPeriodDraft(p=>({...p,to:value}));}} className="block border border-slate-200 rounded-lg p-2 mt-1 bg-white"/></label>
+      <button type="submit" className="text-xs font-semibold text-white bg-blue-600 rounded-lg px-3 py-2 hover:bg-blue-700">기간 적용</button>
+      {!july&&<button type="button" className="text-xs text-blue-700 p-2" onClick={()=>update({from:CURRENT_OBSERVATION_MONTH,to:CURRENT_OBSERVATION_MONTH})}>7월 기준으로</button>}
+      <button type="button" className="text-xs text-slate-500 p-2" onClick={()=>update({sea:'',network:'',station:'',item:''})}>선택 초기화</button>
+      {periodError&&<p role="alert" className="basis-full text-xs text-red-700">{periodError}</p>}
+      {(periodDraft.from!==from||periodDraft.to!==to)&&<p role="status" className="basis-full text-[11px] text-slate-500">기간 적용을 누르면 선택한 기간으로 조회합니다. 현재 결과: {from} ~ {to}</p>}
+    </form>
+    {error&&<p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-100 rounded-lg p-3">{error}</p>}
+    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">{[
+      ['자료 있는 관측소',lake?countMetric(lake.totals.stations):'조회 중','선택 해역·관측망',Building2],
+      ['관측항목',lake?countMetric(lake.totals.items)+'종':'조회 중','선택 원천의 항목 코드',Layers],
+      ['자료 있는 월',lake?months.filter(m=>m.held).length+'/'+months.length+'개월':'조회 중',from+' ~ '+to,CalendarDays],
+      ['자료 채움 (참고)',completion.data?.raw?gridPercent(completion.data.raw.grid):metricWaiting,gridCoverageLabel(completion.data)||'원문 시각의 참고 격자',Activity],
+    ].map(([title,value,note,Icon]:any)=><article key={title} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"><Icon className="w-5 h-5 shrink-0 text-blue-600"/><div className="min-w-0"><h3 className="text-[11px] text-slate-500">{title}</h3><p className="text-lg font-bold text-slate-900">{value}</p><p className="text-[10px] text-slate-500 truncate" title={note}>{note}</p></div></article>)}</div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+      <section aria-label="관측소 지도" className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div className="flex flex-wrap justify-between items-center gap-2 px-4 py-3"><div><h3 className="text-sm font-bold">관측소 지도</h3><p className="text-[11px] text-slate-500 mt-1">{loading?'위치 조회 중':(search.get('sea')||'전체 해역')+' · 지도에 표시 '+mapMarkers.length+'개소'}{selected?' · 선택 '+selected.name:''}</p></div>
+          <button onClick={()=>setMapReset(v=>v+1)} className="flex items-center gap-1.5 border border-slate-200 rounded-lg p-2 text-xs hover:bg-slate-50"><Maximize2 className="w-3.5 h-3.5"/>전체 위치</button></div>
+        <div className="h-[460px] lg:h-[560px] relative">
+          <MapContainer center={[36.3,127.5]} zoom={6} style={{height:'100%',width:'100%'}} zoomControl={true} scrollWheelZoom={true}>
+            <OSMBaseLayer/><MapFocus markers={mapMarkers} selected={selected} scope={query} resetKey={mapReset}/>
+            {mapMarkers.map(marker=><Marker key={marker.id} position={[marker.lat,marker.lng]} icon={markerIcon(marker.name,marker.id===selectedStation)} title={marker.name+' '+marker.id} alt={marker.name} eventHandlers={{click:()=>chooseStation(marker.id)}}>
+              <Tooltip direction="top" offset={[0,-12]}>{marker.name+' · '+marker.net}</Tooltip>
+              <Popup><p className="font-bold">{marker.name}</p><p>{marker.id+' · '+marker.sea}</p><p>{marker.items+'개 항목 · 마지막 자료 '+marker.time.replace('T',' ')}</p><Link className="text-blue-700 underline" to={'/profile/'+encodeURIComponent(marker.id)+'?'+linkQuery}>관측값 자세히</Link></Popup>
+            </Marker>)}
+          </MapContainer>
+          <div className="absolute bottom-3 left-3 z-[400] rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-[11px] shadow-sm flex gap-3"><span><span className="text-blue-600">●</span> 자료 보유</span><span><span className="text-orange-500">●</span> 선택 관측소</span></div>
         </div>
-
-        {/* Middle Col - Table & Progress Bars */}
-        <div className="xl:col-span-2 flex flex-col gap-5">
-          {/* Table */}
-          <div id="observation-table" className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex flex-col h-[400px]">
-            <div className="flex flex-wrap gap-2 justify-between items-center mb-4">
-              <h3 className="text-sm font-bold text-slate-800">관측소별 보유·수신 현황</h3>
-              <div className="flex flex-wrap gap-2 text-xs"><input aria-label="관측소 검색" placeholder="관측소명·코드" value={stationSearch} onChange={e=>setStationSearch(e.target.value)} className="border border-slate-200 rounded px-2 py-1 w-32"/>
-
-
-                <select value={filterStat} onChange={e => setFilterStat(e.target.value)} className="border border-slate-200 rounded px-2 py-1 bg-white outline-none text-slate-600">
-                  <option value="전체 상태">전체 상태</option>
-                  {uniqueStats.map(stat => <option key={stat as string} value={stat as string}>{stat as string}</option>)}
-                </select>
-                <button aria-label="표 필터 초기화" onClick={resetTable} className="border border-slate-200 rounded px-2 py-1 text-slate-600 hover:bg-slate-50"><Menu className="w-3.5 h-3.5" /></button>
-              </div>
-            </div>
-            <div className="flex-1 overflow-auto">
-              <table className="w-full text-xs text-left">
-                <thead className="text-slate-500 bg-slate-50 border-y border-slate-200 sticky top-0">
-                  <tr>
-                    <th className="py-2.5 px-3 font-medium">관측소명</th>
-                    <th className="py-2.5 px-3 font-medium">관측망</th>
-                    <th className="py-2.5 px-3 font-medium">해역</th>
-                    <th className="py-2.5 px-3 font-medium text-right">시간격자 보유율 (참고)</th>
-                    <th className="py-2.5 px-3 font-medium text-center">수신 상태</th>
-                    <th className="py-2.5 px-3 font-medium text-center">최종 관측시각(시간대 미확정)</th>
-                    <th className="py-2.5 px-3 font-medium text-center">지연 시간</th>
-                    <th className="py-2.5 px-3 font-medium">보유 자료</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
-                  {filteredTableData.map((row, i) => (
-                    <tr key={i} onClick={()=>setSelectedStation(row.id)} className={`cursor-pointer transition-colors ${selectedStation===row.id ? 'bg-blue-50' : 'hover:bg-slate-50'}`}>
-                      <td className="py-2.5 px-3 font-medium text-slate-800"><button aria-pressed={selectedStation===row.id} className="text-blue-700 hover:underline text-left" onClick={()=>setSelectedStation(row.id)}>{row.name}<span className="block text-[10px] text-slate-500">{row.id}</span></button></td>
-                      <td className="py-2.5 px-3">{row.net}</td>
-                      <td className="py-2.5 px-3">{row.sea}</td>
-                      <td className="py-2.5 px-3 text-right" title={stationMetrics.get(row.id)?.grid.reason}>{completion.data?.raw?gridPercent(stationMetrics.get(row.id)?.grid):metricWaiting}</td>
-                      <td className={`py-2.5 px-3 text-center font-bold ${row.statColor}`}>{row.stat}</td>
-                      <td className="py-2.5 px-3 text-center">{row.time}</td>
-                      <td className="py-2.5 px-3 text-center">{row.delay}</td>
-                      <td className="py-2.5 px-3 text-xs text-slate-500">{row.note}</td>
-                    </tr>
-                  ))}
-                  {!filteredTableData.length && <tr><td colSpan={8} className="py-6 text-center text-slate-500">{loading ? '조회 중…' : error ? '자료 조회 실패' : '선택 범위·필터에 보유 자료가 없습니다.'}</td></tr>}
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-3 text-center border-t border-slate-100 pt-3">
-              <button onClick={resetTable} className="text-xs text-blue-600 font-medium hover:underline">필터 해제 · 전체 {tableData.length}개소 보기 →</button>
-            </div>
-          </div>
-
-          {/* Bottom Right Layout Split: Progress Bars & Lists */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 h-[300px]">
-            {/* Progress Bars */}
-            <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex flex-col">
-              <h3 className="text-sm font-bold text-slate-800 mb-4">관측소별 보유 항목 수</h3>
-              <p className="text-[10px] text-slate-500 mb-2">원천 항목 코드 {summary.items ?? '—'}종 · 막대는 최대 항목 수 대비 비중이며 수집률이 아닙니다.</p><div className="flex-1 overflow-auto space-y-3.5 text-xs pr-2">
-                {typeStatus.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Link className="w-20 truncate font-medium text-blue-700" to={`/profile/${encodeURIComponent(item.id)}?${linkQuery}`}>{item.name}</Link>
-                    <div className="flex-1 bg-slate-100 h-2.5 rounded-full overflow-hidden flex items-center relative">
-                      <div className={`h-full ${item.color} rounded-full`} style={{ width: `${item.rate}%` }}></div>
-
-                    </div>
-                    <span className={`w-8 text-right font-bold ${item.statColor}`}>{item.stat}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-2 text-center border-t border-slate-100 pt-2">
-                <Link className="text-xs text-blue-600 font-medium hover:underline" to="/data-lake">원천·항목 검증 현황 보기 →</Link>
-              </div>
-            </div>
-
-            {/* Notifications & Lists */}
-            <div className="flex flex-col gap-5">
-              <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex-1 overflow-hidden flex flex-col">
-                <h3 className="text-sm font-bold text-slate-800 mb-3">최근 보유 관측시각</h3>
-                <div className="flex-1 overflow-y-auto space-y-4 text-xs pr-2">
-                  {(Object.entries(
-                    recentData.reduce((acc, item) => {
-                      const net = item.network_type || '기타';
-                      if (!acc[net]) acc[net] = [];
-                      acc[net].push(item);
-                      return acc;
-                    }, {} as Record<string, any[]>)
-                  ) as [string, any[]][]).map(([network, items]) => (
-                    <div key={network} className="space-y-1.5">
-                      <div className="text-[11px] font-bold text-slate-500 border-b border-slate-100 pb-1 mb-1">{network}</div>
-                      {items.map((item, i) => (
-                        <div key={i} className="flex justify-between items-center p-1 hover:bg-slate-50 rounded">
-                          <Link className="font-medium text-blue-700" to={`/profile/${encodeURIComponent(item.id)}?${linkQuery}`}>{item.name}</Link>
-                          <div className="flex items-center gap-2">
-                            <span className="text-slate-400 text-[10px]">{item.time}</span>
-                            <span className={`${item.color} font-bold w-10 text-right`}>{item.status}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-4 flex-1 overflow-hidden flex flex-col">
-                <h3 className="text-sm font-bold text-slate-800 mb-3">수신 알림</h3>
-                <div className="flex-1 overflow-y-auto space-y-3">
-                  {notifications.map((notif, i) => (
-                    <div key={i} className="flex gap-2">
-                      <div className={`w-2 h-2 mt-1 rounded-full ${notif.dot_color} shrink-0`}></div>
-                      <div className="flex-1">
-                        <div className="flex justify-between text-xs font-bold text-slate-800">
-                          <span>{notif.title}</span>
-                          <span className="text-slate-500 font-normal">{notif.time}</span>
-                        </div>
-                        <div className="text-[10px] text-slate-500 mt-0.5">{notif.message}</div>
-                      </div>
-                    </div>
-                  ))}
-                  {notifications.length === 0 && (
-                     <div className="text-xs text-slate-400 text-center mt-4">실시간 수신 알림 미연결 · 알림 없음으로 판정하지 않습니다.</div>
-                  )}
-                </div>
-                <div className="mt-2 text-center border-t border-slate-100 pt-2">
-                  <Link className="text-[11px] text-blue-600 font-medium hover:underline" to="/alerts">전체 알림 보기 →</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div className="px-4 py-2 text-[11px] text-slate-500">{metadataError||'지도의 점을 누르거나 상단에서 관측소를 선택하세요.'}
+          {!loading&&mapMarkers.length<tableData.length&&<span> · 좌표 없는 {tableData.length-mapMarkers.length}개소는 목록에서 선택</span>}
+          {selected?.lat==null&&selected&&<span> · {selected.name}의 위치 좌표가 없습니다.</span>}
         </div>
-        <StationQuickView station={tableData.find(r=>r.id===selectedStation)} source={source} from={from} to={to} snapshot={lake?.snapshot}/>
-      </div>
+      </section>
+      <StationQuickView station={selected} source={source} from={from} to={to} snapshot={lake?.snapshot} receiptDiagnostics={stationMetrics.get(selectedStation)?.receipt_diagnostics} revision={revision}/>
     </div>
-  );
-};
-
-export default Observations;
+    <section id="observation-table" aria-label="관측소 목록" className="rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-3"><div><h3 className="text-sm font-bold">관측소 목록</h3><p className="text-[11px] text-slate-500 mt-1">조회 범위 {filtered.length}개소 · 관측소를 선택하면 지도로 이동합니다.</p></div>
+        <input aria-label="관측소 검색" placeholder="관측소 이름·코드로 찾기" value={stationSearch} onChange={e=>setStationSearch(e.target.value)} className="border border-slate-200 rounded-lg px-3 py-2 text-xs w-56"/></div>
+      <div className="overflow-auto max-h-[420px]"><table className="w-full min-w-[700px] text-xs text-left"><thead className="sticky top-0 bg-slate-50 text-slate-500"><tr>
+        {['관측소','해역 · 관측망','관측항목','자료 있는 월','마지막 관측자료 (원문)','자료 채움 (참고)','상세'].map(title=><th key={title} className="px-3 py-3 font-medium">{title}</th>)}
+      </tr></thead><tbody>{filtered.map(row=><tr key={row.id} className={'border-t border-slate-100 '+(row.id===selectedStation?'bg-blue-50':'hover:bg-slate-50')}>
+        <td className="px-3 py-3"><button aria-pressed={row.id===selectedStation} className="text-blue-700 text-left font-semibold hover:underline" onClick={()=>chooseStation(row.id)}>{row.name}<span className="block text-[10px] text-slate-500 font-normal mt-1">{row.id}</span></button></td>
+        <td className="px-3 py-3">{row.sea}<span className="block text-[10px] text-slate-500 mt-1">{row.net}</span></td>
+        <td className="px-3 py-3">{row.items}개</td><td className="px-3 py-3">{row.months}개월</td>
+        <td className="px-3 py-3 whitespace-nowrap">{row.time.replace('T',' ')}</td>
+        <td className="px-3 py-3" title={stationMetrics.get(row.id)?.grid.reason}>{completion.data?.raw?gridPercent(stationMetrics.get(row.id)?.grid):metricWaiting}</td>
+        <td className="px-3 py-3"><Link aria-label={row.name+' 관측값 상세'} className="inline-flex gap-1 items-center text-blue-700" to={'/profile/'+encodeURIComponent(row.id)+'?'+linkQuery}>보기<ArrowUpRight className="w-3 h-3"/></Link></td>
+      </tr>)}
+      {!filtered.length&&<tr><td colSpan={7} className="text-center py-10 text-slate-500">{loading?'관측소 조회 중…':error?'자료 조회 실패':'선택 해역·기간·검색 조건에 자료가 없습니다.'}</td></tr>}
+      </tbody></table></div>
+      {lake&&<div className="border-t border-slate-100 pt-4 mt-4"><ObservationMonthGrid rows={lake.monthly} from={from} to={to} onMonth={month=>update({from:month,to:month})}/></div>}
+    </section>
+    <details className="rounded-xl border border-slate-200 bg-white p-3 text-xs">
+      <summary className="cursor-pointer text-slate-600 font-semibold">자료 출처·산정 근거</summary>
+      <div className="mt-4 space-y-3"><DatasetSourceSelect source={source}/><p className="text-slate-500">보유 원천 {lake?countMetric(lake.totals.held_rows):'조회 중'}행 · 수집률·QC 정상률은 승인된 기준으로 별도 판단합니다.</p><MetricCompletionPanel {...completion}/></div>
+    </details>
+    <details className="rounded-xl border border-slate-200 bg-white p-3 text-xs">
+      <summary className="cursor-pointer text-slate-600 font-semibold">7월 월간해양정보 대조</summary><div className="mt-3"><MonthlyReportComparison source={source} from={from} to={to}/></div>
+    </details>
+  </div>;
+}
