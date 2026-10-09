@@ -1,18 +1,18 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T07:29:44.577808+00:00",
+  "as_of": "2026-10-09T09:15:48.544729+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/32 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/33 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "passed": 788,
+      "passed": 855,
       "skipped": 1,
       "warnings": 21,
-      "seconds": 242.57,
+      "seconds": 348.68,
       "failed": 0,
-      "log_sha256": "0188041f9eafa4c54f6416ebe3d0d382d2db65f4c0b26ce920856a2c206b3344",
-      "database_scope": "isolated regression; no operational database writes",
-      "date": "2026-10-09"
+      "log_sha256": "6de44ccf43dd27ba067f11897d4edfdba6a5a9735c486c78339406344402ad08",
+      "date": "2026-10-09",
+      "database_scope": "isolated regression; no operational database writes"
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
@@ -58,7 +58,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "2026-10-09 final isolated backend regression, frontend tests/build, actual native-cutoff API and 11 browser checks; inherited dated PostgreSQL gate proof retained separately",
+    "method": "2026-10-09 final isolated regression, exact native 24h diagnostics, independent Arrow 11 channels, frontend real/synthetic contract and browser verification; dated PostgreSQL gate retained separately",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -79,12 +79,10 @@
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 45,
+      "passed": 62,
       "failed": 0,
-      "log_sha256": "941883134d6acc109eeab6a6281f38938850942c51472f10613e3aad4ebc53a0",
       "date": "2026-10-09",
-      "build": "PASS",
-      "build_log_sha256": "e9887cda0bcc4bc9d7fd5511e0e7b2a13135bc180e06d98d3c19c41cb3991f3c"
+      "log_sha256": "d467eef7fa3f4512e96c4a8403c359e486a2955610aebccc8b1a857c549a2063"
     },
     "postgresql_full_restore": {
       "status": "PASS",
@@ -406,6 +404,11 @@
         "build_log_sha256": "8f86d96639768b60956fbfd53216dcbcf2179e5ef9027bc057c764db32fa512e",
         "date": "2026-10-08"
       }
+    },
+    "operation_quality": {
+      "receipt_path": "docs/33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.json",
+      "sha256": "fddc3dd65615efbc536a94523498b7460d2f0047fdacd2529a2329090be11b8d",
+      "production_completed": false
     }
   },
   "runtime": {
@@ -771,7 +774,7 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "10833c3fe84b7b762a88ab96b6c6df26fe4ede42",
+  "verification_base_revision": "a35bb578bdbebb434022614300edae7508d16dc4",
   "experimental_development_release": {
     "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
     "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
@@ -813,7 +816,32 @@
       "local_inventory_sha256": "9755230ee2ddf9eff6065b6046149de06c9b4e564e3014f39b25d0277e6888f0",
       "local_originals_published": false
     },
-    "operational_status_and_collection_rate": "UNVERIFIED",
+    "operational_status_and_collection_rate": "OBSERVATION_DIAGNOSTIC_CALCULATED; RECEIPT_COLLECTION_RATE_UNVERIFIED",
     "production_completed": false
+  },
+  "operation_quality_process": {
+    "document": "33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.json",
+    "sha256": "fddc3dd65615efbc536a94523498b7460d2f0047fdacd2529a2329090be11b8d",
+    "as_of_native": "2026-07-09 15:41:20",
+    "source": "GD_OBS_ST_MONTHLY",
+    "actual_station_counts": {
+      "normal": 58,
+      "warning": 2,
+      "abnormal": 1,
+      "unclassified": 0
+    },
+    "collection_rate": null,
+    "synthetic_scenarios": 15,
+    "real_records_replaced": 0,
+    "approval_accounts": "DEFERRED_BY_USER",
+    "production_completed": false,
+    "displayed_inferred_grid": {
+      "numerator": 827270,
+      "denominator": 829080,
+      "value": "99.8%",
+      "eligible_channels": 609,
+      "total_channels": 610
+    },
+    "synchronized_filter_cases": 53
   }
 }

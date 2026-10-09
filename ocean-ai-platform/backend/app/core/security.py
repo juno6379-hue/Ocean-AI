@@ -42,6 +42,7 @@ def authorize_api(request: Request):
         "/api/qc/rules/evaluate", "/api/forecasting/baseline",
         "/api/agents/workflow", "/api/anomaly-analysis/fit",
         "/api/anomaly-analysis/analyze", "/api/agents/evidence/analyze",
+        "/api/operation-simulation/run",
     }
     if request.method in {"GET", "HEAD", "OPTIONS"} or request.url.path in analysis_paths:
         return

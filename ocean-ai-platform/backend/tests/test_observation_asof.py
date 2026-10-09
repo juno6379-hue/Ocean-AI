@@ -101,12 +101,14 @@ def test_absent_qc_has_no_percentage_not_zero(case,monkeypatch):
 def test_sea_network_scope_applies_include_and_exclude_to_actual_day_rows(case):
     result=dated.overview('GD_OBS_VBU','2026-07','2026-07','2026-07-09',{'include':['FUTURE']},'12:02:00')
     assert result['totals']['stations']==0
-    assert result['operation_summary']['normal'] is None
+    assert result['operation_summary']['normal']==0
     result=dated.overview('GD_OBS_VBU','2026-07','2026-07','2026-07-09',{'exclude':['A']},'12:02:00')
     assert result['totals']['held_rows']==0
     result=dated.overview('GD_OBS_VBU','2026-07','2026-07','2026-07-09',{'include':['A']},'12:02:00')
     assert result['totals']['held_rows']==5
-    assert result['stations'][0]['operation']['state']=='UNVERIFIED'
+    assert result['stations'][0]['operation']['basis']=='OBSERVATION_DIAGNOSTIC'
+    assert result['stations'][0]['operation']['equipment_state']=='UNVERIFIED'
+    assert result['stations'][0]['operation']['collection_rate'] is None
 
 
 def test_excluded_phase_candidate_uses_cutoff_denominator_and_retains_exclusion(case):

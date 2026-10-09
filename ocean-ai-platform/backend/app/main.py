@@ -23,6 +23,7 @@ from app.api import routes_integrations
 from app.api import routes_anomaly_analysis
 from app.api import routes_model_development
 from app.api import routes_development_stages
+from app.api import routes_operation_simulation
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.models import domain  # Ensure models are loaded before create_all
@@ -96,6 +97,7 @@ app.include_router(routes_integrations.router)
 app.include_router(routes_anomaly_analysis.router)
 app.include_router(routes_model_development.router)
 app.include_router(routes_development_stages.router)
+app.include_router(routes_operation_simulation.router)
 app.include_router(routes_imputation.router)
 app.include_router(routes_forecasting.router)
 

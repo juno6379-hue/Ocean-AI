@@ -55,3 +55,7 @@ JSON HTTP 요청 로그와 승인 이력은 목적이 다르다. `ApprovalHistor
 System의 DevelopmentStageReview는13단계×구현/시험/자료/승인/운영을 표시하고 SHA증거·남은 입력을 펼친다. MLOps의 TrainingWorkbench/InputPreparationReview는 legacy 검토·정책 양식·세 승인Dataset 선택·manifest preflight·학습 큐를 연결한다. 입력/권한/worker가 없으면 변경 버튼을 비활성화하고 async응답을 revision guard로 차단한다. frontend17시험/build와 부모 실제 브라우저를 통과했다. 7월 기본 기간과 미산정 지표 경계를 유지한다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).
 
 후속 개발용 학습·시험 배포는 [30](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md)을 따른다. ExperimentalDeploymentPanel은 별도8011 서버의 release/readiness 동등성·정확 입력·artifact SHA를 검증하고 실 예측을 요청한다. 7월 GR 인천 3항목의 고정 분할·후보 오차·참여 SHA를 표시한다. 133,876행의 학습 결과를 운영 모델 수에 합산하지 않는다. 최신20개 frontend 시험과 build 결과는30의 검증 기록으로 분리한다.
+
+## 10/9 운영 진단·가상 품질 시험
+
+상단 정상·주의·이상과 목록 운영상태 필터·관측소 근거는 동일한 최근 24시간 진단을 사용한다. 기준 `2026-07-09 15:41:20`의 실제 61개소는 정상58·주의2·이상1이며 장비 건강 확정과 수신 수집률은 구분한다. 하단 별도 가상 시험에서 15개 시나리오의 실제 Rule/AI/Fusion/영속 승인 gate를 실행하고 주입 값·그래프·검증 결과를 표시한다. 실제 집계와 합산하지 않는다. 최종 frontend62시험·build·실제응답계약·브라우저 결과는 [33 검증 기록](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.json)에 남긴다.

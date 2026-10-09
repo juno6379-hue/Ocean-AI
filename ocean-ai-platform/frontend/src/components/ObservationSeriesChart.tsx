@@ -6,7 +6,7 @@ const numberLabel=(value:number)=>new Intl.NumberFormat('ko-KR',{maximumFraction
 const clockLabel=(clock:number)=>new Date(Math.floor(clock/1000)).toISOString().slice(5,19).replace('T',' ');
 
 /** Native-clock coordinates retain timing gaps and every duplicate source row. */
-export default function ObservationSeriesChart({rows,item,label}:{rows:any[];item:string;label:string}) {
+export default function ObservationSeriesChart({rows,item,label,sample=false}:{rows:any[];item:string;label:string;sample?:boolean}) {
   const plot=observationPlot(rows,item,PLOT_WIDTH,PLOT_HEIGHT);
   const [chosen,setChosen]=useState<number|null>(null);
   const selectedIndex=chosen==null?Math.max(0,plot.samples.length-1):Math.min(chosen,plot.samples.length-1);
@@ -20,7 +20,7 @@ export default function ObservationSeriesChart({rows,item,label}:{rows:any[];ite
   };
   if(!plot.numericCount)return <p role="status" className="obs-chart-empty">{rows.length?'그릴 수 있는 수치·관측시각 쌍이 없습니다. 원천 기록은 표에서 확인할 수 있습니다.':'선택 조건에 관측자료가 없습니다.'}</p>;
   return <div className="obs-series-chart">
-    <div className="obs-chart-viewport"><svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} onPointerMove={pick} onPointerLeave={()=>setChosen(null)} role="img" aria-label={`${label} ${plot.samples.length}건, 원문 관측시각에 따른 실제 ${plot.direction?'개별 관측값':'시계열'}`}>
+    <div className="obs-chart-viewport"><svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} onPointerMove={pick} onPointerLeave={()=>setChosen(null)} role="img" aria-label={`${label} ${plot.samples.length}건, 원문 관측시각에 따른 ${sample?'가상 시험':'실제'} ${plot.direction?'개별 관측값':'시계열'}`}>
       <text x={LEFT} y="15" className="obs-chart-axis-title">{observationSeriesUnit(rows)}</text>
       {[0,.25,.5,.75,1].map(fraction=>{
         const y=TOP+PLOT_HEIGHT*fraction;
@@ -40,6 +40,6 @@ export default function ObservationSeriesChart({rows,item,label}:{rows:any[];ite
     </svg></div>
     <div className="obs-chart-selection" aria-live="polite"><time>{selected?.time.replace('T',' ')||'관측시각 없음'}</time><strong>{selected?.raw==null||String(selected.raw).trim()===''?'값 없음':String(selected.raw)} <small>{selected?.unit||'원천값'}</small></strong><span title={selected?.filename}>{selected?.filename.split(/[\\/]/).at(-1)} · 행 {String(selected?.rowNumber??'—')}{selected?.depth.some(value=>value!=null)?' · 수심 '+selected.depth.map(value=>value??'—').join('/') : ''}</span></div>
     <label className="obs-chart-scrubber">관측 기록 선택 <input type="range" min="0" max={Math.max(0,plot.samples.length-1)} value={selectedIndex} onChange={event=>setChosen(Number(event.target.value))} aria-label={label+' 그래프 관측 기록 선택'}/><span>{selectedIndex+1} / {plot.samples.length}건</span></label>
-    <p className="obs-chart-note">수치 {plot.numericCount}건{plot.missingCount?' · 값 없음/비수치 '+plot.missingCount+'건':''}{plot.invalidClockCount?' · 시각 해석 불가 '+plot.invalidClockCount+'건':''}{plot.coincident?' · 동일 시각 원천 '+plot.coincident+'건 (각 기록 보존)':''}{plot.direction?' · 방향값은 개별 점으로 표시':''}</p>
+    <p className="obs-chart-note">{sample?'가상 시험 자료 · ':''}수치 {plot.numericCount}건{plot.missingCount?' · 값 없음/비수치 '+plot.missingCount+'건':''}{plot.invalidClockCount?' · 시각 해석 불가 '+plot.invalidClockCount+'건':''}{plot.coincident?' · 동일 시각 원천 '+plot.coincident+'건 (각 기록 보존)':''}{plot.direction?' · 방향값은 개별 점으로 표시':''}</p>
   </div>;
 }

@@ -65,17 +65,17 @@ def summary(source: Source='GD_OBS_ST_MONTHLY', from_month: str=Query(CURRENT_OB
     scope=resolve_scope(db,network,sea,CURRENT_OBSERVATION_MONTH if from_month==to_month==CURRENT_OBSERVATION_MONTH else None)
     if as_of_day:
         from app.services.observation_asof import overview
-        return overview(source,from_month,to_month,str(as_of_day),scope,clock)
+        return overview(source,from_month,to_month,str(as_of_day),scope,clock,db=db)
     return lake.overview(source,from_month,to_month,scope)
 
 
 @router.get('/stations/{station}')
-def station_detail(station: str, source: Source='GD_OBS_ST_MONTHLY', from_month: str=Query(CURRENT_OBSERVATION_MONTH,pattern=MONTH_PATTERN), to_month: str=Query(CURRENT_OBSERVATION_MONTH,pattern=MONTH_PATTERN),as_of_day:date|None=None,as_of_time:time|None=None):
+def station_detail(station: str, source: Source='GD_OBS_ST_MONTHLY', from_month: str=Query(CURRENT_OBSERVATION_MONTH,pattern=MONTH_PATTERN), to_month: str=Query(CURRENT_OBSERVATION_MONTH,pattern=MONTH_PATTERN),as_of_day:date|None=None,as_of_time:time|None=None,db:Session=Depends(get_db)):
     if from_month>to_month: raise HTTPException(422,'시작월이 종료월보다 늦습니다.')
     clock=cutoff(as_of_day,as_of_time)
     if as_of_day:
         from app.services.observation_asof import station_detail as dated_detail
-        return dated_detail(station,source,from_month,to_month,str(as_of_day),clock)
+        return dated_detail(station,source,from_month,to_month,str(as_of_day),clock,db=db)
     return lake.station_detail(station,source,from_month,to_month)
 
 

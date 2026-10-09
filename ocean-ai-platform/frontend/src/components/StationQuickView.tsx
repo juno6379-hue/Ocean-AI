@@ -4,12 +4,13 @@ import {MapPin,ArrowRight,Waves,Thermometer,Wind,Droplets,RadioTower,Clock3,BarC
 import {API_BASE_URL,apiFetch} from '../api/client';
 import {nativeReceiptPresentation} from '../data/nativeReceiptPresentation';
 import {observationItemLabel} from '../data/observationAvailability';
-import {operatingState} from '../data/observationWorkspace';
+import {operatingState,collectionPresentation} from '../data/observationWorkspace';
 import ObservationMonthGrid from './ObservationMonthGrid';
 import ObservationTrend from './ObservationTrend';
 import ObservationSeriesChart from './ObservationSeriesChart';
 import {nativeClockCoordinate,observationSeriesUnit} from '../data/observationSeries';
 import StationPhoto from './StationPhoto';
+import OperationEvidence from './OperationEvidence';
 import {matchesLakeDetail,matchesLakeSeries} from '../data/observationCutoff';
 
 export default function StationQuickView({station,source,from,to,snapshot,metric,revision=0,asOfDay,asOfTime}:{station:any;source:string;from:string;to:string;snapshot?:string;metric?:any;revision?:number;asOfDay?:string;asOfTime?:string}) {
@@ -88,7 +89,9 @@ export default function StationQuickView({station,source,from,to,snapshot,metric
   },[stationId,channel,snapshot,revision,fetchSeries,graphLimit,graphKey]);
   const preview=graph.key===graphKey&&(!graph.data||channel&&matchesLakeSeries(graph.data,seriesScope(channel,graphLimit)))?graph:{};
   const receipt=nativeReceiptPresentation(metric?.receipt_diagnostics);
-  const state=operatingState(station?.operation);
+  const operationEnd=asOfDay?asOfDay+' '+(asOfTime||'23:59:59.999999'):'';
+  const state=operatingState(station?.operation,operationEnd);
+  const collection=collectionPresentation(station?.operation?{...station.operation,source}:null,operationEnd);
   const itemCount=new Set(rows.map((r:any)=>r.item_code)).size;
   return <><aside className="obs-panel obs-detail" aria-label="선택 관측소">
     <div className="obs-panel-heading"><h3><RadioTower size={18}/>관측소 상세 정보</h3>{station&&<span className={'obs-status '+state.tone}>{state.label}</span>}</div>
@@ -98,10 +101,12 @@ export default function StationQuickView({station,source,from,to,snapshot,metric
         {station.lat!=null&&station.lng!=null&&<p className="obs-coordinates">{station.lat.toFixed(3)}° N · {station.lng.toFixed(3)}° E</p>}
       </div></div>
       <div className="obs-tabs" role="tablist" aria-label="관측소 상세 종류">{['관측자료','센서·QC','기간정보'].map(t=><button role="tab" aria-selected={tab===t} key={t} onClick={()=>setTab(t)}>{t}</button>)}</div>
+      {operationEnd&&<OperationEvidence operation={station.operation} expectedEnd={operationEnd}/>}
       {error&&<p role="alert" className="obs-error">{error}</p>}
       {!currentData&&!error&&<p role="status" className="obs-loading">관측항목 조회 중…</p>}
       {tab==='관측자료'&&currentData&&<>
-        <div className="obs-detail-metrics"><div><span><Clock3 size={12}/>최근 관측시각</span><strong>{station.time.replace('T',' ')}</strong></div><div title={station.operation?.reason}><span><BarChart3 size={12}/>수집률</span><strong>{station.operation?.collection_rate==null?'—':station.operation.collection_rate+'%'}</strong></div></div>
+        <div className="obs-detail-metrics"><div><span><Clock3 size={12}/>최근 관측시각</span><strong>{station.time.replace('T',' ')}</strong></div><div title={collection.title}><span><BarChart3 size={12}/>{collection.label}</span><strong>{collection.value}</strong></div></div>
+        <p className="obs-caption">{collection.note}</p>
         <div className="obs-value-cards">{cards.map(c=>{
           const candidate=previews[c.key],result=candidate?.data&&!matchesLakeSeries(candidate.data,seriesScope(c,24))?undefined:candidate;
           const samples=result?.data?.rows||[],latest=samples[0];

@@ -1,0 +1,493 @@
+{
+  "schema_version": "ocean-operation-quality-verification-1",
+  "as_of": "2026-10-09T09:15:48.544729+00:00",
+  "verification_base_revision": "a35bb578bdbebb434022614300edae7508d16dc4",
+  "approved": false,
+  "production_completed": false,
+  "backend_tests": {
+    "passed": 855,
+    "skipped": 1,
+    "warnings": 21,
+    "seconds": 348.68,
+    "failed": 0,
+    "log_sha256": "6de44ccf43dd27ba067f11897d4edfdba6a5a9735c486c78339406344402ad08",
+    "date": "2026-10-09",
+    "database_scope": "isolated regression; no operational database writes"
+  },
+  "final_reader_delta_tests": {
+    "passed": 15,
+    "failed": 0,
+    "scope": "after final display-cap recovery fix",
+    "log_sha256": "3c5c311f2a91d2c5852bea2273379dee0516123f7c441f7c606a30848b689516"
+  },
+  "frontend_tests": {
+    "passed": 62,
+    "failed": 0,
+    "build": "PASS",
+    "lint": "PASS_WITH_12_EXISTING_WARNINGS",
+    "log_sha256": "d467eef7fa3f4512e96c4a8403c359e486a2955610aebccc8b1a857c549a2063",
+    "build_log_sha256": "ce26c4c85102c4a3810c1e9c4099d34af977768ec98dec20da6b07320a7b88a0"
+  },
+  "live": {
+    "source": "GD_OBS_ST_MONTHLY",
+    "as_of_day": "2026-07-09",
+    "as_of_time": "15:41:20",
+    "held_rows": 7126689,
+    "stations": 61,
+    "operation_summary": {
+      "normal": 58,
+      "warning": 2,
+      "abnormal": 1,
+      "unclassified": 0,
+      "collection_rate": null,
+      "observed_grid_availability_percent": 99.78168572393497,
+      "basis": "OBSERVATION_DIAGNOSTIC",
+      "policy_version": "observation-data-flow-20261009-v1",
+      "policy_hash": "62e251a21d4e958da748ca149902f37087414ce00a235f4ed7edc23e0da71dd4",
+      "thresholds": {
+        "version": "observation-data-flow-20261009-v1",
+        "basis": "OBSERVATION_DIAGNOSTIC",
+        "window_hours": 24,
+        "history_days": 7,
+        "minimum_unique_clocks": 12,
+        "minimum_interval_dominance_percent": 80,
+        "normal_grid_percent": 99,
+        "abnormal_grid_percent": 90,
+        "normal_finite_percent": 99,
+        "abnormal_finite_percent": 90,
+        "abnormal_interpreted_bad_qc_percent": 10,
+        "abnormal_interpreted_bad_or_missing_qc_percent": 10,
+        "interpreted_qc_denominator": "UNIQUE_NATIVE_CLOCK_WORST_LITERAL",
+        "warning_delay_intervals": 3,
+        "warning_delay_floor_seconds": 300,
+        "abnormal_delay_intervals": 10,
+        "abnormal_delay_floor_seconds": 1800,
+        "phase_required": "UNANIMOUS",
+        "station_aggregation": "WORST_CHANNEL_WITH_INCOMPLETE_EVALUATION_WARNING",
+        "approval_status": "DEVELOPMENT_POLICY_UNAPPROVED"
+      },
+      "window_start": "2026-07-08 15:41:20",
+      "window_end": "2026-07-09 15:41:20",
+      "stations_total": 61,
+      "confidence": "LOW",
+      "equipment_state": "UNVERIFIED",
+      "reason": "최근 24시간의 자료 흐름 진단입니다. 관측 간격·분모는 원천 시각에서 추정했으며 장비 정상·승인 QC·실제 수신 수집률은 확정하지 않습니다."
+    },
+    "nonnormal": [
+      {
+        "station_code": "DT_0062",
+        "station_name": "마산",
+        "state": "WARNING",
+        "reasons": [
+          "RECENT_INFERRED_GRID_AVAILABILITY_BELOW_NORMAL_THRESHOLD"
+        ]
+      },
+      {
+        "station_code": "IE_0060",
+        "station_name": "이어도",
+        "state": "ABNORMAL",
+        "reasons": [
+          "RECENT_INFERRED_GRID_AVAILABILITY_BELOW_ABNORMAL_THRESHOLD"
+        ]
+      },
+      {
+        "station_code": "IE_0062",
+        "station_name": "옹진소청초",
+        "state": "WARNING",
+        "reasons": [
+          "RECENT_INFERRED_GRID_AVAILABILITY_BELOW_NORMAL_THRESHOLD"
+        ]
+      }
+    ],
+    "operating_equipment_health": "UNVERIFIED",
+    "collection_rate": null,
+    "application_db_writes": 0
+  },
+  "independent_arrow": {
+    "files_scanned": 143,
+    "channels_verified": 11,
+    "checks_passed": 143,
+    "all_passed": true,
+    "sha256": "7cf62fa3f7a86f51eae0ec015bbb9837794d1c881566cecd410cd0a2690af740"
+  },
+  "dated_evidence_reader": {
+    "tables": [
+      "operation_log",
+      "daily_inspection_report",
+      "quality_collection_report",
+      "qc_flag_history",
+      "event_registry"
+    ],
+    "actual_registered_rows": 0,
+    "read_only": true,
+    "sha256": "b9c156b0618b8f4f4e9e5624ed8a714f337699fd4a18bf61c8f77cf66fa42513"
+  },
+  "independent_filter_contract": {
+    "cases": 53,
+    "all_passed": true,
+    "backend_scope_cases": 49,
+    "full_inferred_grid": {
+      "numerator": 827270,
+      "denominator": 829080,
+      "value": "99.8%",
+      "eligible_channels": 609,
+      "total_channels": 610
+    },
+    "actual_receipt_collection_rate": null,
+    "database_writes": 0,
+    "contract_sha256": "871dda1809b8aaabb0231fbf297950552b39081e3e84aae1ced0c7dd420f42ef",
+    "oracle_sha256": "694a27f2c9798ee6cd86bfcdf4dc5db453acf7a1d2a372c636e3a179436ab99b"
+  },
+  "synthetic": {
+    "source": "SIMULATION",
+    "scenarios": 15,
+    "tests_passed": 18,
+    "source_records_registered": 0,
+    "actual_accounts_configured": false,
+    "registered_models": 0,
+    "deployed_models": 0,
+    "demonstrated_scenario": "spike",
+    "demonstrated_operation": "NORMAL",
+    "quality_pipeline": {
+      "rule": {
+        "status": "EVALUATED",
+        "evaluated_count": 957,
+        "anomaly_count": 6,
+        "not_evaluated_count": 3,
+        "kinds": [
+          "WT",
+          "ER",
+          "GR",
+          "GD",
+          "SP",
+          "DE"
+        ],
+        "result_sha256": "8cd9e437342d7d1d754c6d353b65039e631e05875910b1fd55eb68a4c691d73d"
+      },
+      "ai": {
+        "status": "EVALUATED",
+        "evaluated_count": 771,
+        "anomaly_count": 15,
+        "modes": {
+          "SPIKE": {
+            "evaluated_count": 159,
+            "anomaly_count": 11
+          },
+          "PERSISTENCE": {
+            "evaluated_count": 153,
+            "anomaly_count": 0
+          },
+          "DRIFT": {
+            "evaluated_count": 153,
+            "anomaly_count": 0
+          },
+          "BIOFOULING_CANDIDATE": {
+            "evaluated_count": 153,
+            "anomaly_count": 0
+          },
+          "SENSOR_DEGRADATION_CANDIDATE": {
+            "evaluated_count": 153,
+            "anomaly_count": 4
+          }
+        },
+        "not_evaluated_count": 29,
+        "artifact_sha256": "383a8da07c987580beaca017054b96d41df375742020081c816cacd44e6421df",
+        "result_sha256": "ee1ec46aaeb024ae0a02915566ffe14a230a9449456265d44edd1785e6e0453f"
+      },
+      "fusion": {
+        "status": "ANALYSIS_ONLY",
+        "recommendation": "REVIEW_CONFLICT",
+        "recommendation_score": 0.4,
+        "missing_categories": [],
+        "score_kind": "WEIGHTED_EVIDENCE_SUPPORT_NOT_PROBABILITY",
+        "coverage_weight": 1.0
+      },
+      "workflow": {
+        "pending_stopped": true,
+        "unapproved_resume_blocked": true,
+        "reviewer_required": true,
+        "stale_revision_blocked": true,
+        "resumed_once": true,
+        "rejected_resume_blocked": true,
+        "production_writes": 0,
+        "status": "COMPLETED",
+        "transitions": [
+          "PENDING",
+          "APPROVED",
+          "COMPLETED"
+        ],
+        "database": "DISPOSABLE_IN_MEMORY_SQLITE",
+        "actual_approval_granted": false,
+        "training_started": false,
+        "deployment_performed": false
+      }
+    },
+    "assertions": [
+      {
+        "name": "OPERATION_EXPECTATION",
+        "passed": true,
+        "detail": "NORMAL"
+      },
+      {
+        "name": "QC_ACTUAL_ENGINE",
+        "passed": true,
+        "detail": "6 applicable configured tests; other guide tests require separate quantities/baselines"
+      },
+      {
+        "name": "AI_HELD_OUT_ENGINE",
+        "passed": true,
+        "detail": "train/calibration/test source rows are disjoint"
+      },
+      {
+        "name": "ALL_FUSION_CATEGORIES",
+        "passed": true,
+        "detail": "Rule/AI/Metadata/Operation/RAG simulation evidence"
+      },
+      {
+        "name": "PRODUCTION_WRITES_ZERO",
+        "passed": true,
+        "detail": "real DB and source files are never opened by this simulation"
+      },
+      {
+        "name": "PENDING_STOPPED",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "UNAPPROVED_RESUME_BLOCKED",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "REVIEWER_REQUIRED",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "REJECTED_RESUME_BLOCKED",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "RESUMED_ONCE",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "STALE_REVISION_BLOCKED",
+        "passed": true,
+        "detail": "actual workflow service, isolated actors/DB"
+      },
+      {
+        "name": "INJECTED_AI_SIGNAL",
+        "passed": true,
+        "detail": "SPIKE"
+      }
+    ],
+    "result_sha256": "9bcb856e465f5522dbaf2ece17a8ac3b53c9d5f76c85b31e96e01a621600419a",
+    "guide_rule_engine_tests": 12,
+    "configured_rules_in_sample": [
+      "WT",
+      "ER",
+      "GR",
+      "GD",
+      "SP",
+      "DE"
+    ],
+    "rag_boundary": "fixed synthetic document evidence; real retrieval not executed"
+  },
+  "browser": {
+    "schema_version": "operation-browser-verification-1",
+    "as_of": "2026-10-09T09:14:42.092Z",
+    "as_of_day": "2026-07-09",
+    "as_of_time": "15:41:20",
+    "url": "http://127.0.0.1:5174/observations?as_of_day=2026-07-09&as_of_time=15%3A41%3A20&station=DT_0028",
+    "checks": [
+      {
+        "name": "actual fleet cards 61/58/2/1",
+        "passed": true
+      },
+      {
+        "name": "warning filter shows Masan and Ongjin Socheongcho",
+        "passed": true
+      },
+      {
+        "name": "abnormal filter shows Ieodo only",
+        "passed": true
+      },
+      {
+        "name": "actual evidence uses same July 9 cutoff and all 10 channels",
+        "passed": true
+      },
+      {
+        "name": "simulation selector exposes 15 distinct scenarios",
+        "passed": true
+      },
+      {
+        "name": "spike actual Rule AI Fusion gate stages complete with 12 assertions",
+        "passed": true
+      },
+      {
+        "name": "sample graph explicitly labelled synthetic with 240 points",
+        "passed": true
+      },
+      {
+        "name": "real counts unchanged after sample run",
+        "passed": true,
+        "comparison": "visible card text, normalized whitespace because innerText and textContent use different line breaks"
+      },
+      {
+        "name": "recovery matched to same event and sensor returns normal with 11 assertions",
+        "passed": true
+      },
+      {
+        "name": "unresolved dated maintenance raises abnormal with 11 assertions",
+        "passed": true
+      },
+      {
+        "name": "future evidence excluded from historical classification and graph",
+        "passed": true
+      }
+    ],
+    "all_passed": true,
+    "scenarios_executed": [
+      "spike",
+      "recovery",
+      "maintenance",
+      "future"
+    ],
+    "screenshots": [
+      "operation-quality-workflow.png",
+      "operation-real-status.png"
+    ],
+    "real_counts": {
+      "total": 61,
+      "normal": 58,
+      "warning": 2,
+      "abnormal": 1
+    },
+    "production_writes": 0,
+    "filter_ui_checks": [
+      {
+        "filters": {},
+        "expected_stations": 61,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "sea": "서해"
+        },
+        "expected_stations": 28,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "sea": "남해"
+        },
+        "expected_stations": 21,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "sea": "남해",
+          "network": "해양과학기지"
+        },
+        "expected_stations": 1,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "sea": "남해",
+          "network": "해양과학기지",
+          "state": "NORMAL"
+        },
+        "expected_stations": 0,
+        "passed": true
+      },
+      {
+        "filters": {
+          "state": "WARNING"
+        },
+        "expected_stations": 2,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "network": "__UNREGISTERED__"
+        },
+        "expected_stations": 2,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "network": "HF-Radar"
+        },
+        "expected_stations": 0,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      },
+      {
+        "filters": {
+          "search": "진도"
+        },
+        "expected_stations": 1,
+        "passed": true
+      },
+      {
+        "filters": {},
+        "expected_stations": 61,
+        "picker_matches": true,
+        "map_matches": true,
+        "cards_match": true,
+        "collection_matches": true,
+        "passed": true
+      }
+    ],
+    "collection_display": {
+      "label": "수집률 (추정)",
+      "value": "99.8%",
+      "held_slots": 827270,
+      "expected_slots": 829080,
+      "eligible_channels": 609,
+      "total_channels": 610,
+      "receipt_rate": null
+    }
+  },
+  "implementation_sha256": {
+    "ocean-ai-platform/backend/app/services/observation_operation.py": "838139129c4979719834b7ffa4128c62c88feff243c4efde22a3a06abd20e762",
+    "ocean-ai-platform/backend/app/services/observation_operation_evidence.py": "bc67e544e87a71c1c0a01d7741a0f1b53cd7e146f7865c466e72f0a8727976b2",
+    "ocean-ai-platform/backend/app/services/operation_simulation.py": "67da403f092544528cfdb15e04d7b067a0d71ae897b99d2f67ce0ebf0c820fb7",
+    "ocean-ai-platform/frontend/src/components/OperationSimulationPanel.tsx": "891d86737c28f54d20aee9fb41d993a0fa7a4a321665da98be399898ed60309a",
+    "ocean-ai-platform/frontend/src/components/StationQuickView.tsx": "55b72721ce3811c69a48f043dae61d9a229e17a16f2fa85f3a3d5ddc4356d6e9",
+    "ocean-ai-platform/frontend/src/components/StationClassifications.tsx": "d89667778e247470ea44667c8744d2b3756bcb7f697fc0c16daaa6bdd0eba3ce",
+    "ocean-ai-platform/frontend/src/pages/Observations.tsx": "95171a35cc4d8f8bee085728a40499a377247725b8eefbaf4d933ca28aa88bcf",
+    "ocean-ai-platform/frontend/src/data/observationWorkspace.ts": "36075f86775d524b979a25ee2cf6c670bf5af6689fb0081934b376f51c7c7e26"
+  }
+}

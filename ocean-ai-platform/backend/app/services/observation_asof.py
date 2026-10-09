@@ -20,8 +20,6 @@ from app.services.native_month_metrics import KEYS, SOURCES, asset_month, typed_
 RECIPE_SHA=file_hash(__file__)
 _locks=defaultdict(threading.Lock)
 NATIVE_PATTERN=r'[0-9]{4}-[0-9]{2}-[0-9]{2}[ T][0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,6})?'
-OPERATION_UNVERIFIED=dict(state='UNVERIFIED',collection_rate=None,
-    reason='파일 보유 자료만으로 기준일의 장비 운영상태·예정 관측건수를 확정할 수 없습니다.')
 
 def day_bounds(month, as_of_day, as_of_time=None):
     day=date.fromisoformat(str(as_of_day))
@@ -191,7 +189,7 @@ def selected_rows(source,start,end,as_of_day,station='',item='',station_scope=No
     if file_hash(view/'station-item-month-validation.parquet')!=evidence['sha256']:raise HTTPException(409,'기준일 집계 중 카탈로그 변경')
     return view,rows,names,unlocatable
 
-def overview(source,start,end,as_of_day,station_scope=None,as_of_time=None):
+def overview(source,start,end,as_of_day,station_scope=None,as_of_time=None,*,db=None):
     view,rows,names,excluded=selected_rows(source,start,end,as_of_day,station_scope=station_scope,as_of_time=as_of_time)
     groups=defaultdict(list)
     for r in rows:groups[r['station_code']].append(r)
@@ -199,15 +197,20 @@ def overview(source,start,end,as_of_day,station_scope=None,as_of_time=None):
         first_clock=min((r['first_native_clock'] for r in group),default=None),last_clock=max((r['last_native_clock'] for r in group),default=None),held_months=len({r['month'] for r in group}))
     by_month=defaultdict(int)
     for r in rows:by_month[r['month']]+=r['raw_rows']
+    from app.services.observation_operation import operations_for_rows
+    operations,operation_summary=operations_for_rows(view,source,rows,as_of_day,as_of_time,db=db)
     return dict(source=source,snapshot=view.name,from_month=start,to_month=end,as_of_day=str(as_of_day),as_of_time=as_of_time,totals=dict(stations=len(groups),**summary(rows)),
-        stations=[dict(station_code=code,station_name=names.get(code),operation=OPERATION_UNVERIFIED,**summary(group)) for code,group in sorted(groups.items())],
-        operation_summary=dict(normal=None,warning=None,abnormal=None,collection_rate=None,unclassified=len(groups),reason=OPERATION_UNVERIFIED['reason']),
+        stations=[dict(station_code=code,station_name=names.get(code),operation=operations[code],**summary(group)) for code,group in sorted(groups.items())],
+        operation_summary=operation_summary,
         monthly=[dict(month=month,held_rows=count) for month,count in sorted(by_month.items())],storage='PARQUET',approval_status='UNAPPROVED',simulated_included=False,
         unlocatable_clock_rows_excluded=excluded,cutoff_basis='NATIVE_OBSERVATION_CLOCK_INCLUSIVE_DAY')
 
-def station_detail(station,source,start,end,as_of_day,as_of_time=None):
+def station_detail(station,source,start,end,as_of_day,as_of_time=None,*,db=None):
     view,rows,_,_=selected_rows(source,start,end,as_of_day,station=station,as_of_time=as_of_time)
+    from app.services.observation_operation import operations_for_rows
+    operations,_=operations_for_rows(view,source,rows,as_of_day,as_of_time,db=db)
     return dict(station_code=station,source=source,snapshot=view.name,as_of_day=str(as_of_day),as_of_time=as_of_time,timezone=None,approval_status='UNAPPROVED',
+        operation=operations.get(station),
         months=[dict(r,held_rows=r['raw_rows'],first_clock=r['first_native_clock'],last_clock=r['last_native_clock']) for r in rows])
 
 def completion(source,start,end,as_of_day,station='',item='',station_scope=None,as_of_time=None):

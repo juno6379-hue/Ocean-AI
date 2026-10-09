@@ -367,3 +367,14 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 enqueue/retrain은 선택한 manifest expected SHA를 받는다. preflight 실패는 큐 생성 이전에 차단하며 큐가 다시 현재 입력을 검증한다. 실제 계정 미설정503, 범위 밖 경로·malformed nested 입력409를 실검증했다. [29](29_DEVELOPMENT_STAGE_EXECUTION.md).
 
 별도 개발용8011 서버의 `/health`, `/readiness`, `/release`, `/predict`는 운영 backend OpenAPI와 구분한다. 3개 원시 수치 시험 모델을 exact release/artifact/입력에 연결하고 운영 Registry를 쓰지 않는다. `/predict`는3개의 유한 값과 expected release/artifact SHA를 받는다. 오래된 선택409·잘못된 입력422·본문크기413·원격Origin/Host403·MIME415를 검증했다. 웹은 운영 token 없이 `/experimental-api`로 연결한다. [30 실행·API](30_EXPERIMENTAL_TRAIN_DEPLOYMENT.md).
+
+## 10/9 운영 진단·가상 품질 시험
+
+현재 등록 OpenAPI는 157개 경로·166개 operation이다. 같은 기준시각의 lake summary/station 응답에 최근 24시간 채널 운영 진단과 날짜별 근거를 추가했다.
+
+| 경로 | Method | 입력·범위 |
+|---|---|---|
+| `/api/operation-simulation/scenarios` | GET | loopback, 고정 15종 가상 시나리오 |
+| `/api/operation-simulation/run` | POST | loopback, 2 KiB, `{scenario_id, as_of_day, as_of_time}`만 허용; 격리 메모리 DB 시험 |
+
+보호된 실제 승인 API의 인증은 유지한다. 가상 출력은 `source=SIMULATION`, `approved=false`이며 실제 원천·승인·모델 원장을 쓰지 않는다. [33 판정·시험 계약](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.md)을 따른다.
