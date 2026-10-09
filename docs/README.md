@@ -1,6 +1,6 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-09**. 이 폴더의 01~37 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정·동일 기준시각·실측 그래프·사진·운영 진단·가상 품질 시험을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-09**. 이 폴더의 01~38 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정·동일 기준시각·실측 그래프·사진·운영 진단·가상 품질 시험을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
@@ -10,7 +10,7 @@
 
 문서 수집 상태는 2026-10-08 조회에서 eligible 4,958개 중 성공 1,603개·중복 1,513개·대기 1,697개·실패 145개이고 최근 실행은 `PARTIAL`이다. 원문 수집 전체 완료나 모든 chunk의 vector 검색 품질 검증을 뜻하지 않는다. 분모와 상태별 해석은 [15](15_DOCUMENT_INDEX_INGESTION.md)를 확인한다.
 
-10/9 월 재산정 단계의 backend 776 passed / 1 skipped와 frontend 29 passed는 [관측현황 UX·재산정](31_OBSERVATION_METRIC_RECALCULATION.md)에 보존한다. 동일 시각의 실제 5항목×240행 그래프·사진 검증은 [32](32_OBSERVATION_WORKSPACE_ASOF.md)에 보존한다. [운영 진단·가상 품질 시험](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.md)의 계산·fixture 기록과 [운영 QC 대시보드](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)의 원문 대조 기록도 해당 단계에 보존한다. 최신 별도 샘플 화면·검토 처리·전체 회귀 결과는 [37](37_QC_SAMPLE_VALIDATION_MODE.md)을 따른다. 실제 수신 수집률·장비 건강·QC 승인은 별도 근거가 필요하며, 날짜별 PostgreSQL gate는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)를 따른다. 구현 검증을 운영 성능 수용으로 해석하지 않는다.
+10/9 월 재산정 단계의 backend 776 passed / 1 skipped와 frontend 29 passed는 [관측현황 UX·재산정](31_OBSERVATION_METRIC_RECALCULATION.md)에 보존한다. 동일 시각의 실제 5항목×240행 그래프·사진 검증은 [32](32_OBSERVATION_WORKSPACE_ASOF.md)에 보존한다. [운영 진단·가상 품질 시험](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.md)의 계산·fixture 기록과 [운영 QC 대시보드](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)의 원문 대조 기록도 해당 단계에 보존한다. 이전 별도 QC 샘플은 [37](37_QC_SAMPLE_VALIDATION_MODE.md)에 보존하고, 최신 QC 샘플 모드·AI 인사이트의 합성 학습/평가·검토/보고서·전체 회귀는 [38](38_QC_AI_SAMPLE_WORKFLOW.md)을 따른다. 실제 수신 수집률·장비 건강·QC 승인은 별도 근거가 필요하며, 날짜별 PostgreSQL gate는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)를 따른다. 구현 검증을 운영 성능 수용으로 해석하지 않는다.
 
 ## 문서 목록
 
@@ -53,6 +53,7 @@
 | 35 | [QC 운영 대시보드 요구사항](35_QC_OPERATIONAL_DASHBOARD_REQUIREMENTS.md) | 사용자의 오늘 중심 QC·상세검토·성능·검증 요구 19개 영역 |
 | 36 | [QC 운영 대시보드 실행·진행 상태](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md) | 3개 에이전트 역할·소유 파일·요구사항별 구현 상태·루트 최종 검증 |
 | 37 | [QC 샘플 검증 모드](37_QC_SAMPLE_VALIDATION_MODE.md) | 정상·지연·결측·Spike의 별도 웹 세션·기존 엔진 계산·샘플 검토와 중지/재개·운영 격리 |
+| 38 | [QC·AI 인사이트 샘플 실행](38_QC_AI_SAMPLE_WORKFLOW.md) | 첨부 AI 화면·4합성 시나리오·예측/이상/Drift 학습·평가·검토 중지/재개·보고서·독립 검증 |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
 관측현황의 기본 관측기간은 **2026년7월 단일 월**이다. QC 운영 대시보드는 backend 오늘 기준을 기본으로 구현·검증했고 명시된 과거 native cutoff도 유지한다. [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)에 역할·19개 요구사항·11개 시험·실제 입력과 성능 한계를 기록했다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.

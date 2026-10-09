@@ -419,3 +419,21 @@ Overview는 PostgreSQL 읽기 전용 repeatable snapshot에서 500행 keyset으�
 기본 `QC_SAMPLE_ENABLED=false`이며 development/test/local에서 명시 활성화했을 때만 동작한다. 비활성·production/staging은 404다. 샘플은 PostgreSQL·실제 원천을 읽거나 쓰지 않고 AI 학습·추론·Final QC 승인을 실행하지 않는다. 세션 요청의 다른 세션/잘못된·만료 token·중복 header·실제 Bearer 혼용은 401, 이전 revision·추천 SHA·멱등 키 충돌은 409, 추가 body/query·형식 오류는 422, 초기화 전 사례는 404, 용량 초과는 429다.
 
 bootstrap은 300초, 세션은 4시간이며 각각 최대 256/64개로 제한한다. 세션별 처리 요청은 최대 512개다. 같은 bootstrap·request key는 동일 세션으로 재시도하고 서로 다른 bootstrap은 같은 key라도 별도 세션을 만든다. 샘플 token은 `X-QC-Sample-Token`만 사용하고 URL·브라우저 storage·cookie·운영 Authorization에는 저장하지 않는다. 승인 후에도 중지 상태이며 RESUME만 합성 후속 초안을 완료한다. `approved=false`와 `definitive_qc=false`는 처리 완료 후에도 유지한다.
+
+## 10/9 AI 인사이트 합성 분석·샘플 보고서
+
+신규 AI sample 등록 후 시험 서버 8010의 실제 OpenAPI는 **175개 경로·184개 operation**이다. `/qc?source=SAMPLE`은 기존 QC sample API를 사용하고 `/ai-insights?source=SAMPLE`은 아래 7개 경로만 사용한다. [38 데이터·후보·검토·최종 검증](38_QC_AI_SAMPLE_WORKFLOW.md)을 따른다.
+
+| 경로 | Method | 입력·결과 |
+|---|---|---|
+| `/api/ai-insights-sample/context` | GET | query 없음. 고정 합성 시각·분할·판본·독립 bootstrap token |
+| `/api/ai-insights-sample/sessions` | POST | `{request_key}`와 `X-AI-Sample-Token` bootstrap. 별도 메모리 session |
+| `/api/ai-insights-sample/sessions/{session_id}/overview` | GET | session token. 4사례·가상 좌표·계산 KPI·모델 fit 수·검토 상태 |
+| `/api/ai-insights-sample/sessions/{session_id}/scenarios/{scenario_id}` | GET | normal/high-temp-neighbor/spike/salinity-drift. 실제 계산 시계열·후보·VAL/TEST 지표·주입 정답 평가·근거·workflow |
+| `/api/ai-insights-sample/sessions/{session_id}/scenarios/{scenario_id}/review` | POST | `{action,comment,expected_revision,recommendation_sha256,request_key}`. COMMENT/APPROVE/HOLD/REJECT/RESUME |
+| `/api/ai-insights-sample/sessions/{session_id}/scenarios/{scenario_id}/report` | GET | 해당 사례 승인·명시 재개 완료 뒤의 Markdown·구조화 보고서·SHA. 전송·운영 승인 없음 |
+| `/api/ai-insights-sample/sessions/{session_id}/reset` | POST | `{expected_session_revision,request_key}`. 새 generation·추천 hash로 검토 권한 초기화 |
+
+`AI_INSIGHTS_SAMPLE_ENABLED=false` 기본이며 development/test/local에서 명시 활성화한다. Authorization/cookie 혼용, QC token·다른 session·잘못된/만료 token은 401, flag 비활성·production/staging은 404, CAS/hash·승인/재개 gate·멱등 충돌은 409, 추가 query/body·엄격 정수 형식은 422, 본문 8 KiB 초과는 413, 용량 제한은 429다. 응답은 no-store이며 운영 source·SQL·모델 registry·학습 queue·Final QC 쓰기 0을 표시한다.
+
+bootstrap 300초·256개, session 4시간·64개, session 처리 128개 제한이다. QC/AI 예약 token은 실제 운영 Actor의 Bearer로 인정하지 않는다. `result_sha256`와 구조화 artifact/report hash는 canonical JSON SHA256, 다운로드 `markdown_sha256`는 명시된 `markdown_hash_kind=UTF8_BYTES_SHA256`의 파일 UTF-8 byte SHA256이다. 선택 표본의 시각·값·예측·비교 센서와 최신 표본을 구분하고, 16:00 대상 미래 예측을 마지막 실관측 15:00으로 덮어쓰지 않는다. 승인 후에도 APPROVED/blocked 상태이며 RESUME은 메모리 보고서만 READY로 바꾼다.

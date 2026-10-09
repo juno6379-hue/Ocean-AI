@@ -91,6 +91,7 @@ export default function AnalysisWorkspace({insights=false}:{insights?:boolean}) 
   ];
   return <div className="p-4 md:p-6 space-y-5 min-h-full bg-gradient-to-br from-blue-50/60 via-white to-indigo-50/40">
     <header className="flex flex-wrap justify-between gap-4 items-end"><div><p className="text-xs tracking-[.18em] text-blue-600 font-bold">{insights?'EVIDENCE & INSIGHTS':'QUALITY CONTROL'}</p><h1 className="text-3xl font-extrabold text-slate-900 mt-2">{insights?'AI 분석 인사이트':'품질 현황 (QC)'}</h1><p className="text-sm text-slate-500 mt-2">{insights?'관측 자료에서 문서 근거, 검토와 평가까지 연결합니다.':'원천 품질 현황과 검토 근거를 함께 확인합니다.'}</p></div><div className="rounded-xl border border-blue-100 bg-blue-50 p-4 text-xs text-blue-800 max-w-sm"><BrainCircuit className="w-5 h-5 mb-2"/>문서 기반 근거 연결 완료 범위부터 조회합니다. 승인된 AI 예측·원인 판정은 아직 제공하지 않습니다.</div></header>
+    {insights&&<Link to="/ai-insights?source=SAMPLE" className="inline-flex items-center gap-2 bg-violet-50 border border-violet-200 rounded-lg px-4 py-2 text-sm text-violet-700">가상 자료로 AI 샘플 인사이트 시험하기 →</Link>}
     <StationClassifications/>
     <div className={`${panel} flex flex-wrap gap-3 text-xs items-end`}>
       <label>자료 출처<DatasetSourceSelect source={source}/></label>

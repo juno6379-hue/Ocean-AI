@@ -16,8 +16,10 @@ import { observationContext } from '../data/observationPeriod';
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-  const compactWorkspace=path==='/observations'||path==='/qc'||path==='/qc/sample'||path==='/copilot';
-  const context = observationContext(new URLSearchParams(location.search));
+  const search = new URLSearchParams(location.search);
+  const sampleMode=path==='/qc/sample'||(['/qc','/copilot','/ai-insights'].includes(path)&&search.get('source')==='SAMPLE');
+  const compactWorkspace=path==='/observations'||path==='/qc'||path==='/qc/sample'||path==='/copilot'||(path==='/ai-insights'&&sampleMode);
+  const context = sampleMode?new URLSearchParams():observationContext(search);
   const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -72,7 +74,7 @@ const Layout: React.FC = () => {
             return (
               <Link
                 key={item.name}
-                to={item.path + contextQuery}
+                to={item.path + (sampleMode&&['/qc','/ai-insights'].includes(item.path)?'?source=SAMPLE':contextQuery)}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
                 title={`${item.name} · ${menuPurposeFor(item.path)?.purpose || ''}`}
@@ -124,12 +126,12 @@ const Layout: React.FC = () => {
           {!compactWorkspace&&<WorkflowStatus />}
           {!compactWorkspace&&<MenuPurpose />}
           <Outlet />
-          {compactWorkspace&&<details className="obs-access-panel"><summary>검토 환경·담당자 연결·업무 단계</summary><OperatorSession/><WorkflowStatus/><MenuPurpose/></details>}
+          {compactWorkspace&&!sampleMode&&<details className="obs-access-panel"><summary>검토 환경·담당자 연결·업무 단계</summary><OperatorSession/><WorkflowStatus/><MenuPurpose/></details>}
         </div>
       </main>
 
       {/* AI Chatbot Floating Component */}
-      <Chatbot />
+      {!sampleMode&&<Chatbot />}
     </div>
   );
 };

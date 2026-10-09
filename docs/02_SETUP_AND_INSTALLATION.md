@@ -140,3 +140,11 @@ backend CLI: `python -m app.scripts.review_document_backlog --help`, `resume_doc
 `QC_SAMPLE_ENABLED=false`가 기본이며 `ENVIRONMENT`가 development/test/local이고 명시적으로 true일 때만 `/api/qc-sample/`이 동작한다. 기존 개발 시험 backend 8010에서 활성화하고 프런트 `/qc/sample`을 사용한다. production/staging에서는 flag가 true여도 404다. 운영 DATA_MODE를 demo로 바꾸거나 실제 계정을 등록할 필요가 없다.
 
 샘플 원장·세션·검토는 프로세스 메모리에만 존재하며 DB migration·seed·원천 적재가 없다. 브라우저 새로고침은 새 세션, backend 재시작은 샘플 이력 초기화다. 토큰은 샘플 전용 header와 화면 메모리에서만 사용하며 실제 API 인증으로 전달하지 않는다. [샘플 구성·사용·검증](37_QC_SAMPLE_VALIDATION_MODE.md)을 따른다.
+
+## 10/9 QC·AI 화면의 명시적 샘플 모드
+
+`/qc`의 자료 경로에서 ‘샘플 · 가상 시험자료’를 선택하면 `/qc?source=SAMPLE`을 사용한다. `/qc/sample`의 별도 페이지도 유지한다. `/ai-insights?source=SAMPLE`은 가상 시계열에서 실제 fit한 개발 기준선과 격리 검토·보고서를 표시한다. 실제 자료와 샘플은 UI 선택만 공유하고 source 적재·승인·registry는 공유하지 않는다. [38 데이터·학습·시나리오·검증 계약](38_QC_AI_SAMPLE_WORKFLOW.md)을 따른다.
+
+AI 샘플 API는 별도의 `AI_INSIGHTS_SAMPLE_ENABLED=false`가 기본이다. 시험용 backend에서만 `QC_SAMPLE_ENABLED=true`, `AI_INSIGHTS_SAMPLE_ENABLED=true`, `ENVIRONMENT=development`를 명시하고 loopback으로 실행한다. production/staging은 flag가 true여도 404다. 기존 8000/5173·8001·8011을 재설정하지 않고 현재 검토용 8010/5174에서 확인한다. 사용자의 실제 계정·외부 AI API key·운영 worker/serving 활성화가 필요하지 않다.
+
+QC와 AI의 bootstrap·session·전용 token header는 서로 다르며 각각 서버 메모리에서만 존재한다. 샘플 학습은 작은 합성 배열에 대한 CPU 계산이며 SQL·원천 파일·학습 큐·serving 호출이 없다. 재학습 후보는 가상 제안이다. 보고서는 승인 후 **명시 재개**해야 다운로드할 수 있고 외부 발송은 수행하지 않는다.

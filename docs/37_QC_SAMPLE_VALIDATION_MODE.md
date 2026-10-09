@@ -73,3 +73,7 @@
 고정 네 사례의 첫 context·세션·overview 조회는 0.570초, 같은 세션의 warm overview는 0.021초였다. 작은 샘플의 측정이며 실원천 전수 처리 성능으로 확대하지 않는다. 최종 frontend 결과와 브라우저 증빙 SHA는 [기계 판독 검증 기록](37_QC_SAMPLE_VALIDATION_MODE.json)에 기록한다. 샘플 token·실제 원천·환경변수·원장 행은 공개하지 않는다.
 
 실제 운영 자료 승인·후보 Final QC gate·typed 원천 QC·업무별 학습/평가/serving의 미완료 항목은 [36 운영 경계](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)에 남아 있다. 이번 완료 범위는 **직접 조작 가능한 별도 샘플 데이터와 검토 처리**이다.
+
+## 후속 구현 38
+
+이 문서는 별도 `/qc/sample`의 당시 검증 기록을 보존한다. 운영 QC 화면의 명시적 샘플 선택과 AI 인사이트 합성 학습·평가·검토·보고서 연결의 최신 검증은 [38](38_QC_AI_SAMPLE_WORKFLOW.md)을 따른다. [37 JSON](37_QC_SAMPLE_VALIDATION_MODE.json)의 당시 소스 SHA·시험 수는 소급 수정하지 않는다.

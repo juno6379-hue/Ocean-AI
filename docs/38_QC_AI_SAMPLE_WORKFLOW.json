@@ -1,0 +1,376 @@
+{
+  "schema_version": "qc-ai-sample-workflow-release-1",
+  "checked_at_utc": "2026-10-09T14:58:44.035876+00:00",
+  "verification_base_revision": "8853038d3d6bd1ad704b2739fb1c9616624e915c",
+  "revision_resolution": "Resolve containing commit with Git history; source hashes cover tested files",
+  "status": "COMPLETE_ISOLATED_QC_AND_AI_SCENARIOS",
+  "production_completed": false,
+  "approved": false,
+  "roles": {
+    "ui": "ui_values_graphs",
+    "engine": "model_comparison",
+    "independent_review": "ui_data_review",
+    "integration_and_final_verification": "root"
+  },
+  "sample": {
+    "qc_page": "/qc?source=SAMPLE",
+    "qc_standalone": "/qc/sample",
+    "ai_page": "/ai-insights?source=SAMPLE",
+    "source": "SAMPLE",
+    "fixed_as_of": "2026-07-09T15:41:20+09:00",
+    "ai_latest_observation": "2026-07-09T15:00:00+09:00",
+    "virtual_stations": 4,
+    "rows_per_case": 928,
+    "split_counts": {
+      "TRAIN": 480,
+      "VALIDATION": 168,
+      "TEST": 280
+    },
+    "forecast_pair_counts": {
+      "TRAIN": 477,
+      "VALIDATION": 165,
+      "TEST": 277
+    },
+    "forecast_selection": "VALIDATION_MAE_ONLY_TEST_NOT_USED",
+    "fitted_ridge_candidates": 12,
+    "fitted_anomaly_modes": 8,
+    "selected_forecast_baselines": 4,
+    "anomaly_evaluated_rows": 1092,
+    "anomaly_test_rows": 1120,
+    "operational_model_count": 0,
+    "forecast_horizon_seconds": 3600,
+    "future_prediction_target": "2026-07-09T16:00:00+09:00",
+    "future_prediction_is_observation": false,
+    "confidence_probability": null,
+    "uncertainty": null,
+    "quantitative_explainability_score": null,
+    "spatiotemporal_model_trained": false,
+    "neighbor_comparison": "EXPLICIT_SYNTHETIC_INDEPENDENT_SENSOR",
+    "reports": "COMPUTED_TEMPLATE_WITH_NUMERIC_METRICS",
+    "external_llm_or_rag_calls": 0,
+    "operational_writes": 0,
+    "source_reads": 0,
+    "registry_writes": 0,
+    "final_qc_writes": 0,
+    "training_queue_writes": 0
+  },
+  "metrics": {
+    "normal": {
+      "unit": "degree_C",
+      "assessment": "NORMAL_SAMPLE",
+      "confusion": {
+        "tp": 0,
+        "fp": 29,
+        "fn": 0,
+        "tn": 244,
+        "evaluated_count": 273,
+        "precision": 0.0,
+        "recall": null,
+        "false_positive_rate": 0.10622710622710622,
+        "false_negative_rate": null,
+        "definition": "ANY_SPIKE_OR_DRIFT_WHEN_BOTH_EVALUATED_VS_SENSOR_DEVIATION_INJECTION_LABEL; ENVIRONMENTAL_RISE_IS_NOT_SENSOR_FAULT_TRUTH"
+      },
+      "validation_metrics": {
+        "RIDGE": {
+          "mae": 0.030142604971301112,
+          "rmse": 0.03671835255814214,
+          "count": 165
+        },
+        "PERSISTENCE": {
+          "mae": 0.15212476223459154,
+          "rmse": 0.16986682993944227,
+          "count": 165
+        }
+      },
+      "test_metrics": {
+        "RIDGE": {
+          "mae": 0.033335041421591216,
+          "rmse": 0.04023018080527451,
+          "count": 277
+        },
+        "PERSISTENCE": {
+          "mae": 0.15398526520295952,
+          "rmse": 0.17222996678392974,
+          "count": 277
+        }
+      }
+    },
+    "high-temp-neighbor": {
+      "unit": "degree_C",
+      "assessment": "ENVIRONMENTAL_CHANGE_CANDIDATE",
+      "confusion": {
+        "tp": 0,
+        "fp": 15,
+        "fn": 0,
+        "tn": 258,
+        "evaluated_count": 273,
+        "precision": 0.0,
+        "recall": null,
+        "false_positive_rate": 0.054945054945054944,
+        "false_negative_rate": null,
+        "definition": "ANY_SPIKE_OR_DRIFT_WHEN_BOTH_EVALUATED_VS_SENSOR_DEVIATION_INJECTION_LABEL; ENVIRONMENTAL_RISE_IS_NOT_SENSOR_FAULT_TRUTH"
+      },
+      "validation_metrics": {
+        "RIDGE": {
+          "mae": 0.030889772659884265,
+          "rmse": 0.03825544108611119,
+          "count": 165
+        },
+        "PERSISTENCE": {
+          "mae": 0.1522236697168026,
+          "rmse": 0.17114429711005702,
+          "count": 165
+        }
+      },
+      "test_metrics": {
+        "RIDGE": {
+          "mae": 0.05551971996114298,
+          "rmse": 0.10400168387257851,
+          "count": 277
+        },
+        "PERSISTENCE": {
+          "mae": 0.16259356457640023,
+          "rmse": 0.1870454453144127,
+          "count": 277
+        }
+      }
+    },
+    "spike": {
+      "unit": "degree_C",
+      "assessment": "SENSOR_DEVIATION_CANDIDATE",
+      "confusion": {
+        "tp": 8,
+        "fp": 7,
+        "fn": 0,
+        "tn": 258,
+        "evaluated_count": 273,
+        "precision": 0.5333333333333333,
+        "recall": 1.0,
+        "false_positive_rate": 0.026415094339622643,
+        "false_negative_rate": 0.0,
+        "definition": "ANY_SPIKE_OR_DRIFT_WHEN_BOTH_EVALUATED_VS_SENSOR_DEVIATION_INJECTION_LABEL; ENVIRONMENTAL_RISE_IS_NOT_SENSOR_FAULT_TRUTH"
+      },
+      "validation_metrics": {
+        "RIDGE": {
+          "mae": 0.03235813877431586,
+          "rmse": 0.039733954800307586,
+          "count": 165
+        },
+        "PERSISTENCE": {
+          "mae": 0.15295959633619968,
+          "rmse": 0.17117002789999353,
+          "count": 165
+        }
+      },
+      "test_metrics": {
+        "RIDGE": {
+          "mae": 0.2672060902459113,
+          "rmse": 1.1677289501433101,
+          "count": 277
+        },
+        "PERSISTENCE": {
+          "mae": 0.29295062854349735,
+          "rmse": 0.8657848404755148,
+          "count": 277
+        }
+      }
+    },
+    "salinity-drift": {
+      "unit": "psu",
+      "assessment": "SENSOR_DEVIATION_CANDIDATE",
+      "confusion": {
+        "tp": 78,
+        "fp": 9,
+        "fn": 1,
+        "tn": 185,
+        "evaluated_count": 273,
+        "precision": 0.896551724137931,
+        "recall": 0.9873417721518988,
+        "false_positive_rate": 0.04639175257731959,
+        "false_negative_rate": 0.012658227848101266,
+        "definition": "ANY_SPIKE_OR_DRIFT_WHEN_BOTH_EVALUATED_VS_SENSOR_DEVIATION_INJECTION_LABEL; ENVIRONMENTAL_RISE_IS_NOT_SENSOR_FAULT_TRUTH"
+      },
+      "validation_metrics": {
+        "RIDGE": {
+          "mae": 0.022594196505048146,
+          "rmse": 0.02801115087466395,
+          "count": 165
+        },
+        "PERSISTENCE": {
+          "mae": 0.049910672130671685,
+          "rmse": 0.057123959587670255,
+          "count": 165
+        }
+      },
+      "test_metrics": {
+        "RIDGE": {
+          "mae": 0.06747866139009527,
+          "rmse": 0.11325338236170113,
+          "count": 277
+        },
+        "PERSISTENCE": {
+          "mae": 0.052054170234579956,
+          "rmse": 0.060730997774405056,
+          "count": 277
+        }
+      }
+    }
+  },
+  "isolation": {
+    "default_qc_enabled": false,
+    "default_ai_enabled": false,
+    "allowed_environments": [
+      "development",
+      "test",
+      "local"
+    ],
+    "production_status": 404,
+    "header_namespaces": [
+      "X-QC-Sample-Token",
+      "X-AI-Sample-Token"
+    ],
+    "token_url_or_storage": false,
+    "cookies": false,
+    "operational_authorization": false,
+    "qc_ai_memory_sessions_separate": true,
+    "pending_stops": true,
+    "approved_stops_until_resume": true,
+    "resume_output": "TRANSIENT_SAMPLE_REPORT_ONLY",
+    "actual_shared_operator_and_workflow_and_chatbot_mounts": false
+  },
+  "verification": {
+    "backend": {
+      "passed": 1106,
+      "failed": 0,
+      "skipped": 1,
+      "warnings": 18,
+      "seconds": 399.81,
+      "database_scope": "ISOLATED_ONLY",
+      "skip_reason": "Existing Windows symlink privilege unavailable",
+      "log_sha256": "fce814c774a1a249497c76265abdc7c045d7e37c431d492707e6fd3692bfbeef",
+      "date": "2026-10-09"
+    },
+    "frontend": {
+      "passed": 146,
+      "failed": 0,
+      "skipped": 0,
+      "build": "PASS",
+      "lint_existing_warnings": 12,
+      "new_qc_ai_lint_warnings": 0,
+      "log_sha256": "f21179ce686ee2191e539fe15ec06b5b5489965d67ae2d433aacc44f139e9f57",
+      "build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
+      "lint_log_sha256": "a02faaa3bf12f17160af55c77a3b16829f812f12b442bb5ff37383fc97a1f97c",
+      "date": "2026-10-09"
+    },
+    "ai_backend_focused": {
+      "owned": 25,
+      "independent": 39,
+      "total": 64,
+      "included_in_full": true
+    },
+    "qc_workspace_independent_react_dom": 9,
+    "ai_http": {
+      "passed": 57,
+      "failed": 0,
+      "receipt_sha256": "c6e085d9ee0bdbb52cb5ddd3bb04202df52311cb1bdf98930b6166c66c4b3ca9"
+    },
+    "browser": {
+      "passed": 29,
+      "failed": 0,
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "viewports": [
+        {
+          "page": "AI",
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "page": "QC",
+          "width": 890,
+          "height": 836
+        }
+      ],
+      "receipt_sha256": "22ad0851bfd64afb2b3a8d675de958b9c3e895d1aeb20089610c45ffc56b27a5",
+      "screenshots": [
+        {
+          "name": "parent-sample-workflow-ai-dashboard-final.png",
+          "sha256": "01ec8fb16325795a7412624d99be68e76bc19c2e2b70484489c1f6ae2210ad50"
+        },
+        {
+          "name": "parent-sample-workflow-ai-map-final.png",
+          "sha256": "7c1192188173f748cfdc967ce0755344a3c2708d66913c254ad5e2c6e00c40cc"
+        },
+        {
+          "name": "parent-sample-workflow-ai-report-final.png",
+          "sha256": "23d4d468347076d01f23b05033941b4fe4b9f7dd13c7617fab22ca5c526f4fa0"
+        },
+        {
+          "name": "parent-sample-workflow-qc-final.png",
+          "sha256": "323e27cf63f29766d753a9d876c5c6c5ac9403850444a9066cd9f2193756efe2"
+        }
+      ]
+    },
+    "source_freeze": {
+      "backend_files": 279,
+      "frontend_files": 107,
+      "unchanged": true
+    },
+    "operational_audit": {
+      "table_count": 13,
+      "unchanged": true,
+      "queue_unchanged": true,
+      "queue_count": 0,
+      "counts": {
+        "observation_raw": 13621,
+        "observation_standard": 4074,
+        "qc_rule_result": 0,
+        "source_observation_binding": 0,
+        "source_contract_packets": 0,
+        "source_contract_decisions": 0,
+        "approval_history": 0,
+        "dataset_registry": 0,
+        "model_registry": 0,
+        "agent_workflow_run": 0,
+        "agent_workflow_transition": 0,
+        "retraining_history": 0,
+        "retraining_pool": 0
+      },
+      "receipt_sha256": "16f4c694dc5220dd8c372ea3ce657346b73dcc964d65b7f95307a93920fff340"
+    }
+  },
+  "code_sha256": {
+    "ocean-ai-platform/backend/app/api/routes_ai_insights_sample.py": "c08e9b50a97c86d9bedc40c76a45f72da1cba58470adf9843dd71e5098eb0cbb",
+    "ocean-ai-platform/backend/app/core/config.py": "1e082194f264636ba435feeb2afa4ce6e24c4923d6146c9f521ccf77db26fa1a",
+    "ocean-ai-platform/backend/app/core/security.py": "3b17c397c91180b8759ce0d08306068d611e078e3deeeeb8ba4f5bbfae30e360",
+    "ocean-ai-platform/backend/app/main.py": "c19de08d22986da07a17b15f3fe7ce375e8b4c801b277ca738248dddd5002a18",
+    "ocean-ai-platform/backend/app/services/ai_insights_sample.py": "98f8733cb16407f579b7a59c3c3247e61a500b386d02051b3134d3ec603ee327",
+    "ocean-ai-platform/backend/tests/test_ai_insights_sample.py": "558560f87d7edca663bf467e09cd655ea251165a07ddb9a84935f5a0cfcfa0d3",
+    "ocean-ai-platform/backend/tests/test_ai_insights_sample_isolation.py": "eff27e7272a7b12a88f03de08f4a97ec5ea2c5271c5200f5f27a0021908c2ab3",
+    "ocean-ai-platform/frontend/src/components/AnalysisWorkspace.tsx": "038d4153b36f6bcc21330690dce72400817c9573e7e60a038ca7b0e709a3773b",
+    "ocean-ai-platform/frontend/src/components/Layout.tsx": "8f5ba3221a7acc5070e81ecae398745821becb4f3a7b78246f8add5a14dadc1d",
+    "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx": "8d83d05d08c85f458e828d0cd7cbce7cd5211374be6d498d455156192a8387d2",
+    "ocean-ai-platform/frontend/src/data/aiInsightsSample.ts": "e62ba54503ab5fefb3669eb770b8897311fd1a9f6e585237b49ec6e083932aef",
+    "ocean-ai-platform/frontend/src/pages/AIInsights.tsx": "0c40209ebd25a7dab11917e03e933548e3635a2585eb7aa612c38cd8c1fbf52c",
+    "ocean-ai-platform/frontend/src/pages/AIInsightsSample.tsx": "7daab54e076b985876a5ce5309c66a165f09be74fc686b740f3aadbcaaceddfc",
+    "ocean-ai-platform/frontend/src/pages/QCCopilot.tsx": "1d6eddc1cd670f273565e91c6adf93aea1591aa1acfa0fdaa3f421ea68ac3545",
+    "ocean-ai-platform/frontend/src/pages/QCSample.tsx": "c6d283333d82eee5a94a556c9001ea2d4f05f863d889cfdf22b9fed2f0b530c7",
+    "ocean-ai-platform/frontend/src/styles/aiInsightsSample.css": "bad051329d75fe6ce38c199a92d9ee7cc2b27d7bdf3e75dd811ed187686a3a71",
+    "ocean-ai-platform/frontend/src/styles/qcSample.css": "c8028ac6d9fafeb5b7e9299df1d7a4010ccf787ea400240f87be61228788aebc",
+    "ocean-ai-platform/frontend/tests/ai-insights-sample-fixtures.mjs": "0b12425554966a914bb115eec5c2ca4396fd65460deeda5de4d7abd1018aa399",
+    "ocean-ai-platform/frontend/tests/ai-insights-sample-runtime.mjs": "30474b410045f8b06b050d5c3e74cc8e44e3ee06d370b9dc9b262898ba0a6242",
+    "ocean-ai-platform/frontend/tests/ai-insights-sample-ui.test.mjs": "5a498a764eb73a5e44393b3d67d1e7540977d87c210a6c44c7928ff33fdf1a48",
+    "ocean-ai-platform/frontend/tests/ai-insights-sample.test.mjs": "608d80a84f841abc44fac6f6c03a3b616df499e4952f01d7609603b6ecc50cd1",
+    "ocean-ai-platform/frontend/tests/qc-sample-workspace-runtime.mjs": "bda6a524ca8a96589d4e6de3da0458b9f39949889607ef32afff7ea151310fc8",
+    "ocean-ai-platform/frontend/tests/qc-sample-workspace.test.mjs": "10c3a1ba9e05ada35e699c736e62ff3ed5d3569976d13336b3eccecf470dcc84"
+  },
+  "limitations": [
+    "Synthetic benchmark only; actual operational model count remains zero",
+    "False positives and false negatives retained; metrics are not operational acceptance",
+    "Neighbor comparison and virtual coordinate map do not train a spatial network model",
+    "No quantitative explainability, calibrated fault probability or validated uncertainty",
+    "Sample approval and report generation do not change real source approvals or Final QC"
+  ]
+}

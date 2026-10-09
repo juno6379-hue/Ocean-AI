@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     DATA_MODE: Literal["live", "demo"] = "live"
     # Opt-in, process-memory QC samples. These never use the operational database.
     QC_SAMPLE_ENABLED: bool = False
+    AI_INSIGHTS_SAMPLE_ENABLED: bool = False
     MDC_SYNC_ENABLED: bool = False
     AUTO_CREATE_TABLES: bool = False
     VECTOR_SEARCH_ENABLED: bool = True

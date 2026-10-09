@@ -27,6 +27,7 @@ from app.api import routes_operation_simulation
 from app.api import routes_qc_workspace
 from app.api import routes_qc_candidates
 from app.api import routes_qc_sample
+from app.api import routes_ai_insights_sample
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.models import domain  # Ensure models are loaded before create_all
@@ -104,6 +105,7 @@ app.include_router(routes_operation_simulation.router)
 app.include_router(routes_qc_workspace.router)
 app.include_router(routes_qc_candidates.router)
 app.include_router(routes_qc_sample.router)
+app.include_router(routes_ai_insights_sample.router)
 app.include_router(routes_imputation.router)
 app.include_router(routes_forecasting.router)
 

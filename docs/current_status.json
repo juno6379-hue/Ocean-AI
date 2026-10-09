@@ -1,18 +1,18 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T13:40:27.903680+00:00",
+  "as_of": "2026-10-09T14:58:44.035876+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/37 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/38 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "passed": 1042,
+      "passed": 1106,
       "failed": 0,
       "skipped": 1,
       "warnings": 18,
-      "seconds": 379.49,
+      "seconds": 399.81,
       "database_scope": "ISOLATED_ONLY",
-      "skip_reason": "Existing Windows symlink privilege unavailable; separate reparse-flag tests passed",
-      "log_sha256": "a65c7967391616832d6aa6cc4486e65bae62146447c9af1c2fcb8d6393e2d07d",
+      "skip_reason": "Existing Windows symlink privilege unavailable",
+      "log_sha256": "fce814c774a1a249497c76265abdc7c045d7e37c431d492707e6fd3692bfbeef",
       "date": "2026-10-09"
     },
     "frontend_clean_install": "PASS",
@@ -59,7 +59,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Frozen isolated backend/frontend regression + real HTTP and browser sample review + unchanged operational row fingerprints; historical actual-source QC and PostgreSQL gates retained separately",
+    "method": "Frozen isolated backend/frontend regression, actual QC/AI sample HTTP and browser workflows, unchanged 13 operational tables and worker queue; historical production gates retained separately",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -76,19 +76,19 @@
       "combined_passed": 14,
       "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
     },
-    "frontend_build_log_sha256": "b42f111a453a50d79bbfaa8345f42e9aba52b0adcd254aee27d6187f33690e2d",
+    "frontend_build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 117,
+      "passed": 146,
       "failed": 0,
       "skipped": 0,
-      "sample_tests": 13,
-      "sample_react_dom_tests": 9,
       "build": "PASS",
       "lint_existing_warnings": 12,
-      "new_qc_lint_warnings": 0,
-      "log_sha256": "77955f379fc756f699a65d95cfe084101d2eee63abedc0ddcd8f285065f2237b",
+      "new_qc_ai_lint_warnings": 0,
+      "log_sha256": "f21179ce686ee2191e539fe15ec06b5b5489965d67ae2d433aacc44f139e9f57",
+      "build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
+      "lint_log_sha256": "a02faaa3bf12f17160af55c77a3b16829f812f12b442bb5ff37383fc97a1f97c",
       "date": "2026-10-09"
     },
     "postgresql_full_restore": {
@@ -433,6 +433,141 @@
       "operational_rows_unchanged": true,
       "production_completed": false,
       "approved": false
+    },
+    "qc_ai_sample_workflow": {
+      "document": "38_QC_AI_SAMPLE_WORKFLOW.md",
+      "receipt": "38_QC_AI_SAMPLE_WORKFLOW.json",
+      "status": "COMPLETE_ISOLATED_QC_AND_AI_SCENARIOS",
+      "production_completed": false,
+      "approved": false,
+      "verification": {
+        "backend": {
+          "passed": 1106,
+          "failed": 0,
+          "skipped": 1,
+          "warnings": 18,
+          "seconds": 399.81,
+          "database_scope": "ISOLATED_ONLY",
+          "skip_reason": "Existing Windows symlink privilege unavailable",
+          "log_sha256": "fce814c774a1a249497c76265abdc7c045d7e37c431d492707e6fd3692bfbeef",
+          "date": "2026-10-09"
+        },
+        "frontend": {
+          "passed": 146,
+          "failed": 0,
+          "skipped": 0,
+          "build": "PASS",
+          "lint_existing_warnings": 12,
+          "new_qc_ai_lint_warnings": 0,
+          "log_sha256": "f21179ce686ee2191e539fe15ec06b5b5489965d67ae2d433aacc44f139e9f57",
+          "build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
+          "lint_log_sha256": "a02faaa3bf12f17160af55c77a3b16829f812f12b442bb5ff37383fc97a1f97c",
+          "date": "2026-10-09"
+        },
+        "ai_backend_focused": {
+          "owned": 25,
+          "independent": 39,
+          "total": 64,
+          "included_in_full": true
+        },
+        "qc_workspace_independent_react_dom": 9,
+        "ai_http": {
+          "passed": 57,
+          "failed": 0,
+          "receipt_sha256": "c6e085d9ee0bdbb52cb5ddd3bb04202df52311cb1bdf98930b6166c66c4b3ca9"
+        },
+        "browser": {
+          "passed": 29,
+          "failed": 0,
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "viewports": [
+            {
+              "page": "AI",
+              "width": 1280,
+              "height": 720
+            },
+            {
+              "page": "QC",
+              "width": 890,
+              "height": 836
+            }
+          ],
+          "receipt_sha256": "22ad0851bfd64afb2b3a8d675de958b9c3e895d1aeb20089610c45ffc56b27a5",
+          "screenshots": [
+            {
+              "name": "parent-sample-workflow-ai-dashboard-final.png",
+              "sha256": "01ec8fb16325795a7412624d99be68e76bc19c2e2b70484489c1f6ae2210ad50"
+            },
+            {
+              "name": "parent-sample-workflow-ai-map-final.png",
+              "sha256": "7c1192188173f748cfdc967ce0755344a3c2708d66913c254ad5e2c6e00c40cc"
+            },
+            {
+              "name": "parent-sample-workflow-ai-report-final.png",
+              "sha256": "23d4d468347076d01f23b05033941b4fe4b9f7dd13c7617fab22ca5c526f4fa0"
+            },
+            {
+              "name": "parent-sample-workflow-qc-final.png",
+              "sha256": "323e27cf63f29766d753a9d876c5c6c5ac9403850444a9066cd9f2193756efe2"
+            }
+          ]
+        },
+        "source_freeze": {
+          "backend_files": 279,
+          "frontend_files": 107,
+          "unchanged": true
+        },
+        "operational_audit": {
+          "table_count": 13,
+          "unchanged": true,
+          "queue_unchanged": true,
+          "queue_count": 0,
+          "counts": {
+            "observation_raw": 13621,
+            "observation_standard": 4074,
+            "qc_rule_result": 0,
+            "source_observation_binding": 0,
+            "source_contract_packets": 0,
+            "source_contract_decisions": 0,
+            "approval_history": 0,
+            "dataset_registry": 0,
+            "model_registry": 0,
+            "agent_workflow_run": 0,
+            "agent_workflow_transition": 0,
+            "retraining_history": 0,
+            "retraining_pool": 0
+          },
+          "receipt_sha256": "16f4c694dc5220dd8c372ea3ce657346b73dcc964d65b7f95307a93920fff340"
+        }
+      },
+      "code_sha256": {
+        "ocean-ai-platform/backend/app/api/routes_ai_insights_sample.py": "c08e9b50a97c86d9bedc40c76a45f72da1cba58470adf9843dd71e5098eb0cbb",
+        "ocean-ai-platform/backend/app/core/config.py": "1e082194f264636ba435feeb2afa4ce6e24c4923d6146c9f521ccf77db26fa1a",
+        "ocean-ai-platform/backend/app/core/security.py": "3b17c397c91180b8759ce0d08306068d611e078e3deeeeb8ba4f5bbfae30e360",
+        "ocean-ai-platform/backend/app/main.py": "c19de08d22986da07a17b15f3fe7ce375e8b4c801b277ca738248dddd5002a18",
+        "ocean-ai-platform/backend/app/services/ai_insights_sample.py": "98f8733cb16407f579b7a59c3c3247e61a500b386d02051b3134d3ec603ee327",
+        "ocean-ai-platform/backend/tests/test_ai_insights_sample.py": "558560f87d7edca663bf467e09cd655ea251165a07ddb9a84935f5a0cfcfa0d3",
+        "ocean-ai-platform/backend/tests/test_ai_insights_sample_isolation.py": "eff27e7272a7b12a88f03de08f4a97ec5ea2c5271c5200f5f27a0021908c2ab3",
+        "ocean-ai-platform/frontend/src/components/AnalysisWorkspace.tsx": "038d4153b36f6bcc21330690dce72400817c9573e7e60a038ca7b0e709a3773b",
+        "ocean-ai-platform/frontend/src/components/Layout.tsx": "8f5ba3221a7acc5070e81ecae398745821becb4f3a7b78246f8add5a14dadc1d",
+        "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx": "8d83d05d08c85f458e828d0cd7cbce7cd5211374be6d498d455156192a8387d2",
+        "ocean-ai-platform/frontend/src/data/aiInsightsSample.ts": "e62ba54503ab5fefb3669eb770b8897311fd1a9f6e585237b49ec6e083932aef",
+        "ocean-ai-platform/frontend/src/pages/AIInsights.tsx": "0c40209ebd25a7dab11917e03e933548e3635a2585eb7aa612c38cd8c1fbf52c",
+        "ocean-ai-platform/frontend/src/pages/AIInsightsSample.tsx": "7daab54e076b985876a5ce5309c66a165f09be74fc686b740f3aadbcaaceddfc",
+        "ocean-ai-platform/frontend/src/pages/QCCopilot.tsx": "1d6eddc1cd670f273565e91c6adf93aea1591aa1acfa0fdaa3f421ea68ac3545",
+        "ocean-ai-platform/frontend/src/pages/QCSample.tsx": "c6d283333d82eee5a94a556c9001ea2d4f05f863d889cfdf22b9fed2f0b530c7",
+        "ocean-ai-platform/frontend/src/styles/aiInsightsSample.css": "bad051329d75fe6ce38c199a92d9ee7cc2b27d7bdf3e75dd811ed187686a3a71",
+        "ocean-ai-platform/frontend/src/styles/qcSample.css": "c8028ac6d9fafeb5b7e9299df1d7a4010ccf787ea400240f87be61228788aebc",
+        "ocean-ai-platform/frontend/tests/ai-insights-sample-fixtures.mjs": "0b12425554966a914bb115eec5c2ca4396fd65460deeda5de4d7abd1018aa399",
+        "ocean-ai-platform/frontend/tests/ai-insights-sample-runtime.mjs": "30474b410045f8b06b050d5c3e74cc8e44e3ee06d370b9dc9b262898ba0a6242",
+        "ocean-ai-platform/frontend/tests/ai-insights-sample-ui.test.mjs": "5a498a764eb73a5e44393b3d67d1e7540977d87c210a6c44c7928ff33fdf1a48",
+        "ocean-ai-platform/frontend/tests/ai-insights-sample.test.mjs": "608d80a84f841abc44fac6f6c03a3b616df499e4952f01d7609603b6ecc50cd1",
+        "ocean-ai-platform/frontend/tests/qc-sample-workspace-runtime.mjs": "bda6a524ca8a96589d4e6de3da0458b9f39949889607ef32afff7ea151310fc8",
+        "ocean-ai-platform/frontend/tests/qc-sample-workspace.test.mjs": "10c3a1ba9e05ada35e699c736e62ff3ed5d3569976d13336b3eccecf470dcc84"
+      }
     }
   },
   "runtime": {
@@ -465,14 +600,18 @@
       "review_frontend_port": 5174,
       "sample_enabled": true,
       "environment": "development",
-      "openapi_paths": 168,
-      "openapi_operations": 177,
+      "openapi_paths": 175,
+      "openapi_operations": 184,
       "sample_paths": 6,
       "health": "PASS",
       "readiness": "PASS",
       "canonical_8000_8001_8011_5173_process_ids_preserved": true,
-      "scope": "LOOPBACK_REVIEW_SERVER_ONLY"
-    }
+      "scope": "LOOPBACK_REVIEW_SERVER_ONLY",
+      "ai_sample_paths": 7,
+      "ai_sample_enabled": true
+    },
+    "qc_sample_page_url": "http://127.0.0.1:5174/qc?source=SAMPLE",
+    "ai_sample_page_url": "http://127.0.0.1:5174/ai-insights?source=SAMPLE"
   },
   "database_counts": {
     "source_contract_packets": 0,
@@ -490,7 +629,8 @@
     "agent_workflow_transition": 0,
     "qc_rule_result": 0,
     "observation_raw": 13621,
-    "observation_standard": 4074
+    "observation_standard": 4074,
+    "retraining_pool": 0
   },
   "schema_not_applied": [
     "mdc_sensor_catalog"
@@ -687,7 +827,7 @@
     "runtime_is_canonical_workstation_copy": true,
     "session_http_status": 503
   },
-  "database_counts_checked_at": "2026-10-09T11:32:43.977095+00:00",
+  "database_counts_checked_at": "2026-10-09T14:57:43.803536+00:00",
   "additive_schema_application": {
     "checked_at": "2026-10-08T05:07:26.153330+00:00",
     "files": [
@@ -906,7 +1046,7 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "634c32485c03ad05d5a9065e5094f0c6bb8df911",
+  "verification_base_revision": "8853038d3d6bd1ad704b2739fb1c9616624e915c",
   "experimental_development_release": {
     "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
     "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
@@ -974,6 +1114,16 @@
       "eligible_channels": 609,
       "total_channels": 610
     },
-    "synchronized_filter_cases": 53
+    "synchronized_filter_cases": 53,
+    "qc_ai_sample_workflow": {
+      "qc_page": "/qc?source=SAMPLE",
+      "ai_page": "/ai-insights?source=SAMPLE",
+      "source": "SAMPLE",
+      "status": "COMPLETE_ISOLATED_QC_AND_AI_SCENARIOS",
+      "production_eligible": false,
+      "fitted_development_baselines": true,
+      "operational_models": 0,
+      "operational_writes": 0
+    }
   }
 }
