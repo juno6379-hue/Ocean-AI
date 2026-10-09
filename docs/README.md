@@ -1,10 +1,10 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-09**. 이 폴더의 01~33 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정·동일 기준시각·실측 그래프·사진·운영 진단·가상 품질 시험을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-09**. 이 폴더의 01~36 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정·동일 기준시각·실측 그래프·사진·운영 진단·가상 품질 시험을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
-2026-10-08 운영 PostgreSQL을 읽기 전용으로 확인했고, 백엔드 health/readiness와 프런트엔드 HTTP 응답은 정상이다. 기존 canonical 작업본의 학습 worker는 실행 중이며 큐는 비어 있다. **원천 계약·판정·관측 binding·승인 기록·dataset·학습 이력·model registry는 모두 0건**이고, 실제 운영 모델도 0개다. 실제 계정은 사용자 지시로 업무 수행 시점에 설정한다(DEFERRED_BY_USER). 현재 readonly 기술 분석은 가능하고 실제 승인 쓰기는 차단한다. 운영 `mdc_sensor_catalog` 테이블은 아직 적용되지 않았다.
+2026-10-08 운영 PostgreSQL을 읽기 전용으로 확인했고, 백엔드 health/readiness와 프런트엔드 HTTP 응답은 정상이다. 10/9 재확인에서 canonical 작업본의 학습 worker 설정은 true이나 실행 검증은 false(`STALE_OR_CHANGED`)이며 큐는 비어 있다. 10/8 실행 기록을 현재 상태로 재사용하지 않는다. **원천 계약·판정·관측 binding·승인 기록·dataset·학습 이력·model registry는 모두 0건**이고, 실제 운영 모델도 0개다. 실제 계정은 사용자 지시로 업무 수행 시점에 설정한다(DEFERRED_BY_USER). 현재 readonly 기술 분석은 가능하고 실제 승인 쓰기는 차단한다. 운영 `mdc_sensor_catalog` 테이블은 아직 적용되지 않았다.
 
 `/api/mlops/readiness`는 `BLOCKED`, 수용 기준 상태는 `NOT_DEFINED`, `/api/mlops/serving/health`는 `409 NO_ACTIVE_LOCAL_MODEL`이다. 프로세스 실행과 자료형 기준선 구현을 업무별 모델의 운영 완료로 해석하지 않는다. 72개 업무 키는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이며, 구현 범위는 6종 자료형과 3종 업무 알고리즘의 기준선이다.
 
@@ -49,13 +49,16 @@
 | 31 | [관측현황 UX·원천 지표 재산정](31_OBSERVATION_METRIC_RECALCULATION.md) | 큰 지도·해역/관측소 선택·최근 값·월별 자료 유무·142개 원천 월 재계산 |
 | 32 | [관측현황·동일 시각·실측 그래프](32_OBSERVATION_WORKSPACE_ASOF.md) | 7월 9일 동일 기준시각·실제 5항목 시계열·사진 코드 매칭·다중 에이전트 교차검증 |
 | 33 | [운영 진단·가상 품질 시험](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.md) | 최근 24시간 정상·주의·이상·날짜별 점검/QC·15종 샘플과 실제 엔진·승인 gate 시험 |
+| 34 | [목적별 데이터셋·모델 준비도 검토](34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.md) | 4개 목적의 실제 구현·개발 모델 3개·운영 모델 0개·학습/평가 입력과 한계 |
+| 35 | [QC 운영 대시보드 요구사항](35_QC_OPERATIONAL_DASHBOARD_REQUIREMENTS.md) | 사용자의 오늘 중심 QC·상세검토·성능·검증 요구 19개 영역 |
+| 36 | [QC 운영 대시보드 실행·진행 상태](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md) | 3개 에이전트 역할·소유 파일·요구사항별 구현 상태·루트 최종 검증 |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
-현황의 기본 관측기간은 **2026년7월 단일 월**이다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.
+관측현황의 기본 관측기간은 **2026년7월 단일 월**이다. QC 운영 대시보드는 backend 오늘 기준을 기본으로 구현·검증했고 명시된 과거 native cutoff도 유지한다. [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)에 역할·19개 요구사항·11개 시험·실제 입력과 성능 한계를 기록했다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.
 
 ## 10/8 확장과 실행 웹
 
-12종 Rule QC, fitted 통계 이상탐지6모드,5종 Evidence Fusion과 PostgreSQL PENDING stop/resume을 구현했다. 실제 조건이 없으면 NOT_EVALUATED이며 score는 운영 확률이 아니다. 최신 개발 웹은 `http://127.0.0.1:5174`, backend는8010이다. 기존 canonical5173/8000과 worker는 유지한다. 현재 분석/조회는 가능하고 실제 계정 승인·물리 source fit·등록/운영 모델은0이다. 별도 원시 숫자 적합3개는 [29](29_DEVELOPMENT_STAGE_EXECUTION.md)에 기록했다.
+12종 Rule QC, fitted 통계 이상탐지6모드,5종 Evidence Fusion과 PostgreSQL PENDING stop/resume을 구현했다. 실제 조건이 없으면 NOT_EVALUATED이며 score는 운영 확률이 아니다. 최신 개발 웹은 `http://127.0.0.1:5174`, backend는8010이다. 기존 canonical5173/8000은 유지하며 worker의 현재 실행 판정은 [34](34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.md)를 따른다. 현재 분석/조회는 가능하고 실제 계정 승인·물리 source fit·등록/운영 모델은0이다. 별도 원시 숫자 적합3개는 [29](29_DEVELOPMENT_STAGE_EXECUTION.md)에 기록했다.
 
 ## 운영 완료까지 필요한 순서
 

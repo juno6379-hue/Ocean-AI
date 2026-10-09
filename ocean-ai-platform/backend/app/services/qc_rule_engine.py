@@ -16,6 +16,7 @@ from functools import lru_cache
 from copy import deepcopy
 from decimal import Decimal, InvalidOperation
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+from app.services.qc_analysis_readiness import fact_period, FactPeriodError
 
 GUIDE_SHA256 = "d1fd062b7f7313d6dee585692a20665cb4dd724a16008ccdae5ddf250054c9d9"
 ENGINE_VERSION = "guide-existing-12-v1"
@@ -44,7 +45,8 @@ def catalog():
 @lru_cache(maxsize=1)
 def implementation_hashes():
     return {"implementation_sha256": sha256(Path(__file__).read_bytes()).hexdigest(),
-        "catalog_sha256": sha256(Path(__file__).with_name("qc_rule_catalog.json").read_bytes()).hexdigest()}
+        "catalog_sha256": sha256(Path(__file__).with_name("qc_rule_catalog.json").read_bytes()).hexdigest(),
+        "fact_contract_sha256": sha256(Path(__file__).with_name("qc_analysis_readiness.py").read_bytes()).hexdigest()}
 
 
 def utc(value):
@@ -108,9 +110,12 @@ def _record(row, context, *, numeric=True, clock_diagnostic=False):
     evidence(facts.get("evidence"))
     if row["variable_code"] == "TIDE" and (not isinstance(facts.get("reference_datum"), str) or not facts["reference_datum"].strip()):
         raise NotEvaluated("TIDE_REFERENCE_DATUM_REQUIRED")
-    start, end = utc(facts.get("effective_start")), utc(facts.get("effective_end"))
-    if not start <= when < end:
-        raise NotEvaluated("SOURCE_EPISODE_OUTSIDE_EFFECTIVE_PERIOD")
+    try:
+        fact_period(facts, ("effective_start", "effective_end"), when=when, as_of=context["as_of"],
+            expected_scope={k:row[k] for k in SCOPE_FIELDS})
+    except FactPeriodError as exc:
+        raise NotEvaluated("SOURCE_EPISODE_OUTSIDE_EFFECTIVE_PERIOD" if str(exc)=="FACT_OUTSIDE_EFFECTIVE_INTERVAL"
+            else str(exc)) from None
     if numeric and row.get("value") is not None:
         number(row["value"])
     return when

@@ -69,7 +69,8 @@ def fingerprint():
     service = Path(__file__).parents[1] / "services" / "anomaly_analysis.py"
     return sha256({"schema": SCHEMA, "python":platform.python_version(),"numpy": np.__version__, "code": {
         "artifact": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "analysis": hashlib.sha256(service.read_bytes()).hexdigest()}})
+        "analysis": hashlib.sha256(service.read_bytes()).hexdigest(),
+        "fact_contract": hashlib.sha256(service.with_name("qc_analysis_readiness.py").read_bytes()).hexdigest()}})
 
 
 def envelope(body):

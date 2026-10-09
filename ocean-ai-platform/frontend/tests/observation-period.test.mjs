@@ -87,3 +87,12 @@ test('returning to the basis month is an explicit action that exits historical s
   assert.equal(next.has('station'), false);
   assert.equal(original.get('from'), '2013-01');
 });
+
+test('navigation preserves an explicit native cutoff without re-reading the system clock', () => {
+  const original=new URLSearchParams('station=DT_0028&item=WATER_TEMP&as_of_day=2026-07-09&as_of_time=15%3A41%3A20&candidate=unrelated');
+  const context=observationContext(original);
+  assert.deepEqual(Object.fromEntries(context),{as_of_day:'2026-07-09',as_of_time:'15:41:20'});
+  assert.equal(context.has('station'),false);
+  assert.equal(context.has('candidate'),false);
+  assert.equal(original.get('station'),'DT_0028');
+});

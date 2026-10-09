@@ -1,18 +1,19 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T09:15:48.544729+00:00",
+  "as_of": "2026-10-09T11:47:43.005809+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/33 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/36 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
-      "passed": 855,
-      "skipped": 1,
-      "warnings": 21,
-      "seconds": 348.68,
+      "passed": 1001,
       "failed": 0,
-      "log_sha256": "6de44ccf43dd27ba067f11897d4edfdba6a5a9735c486c78339406344402ad08",
-      "date": "2026-10-09",
-      "database_scope": "isolated regression; no operational database writes"
+      "skipped": 1,
+      "warnings": 18,
+      "seconds": 360.36,
+      "database_scope": "ISOLATED_ONLY",
+      "skip_reason": "Windows symlink privilege unavailable; separate reparse-flag tests passed",
+      "log_sha256": "d037a5dd52d77f993b31783bf5895521a7d4e51603bff445902ba92d65c3392d",
+      "date": "2026-10-09"
     },
     "frontend_clean_install": "PASS",
     "frontend_production_build": "PASS",
@@ -58,7 +59,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "2026-10-09 final isolated regression, exact native 24h diagnostics, independent Arrow 11 channels, frontend real/synthetic contract and browser verification; dated PostgreSQL gate retained separately",
+    "method": "Frozen isolated backend/frontend regression; exact read-only runtime + independent Arrow 143 files/121 detail cells + real browser; historical PostgreSQL gate retained separately",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -75,14 +76,19 @@
       "combined_passed": 14,
       "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
     },
-    "frontend_build_log_sha256": "8f86d96639768b60956fbfd53216dcbcf2179e5ef9027bc057c764db32fa512e",
+    "frontend_build_log_sha256": "786a82c7715ff91e61a5ef4e4727014058a2a808de53befe4038d51e39d8a07b",
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 62,
+      "passed": 104,
       "failed": 0,
-      "date": "2026-10-09",
-      "log_sha256": "d467eef7fa3f4512e96c4a8403c359e486a2955610aebccc8b1a857c549a2063"
+      "skipped": 0,
+      "react_dom_tests": 16,
+      "build": "PASS",
+      "lint_existing_warnings": 12,
+      "new_qc_lint_warnings": 0,
+      "log_sha256": "ae135998aa27d087e502dd50985304a4681efc2773626776e172a7e5699d7686",
+      "date": "2026-10-09"
     },
     "postgresql_full_restore": {
       "status": "PASS",
@@ -409,10 +415,16 @@
       "receipt_path": "docs/33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.json",
       "sha256": "fddc3dd65615efbc536a94523498b7460d2f0047fdacd2529a2329090be11b8d",
       "production_completed": false
+    },
+    "qc_operational_dashboard": {
+      "document": "docs/36_QC_OPERATIONAL_DASHBOARD_VERIFICATION.json",
+      "sha256": "88e734c5b157e16aff255e49a47cf2a01a394cedb22d0f6dbb47685dbb913e0f",
+      "status": "IMPLEMENTED_VERIFIED_WITH_EXPLICIT_LIMITS",
+      "production_completed": false
     }
   },
   "runtime": {
-    "checked_at": "2026-10-08T11:44:11.027922+00:00",
+    "checked_at": "2026-10-09T11:32:43.977095+00:00",
     "runtime_is_canonical_workstation_copy": false,
     "runtime_source": "public_worktree",
     "backend_url": "http://127.0.0.1:8010",
@@ -451,7 +463,9 @@
     "mdc_sensor_catalog": null,
     "agent_workflow_run": 0,
     "agent_workflow_transition": 0,
-    "qc_rule_result": 0
+    "qc_rule_result": 0,
+    "observation_raw": 13621,
+    "observation_standard": 4074
   },
   "schema_not_applied": [
     "mdc_sensor_catalog"
@@ -494,7 +508,15 @@
     "Actual accounts are deferred by user; readonly development analysis is available without them.",
     "Historical source semantics, scale/datum/clock, QC effective periods and physical sensor validity remain unconfirmed where evidence is absent.",
     "Fitted statistical anomaly engine and development Fusion weights do not establish actual marine accuracy or 72 operating models.",
-    "Workflow approval/resume only creates a draft and MLOps recommendation; it does not approve source/QC/dataset/model execution."
+    "Workflow approval/resume only creates a draft and MLOps recommendation; it does not approve source/QC/dataset/model execution.",
+    "Actual approved source/dataset/model and QC candidate/workflow records remain zero.",
+    "Registered operational QC supports SCALAR only; typed directional/vector/profile/trajectory QC is not completed.",
+    "A verified schedule/missing-transmission contract is absent; inferred clock gaps are not confirmed receive loss.",
+    "Exact candidate/version-linked Final QC editing is not implemented; existing generic approval endpoints are not silently substituted.",
+    "Stored AI reads are implemented; on-demand inference, new training, full spatial-field or dedicated distribution drift worker are not implemented by this release.",
+    "Cold archive queries can exceed the ten-second UX target; actual 878400-row registered daily performance has not been verified.",
+    "Only the actual 1280x720 browser viewport was verified; attempted capability overrides did not apply.",
+    "Actual account configuration and operational approvals remain deferred by the user."
   ],
   "document_ingestion": {
     "files": 71960,
@@ -515,9 +537,9 @@
     "checked_at": "2026-10-08T04:15:21.273811+00:00",
     "latest_run_status": "PARTIAL"
   },
-  "base_revision": "5829e891a4af39da1829f10ce2c9da9116e4a789",
+  "base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
   "revision_resolution": "The Git commit containing this file identifies the release; runtime fingerprints are recorded below.",
-  "implementation_release": "2026-10-08_STAGE_REVIEW_NATIVE_EXPERIMENTS_INPUT_BRIDGE_AND_RECOVERY",
+  "implementation_release": "2026-10-09_QC_OPERATIONAL_DASHBOARD_EXPLICIT_LIMITS",
   "previous_verification": {
     "base_tree": "35f86cf",
     "backend_tests": {
@@ -571,6 +593,25 @@
       "frontend_build_log_sha256": "9dd156b89ddcd179285c18fa616030dcb7e48e659f7d4e132febd3a303c4e709",
       "metric_browser": "PASS",
       "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a"
+    },
+    "before_qc_operational_dashboard_20261009": {
+      "backend_tests": {
+        "passed": 855,
+        "skipped": 1,
+        "warnings": 21,
+        "seconds": 348.68,
+        "failed": 0,
+        "log_sha256": "6de44ccf43dd27ba067f11897d4edfdba6a5a9735c486c78339406344402ad08",
+        "date": "2026-10-09",
+        "database_scope": "isolated regression; no operational database writes"
+      },
+      "frontend_tests": {
+        "passed": 62,
+        "failed": 0,
+        "date": "2026-10-09",
+        "log_sha256": "d467eef7fa3f4512e96c4a8403c359e486a2955610aebccc8b1a857c549a2063"
+      },
+      "frontend_production_build": "PASS"
     }
   },
   "previous_canonical_runtime": {
@@ -594,7 +635,7 @@
     "runtime_is_canonical_workstation_copy": true,
     "session_http_status": 503
   },
-  "database_counts_checked_at": "2026-10-08T11:44:11.027922+00:00",
+  "database_counts_checked_at": "2026-10-09T11:32:43.977095+00:00",
   "additive_schema_application": {
     "checked_at": "2026-10-08T05:07:26.153330+00:00",
     "files": [
@@ -609,7 +650,18 @@
     ],
     "existing_ledger_counts_unchanged": true,
     "workflow_tables_empty": true,
-    "accounts_or_approvals_created": false
+    "accounts_or_approvals_created": false,
+    "qc_binding_clock_20261009": {
+      "added_nullable_columns": [
+        "source_observation_binding.bound_at_utc"
+      ],
+      "postgres_timezone": true,
+      "default": null,
+      "legacy_backfill": false,
+      "existing_rows_unchanged": true,
+      "operational_dml": 0,
+      "new_indexes": 0
+    }
   },
   "implementation": {
     "rule_qc": {
@@ -669,18 +721,29 @@
       "training_enqueued": false,
       "model_registered": false,
       "deployment_performed": false
+    },
+    "qc_operational_dashboard": {
+      "status": "IMPLEMENTED_VERIFIED_WITH_EXPLICIT_LIMITS",
+      "registered_representation": "SCALAR",
+      "on_demand_ai_inference": false,
+      "candidate_final_qc_gate": false,
+      "actual_source_qc_complete": false,
+      "production_completed": false
     }
   },
   "implementation_fingerprints": {
-    "app/services/qc_rule_engine.py": "431bcc4cb04bcfc4b8048da8d91e7fb83881527173cc5033726c2a08fedc3ffc",
+    "app/services/qc_rule_engine.py": "9993072a38e264808c828a93a460908bef59a6e9e8d58cdc11198425eef2ff51",
     "app/services/qc_rule_catalog.json": "7d30ad39f1ff40bbfb2224866f869ffd53782e958a94f3e71bf767b35e8d4889",
-    "app/services/anomaly_analysis.py": "773919d6fd36e130c79ad26aef666e0d04200e2af20c0a4ba87512ac19040646",
-    "app/ml/anomaly_artifact.py": "ec7e3000297d9ec4e0ed277b9f61050e4b5080808f6c2f4040242f95f989b745",
+    "app/services/anomaly_analysis.py": "e69c6192cdea3a72009146007acdce0d6b1994d77ef9b091f2b362e871308f98",
+    "app/ml/anomaly_artifact.py": "7ffbf90f96bd89e6006d9527b9f3d7f3fe7880785e24377db4f1f9ee6f79f774",
     "app/services/evidence_fusion.py": "df61afe9d94cc679c14db0d94e8eb0189f17fccf21f07e35a29fd0e3eab53630",
     "app/agents/multi_agent_workflow.py": "a4e94d8b98603c79e5ad5e0489387ebfb0a167c02dba24bd07051b2ecd659ce0",
     "raw_diagnostic": "af451ab81f161e410fc119e5637ce1ccb08a3647a25b5b4e333805c64c81c371",
     "raw_model_comparison": "919dbf70918afc03b7a351f613fbff86a66120eb54ca1e2d7620120b08d79bdd",
-    "recovery_promotion": "4c616d8395aff3e782c4c526dc30f889acaf2f03ff941fe99419b58966531351"
+    "recovery_promotion": "4c616d8395aff3e782c4c526dc30f889acaf2f03ff941fe99419b58966531351",
+    "app/services/qc_analysis_readiness.py": "07ff0df600b021643d46d8b27d7baa7734492a07a22c1bef4e8bb1b49de7cf87",
+    "app/services/qc_overview.py": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
+    "app/services/qc_candidate_review.py": "c80417c07a40a3e58840da11d438cbd0b8bd938b1cc80e60360cce983cd74019"
   },
   "observation_current_month": "2026-07",
   "july_report_match": {
@@ -774,7 +837,7 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "a35bb578bdbebb434022614300edae7508d16dc4",
+  "verification_base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
   "experimental_development_release": {
     "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
     "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",

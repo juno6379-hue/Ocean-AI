@@ -370,7 +370,7 @@ enqueue/retrain은 선택한 manifest expected SHA를 받는다. preflight 실�
 
 ## 10/9 운영 진단·가상 품질 시험
 
-현재 등록 OpenAPI는 157개 경로·166개 operation이다. 같은 기준시각의 lake summary/station 응답에 최근 24시간 채널 운영 진단과 날짜별 근거를 추가했다.
+이 단계에서 등록 OpenAPI는 157개 경로·166개 operation이었다. 같은 기준시각의 lake summary/station 응답에 최근 24시간 채널 운영 진단과 날짜별 근거를 추가했다. 이후 QC 대시보드의 추가 경로는 아래 별도 표를 따른다.
 
 | 경로 | Method | 입력·범위 |
 |---|---|---|
@@ -378,3 +378,27 @@ enqueue/retrain은 선택한 manifest expected SHA를 받는다. preflight 실�
 | `/api/operation-simulation/run` | POST | loopback, 2 KiB, `{scenario_id, as_of_day, as_of_time}`만 허용; 격리 메모리 DB 시험 |
 
 보호된 실제 승인 API의 인증은 유지한다. 가상 출력은 `source=SIMULATION`, `approved=false`이며 실제 원천·승인·모델 원장을 쓰지 않는다. [33 판정·시험 계약](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.md)을 따른다.
+
+## 10/9 일일 QC 운영 대시보드
+
+시험 서버의 등록 OpenAPI는 **162개 경로·171개 operation**이다. [사용자 요구사항](35_QC_OPERATIONAL_DASHBOARD_REQUIREMENTS.md), [개발·최종 검증 상태](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)를 따른다. 경로 등록과 운영 데이터 적재 완료는 다른 상태다.
+
+| 경로 / 구현 | Method | 입력·결과 |
+|---|---|---|
+| [/api/qc/context](../ocean-ai-platform/backend/app/api/routes_qc_workspace.py) | GET | query 없음. 실제 backend local offset 시계·오늘 시작·기본 REGISTERED/today·source/preset·Flag catalog |
+| [/api/qc/overview](../ocean-ai-platform/backend/app/api/routes_qc_workspace.py) | GET | source, preset, date_from/date_to, station_id/variable_code, network/sea/flag, queue_limit≤30, queue_offset≤1000. 단일 window의 KPI·Flag·시간/일 추이·Rule·matrix·queue |
+| [/api/qc/flag-catalog](../ocean-ai-platform/backend/app/api/routes_qc_candidates.py) | GET | 기존 Rule namespace 1/3/4/9/NOT_EVALUATED·unknown 정책·12종 엔진 catalog. 승인 API의 허용값을 원문 코드북으로 해석하지 않음 |
+| [/api/qc/candidates/{candidate_id}](../ocean-ai-platform/backend/app/api/routes_qc_candidates.py) | GET | Overview의 정확 window·SHA·source·snapshot·station/item·half_window_minutes≤120. 실제 주변 시계열·Rule·저장 AI·장비 구간·연결 근거·workflow/history/capabilities |
+| [/api/qc/workspace](../ocean-ai-platform/backend/app/api/routes_qc_workspace.py) | GET | 이전 native 월별 원문 QC 재현. source/from_month/to_month/as_of_day/as_of_time·station/item/network/sea·qc_field/literal/NULL 필터를 유지 |
+
+`REGISTERED`는 승인 source receipt·정확 원본·sensor 구간·가용시각을 검증한 관측자료이며 SIMULATED DB 원천을 합산하지 않는다. 기본 오늘은 서버 00:00부터 현재까지, 어제는 전날 전체, 7일/30일은 오늘을 포함한다. custom은 offset 시각과 최대 31일 이내 범위를 받는다. 보존 Parquet source는 명시적 custom native 시각을 받아 시간대를 임의로 붙이지 않는다. 오늘·어제는 hourly, 7일/30일은 daily다.
+
+Overview는 PostgreSQL 읽기 전용 repeatable snapshot에서 500행 keyset으로 source/Rule를 검증하고 집계한다. receipt/definition cache는 request-local이다. 시간 예산·제외로 전수가 확인되지 않으면 `PARTIAL`이며 전체 비율과 queue total은 null이다. archive는 서버 SQL 집계와 최신 15개 원문 표본만 반환하고 원문 QC literal을 승인 Flag로 변환하지 않는다. 실제 미수신 계획 분모가 없으면 received-row QC와 수신 결측률을 구분한다.
+
+신규 승인 ingest의 가용시각은 별도 `bound_at_utc` nullable timestamptz로 확인한다. 기존 naive `created_at`을 UTC로 추정하지 않으며 NULL legacy binding은 미확인이다. 배포 순서와 소급 채움 없는 migration은 [설치 02](02_SETUP_AND_INSTALLATION.md)를 따른다. linked workflow는 실제 observation reference·sensor 구간·추천 hash·revision·가용시각을 대조하며, 완료 건수는 권고 workflow 처리 완료이다. Final QC 승인 건수와 구분한다.
+
+후보 상세 workflow는 최신 100건 절단 대신 bounded keyset으로 전수 대조하며 관측별 미확정/중복 이력을 Overview와 같은 상태로 반환한다. 등록 운영 QC는 SCALAR만 지원하고 typed 관측은 명시 제외·PARTIAL로 표시한다. 후보에 정확히 연결된 Final QC 승인 대상·판본이 없는 상태에서 일반 승인 API를 대체 실행하지 않는다. 최종 회귀·실제 원본 대조·성능 제한은 [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)을 따른다.
+
+상세는 `qc:{persisted_result_id}` 또는 `archive:{parquet_sha256}:{file_row_number}`를 받는다. `date_from`, `date_to`, `as_of`, `clock_basis`, `offset`, `granularity`, `mode`, `preset`, `window_id`를 Overview 그대로 전달한다. archive에는 snapshot이 추가된다. 변경된 window SHA409·잘못된 query/범위422·없는 후보404·storage 실패503을 빈 성공으로 바꾸지 않는다. 주변 ±2시간 원문 값과 duplicate·gap을 보존하며 prediction을 원문에 덮어쓰지 않는다.
+
+상세 GET은 새 학습·추론·RAG 검색·최종 QC 저장을 실행하지 않는다. 저장 AI가 정확 source/관측/sensor/모델/가용시각에 연결됐을 때만 prediction/residual/score를 반환한다. 현재 serving health를 조회하지 않은 registry 선언 상태를 실제 배포 승인으로 확대하지 않는다. 처리 버튼은 연결된 기존 workflow의 endpoint·추천 SHA·revision과 현재 Actor 역할을 사용한다. source 승인·final QC 변경 권한을 새로 부여하지 않는다.

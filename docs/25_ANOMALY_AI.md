@@ -58,6 +58,8 @@ POST /api/anomaly-analysis/analyze
 
 ## 검증과 실제 원천 상태
 
+2026-10-09 QC 상세 Drawer는 정확히 연결된 **저장 AI 결과**만 읽는다. 예상값·Residual·score를 원문 실측과 분리하고 같은 source/row/physical sensor/기간·가용 판본과 SHA가 맞지 않으면 표시하지 않는다. 실제 모델이 없으면 미실행/모델 없음이며 가짜 예측선을 만들지 않는다. 화면 클릭의 새 추론·학습·배포는 이 후속 개발에 포함하지 않았다. [36의 구현·검증](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md), [34의 목적별 학습·평가 준비도](34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.md)를 구분한다.
+
 [격리 시험](../ocean-ai-platform/backend/tests/test_anomaly_analysis.py)은 합성 정상 자료와 별도 heldout 결함을 사용한다. 고정 합성 시나리오에서 healthy SPIKE는 159개 평가 중 5개 false positive(약 3.14%), 주입한 spike edge 6개는 TP 6/FN 0이었다. TEMP/SAL drift의 충분히 진행된 마지막 40개는 각각 40개 탐지했고 flatline 마지막 50개는 50개 탐지했다. 이는 합성 검증 값이며 실제 해양관측 성능이나 원인 정답률이 아니다.
 
 2026-10-08 읽기 전용 smoke에서 보존 `GR_OBS_ST_202609` Parquet의 전체 bytes SHA가 manifest와 일치했고 DT_0001 WATER_TEMP 500행의 유한 값을 읽었다. 원문 시각은 offset 없는 문자열이며 과거 기간 단위·QC 코드북·물리 센서 구간이 미확정이다. 요구조건 점검은 NOT_EVALUATED였고 실제 원천 fitting·Registry 등록·운영 배포는 수행하지 않았다. 삭제된 원본 CSV를 현재 보존 원본으로 표시하지 않는다.

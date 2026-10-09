@@ -1,0 +1,1121 @@
+{
+  "schema_version": "qc-operational-dashboard-release-verification-1",
+  "checked_at_utc": "2026-10-09T11:47:43.005809+00:00",
+  "base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
+  "release_revision_resolution": "The Git commit containing this file identifies the verified release.",
+  "implementation_status": "IMPLEMENTED_VERIFIED_WITH_EXPLICIT_LIMITS",
+  "production_completed": false,
+  "roles": {
+    "station_photos": "OVERVIEW_AND_INDEPENDENT_BACKEND_REVIEW",
+    "ui_data_review": "CANDIDATE_EVIDENCE_AUTHORITY_WORKFLOW",
+    "ui_values_graphs": "DAILY_QC_UI_DRAWER_CONTRACT_DOM_TESTS",
+    "root": "INTEGRATION_INDEPENDENT_VALIDATION_RUNTIME_DOCUMENTATION_GIT"
+  },
+  "requirements": [
+    {
+      "number": 1,
+      "name": "오늘 1차 QC 운영 대시보드",
+      "status": "IMPLEMENTED",
+      "evidence": "6 KPI와 3×2 패널·상세 탐색"
+    },
+    {
+      "number": 2,
+      "name": "오늘·어제·7일·30일·사용자 지정",
+      "status": "VERIFIED",
+      "evidence": "실제 backend offset·자정 refresh·native 과거 cutoff"
+    },
+    {
+      "number": 3,
+      "name": "기간별 6 KPI",
+      "status": "IMPLEMENTED_CONDITIONAL_DATA",
+      "evidence": "분모·미평가·없음·부분 자료·권고 workflow 완료 구분"
+    },
+    {
+      "number": 4,
+      "name": "동적 backend Flag 분포와 클릭",
+      "status": "VERIFIED",
+      "evidence": "1/3/4/9/NOT_EVALUATED·UNKNOWN; 원문 코드 의미 변경 없음"
+    },
+    {
+      "number": 5,
+      "name": "hourly/daily 품질 추이",
+      "status": "VERIFIED",
+      "evidence": "오늘/어제 hourly, 7/30일 daily·빈 구간 공백"
+    },
+    {
+      "number": 6,
+      "name": "실제 Rule 결과",
+      "status": "IMPLEMENTED_CONDITIONAL_DATA",
+      "evidence": "12종 엔진 catalog와 실제 등록 정의·저장 결과 분리"
+    },
+    {
+      "number": 7,
+      "name": "지연·결측 이력",
+      "status": "IMPLEMENTED_CONDITIONAL_DATA",
+      "evidence": "확인된 received time만 계산; 실제값 유지·추정 gap 별도"
+    },
+    {
+      "number": 8,
+      "name": "Heatmap과 전체 필터",
+      "status": "IMPLEMENTED_SCALAR_SCOPE",
+      "evidence": "셀 통계·Rule/latest·선택 동기화; typed 운영 QC 미지원"
+    },
+    {
+      "number": 9,
+      "name": "우선 검토 Queue",
+      "status": "VERIFIED",
+      "evidence": "BAD→Suspect→최근·bounded 페이지; 원문 표본 별도"
+    },
+    {
+      "number": 10,
+      "name": "QC 상세검토 Drawer",
+      "status": "VERIFIED_CONDITIONAL_DATA",
+      "evidence": "실측±2h/zoom·Rule·저장 AI·정확 epoch·Evidence·history"
+    },
+    {
+      "number": 11,
+      "name": "저장 AI 조회",
+      "status": "IMPLEMENTED",
+      "evidence": "정확 관측/source/기간만 조회. 임의 추론·가짜 결과 없음"
+    },
+    {
+      "number": 12,
+      "name": "QC와 장기 AI 역할 분리",
+      "status": "IMPLEMENTED",
+      "evidence": "장기 Drift·모델·Residual 분석은 AI 인사이트"
+    },
+    {
+      "number": 13,
+      "name": "Overview/context/candidate API",
+      "status": "VERIFIED",
+      "evidence": "5개 GET 통합·162 paths/171 operations·읽기 전용"
+    },
+    {
+      "number": 14,
+      "name": "성능·대용량 집계",
+      "status": "PARTIAL_PERFORMANCE",
+      "evidence": "500행 keyset·SQL aggregate·snapshot·부분자료; 과거 cold 10초 목표 미달"
+    },
+    {
+      "number": 15,
+      "name": "상태와 오류 처리",
+      "status": "VERIFIED",
+      "evidence": "loading/no-data/error/partial/AI未실행/model없음/evidence없음/review완료"
+    },
+    {
+      "number": 16,
+      "name": "금지 사항 준수",
+      "status": "VERIFIED",
+      "evidence": "운영 DML·raw 변경·가짜 결과·자동 Final QC 저장 0"
+    },
+    {
+      "number": 17,
+      "name": "빠른 탐색과 근거 UX",
+      "status": "VERIFIED_WITH_LIMITS",
+      "evidence": "실제 1280×720 확인; cold 과거 조회·다른 viewport 성능은 제한"
+    },
+    {
+      "number": 18,
+      "name": "11개 시나리오와 회귀",
+      "status": "VERIFIED",
+      "evidence": "backend1001/skip1·frontend104·build·실제 Arrow/브라우저·격리 양성"
+    },
+    {
+      "number": 19,
+      "name": "최종 보고와 미구현 구분",
+      "status": "DOCUMENTED",
+      "evidence": "본 문서·공개 집계 JSON·변경 파일·입력/성능 한계"
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "최초 진입",
+      "passed": true,
+      "evidence": "실제 오늘 기본·실제 데이터 없음과 비율 null",
+      "scope": "ACTUAL_HTTP_BROWSER"
+    },
+    {
+      "name": "날짜 변경",
+      "passed": true,
+      "evidence": "오늘/어제/7/30일/custom·자정 refresh·모든 widget 동일 window",
+      "scope": "ACTUAL_AND_ISOLATED_DOM"
+    },
+    {
+      "name": "지연 자료",
+      "passed": true,
+      "evidence": "실측 유지·receipt clock/delay marker·미확정 clock 제외",
+      "scope": "ISOLATED_BACKEND_DOM"
+    },
+    {
+      "name": "결측 자료",
+      "passed": true,
+      "evidence": "NULL·빈값·duplicate·추정 gap·no interpolation",
+      "scope": "ACTUAL_ARROW_AND_ISOLATED_DOM"
+    },
+    {
+      "name": "사례 상세",
+      "passed": true,
+      "evidence": "원문121점·21.38·Rule threshold/version 양성",
+      "scope": "ACTUAL_ARCHIVE_AND_ISOLATED_QC"
+    },
+    {
+      "name": "AI 존재",
+      "passed": true,
+      "evidence": "저장 prediction/residual/score·정밀도·미래/잘못된 센서 제외",
+      "scope": "ISOLATED_BACKEND_DOM"
+    },
+    {
+      "name": "AI 없음",
+      "passed": true,
+      "evidence": "실제 모델 없음/未실행·가짜 예측 path 0",
+      "scope": "ACTUAL_HTTP_BROWSER"
+    },
+    {
+      "name": "리뷰 처리",
+      "passed": true,
+      "evidence": "role/owner/hash/revision·승인/반려/resume·401/403/409·완료 이력",
+      "scope": "ISOLATED_BACKEND_DOM_AND_DATED_POSTGRES_GATE"
+    },
+    {
+      "name": "Frontend",
+      "passed": true,
+      "evidence": "104 PASS·TypeScript/Vite PASS·기존 lint12 warning",
+      "scope": "FROZEN_FULL_REGRESSION"
+    },
+    {
+      "name": "Backend",
+      "passed": true,
+      "evidence": "1001 PASS·1 Windows symlink privilege skip·18 warning",
+      "scope": "FROZEN_FULL_REGRESSION"
+    },
+    {
+      "name": "기존 기능 회귀",
+      "passed": true,
+      "evidence": "원천/Rule/AI/Fusion/workflow/MLOps/관측현황 전체 회귀",
+      "scope": "FROZEN_FULL_REGRESSION"
+    }
+  ],
+  "tests": {
+    "backend": {
+      "passed": 1001,
+      "failed": 0,
+      "skipped": 1,
+      "warnings": 18,
+      "seconds": 360.36,
+      "database_scope": "ISOLATED_ONLY",
+      "skip_reason": "Windows symlink privilege unavailable; separate reparse-flag tests passed"
+    },
+    "frontend": {
+      "passed": 104,
+      "failed": 0,
+      "skipped": 0,
+      "react_dom_tests": 16,
+      "build": "PASS",
+      "lint_existing_warnings": 12,
+      "new_qc_lint_warnings": 0
+    },
+    "focused_backend": {
+      "candidate_binding_overview_passed": 124,
+      "final_overview_workspace_passed": 46
+    },
+    "independent_peer": {
+      "candidate_clock_evidence_passed": 28,
+      "positive_scope_tests_passed": 13,
+      "positive_scope_semantic_checks_passed": 18
+    },
+    "counts_overlap_do_not_add": true
+  },
+  "actual_archive": {
+    "files": 143,
+    "day_rows": 541426,
+    "from_july_1_to_cutoff_rows": 7126689,
+    "matrix_cells": 610,
+    "jindo_day_temperature_rows": 942,
+    "jindo_window_temperature_rows": 12459,
+    "detail_points": 121,
+    "latest_original_numeric": 21.38,
+    "source_qc_interpreted": false,
+    "window_native": "2026-07-09 00:00:00 ~ 2026-07-09 15:41:20"
+  },
+  "runtime": {
+    "schema_version": "parent-qc-frozen-runtime-1",
+    "checked_at_utc": "2026-10-09T11:32:43.977095+00:00",
+    "database_counts": {
+      "observation_raw": 13621,
+      "observation_standard": 4074,
+      "qc_rule_result": 0,
+      "source_observation_binding": 0,
+      "source_contract_packets": 0,
+      "source_contract_decisions": 0,
+      "approval_history": 0,
+      "dataset_registry": 0,
+      "model_registry": 0,
+      "agent_workflow_run": 0,
+      "agent_workflow_transition": 0,
+      "retraining_history": 0
+    },
+    "binding_clock": [
+      {
+        "name": "bound_at_utc",
+        "type": "TIMESTAMP",
+        "timezone": true,
+        "nullable": true,
+        "default": null
+      }
+    ],
+    "indexes": {
+      "observation_standard": [
+        {
+          "name": "ix_observation_standard_sensor_id",
+          "unique": false,
+          "column_names": [
+            "sensor_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_observation_standard_station_id",
+          "unique": false,
+          "column_names": [
+            "station_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_observation_standard_timestamp_utc",
+          "unique": false,
+          "column_names": [
+            "timestamp_utc"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_observation_standard_variable_code",
+          "unique": false,
+          "column_names": [
+            "variable_code"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "uq_observation_standard_natural_key",
+          "unique": true,
+          "column_names": [
+            "station_id",
+            "sensor_id",
+            "variable_code",
+            "timestamp_utc"
+          ],
+          "duplicates_constraint": "uq_observation_standard_natural_key",
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "uq_observation_standard_natural_key_idx",
+          "unique": true,
+          "column_names": [
+            "station_id",
+            "sensor_id",
+            "variable_code",
+            "timestamp_utc"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        }
+      ],
+      "qc_rule_result": [
+        {
+          "name": "ix_qc_rule_result_observation_id",
+          "unique": false,
+          "column_names": [
+            "observation_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_qc_rule_result_qc_rule_id",
+          "unique": false,
+          "column_names": [
+            "qc_rule_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_qc_rule_result_sensor_id",
+          "unique": false,
+          "column_names": [
+            "sensor_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_qc_rule_result_station_id",
+          "unique": false,
+          "column_names": [
+            "station_id"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_qc_rule_result_timestamp_utc",
+          "unique": false,
+          "column_names": [
+            "timestamp_utc"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "ix_qc_rule_result_variable_code",
+          "unique": false,
+          "column_names": [
+            "variable_code"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "uq_qc_rule_result_observation_rule_version",
+          "unique": true,
+          "column_names": [
+            "observation_id",
+            "qc_rule_id",
+            "rule_version"
+          ],
+          "duplicates_constraint": "uq_qc_rule_result_observation_rule_version",
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        }
+      ],
+      "source_observation_binding": [
+        {
+          "name": "ix_source_observation_binding_exact_scope_key",
+          "unique": false,
+          "column_names": [
+            "exact_scope_key"
+          ],
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        },
+        {
+          "name": "uq_source_observation_row",
+          "unique": true,
+          "column_names": [
+            "parquet_sha256",
+            "source_row_locator"
+          ],
+          "duplicates_constraint": "uq_source_observation_row",
+          "include_columns": [],
+          "dialect_options": {
+            "postgresql_include": []
+          }
+        }
+      ]
+    },
+    "http": [
+      {
+        "path": "/health",
+        "status": 200,
+        "sha256": "62e77a4b7564b968e91336745de7846ad463fb1562bd23b2c5dd9473e4845984"
+      },
+      {
+        "path": "/readiness",
+        "status": 200,
+        "sha256": "73e573da2efaf67ddace5634462c1b4ce582cfca36176d691a81f2d834a7218c"
+      },
+      {
+        "path": "/api/runtime",
+        "status": 200,
+        "sha256": "6e224f41eee4661e50a0360507fbdc066a00ec11cdd593a294067d88dc59e1a2"
+      },
+      {
+        "path": "/api/session",
+        "status": 503,
+        "sha256": "0f9261d5466ba0baa56aaa4f7735199a454193530fbd8babc23baa811a553ae9"
+      },
+      {
+        "path": "/openapi.json",
+        "status": 200,
+        "sha256": "13162c02939379c0f04112e762ec9f53d6911b4ff2573f76df44c6fb90524341"
+      }
+    ],
+    "openapi_paths": 162,
+    "openapi_operations": 171,
+    "qc_readonly_paths": [
+      "/api/qc/workspace",
+      "/api/qc/context",
+      "/api/qc/overview",
+      "/api/qc/flag-catalog",
+      "/api/qc/candidates/{candidate_id}"
+    ],
+    "operational_dml": 0,
+    "actual_accounts_configured": false,
+    "review_backend": "http://127.0.0.1:8010",
+    "review_frontend": "http://127.0.0.1:5174",
+    "canonical_preserved": true,
+    "new_worker_started": false,
+    "new_serving_started": false
+  },
+  "db_change": {
+    "added_nullable_columns": [
+      "source_observation_binding.bound_at_utc"
+    ],
+    "postgres_timezone": true,
+    "default": null,
+    "legacy_backfill": false,
+    "existing_rows_unchanged": true,
+    "operational_dml": 0,
+    "new_indexes": 0
+  },
+  "flag_policy": {
+    "namespace": "EXISTING_RULE_ENGINE",
+    "codes": {
+      "1": "GOOD",
+      "3": "SUSPECT",
+      "4": "BAD",
+      "9": "MISSING",
+      "NOT_EVALUATED": "NOT_EVALUATED",
+      "UNKNOWN": "UNINTERPRETED"
+    },
+    "display_policy": "QC_DISPLAY_TONES_2",
+    "missing_color": "#a855f7",
+    "unknown_color": "#9ca3af",
+    "raw_source_codes_not_converted": true,
+    "workflow_completed_is_final_qc": false
+  },
+  "positive_scope_catalog_census": {
+    "schema_version": "qc-positive-scope-arrow-census-1",
+    "checked_at_utc": "2026-10-09T11:19:11.773312+00:00",
+    "all_passed": true,
+    "source_files": 143,
+    "batches": 428,
+    "batch_size": 65536,
+    "full_month_shaped_rows": 23694337,
+    "footer_rows": 23695284,
+    "metadata_rows": 947,
+    "catalog_grains": 610,
+    "raw_grains": 610,
+    "scope_basis": "READ_ONLY_DB_JULY_CLASSIFICATION_NOT_RESPONSE_MATRIX",
+    "db_west_scope_count": 119,
+    "raw_west_scope_count": 28,
+    "day_west_rows": 240902,
+    "day_west_stations": 28,
+    "day_west_items": 85,
+    "matrix_cells": 273,
+    "raw_blank_values": 0,
+    "invalid_clocks_before_period": 0,
+    "source_catalog_sha256": "7e1a4814ca61d57d33cf398e74b3c9bf5c27b5eb1420429bf22c06f2fe16a50f",
+    "source_assets_sha256": "9adfd79cddb255399e5a284145152edeb078084f1055a9c961867249c4e13c88",
+    "verification_sha256": "68fc306e0d25c2e3fd44c9c125ce9e2722a9d2b1fb8a054da78f65cd5ddb542e",
+    "raw_rows_retained": 15,
+    "source_qc_interpreted": false,
+    "production_writes": 0,
+    "seconds": 19.51483410038054
+  },
+  "positive_scope_exact_comparison": {
+    "schema_version": "qc-overview-positive-scope-final-ab-1",
+    "checked_at_utc": "2026-10-09T11:31:06.683835+00:00",
+    "scope": "ACTUAL_READ_ONLY_NATIVE_WINDOW",
+    "all_passed": true,
+    "code_sha256": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
+    "test_sha256": "b7c67c83e67190e9f8e1810041495da0a8ab0c8c9ea39515b96ca89d913f5164",
+    "environment": {
+      "python": "3.14.2",
+      "duckdb": "1.5.6",
+      "cpu_count": 12,
+      "duckdb_threads": 2,
+      "duckdb_memory_limit": "512MB",
+      "os_cache_flushed": false,
+      "query_cache_cleared_before_cold": true,
+      "process": "SEPARATE_PRIVATE_BENCHMARK_PROCESS_NOT_BROWSER_HTTP"
+    },
+    "runs": [
+      {
+        "run": "cold",
+        "elapsed_seconds": 11.106430400162935,
+        "backend_seconds": 11.10308170132339,
+        "total": 240902,
+        "stations": 28,
+        "items": 85,
+        "cells": 273,
+        "entire_semantic_response_equal": true,
+        "different_top_level_keys": [],
+        "query_exact_excluding_elapsed_seconds": true,
+        "query": {
+          "raw_rows_sent": 15,
+          "registered_batch_size": 500,
+          "queue_limit": 15,
+          "server_aggregation": true,
+          "snapshot_policy": {
+            "dialect": "postgresql",
+            "isolation": "REPEATABLE READ",
+            "read_only": true,
+            "authority_basis": "CONSISTENT_REQUEST_DB_SNAPSHOT_AND_VERIFIED_SOURCE_FILES"
+          }
+        },
+        "result_sha256": "dff1486cb7e624262d33ea3fe64f357251cd19fa040c92e3a4c33991247eef89",
+        "source_files": 143,
+        "cache": "CacheInfo(hits=0, misses=1, maxsize=8, currsize=1)",
+        "cold_under_ten_seconds": false
+      },
+      {
+        "run": "warm",
+        "elapsed_seconds": 0.2738340999931097,
+        "backend_seconds": 0.2689904998987913,
+        "total": 240902,
+        "stations": 28,
+        "items": 85,
+        "cells": 273,
+        "entire_semantic_response_equal": true,
+        "different_top_level_keys": [],
+        "query_exact_excluding_elapsed_seconds": true,
+        "query": {
+          "raw_rows_sent": 15,
+          "registered_batch_size": 500,
+          "queue_limit": 15,
+          "server_aggregation": true,
+          "snapshot_policy": {
+            "dialect": "postgresql",
+            "isolation": "REPEATABLE READ",
+            "read_only": true,
+            "authority_basis": "CONSISTENT_REQUEST_DB_SNAPSHOT_AND_VERIFIED_SOURCE_FILES"
+          }
+        },
+        "result_sha256": "b9d00cd4284df41783f40993e4004f527bfa5fd537ffb240c7ba89d25d667141",
+        "source_files": 143,
+        "cache": "CacheInfo(hits=1, misses=1, maxsize=8, currsize=1)",
+        "cold_under_ten_seconds": null
+      }
+    ],
+    "compared": "ENTIRE_RESPONSE_INCLUDING_QUERY_EXCEPT_EXPLICIT_PATHS",
+    "excluded_paths": [
+      "result_sha256",
+      "query.elapsed_seconds",
+      "provenance.catalog_census_verification_sha256",
+      "provenance.scope_predicate_policy",
+      "flag_catalog[*].color",
+      "flag_catalog[*].color_policy",
+      "flag_distribution[*].color"
+    ],
+    "baseline": {
+      "origin": "FROZEN_PRE_OPTIMIZATION_HTTP_CODE",
+      "client_seconds": 0.3419058993458748,
+      "backend_seconds": 0.28442460112273693,
+      "result_sha256": "8d7ada8318964bab72a03dd7716783a5c27b566ae7208eca713f99444b38e463",
+      "catalog_color_policy": [
+        "QC_DISPLAY_TONES_1"
+      ],
+      "previous_private_cold_seconds": 28.39597379975021,
+      "previous_private_profile_code_sha256": "ac6d95615c2322ed4d3f6cd5e66b574d8649126f7291dfe95c008992e2667cf1",
+      "response_recipe_sha256_current_disk": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
+      "runtime_identity_limitation": "OLD_LOADED_CODE_POLICY1; RECIPE_HASH_IS_CURRENT_DISK_NOT_LOADED_MODULE"
+    },
+    "comparison_different_top_level_keys": [],
+    "comparison_stage": "DISPLAY_COLORS",
+    "index_inventory": {
+      "actual_count": 36,
+      "unchanged": true,
+      "actual_sha256": "992384ee258b1a97696e977248854e81db7a1e01b4d4cc0631076ab7bb70756d",
+      "prior_sha256": "992384ee258b1a97696e977248854e81db7a1e01b4d4cc0631076ab7bb70756d"
+    },
+    "independent_arrow_census": {
+      "file": "qc-positive-scope-arrow-census.json",
+      "sha256": "a4f4da7ae91965cb9fe419b367e0507ae32b7fb64551e18966bad0fe53632249",
+      "all_passed": true
+    },
+    "production_writes": 0,
+    "code_unchanged": true,
+    "phase_totals": {
+      "cold": {
+        "grouping_sets": 3.489955101162195,
+        "invalid_clock_count": 3.2763439007103443,
+        "latest_15": 3.2869019005447626,
+        "setup": 0.465806495398283
+      },
+      "warm": {
+        "setup": 0.004317600280046463
+      }
+    }
+  },
+  "positive_scope_final_http": {
+    "schema_version": "parent-qc-final-scope-http-1",
+    "checked_at_utc": "2026-10-09T11:32:22.734285+00:00",
+    "all_passed": true,
+    "backend_source_sha256": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
+    "query": {
+      "source": "GD_OBS_ST_MONTHLY",
+      "preset": "custom",
+      "date_from": "2026-07-09T00:00:00",
+      "date_to": "2026-07-09T15:41:20",
+      "sea": "서해"
+    },
+    "timings": [
+      {
+        "label": "first_after_backend_restart",
+        "client_seconds": 11.2377,
+        "backend_seconds": 11.17073579877615,
+        "response_bytes": 150705
+      },
+      {
+        "label": "warm",
+        "client_seconds": 0.3166,
+        "backend_seconds": 0.2917896006256342,
+        "response_bytes": 150706
+      }
+    ],
+    "total_rows": 240902,
+    "raw_rows_sent": 15,
+    "exact_semantics_excluding_only_elapsed_seconds_and_result_digest": true,
+    "scope_predicate_policy": "VERIFIED_SOURCE_MONTH_STATION_INTERSECTION",
+    "catalog_census_verification_sha256": "68fc306e0d25c2e3fd44c9c125ce9e2722a9d2b1fb8a054da78f65cd5ddb542e",
+    "flag_display_policy": "QC_DISPLAY_TONES_2",
+    "raw_source_qc_interpreted": false,
+    "operational_dml": 0
+  },
+  "frozen_source_verification": {
+    "checked_at_utc": "2026-10-09T11:44:44.983514+00:00",
+    "unchanged": true,
+    "changed": [],
+    "source_files": 362,
+    "excluded_generated_test_workspace": true,
+    "manifest_sha256": "2b6f6e1c65e5f38bae1cd27d68920b7a41590386b48cfc9ad8902611113c14b0"
+  },
+  "code_sha256": {
+    "ocean-ai-platform/backend/app/api/routes_qc_candidates.py": "d0810b73f027dabed38439b3225d9678a066da541a7d11770b30f8e98774cbf9",
+    "ocean-ai-platform/backend/app/api/routes_qc_workspace.py": "04bfc0a4421ce4faafd4e1117c08ea45c0b1f8e8e99952f7eaa613f8860e62c2",
+    "ocean-ai-platform/backend/app/main.py": "91921f945d05c9ccbfc4cab17b179a221939cec228494aa0fd6d02b36df4b2cd",
+    "ocean-ai-platform/backend/app/ml/anomaly_artifact.py": "7ffbf90f96bd89e6006d9527b9f3d7f3fe7880785e24377db4f1f9ee6f79f774",
+    "ocean-ai-platform/backend/app/models/source_observation_binding.py": "3b3cd7dcbfe5d82aa8a2f7081d59db66ca863b0291d9a515a5b7fd04d7499b1c",
+    "ocean-ai-platform/backend/app/scripts/migrate_binding_clock_20261009.py": "0f28f5e70403e3657b153d7a80f368eedabb4a61768817596daf510faa7442e1",
+    "ocean-ai-platform/backend/app/services/anomaly_analysis.py": "e69c6192cdea3a72009146007acdce0d6b1994d77ef9b091f2b362e871308f98",
+    "ocean-ai-platform/backend/app/services/qc_analysis_readiness.py": "07ff0df600b021643d46d8b27d7baa7734492a07a22c1bef4e8bb1b49de7cf87",
+    "ocean-ai-platform/backend/app/services/qc_candidate_review.py": "c80417c07a40a3e58840da11d438cbd0b8bd938b1cc80e60360cce983cd74019",
+    "ocean-ai-platform/backend/app/services/qc_overview.py": "6591553854486c1690d8f9e19dc345bd196823d7bbc994921499c8f10259009f",
+    "ocean-ai-platform/backend/app/services/qc_rule_engine.py": "9993072a38e264808c828a93a460908bef59a6e9e8d58cdc11198425eef2ff51",
+    "ocean-ai-platform/backend/app/services/qc_workspace.py": "6c636fb7a810cb4e575fb56eb04fe7cabd3b87032932a769246f6ecdcb1cc865",
+    "ocean-ai-platform/backend/app/services/source_contract_snapshot.py": "455ef3bd3fedb92a6e20ed2b3b9a658d403897bf3a308befd850036f86f6e9e0",
+    "ocean-ai-platform/backend/tests/test_qc_candidate_review.py": "c8d966f1f75d043ec97ced6b774b3fdbd872fdb0ce944b81f9469a92fdac1c44",
+    "ocean-ai-platform/backend/tests/test_qc_overview.py": "b7c67c83e67190e9f8e1810041495da0a8ab0c8c9ea39515b96ca89d913f5164",
+    "ocean-ai-platform/backend/tests/test_qc_workspace.py": "9cbb15c712639aa537e35999433baa775e62b2588563ad5ba4548541286486b4",
+    "ocean-ai-platform/backend/tests/test_source_binding_clock.py": "1ab70fea032da5fd36317ad07cd42e6d44974beb3cd7276a46146d0a865fa471",
+    "ocean-ai-platform/backend/tests/test_source_fact_period.py": "8701d20a7549b825e3e50a2252fc5ed48a3439ed6a244ce2fee661be9d314457",
+    "ocean-ai-platform/frontend/package-lock.json": "4e889d88b90b7e78d68e079797dcda18ffcd718a5ec1a1cca6a1ab20b9efec6c",
+    "ocean-ai-platform/frontend/package.json": "debca516f9772ee60218217f7849fb399a58d6e45a5d1d0e21c9fe935a30df9a",
+    "ocean-ai-platform/frontend/src/components/Layout.tsx": "07cc16a8a738a069888360e9dd2a2b8fa50aed3418b10937c52ffac48dc46bac",
+    "ocean-ai-platform/frontend/src/components/QCCandidateDrawer.tsx": "975e145fc28335ed6fcc45f45b77c6b782de87eebdf62093b399f073fb248102",
+    "ocean-ai-platform/frontend/src/components/QCCaseReview.tsx": "3e4dcd2fa8b2a9c4058af9d64d3d2840dc0ee497bf5b26ddf91323c77bac148e",
+    "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx": "f694d43a1e0cc5859f2bcd1a02f6667b579699b9200fd89162acbf920999cd15",
+    "ocean-ai-platform/frontend/src/components/QCWorkspaceCharts.tsx": "2600e77bfe7de7d17707835ea79a084627a1236ee322ee75313fc62aa64215c7",
+    "ocean-ai-platform/frontend/src/data/observationPeriod.ts": "5f704fb4f1a742e13004be83d968a6cebb6c26b0da403a6ab31895d35af0b1a5",
+    "ocean-ai-platform/frontend/src/data/qcWorkspace.ts": "2c851c7b1cdd7f9fce643e37e679cd5e1eba4e6fbd5987422c9d1083a62a1193",
+    "ocean-ai-platform/frontend/src/pages/QCCopilot.tsx": "536a7c4140035a3f66eab329c98eabd932dfa8b460dd022e4fdfbbbd526d30c9",
+    "ocean-ai-platform/frontend/src/styles/qc.css": "bfd4bca30eeb3358bd0dd11d3c4746ed00e1570de3baad38dcd7be6e52ff1043",
+    "ocean-ai-platform/frontend/tests/observation-period.test.mjs": "07d0770204090e7232911b872bcecd889f2e87b93f34fbd05c3cd4934be35c49",
+    "ocean-ai-platform/frontend/tests/qc-daily-fixtures.mjs": "c7b1973837b0fe33f4bb35e55547da90e1a3d686dc7e10649e20a1d4c98a6da4",
+    "ocean-ai-platform/frontend/tests/qc-daily-ui.test.mjs": "3f90633b09010233e56d055708d115ac0da1aa608b995aea85048b7f5c1d831d",
+    "ocean-ai-platform/frontend/tests/qc-daily.test.mjs": "82884aff9d2479d55255026d5175a73f07ccc3b8b28b183aba2ff9908d89485f",
+    "ocean-ai-platform/frontend/tests/qc-workspace.test.mjs": "c0cb30d683875a32ed08082361b169bf39d04965159a5380f5ee655be589f9df"
+  },
+  "changed_files": [
+    "docs/02_SETUP_AND_INSTALLATION.md",
+    "docs/04_API_SPECIFICATION.md",
+    "docs/12_QC_RULE_RESULT_LAYER.md",
+    "docs/22_FRONTEND_OPERATIONS_AUDIT.md",
+    "docs/25_ANOMALY_AI.md",
+    "docs/34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.json",
+    "docs/34_PURPOSE_DATASET_MODEL_READINESS_REVIEW.md",
+    "docs/35_QC_OPERATIONAL_DASHBOARD_REQUIREMENTS.md",
+    "docs/36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md",
+    "docs/36_QC_OPERATIONAL_DASHBOARD_VERIFICATION.json",
+    "docs/README.md",
+    "docs/current_status.json",
+    "ocean-ai-platform/backend/app/api/routes_qc_candidates.py",
+    "ocean-ai-platform/backend/app/api/routes_qc_workspace.py",
+    "ocean-ai-platform/backend/app/main.py",
+    "ocean-ai-platform/backend/app/ml/anomaly_artifact.py",
+    "ocean-ai-platform/backend/app/models/source_observation_binding.py",
+    "ocean-ai-platform/backend/app/scripts/migrate_binding_clock_20261009.py",
+    "ocean-ai-platform/backend/app/services/anomaly_analysis.py",
+    "ocean-ai-platform/backend/app/services/qc_analysis_readiness.py",
+    "ocean-ai-platform/backend/app/services/qc_candidate_review.py",
+    "ocean-ai-platform/backend/app/services/qc_overview.py",
+    "ocean-ai-platform/backend/app/services/qc_rule_engine.py",
+    "ocean-ai-platform/backend/app/services/qc_workspace.py",
+    "ocean-ai-platform/backend/app/services/source_contract_snapshot.py",
+    "ocean-ai-platform/backend/tests/test_qc_candidate_review.py",
+    "ocean-ai-platform/backend/tests/test_qc_overview.py",
+    "ocean-ai-platform/backend/tests/test_qc_workspace.py",
+    "ocean-ai-platform/backend/tests/test_source_binding_clock.py",
+    "ocean-ai-platform/backend/tests/test_source_fact_period.py",
+    "ocean-ai-platform/frontend/package-lock.json",
+    "ocean-ai-platform/frontend/package.json",
+    "ocean-ai-platform/frontend/src/components/Layout.tsx",
+    "ocean-ai-platform/frontend/src/components/QCCandidateDrawer.tsx",
+    "ocean-ai-platform/frontend/src/components/QCCaseReview.tsx",
+    "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx",
+    "ocean-ai-platform/frontend/src/components/QCWorkspaceCharts.tsx",
+    "ocean-ai-platform/frontend/src/data/observationPeriod.ts",
+    "ocean-ai-platform/frontend/src/data/qcWorkspace.ts",
+    "ocean-ai-platform/frontend/src/pages/QCCopilot.tsx",
+    "ocean-ai-platform/frontend/src/styles/qc.css",
+    "ocean-ai-platform/frontend/tests/observation-period.test.mjs",
+    "ocean-ai-platform/frontend/tests/qc-daily-fixtures.mjs",
+    "ocean-ai-platform/frontend/tests/qc-daily-ui.test.mjs",
+    "ocean-ai-platform/frontend/tests/qc-daily.test.mjs",
+    "ocean-ai-platform/frontend/tests/qc-workspace.test.mjs"
+  ],
+  "performance_http_seconds": [
+    {
+      "query": {
+        "preset": "today"
+      },
+      "seconds": 0.0462,
+      "status": 200
+    },
+    {
+      "query": {
+        "preset": "yesterday"
+      },
+      "seconds": 0.0364,
+      "status": 200
+    },
+    {
+      "query": {
+        "preset": "7d"
+      },
+      "seconds": 0.0346,
+      "status": 200
+    },
+    {
+      "query": {
+        "preset": "30d"
+      },
+      "seconds": 0.0553,
+      "status": 200
+    },
+    {
+      "query": {
+        "source": "GD_OBS_ST_MONTHLY",
+        "preset": "custom",
+        "date_from": "2026-07-09T00:00:00",
+        "date_to": "2026-07-09T15:41:20"
+      },
+      "seconds": 9.4961,
+      "status": 200
+    },
+    {
+      "query": {
+        "source": "GD_OBS_ST_MONTHLY",
+        "preset": "custom",
+        "date_from": "2026-07-09T00:00:00",
+        "date_to": "2026-07-09T15:41:20",
+        "station_id": "DT_0028",
+        "variable_code": "WATER_TEMP"
+      },
+      "seconds": 1.2645,
+      "status": 200
+    },
+    {
+      "query": {
+        "source": "GD_OBS_ST_MONTHLY",
+        "preset": "custom",
+        "date_from": "2026-07-01T00:00:00",
+        "date_to": "2026-07-09T15:41:20"
+      },
+      "seconds": 11.5504,
+      "status": 200
+    },
+    {
+      "query": {
+        "source": "GD_OBS_ST_MONTHLY",
+        "preset": "custom",
+        "date_from": "2026-07-09T00:00:00",
+        "date_to": "2026-07-09T15:41:20",
+        "network": "__UNREGISTERED__"
+      },
+      "seconds": 1.8584,
+      "status": 200
+    },
+    {
+      "query": {
+        "source": "GD_OBS_ST_MONTHLY",
+        "preset": "custom",
+        "date_from": "2026-07-09T00:00:00",
+        "date_to": "2026-07-09T15:41:20",
+        "sea": "제주해역"
+      },
+      "seconds": 0.5214,
+      "status": 200
+    }
+  ],
+  "backend_source_continuity_during_frontend_only_final_fix": {
+    "checked_at_utc": "2026-10-09T11:44:44.664211+00:00",
+    "unchanged": true,
+    "backend_source_files": 271,
+    "previous_source_manifest_sha256": "adc9b7f97d4ae6628e06ee80d7afc56832078f89777da5e0f83c103beaaeb467",
+    "scope": "Final full backend regression source unchanged across frontend-only rapid filter fix",
+    "frontend_checked_separately_after_its_final_freeze": true,
+    "operational_data_access": false
+  },
+  "browser": {
+    "schema_version": "parent-qc-browser-final-1",
+    "source": "FROZEN_REVIEW_8010_5174",
+    "actual_viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "checks": [
+      {
+        "name": "Fresh QC defaults to server today 00:00 to actual offset clock",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "No actual registered data is NO_DATA, not a fake zero percent normal rate",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Yesterday, 7d, 30d and custom period controls share a window",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Observation navigation preserves native July 9 15:41:20 cutoff",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "July 9 archive 541426 rows and station/item selection Jindo temperature 942 rows",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "West Sea dropdown synchronizes matrix: 240902 rows, 28 stations, 85 items",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Original raw samples are separate from zero QC candidate queue",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Exact sample opens 121 original 1-minute points; latest 21.38 precision retained",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Detail zoom changes visible time extent and retains query cutoff",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "No stored AI means no fabricated prediction path",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "Raw sample approval and Final QC edits stay disabled with reasons",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY"
+      },
+      {
+        "name": "No new browser console errors after frozen runtime restart",
+        "passed": true,
+        "scope": "AFTER_2026-10-09T11:32:00Z"
+      },
+      {
+        "name": "Final backend palette: missing9 purple; UNKNOWN gray across donut, heatmap and 121 actual detail points",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY_FINAL"
+      },
+      {
+        "name": "Rapid successive station DT_0028 and item WATER_TEMP selections preserve both filters and show exactly 942 rows",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY_FINAL_AFTER_REPRODUCED_FIX"
+      },
+      {
+        "name": "Final detail contains 121 exact original points, latest21.38 and zero prediction lines",
+        "passed": true,
+        "scope": "ACTUAL_READ_ONLY_FINAL"
+      }
+    ],
+    "screenshot_files": [
+      "parent-qc-today-full-final.png",
+      "parent-qc-archive-full-final.png",
+      "parent-qc-actual-detail-final.png"
+    ],
+    "operational_db_writes": 0,
+    "viewport_override_reset": true,
+    "additional_viewport_verification": "NOT_CONFIRMED: requested 768/1672 capability overrides retained actual 1280x720; no mobile verification claim",
+    "actual_stored_ai_positive": false,
+    "actual_review_decision_posted": false,
+    "isolated_positive_paths": "Stored AI, late/gap, equipment/inspection/RAG, role/owner/hash/revision approval/resume covered by backend and React DOM tests",
+    "checked_at_utc": "2026-10-09T11:47:42.613885+00:00",
+    "flag_display_policy": "QC_DISPLAY_TONES_2",
+    "screenshot_sha256": {
+      "parent-qc-today-full-final.png": "284f6e937cc54a892f63193eda73f13f2f49cdb496a9bc775b4b4d3c68f1f028",
+      "parent-qc-archive-full-final.png": "6e0a42b670e7347dafef5d9b1fad5257efd89604b3e4ab0ecb479d0c1383e6db",
+      "parent-qc-actual-detail-final.png": "7550015404088e5090833506f824af1402ed59bca22d8661ba894014845b7124"
+    }
+  },
+  "private_evidence": [
+    {
+      "name": "parent-backend-qc-after-scope-optimization-suite.log",
+      "sha256": "d037a5dd52d77f993b31783bf5895521a7d4e51603bff445902ba92d65c3392d",
+      "published": false
+    },
+    {
+      "name": "parent-frontend-qc-after-palette-tests.log",
+      "sha256": "ae135998aa27d087e502dd50985304a4681efc2773626776e172a7e5699d7686",
+      "published": false
+    },
+    {
+      "name": "parent-frontend-qc-after-scope-build.log",
+      "sha256": "786a82c7715ff91e61a5ef4e4727014058a2a808de53befe4038d51e39d8a07b",
+      "published": false
+    },
+    {
+      "name": "parent-frontend-qc-after-scope-lint.log",
+      "sha256": "69bcee80c653bf5ebb04153f94ded948a4361f4cf05bbad2762aa6c24678f3dc",
+      "published": false
+    },
+    {
+      "name": "parent-qc-operational-http-arrow-verification.json",
+      "sha256": "37f4a52e3a1cb37e344974b3b32e5167e82f8a154c0258ac491d1d3050d6d331",
+      "published": false
+    },
+    {
+      "name": "parent-qc-frozen-runtime-verification.json",
+      "sha256": "9fc3a5e941fcad76292d849c7ad8448bff027b6405b62acd7b0a420a9e5f12b0",
+      "published": false
+    },
+    {
+      "name": "parent-qc-binding-clock-migration.json",
+      "sha256": "7c97087e7b2ad0ed23f496abe35d9d63842efc6880285857f1d527ebb5f3e292",
+      "published": false
+    },
+    {
+      "name": "parent-qc-release-source-freeze.json",
+      "sha256": "2b6f6e1c65e5f38bae1cd27d68920b7a41590386b48cfc9ad8902611113c14b0",
+      "published": false
+    },
+    {
+      "name": "parent-qc-release-source-freeze-verified.json",
+      "sha256": "c26c3b6ecbfa3687889837f35c9f0c643b9ca2291b544cc7fd7b89e8db48772c",
+      "published": false
+    },
+    {
+      "name": "parent-qc-browser-final-verification.json",
+      "sha256": "52534dd9a2b078db433879896b3ecaa63ee92fa07fee5d1e170d0273dfde3503",
+      "published": false
+    },
+    {
+      "name": "qc-candidate-binding-overview-final-tests.log",
+      "sha256": "5f75b624e13f9c002149abb39b877de197d803fa2a52e7a2fccc00cb4fc501c2",
+      "published": false
+    },
+    {
+      "name": "independent-binding-clock-review-tests.log",
+      "sha256": "a2e46f7d092b360db72d7af6b096ba3c9ebfe847d6089aa9cf94c9a9d1b757b6",
+      "published": false
+    },
+    {
+      "name": "independent-qc-evidence-status-review-tests.log",
+      "sha256": "b6ed655e6567da76e17eed53bc3cb5b15216a3b81d2c945873233d78bccfa515",
+      "published": false
+    },
+    {
+      "name": "independent-qc-utc-boundary-review.json",
+      "sha256": "c5a84d9dfd5064d2d620c1e4bc1b8d95b5111d5f71d7a4f75b90b00583f273d7",
+      "published": false
+    },
+    {
+      "name": "qc-candidate-isolated-detail-fixtures.json",
+      "sha256": "9a8bb015fe71617540cf80db38dfa63831c84f4e382c693b9e2fdcaa1aad2253",
+      "published": false
+    },
+    {
+      "name": "parent-qc-final-skip-reason.log",
+      "sha256": "19304d2b9083e47aa8aa00f3706603b97fc884e7716f80f0aa1dae129faa1528",
+      "published": false
+    },
+    {
+      "name": "qc-positive-scope-arrow-census.json",
+      "sha256": "a4f4da7ae91965cb9fe419b367e0507ae32b7fb64551e18966bad0fe53632249",
+      "published": false
+    },
+    {
+      "name": "qc-overview-positive-scope-tests.log",
+      "sha256": "d4db85ca5ede2323bb38995410e7d0d9e02162b728c4eae0d9ecad6832301437",
+      "published": false
+    },
+    {
+      "name": "qc-overview-positive-scope-final-ab.json",
+      "sha256": "df5abdafe60848d3faf3e65f05a14cef5a684126baf1a9fd3a3e0dc0c18ffff7",
+      "published": false
+    },
+    {
+      "name": "parent-qc-final-scope-http-verification.json",
+      "sha256": "d1edadfcfaa92f7e51eb4ef608c30199ec91968a5241db3b939d07625836a70e",
+      "published": false
+    },
+    {
+      "name": "qc-positive-scope-independent-review.json",
+      "sha256": "ab83defe5cdab8217baf990dd050c6b2ab7d0d001a36800f6fb08762f69c62a8",
+      "published": false
+    },
+    {
+      "name": "parent-qc-backend-source-continuity.json",
+      "sha256": "b87fefbabfb35d38310df1ce57cc6efda3254f4e9cd7295548054c3e3faa7828",
+      "published": false
+    }
+  ],
+  "limitations": [
+    "Actual approved source/dataset/model and QC candidate/workflow records remain zero.",
+    "Registered operational QC supports SCALAR only; typed directional/vector/profile/trajectory QC is not completed.",
+    "A verified schedule/missing-transmission contract is absent; inferred clock gaps are not confirmed receive loss.",
+    "Exact candidate/version-linked Final QC editing is not implemented; existing generic approval endpoints are not silently substituted.",
+    "Stored AI reads are implemented; on-demand inference, new training, full spatial-field or dedicated distribution drift worker are not implemented by this release.",
+    "Cold archive queries can exceed the ten-second UX target; actual 878400-row registered daily performance has not been verified.",
+    "Only the actual 1280x720 browser viewport was verified; attempted capability overrides did not apply.",
+    "Actual account configuration and operational approvals remain deferred by the user."
+  ]
+}

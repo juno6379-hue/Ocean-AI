@@ -420,7 +420,8 @@ def ingest_approved_source(db,receipt,sha,actor,register_metadata=False):
         db.flush()
         db.add(SourceObservationBinding(observation_id=oid,contract_id=receipt['contract_id'],approval_history_id=authority['approval_history_id'],
             receipt_sha256=sha,source_sha256=proof['source_sha256'],parquet_sha256=proof['parquet_sha256'],source_row_locator=proof['source_row_locator'],
-            exact_scope_key=proof['exact_scope_key'],payload=proof,created_by=actor.user_id));db.flush();inserted+=1
+            exact_scope_key=proof['exact_scope_key'],payload=proof,created_by=actor.user_id,
+            bound_at_utc=datetime.now(timezone.utc)));db.flush();inserted+=1
     return {'contract_id':receipt['contract_id'],'receipt_sha256':sha,'inserted':inserted,'already_bound':existing,
         'labels_created':0,'events_created':0,'features_created':0,'dataset_memberships_created':0,'requires_independent_downstream_reviews':True}
 

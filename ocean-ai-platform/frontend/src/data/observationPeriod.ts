@@ -28,7 +28,7 @@ export function observationPeriod(search: SearchValues) {
 /** Keep only explicitly chosen context; each destination resolves its defaults. */
 export function observationContext(search: SearchValues) {
   const context = new URLSearchParams();
-  for (const key of ['source', 'from', 'to', 'network', 'sea']) {
+  for (const key of ['source', 'from', 'to', 'network', 'sea', 'as_of_day', 'as_of_time']) {
     const value = search.get(key);
     if (value) context.set(key, value);
   }

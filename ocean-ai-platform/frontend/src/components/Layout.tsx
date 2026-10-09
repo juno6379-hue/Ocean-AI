@@ -16,7 +16,7 @@ import { observationContext } from '../data/observationPeriod';
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
-  const observationsPage=path==='/observations';
+  const compactWorkspace=path==='/observations'||path==='/qc'||path==='/copilot';
   const context = observationContext(new URLSearchParams(location.search));
   const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,7 +38,7 @@ const Layout: React.FC = () => {
   ];
 
   return (
-    <div className={'flex h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden relative '+(observationsPage?'observations-shell':'')}>
+    <div className={'flex h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden relative '+(compactWorkspace?'observations-shell':'')}>
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div
@@ -68,7 +68,7 @@ const Layout: React.FC = () => {
         <nav className="flex-1 py-6 space-y-1.5 px-3 overflow-y-auto custom-scrollbar-dark overflow-x-hidden">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = path === item.path || (path.startsWith(item.path) && item.path !== '/');
+            const isActive = path === item.path || (path.startsWith(item.path) && item.path !== '/') || (item.path==='/qc'&&path==='/copilot');
             return (
               <Link
                 key={item.name}
@@ -108,7 +108,7 @@ const Layout: React.FC = () => {
 
       {/* Main Content Area (Light Theme) */}
       <main className="flex-1 flex flex-col overflow-hidden bg-[#F8FAFC] w-full">
-        {!observationsPage&&<OperatorSession />}
+        {!compactWorkspace&&<OperatorSession />}
         {/* Mobile Header */}
         <header className="lg:hidden h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-2">
@@ -121,10 +121,10 @@ const Layout: React.FC = () => {
         </header>
 
         <div className="flex-1 overflow-auto platform-content">
-          {!observationsPage&&<WorkflowStatus />}
-          <MenuPurpose />
+          {!compactWorkspace&&<WorkflowStatus />}
+          {!compactWorkspace&&<MenuPurpose />}
           <Outlet />
-          {observationsPage&&<details className="obs-access-panel"><summary>검토 환경·담당자 연결·업무 단계</summary><OperatorSession/><WorkflowStatus/></details>}
+          {compactWorkspace&&<details className="obs-access-panel"><summary>검토 환경·담당자 연결·업무 단계</summary><OperatorSession/><WorkflowStatus/><MenuPurpose/></details>}
         </div>
       </main>
 

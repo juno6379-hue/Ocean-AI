@@ -1,3 +1,2 @@
-import AnalysisWorkspace from '../components/AnalysisWorkspace';
-import WorkflowReviewPanel from '../components/WorkflowReviewPanel';
-export default function QCCopilot() { return <div className="space-y-6"><WorkflowReviewPanel/><AnalysisWorkspace/></div>; }
+import QCWorkspace from '../components/QCWorkspace';
+export default function QCCopilot() { return <QCWorkspace/>; }

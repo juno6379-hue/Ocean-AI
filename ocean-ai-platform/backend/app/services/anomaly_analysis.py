@@ -15,6 +15,7 @@ from app.ml.anomaly_artifact import (
     SCHEMA, MAX_ROWS, AnomalyContractError, canonical_bytes, clock, envelope,
     evidence, fingerprint, number, sha256, verify,
 )
+from app.services.qc_analysis_readiness import fact_period, FactPeriodError
 
 MODES = {"SPIKE", "PERSISTENCE", "TIDE_RESIDUAL", "DRIFT",
          "BIOFOULING_CANDIDATE", "SENSOR_DEGRADATION_CANDIDATE"}
@@ -149,13 +150,16 @@ def _rows(series):
         if row.get("qc_eligible") is not True: errors.append("SOURCE_QC_NOT_USABLE")
         if availability < t: errors.append("OBSERVATION_AVAILABLE_BEFORE_OBSERVED_CLOCK")
         if t > as_of or availability > as_of or qc_available > as_of: errors.append("SOURCE_NOT_AVAILABLE_AS_OF")
+        fact_availability=[]
         for key in sorted(FACT_NAMES):
             fact=series.get("facts", {}).get(key, {}); name=key.upper()+"_CONTRACT"
             try:
-                if not clock(fact.get("start")) <= t < clock(fact.get("end")):
-                    errors.append(name + "_OUTSIDE_EFFECTIVE_INTERVAL")
-            except AnomalyContractError:
-                errors.append(name + "_EFFECTIVE_INTERVAL_NOT_DOCUMENTED")
+                _,_,available=fact_period(fact, when=t, as_of=as_of, expected_scope=series["scope"])
+                fact_availability.extend(available)
+            except FactPeriodError as exc:
+                errors.append(name+"_OUTSIDE_EFFECTIVE_INTERVAL" if str(exc)=="FACT_OUTSIDE_EFFECTIVE_INTERVAL"
+                    else name+"_EFFECTIVE_INTERVAL_NOT_DOCUMENTED" if str(exc)=="FACT_PERIOD_OFFSET_REQUIRED"
+                    else name+":"+str(exc))
         reference_error=None
         ref_source=row.get("reference",{}).get("source") if isinstance(row.get("reference"),dict) else None
         if evidence([ref_source]):
@@ -163,7 +167,7 @@ def _rows(series):
             if ref_cell in reference_cells or ref_cell in cells:
                 reference_error="REFERENCE_SOURCE_RECORD_REUSE"
             reference_cells.add(ref_cell)
-        result.append({"raw": row, "time": t, "available": max(availability,qc_available), "errors": errors,"reference_error":reference_error})
+        result.append({"raw": row, "time": t, "available": max([availability,qc_available]+fact_availability), "errors": errors,"reference_error":reference_error})
     canonical_bytes(series)
     return result
 

@@ -1,0 +1,634 @@
+{
+  "schema_version": "ocean-purpose-model-readiness-review-1",
+  "checked_at_utc": "2026-10-09T09:15:24.255804+00:00",
+  "audit_actions": {
+    "http_methods": [
+      "GET"
+    ],
+    "new_fitting": false,
+    "new_training": false,
+    "new_deployment": false,
+    "db_writes": false,
+    "account_changes": false
+  },
+  "api": [
+    {
+      "endpoint": "http://127.0.0.1:8000/api/mlops/readiness",
+      "checked_at_utc": "2026-10-09T09:15:22.859094+00:00",
+      "http_status": 200,
+      "response_sha256": "3a5bbb93026ad0c3955862ebb1aa7d4d251a2145c1c3fa8a4a5ae683834fe218",
+      "method": "GET",
+      "aggregate": {
+        "status": "BLOCKED",
+        "counts": {
+          "models": 0,
+          "datasets": 0,
+          "approved_datasets": 0,
+          "registry_production_models": 0
+        },
+        "operational_model_count": 0,
+        "acceptance_criteria_status": "NOT_DEFINED",
+        "ready_for_deployment": false,
+        "execution": {
+          "code_implemented": true,
+          "worker_configured": true,
+          "worker_running": false,
+          "worker_status": "STALE_OR_CHANGED",
+          "serving_configured": true,
+          "live_local_model_count": 0,
+          "approved_input_ready": false
+        }
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/api/mlops/training/jobs",
+      "checked_at_utc": "2026-10-09T09:15:22.900998+00:00",
+      "http_status": 200,
+      "response_sha256": "194add070c1713959c02c048a47ebf03e3525e7ce3c0c138844449e773a4a7dd",
+      "method": "GET",
+      "aggregate": {
+        "job_count": 0,
+        "queue_initialized": true,
+        "states": [],
+        "api_limit": 100
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/api/mlops/serving/health",
+      "checked_at_utc": "2026-10-09T09:15:22.933685+00:00",
+      "http_status": 409,
+      "response_sha256": "53c5ba0e46aecaa016e55f165a4daf84bfd527b0d49b4ef2d6b4255cf51f0d13",
+      "method": "GET",
+      "aggregate": {
+        "detail": {
+          "code": "NO_ACTIVE_LOCAL_MODEL",
+          "detail": "",
+          "mutation_performed": false
+        }
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/mlops/readiness",
+      "checked_at_utc": "2026-10-09T09:15:22.968161+00:00",
+      "http_status": 200,
+      "response_sha256": "3b4db083c720e97058402dce423df6cc041ee21e9a697e9d1404d41fb04dff8d",
+      "method": "GET",
+      "aggregate": {
+        "status": "BLOCKED",
+        "counts": {
+          "models": 0,
+          "datasets": 0,
+          "approved_datasets": 0,
+          "registry_production_models": 0
+        },
+        "operational_model_count": 0,
+        "acceptance_criteria_status": "NOT_DEFINED",
+        "ready_for_deployment": false,
+        "execution": {
+          "code_implemented": true,
+          "worker_configured": false,
+          "worker_running": false,
+          "worker_status": "STALE_OR_CHANGED",
+          "serving_configured": false,
+          "live_local_model_count": 0,
+          "approved_input_ready": false
+        }
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/mlops/training/jobs",
+      "checked_at_utc": "2026-10-09T09:15:22.997143+00:00",
+      "http_status": 200,
+      "response_sha256": "194add070c1713959c02c048a47ebf03e3525e7ce3c0c138844449e773a4a7dd",
+      "method": "GET",
+      "aggregate": {
+        "job_count": 0,
+        "queue_initialized": true,
+        "states": [],
+        "api_limit": 100
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/mlops/serving/health",
+      "checked_at_utc": "2026-10-09T09:15:23.023947+00:00",
+      "http_status": 409,
+      "response_sha256": "8c86dc7f87aa8ddd32ae5205abb89a6b718902abad6800dc6541f1d40f3186b9",
+      "method": "GET",
+      "aggregate": {
+        "detail": {
+          "code": "LOCAL_JSON_SERVING_DISABLED",
+          "detail": "",
+          "mutation_performed": false
+        }
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/datasets",
+      "checked_at_utc": "2026-10-09T09:15:23.027139+00:00",
+      "http_status": 200,
+      "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "method": "GET",
+      "aggregate": {
+        "dataset_count": 0
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/source-contracts",
+      "checked_at_utc": "2026-10-09T09:15:23.057484+00:00",
+      "http_status": 200,
+      "response_sha256": "87c8d31e8b5d31255b80221de105b1ff1d3b2dcb032197409886f06b864d1182",
+      "method": "GET",
+      "aggregate": {
+        "packet_count": 0
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/forecasting/models",
+      "checked_at_utc": "2026-10-09T09:15:23.073152+00:00",
+      "http_status": 200,
+      "response_sha256": "202d799c33ef8c0b37041af2936b60396240ec5588ffa9900cc417f38db1c8a3",
+      "method": "GET",
+      "aggregate": {
+        "model_count": 0,
+        "is_demo": false
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/model-development/training-manifests",
+      "checked_at_utc": "2026-10-09T09:15:23.104667+00:00",
+      "http_status": 200,
+      "response_sha256": "1408847e294c413926728f66ab36c2b4d13faf81c5429b941fa60bbd0dc482eb",
+      "method": "GET",
+      "aggregate": {
+        "state": "NO_REQUESTS",
+        "manifest_count": 0,
+        "mutation_performed": false
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/model-development/task-readiness",
+      "checked_at_utc": "2026-10-09T09:15:23.133029+00:00",
+      "http_status": 200,
+      "response_sha256": "1a28860dd3a568fd77bd86d05681a4c43566b4195cae3e2fed9cbb00f73fd433",
+      "method": "GET",
+      "aggregate": {
+        "task_keys": 72,
+        "scope_status": "REPRESENTATION_BASELINE_SCOPE_PARTIAL",
+        "source_inventory_status": "RAW_DIAGNOSTICS_ONLY_UNAPPROVED",
+        "training_ready_count": 0,
+        "operational_ready_count": null,
+        "operational_status": "NOT_EVALUATED_IN_SOURCE_INVENTORY",
+        "diagnostic_sha256": "d7ebb9abc656f734f7a512fcbb6494efa1a1ada1ba156137ef313fa082323d32",
+        "source_manifest_sha256": "e6968bfa4a162ffa1561383dcd4004323470e6002b9667da227040ff88875240",
+        "mutation_performed": false,
+        "approved_source_proofs_per_task_max": 0
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8010/api/mlops/adapters",
+      "checked_at_utc": "2026-10-09T09:15:23.382561+00:00",
+      "http_status": 200,
+      "response_sha256": "2204cb23341587b71be44d20fa568ee2535f2a6a37f387e1016433c4481a5408",
+      "method": "GET",
+      "aggregate": {
+        "task_keys": 72,
+        "code_implementations": 6,
+        "task_algorithms": 3,
+        "registered_models_by_coverage": 0,
+        "operational_completion": false,
+        "source_matrix_sha256": "01bc37643f2a3279bfe216f88d20bdb7381cf495104aa7025ce617db766b7fb6"
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8011/readiness",
+      "checked_at_utc": "2026-10-09T09:15:23.392105+00:00",
+      "http_status": 200,
+      "response_sha256": "dd41bc5e046fffbf3362ccdc3134e08322be89a600dae208ecf20cb4ed9f3766",
+      "method": "GET",
+      "aggregate": {
+        "status": "READY",
+        "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
+        "model_count": 3,
+        "blockers": [],
+        "experimental": true,
+        "nonoperational": true,
+        "approved": false,
+        "production_eligible": false
+      }
+    },
+    {
+      "endpoint": "http://127.0.0.1:8011/release",
+      "checked_at_utc": "2026-10-09T09:15:23.627800+00:00",
+      "http_status": 200,
+      "response_sha256": "dc59c72c19fee2c1706ae181b76f1882b62402fef2f8139c95199bb04ba37221",
+      "method": "GET",
+      "aggregate": {
+        "status": "READY",
+        "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
+        "manifest_sha256": "76cf46101c1d5e69e99bf083922c77942c2aec3f42f9205417d0a5e6d83a7e1d",
+        "source_period": "2026-07",
+        "source_table": "GR_OBS_ST",
+        "station_code": "DT_0001",
+        "task": "NEXT_OBSERVED_ROW_FORECAST",
+        "native_clock_only": true,
+        "unit": null,
+        "timezone": null,
+        "horizon_seconds": null,
+        "experimental": true,
+        "nonoperational": true,
+        "approved": false,
+        "production_eligible": false,
+        "models": [
+          {
+            "model_id": "AIR_PRES",
+            "variable_code": "AIR_PRES",
+            "artifact_sha256": "5d77a74454004d3ba110b804ba437be4aae1ba134301d3397eed76d2ca0f6e79",
+            "selected_model": "PERSISTENCE",
+            "input_lags": 3,
+            "source_membership_count": 44625,
+            "source_membership_sha256": "53ec2125bc2056e503b85132b68a6aa8ce9d516bbe0c985e7c37a7dbf2aa4664",
+            "split_counts": {
+              "TEST": 10065,
+              "TRAIN": 25920,
+              "VALIDATION": 8640
+            },
+            "pair_counts": {
+              "TEST": 10062,
+              "TRAIN": 25917,
+              "VALIDATION": 8637
+            },
+            "test_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.010693699065792307,
+                "pair_count": 10062,
+                "rmse": 0.03270122179031316
+              },
+              "RIDGE": {
+                "mae": 0.011938730194950209,
+                "pair_count": 10062,
+                "rmse": 0.03254728682062203
+              }
+            },
+            "validation_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.014576820655320328,
+                "pair_count": 8637,
+                "rmse": 0.038300712015948264
+              },
+              "RIDGE": {
+                "mae": 0.01588384910048765,
+                "pair_count": 8637,
+                "rmse": 0.03810338362183977
+              }
+            }
+          },
+          {
+            "model_id": "WATER_TEMP",
+            "variable_code": "WATER_TEMP",
+            "artifact_sha256": "eccf1c5394bd1997ea82fad2889959c582179cc38427d182acfc24f5e3f91055",
+            "selected_model": "PERSISTENCE",
+            "input_lags": 3,
+            "source_membership_count": 44626,
+            "source_membership_sha256": "de77ee77a21b57282c44a1eff787672c363d8662b28e883550e96b960d5da06b",
+            "split_counts": {
+              "TEST": 10066,
+              "TRAIN": 25920,
+              "VALIDATION": 8640
+            },
+            "pair_counts": {
+              "TEST": 10063,
+              "TRAIN": 25917,
+              "VALIDATION": 8637
+            },
+            "test_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.01210076517936997,
+                "pair_count": 10063,
+                "rmse": 0.023791259918181814
+              },
+              "RIDGE": {
+                "mae": 0.01275996319686965,
+                "pair_count": 10063,
+                "rmse": 0.024037389582453064
+              }
+            },
+            "validation_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.010399444251476209,
+                "pair_count": 8637,
+                "rmse": 0.019812131412780553
+              },
+              "RIDGE": {
+                "mae": 0.010713515971350616,
+                "pair_count": 8637,
+                "rmse": 0.019743840003990133
+              }
+            }
+          },
+          {
+            "model_id": "SALINITY",
+            "variable_code": "SALINITY",
+            "artifact_sha256": "c3e63937806a9ca8d588239bc0abf56d88a394614fe90f59c38126dc033bf2af",
+            "selected_model": "PERSISTENCE",
+            "input_lags": 3,
+            "source_membership_count": 44625,
+            "source_membership_sha256": "a638304df1739b894c6ca51acfc1973e622afc2cdbb8a11d7ebb060a7040ff07",
+            "split_counts": {
+              "TEST": 10065,
+              "TRAIN": 25920,
+              "VALIDATION": 8640
+            },
+            "pair_counts": {
+              "TEST": 10062,
+              "TRAIN": 25917,
+              "VALIDATION": 8637
+            },
+            "test_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.021066388391969785,
+                "pair_count": 10062,
+                "rmse": 0.31945007470429987
+              },
+              "RIDGE": {
+                "mae": 0.11733347273068281,
+                "pair_count": 10062,
+                "rmse": 0.3329816583170824
+              }
+            },
+            "validation_metrics": {
+              "PERSISTENCE": {
+                "mae": 0.025104781752923452,
+                "pair_count": 8637,
+                "rmse": 0.3601201509195202
+              },
+              "RIDGE": {
+                "mae": 0.09956006971576319,
+                "pair_count": 8637,
+                "rmse": 0.3639511291732421
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "db_counts": {
+    "retraining_history": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "feature_definition": {
+      "count": 9,
+      "state": "PRESENT"
+    },
+    "feature_value": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "retraining_pool": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "source_contract_packets": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "source_contract_decisions": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "dataset_registry": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "model_registry": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "approval_history": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "source_observation_binding": {
+      "count": 0,
+      "state": "PRESENT"
+    },
+    "ai_label": {
+      "count": 0,
+      "state": "PRESENT"
+    }
+  },
+  "db_proof_sha256": "715b23df418fd8da19ea63c568dce4ff181165deef7fda1f200d5ace75b8c16c",
+  "db_raw_source_counts": [
+    {
+      "source_system": "MDC_WEB_OBS_ST_SIMULATED",
+      "rows": 714,
+      "first_utc": "2026-09-15 15:05:00",
+      "last_utc": "2026-09-18 02:30:00"
+    },
+    {
+      "source_system": "MDC_WEB_OBS_VBU_SIMULATED",
+      "rows": 12907,
+      "first_utc": "2026-09-15 15:00:15",
+      "last_utc": "2026-09-23 03:10:45"
+    }
+  ],
+  "db_standard_version_counts": [
+    {
+      "standardization_version": "OBS-STD-1.0",
+      "rows": 4074,
+      "first_utc": "2026-09-15 15:00:15",
+      "last_utc": "2026-09-18 02:33:45"
+    }
+  ],
+  "conditional_contract_probe": {
+    "fixture_source": "SYNTHETIC_ONLY",
+    "fit_executed": false,
+    "engine_rows_accepted": 380,
+    "engine_row_errors": 0,
+    "requirements_status": "NOT_EVALUATED",
+    "requirements_blockers": [
+      "SOURCE_FACT_PERIOD_REQUIRED:clock",
+      "SOURCE_FACT_PERIOD_REQUIRED:qc",
+      "SOURCE_FACT_PERIOD_REQUIRED:semantic",
+      "SOURCE_FACT_PERIOD_REQUIRED:sensor_episode",
+      "SOURCE_FACT_PERIOD_REQUIRED:unit"
+    ],
+    "requirements_sha256": "01c9026b4ad7b5e80b8deb7905d4d49b8631416048ced1b862240569281db571"
+  },
+  "source_files": [
+    {
+      "file": "ocean-ai-platform/backend/app/ml/adapter_registry.py",
+      "sha256": "6604b3b10c42067c54dfe734c4e3694fbcea7402c8bab1591885b52aac1adc12"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/typed_adapters.py",
+      "sha256": "8acc5ed23645ef92cc91f2e6c160e813096ccfa59499ac6e1218e4e22aca1e0b"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/comparison_runner.py",
+      "sha256": "011c5a8c081cdb9bc4e1874fe8fd6fe573f9928d8404b3eb6f07718030003a94"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/job_queue.py",
+      "sha256": "82540fc9ed1ff73cd561a9e0d2d0bc46691dc3015c1e80850bb6798939b338bf"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/candidate_authority.py",
+      "sha256": "d0515d0128a8896193993e8007f0bff1a7d9895a9ff4623d77ed173f2148a0e5"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/serving.py",
+      "sha256": "dc42ced80718c8f1ff1c83f2bc7eafb5b9e1b698a5f90931f65e7d08c872cbaf"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/services/anomaly_analysis.py",
+      "sha256": "773919d6fd36e130c79ad26aef666e0d04200e2af20c0a4ba87512ac19040646"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/services/qc_analysis_readiness.py",
+      "sha256": "7c0826a27c17430b74708a85c762c109781f9658d61819896e35475ace1ac3ed"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/services/qc_raw_diagnostic.py",
+      "sha256": "af451ab81f161e410fc119e5637ce1ccb08a3647a25b5b4e333805c64c81c371"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/services/raw_next_row_training.py",
+      "sha256": "3b00e4e2946f0b9474ba4d578b970c713f547a4d05d26873d5ee2b0425e97f05"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/api/routes_forecasting.py",
+      "sha256": "0d7fc9ae059b0a8575ec1a7d9975c2a72a49aa295503c6ef6f910ca1301e2f6b"
+    },
+    {
+      "file": "ocean-ai-platform/frontend/src/components/AnalysisWorkspace.tsx",
+      "sha256": "0a52da828f4ab25c6c24e86527d40a333bd8a4c4ba0c1c3a10f10fe4c4b2ea0c"
+    },
+    {
+      "file": "ocean-ai-platform/frontend/src/components/TrainingWorkbench.tsx",
+      "sha256": "d7e1a77d82ba03c4f527f4ef436abc98d3c221c6b64ad00526c6cd66e4f35584"
+    },
+    {
+      "file": "ocean-ai-platform/backend/app/ml/model_scope_matrix.json",
+      "sha256": "01bc37643f2a3279bfe216f88d20bdb7381cf495104aa7025ce617db766b7fb6"
+    }
+  ],
+  "audit_evidence_sha256": "40f148b4818bd8a4bb1e06372a7164af3d07732134a7d11efad5bbe04d1849a1",
+  "verification_base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
+  "source_files_scope": "READONLY_AUDIT_IMPLEMENTATION_BEFORE_PERIOD_CODEC_FIX",
+  "operational_completion": false,
+  "new_training_awaits_user_scope_decision": true,
+  "purpose_summary": {
+    "FORECASTING": {
+      "development_raw_release_models": 3,
+      "operational_models": 0,
+      "target": "NEXT_OBSERVED_ROW_FORECAST",
+      "approved_datasets": 0
+    },
+    "ANOMALY_DETECTION": {
+      "implemented": "TRAIN_NORMAL_ROBUST_SCORE_AND_CONDITIONAL_SIX_MODES",
+      "approved_labels": 0,
+      "operational_models": 0
+    },
+    "DRIFT_DETECTION": {
+      "implemented": "CONDITIONAL_PAIRED_REFERENCE_ANOMALY_MODE",
+      "separate_training_task": false,
+      "distribution_drift_retraining_worker": false
+    },
+    "SPATIO_TEMPORAL_ANALYSIS": {
+      "implemented": "TYPED_SINGLE_TARGET_REPRESENTATION_BASELINES",
+      "whole_spatial_field_or_graph_model": false,
+      "approved_geometry_datasets": 0
+    }
+  },
+  "period_contract_fix": {
+    "schema_version": "source-fact-period-alignment-verification-1",
+    "checked_at_utc": "2026-10-09T09:32:51.662324+00:00",
+    "before_readonly_proof_sha256": "40f148b4818bd8a4bb1e06372a7164af3d07732134a7d11efad5bbe04d1849a1",
+    "source_files": [
+      {
+        "file": "ocean-ai-platform/backend/app/ml/anomaly_artifact.py",
+        "sha256": "7ffbf90f96bd89e6006d9527b9f3d7f3fe7880785e24377db4f1f9ee6f79f774"
+      },
+      {
+        "file": "ocean-ai-platform/backend/app/services/anomaly_analysis.py",
+        "sha256": "e69c6192cdea3a72009146007acdce0d6b1994d77ef9b091f2b362e871308f98"
+      },
+      {
+        "file": "ocean-ai-platform/backend/app/services/qc_analysis_readiness.py",
+        "sha256": "07ff0df600b021643d46d8b27d7baa7734492a07a22c1bef4e8bb1b49de7cf87"
+      },
+      {
+        "file": "ocean-ai-platform/backend/app/services/qc_rule_engine.py",
+        "sha256": "9993072a38e264808c828a93a460908bef59a6e9e8d58cdc11198425eef2ff51"
+      },
+      {
+        "file": "ocean-ai-platform/backend/tests/test_source_fact_period.py",
+        "sha256": "8701d20a7549b825e3e50a2252fc5ed48a3439ed6a244ce2fee661be9d314457"
+      }
+    ],
+    "canonical_fact_fields": {
+      "anomaly_series": [
+        "start",
+        "end"
+      ],
+      "rule_source_binding": [
+        "effective_start",
+        "effective_end"
+      ]
+    },
+    "period_boundary": "[start,end)",
+    "alias_fallback": false,
+    "metadata_availability_policy": "Supplied available_at/version_available_at must be explicit offset instants no later than as_of; missing fields remain undeclared development facts and are never source authority.",
+    "after_probe": {
+      "source": "SYNTHETIC_ONLY",
+      "engine_rows_accepted": 380,
+      "engine_row_errors": 0,
+      "requirements_status": "CONDITIONAL_INPUT_READY",
+      "requirements_blockers": [],
+      "approved": false,
+      "production_eligible": false,
+      "training_executed": false
+    },
+    "tests": {
+      "period_anomaly_rule_raw": {
+        "passed": 174,
+        "failed": 0,
+        "seconds": 10.74
+      },
+      "final_period_focused": {
+        "passed": 36,
+        "failed": 0,
+        "log": "source-fact-period-final.log"
+      }
+    },
+    "fingerprints": {
+      "anomaly": "3adc57e320aa6572feb99d8015fa4fe97e9d0e4e93ddad4994d27eefcaddcb15",
+      "rule": {
+        "implementation_sha256": "9993072a38e264808c828a93a460908bef59a6e9e8d58cdc11198425eef2ff51",
+        "catalog_sha256": "7d30ad39f1ff40bbfb2224866f869ffd53782e958a94f3e71bf767b35e8d4889",
+        "fact_contract_sha256": "07ff0df600b021643d46d8b27d7baa7734492a07a22c1bef4e8bb1b49de7cf87"
+      }
+    },
+    "experimental_release_unchanged": {
+      "status": "READY",
+      "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
+      "model_count": 3,
+      "blockers": [],
+      "experimental": true,
+      "nonoperational": true,
+      "approved": false,
+      "production_eligible": false
+    },
+    "audit_actions": {
+      "new_actual_training": false,
+      "new_actual_deployment": false,
+      "db_mutation": false,
+      "server_restart": false,
+      "account_changes": false,
+      "synthetic_regression_tests": true
+    }
+  },
+  "period_contract_fix_evidence_sha256": "da21d88398a7650e6dc4de282821d6250c69dffd5da1b57a9130ddd5bbe0e6ef"
+}

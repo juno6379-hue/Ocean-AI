@@ -14,7 +14,7 @@
 |---|---|---|
 | Dashboard | `/api/lake/summary`, `/api/lake/monitoring`, `/api/stations`, `/api/reports` | 선택 원천·기간·관측망과 전체 기준 범위를 구분한다. 보유 관측소·행 수, 원천 QC 존재 비율은 장비 정상·예상 수집률이 아니다. |
 | 관측 현황 | `/api/lake/summary`, `/api/stations`, `/api/lake/metric-completion`, `/api/lake/stations/{station_id}`, `/api/lake/series?tail=true`, `/api/stations/{station_id}/photograph` | 동일 기준일·시각으로 큰 지도·휠 확대/축소, 해역·관측소·기간 선택, 실제 값과 확대 그래프·공식 사진을 제공한다. 원천 행 수와 산정 근거는 하단에서 펼친다. [32 검증](32_OBSERVATION_WORKSPACE_ASOF.md)을 따른다. |
-| QC Copilot | `WorkflowReviewPanel`의 evidence/analyze·workflows, 기존 `AnalysisWorkspace` lake 조회 | exact scope 분석·score/coverage·누락·충돌·PENDING·승인/반려·재개를 표시한다. 계정 미설정이면 분석/조회만 가능하다. |
+| 품질 현황 (QC) | `QCWorkspace`의 qc/context·overview, `QCCandidateDrawer`의 qc/candidates, 기존 workflow 결정·재개 | 기본 오늘 1차 QC 집계·우선 후보·±2h 실제 근거 상세를 연결한다. legacy 관측 native cutoff는 보존 원문 모드다. 새 전체 검증 상태는 [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)를 따른다. |
 | AI Insights | 같은 `AnalysisWorkspace`의 Insights 모드와 관측소 기준 좌표 | 보유 자료·근거를 비교한다. 기존 `/ai-insights/summary`의 휴리스틱 위험 점수 화면과 구분한다. |
 | Equipment | `/api/lake/equipment-evidence`, lake summary, 관측소 기준 좌표 | 문서의 설치·장비 근거를 표시한다. 설치 문구만으로 센서 운영기간·실시간 health를 확정하지 않는다. |
 | MLOps | `/api/mlops/summary`, `/retrain-history`, `/adapters`, 고정 학습 입력 및 별도 `/experimental-api` | 승인 입력 선택·preflight·큐 요청을 연결하고, 실제 7월 원시 자료의 개발용 학습·시험 배포를 별도 패널로 표시한다. 운영 Registry와 시험 모델을 분리한다. 학습 artifact 다운로드 UI는 미연결이다. |
@@ -22,6 +22,10 @@
 | Alerts | `/api/approvals/pending`, `/approve`, `/reject` | 일반 QC_CHANGE·AI_LABEL·REPORT·MODEL_DEPLOY 대기 업무를 처리한다. Source Contract·Dataset·Protocol 전체의 승인 inbox는 아니다. |
 
 근거 component: [Dashboard](../ocean-ai-platform/frontend/src/pages/Dashboard.tsx), [AnalysisWorkspace](../ocean-ai-platform/frontend/src/components/AnalysisWorkspace.tsx), [EquipmentWorkspace](../ocean-ai-platform/frontend/src/components/EquipmentWorkspace.tsx), [MLOps](../ocean-ai-platform/frontend/src/pages/MLOps.tsx), [Reports](../ocean-ai-platform/frontend/src/pages/Reports.tsx), [Alerts](../ocean-ai-platform/frontend/src/pages/Alerts.tsx).
+
+QC는 [QCWorkspace](../ocean-ai-platform/frontend/src/components/QCWorkspace.tsx)·[차트](../ocean-ai-platform/frontend/src/components/QCWorkspaceCharts.tsx)·[검토 Queue](../ocean-ai-platform/frontend/src/components/QCCaseReview.tsx)·[상세 Drawer](../ocean-ai-platform/frontend/src/components/QCCandidateDrawer.tsx)를 사용한다. 6개 기간 지표와 3×2 패널을 같은 window/filter로 조회하며 source·Flag·분모는 backend contract를 확인한다. 전체 분 관측행을 전송하지 않는다. 원문 표본과 실제 Rule candidate는 분리한다. AI 미실행·모델 없음·Evidence 없음·부분 자료·API 오류를 정상률 0으로 대신하지 않는다. 이전 월별 UI 시험 통과와 새 일일/Drawer 완료 근거는 구분한다.
+
+장기 Drift·모델 비교는 AI 인사이트의 역할로 유지한다. QC 상세에는 이미 저장된 정확 후보의 AI 결과만 보여주며 가짜 기대값 선을 생성하지 않는다. 계정 미설정·workflow 미연결이면 승인 버튼의 사유를 표시한다. 관측에서 전달된 명시적 native 기준일·시각은 메뉴 이동에서도 보존하며 fresh `/qc`는 backend 오늘 시계를 사용한다.
 
 lake 조회는 같은 snapshot인지 확인하고 로딩·오류·빈 범위를 분리한다. 참조 좌표나 문서 근거 조회 실패는 별도 메시지로 남기며 성공한 모의 값으로 덮지 않는다. 승인되지 않은 의미·단위·QC와 미확정 장비 기간을 정상 성과로 해석하지 않는다.
 
@@ -59,3 +63,9 @@ System의 DevelopmentStageReview는13단계×구현/시험/자료/승인/운영�
 ## 10/9 운영 진단·가상 품질 시험
 
 상단 정상·주의·이상과 목록 운영상태 필터·관측소 근거는 동일한 최근 24시간 진단을 사용한다. 기준 `2026-07-09 15:41:20`의 실제 61개소는 정상58·주의2·이상1이며 장비 건강 확정과 수신 수집률은 구분한다. 하단 별도 가상 시험에서 15개 시나리오의 실제 Rule/AI/Fusion/영속 승인 gate를 실행하고 주입 값·그래프·검증 결과를 표시한다. 실제 집계와 합산하지 않는다. 최종 frontend62시험·build·실제응답계약·브라우저 결과는 [33 검증 기록](33_OPERATION_DIAGNOSTICS_AND_SYNTHETIC_QC.json)에 남긴다.
+
+## 10/9 일일 QC 운영 화면
+
+후속 [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)의 QCWorkspace는 backend 오늘부터 시작한다. 6 KPI·공통 기간/필터·동적 Flag·hourly/daily 집계·실제 Rule·행렬·우선 검토 큐와 QCCandidateDrawer를 연결했다. 보존 원문 표본은 이상 후보와 분리하며 실측 21.38을 불필요하게 반올림하지 않는다. 실제 stored AI·장비/점검/Evidence·검토 이력은 exact source/센서/판본·가용 시각이 맞을 때만 표시한다.
+
+기존 workflow의 role/owner/revision/추천 hash 승인·반려·resume을 연결하고 불확실한 판본/중복 연결은 차단한다. candidate Final QC 수정은 정확한 승인 대상·판본 계약이 없어 비활성 상태다. 등록 QC의 현재 범위는 SCALAR이며 실제 승인 source/QC/model 입력은 0이다. 격리 양성 경로와 실제 원장 결과를 구분하며 최종 시험·브라우저·성능 제한은 [검증 JSON](36_QC_OPERATIONAL_DASHBOARD_VERIFICATION.json)에 기록한다.

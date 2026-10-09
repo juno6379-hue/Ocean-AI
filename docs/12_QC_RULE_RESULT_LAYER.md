@@ -73,6 +73,8 @@ window와 보조 관측·통계 baseline의 `available_at`은 분석 `as_of` 이
 
 ## 평가와 현재 상태
 
+2026-10-09 후속 일일 운영 화면과 읽기 전용 context/overview/candidate 경로는 [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)을 따른다. 12종 엔진 catalog·실제 등록 Rule·저장된 실행 결과를 구분하고 원문 QC/MQ/N1을 임의로 확정 Flag에 매핑하지 않는다. source/QC 판본·exact sensor episode·기간과 가용 시각을 검증하며 현재 운영 입력은 0이다. registered SCALAR 지원과 typed QC·미수신 슬롯·candidate Final QC 연결의 남은 범위도 같은 문서에 명시했다.
+
 모델 품질 평가는 [MLOps](19_MLOPS_VERSION_AND_EVALUATION.md)의 별도 fixed evaluation/acceptance 계약을 따른다. human quality label과 rule QC flag를 분리하고 미평가 mask·false-good 위험을 함께 평가한다. source 표기율, rule score, cosine 검색 점수는 품질 정확도나 승인율이 아니다.
 
 [12종 시험](../ocean-ai-platform/backend/tests/test_qc_rule_engine.py)은 각 검사 정상/이상, 원문 붙임 1의 범위/sentinel/간격별 SP, 미평가·경계·단위 동등성을 검증한다. [API 시험](../ocean-ai-platform/backend/tests/test_qc_rule_api.py)은 격리된 source 승인→적재→QC 저장과 변조/미승인 차단을 검증한다. 2026-10-08 실제 보존 Parquet의 500개 draft locator와 7개 원문 표기는 정확히 일치했지만 source 의미·단위·시간·센서 계약이 미확정이어서 12×500=6,000 결과 모두 `NOT_EVALUATED`였다. 이 표본을 전체 원천 또는 운영 승인으로 확대하지 않는다. 같은 날 운영 확인의 승인 원장 0은 시험 승인과 별개다.

@@ -64,6 +64,16 @@ python -c "from app.core.database import Base,engine; from app.models import dom
 
 기존 PostgreSQL에는 [QC evidence nullable3열](../ocean-ai-platform/backend/migrations/20261008_qc_rule_evidence.sql)과 [workflow run/transition2테이블](../ocean-ai-platform/backend/migrations/20261008_agent_workflow.sql)을 명시 적용한다. 파일은 additive·멱등 DDL이며 기존 결과를 EVALUATED 또는 APPROVED로 backfill하지 않는다. ApprovalHistory/QCRuleResult 등 기존 FK 대상이 먼저 있어야 한다. 검토한 DB 연결에서 각 SQL을 적용하고 열·제약을 확인한다.
 
+10/9 일일 QC reader에는 [binding clock migration](../ocean-ai-platform/backend/app/scripts/migrate_binding_clock_20261009.py)의 `source_observation_binding.bound_at_utc`도 필요하다. PostgreSQL nullable timestamptz이며 기본값·소급 채움이 없다. 기존 `created_at`과 승인 payload를 유지하고 신규 승인 ingest만 같은 트랜잭션에서 명시 UTC를 저장한다. 예전 binding의 NULL 시각은 미확인으로 남는다. schema migration을 먼저 확인한 뒤 새 reader/writer를 실행한다.
+
+```powershell
+python -m app.scripts.migrate_binding_clock_20261009
+# 검토한 DB 연결에만 명시 적용
+python -m app.scripts.migrate_binding_clock_20261009 --apply
+```
+
+기본 명령은 DDL 문자열만 출력한다. 10/9 시험 DB는 기존 binding 0건을 확인한 뒤 이 nullable 열만 추가하고 재적용 멱등성과 전체 원장 건수 불변을 대조했다. 실제 원천·승인·QC/모델 기록을 만들거나 기존 시간대를 확정한 작업은 아니다. [36 검증·schema 변경 기록](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)을 따른다.
+
 실제 계정은 사용자 지시로 업무 수행 시점에 설정한다. `API_IDENTITIES={}`에서도 readonly QC 평가·loopback anomaly fit/analyze·Evidence Fusion을 검토할 수 있다. 실제 workflow 생성/승인/재개는 계정/role을 요구한다. 개발 선언과 JSON artifact는 source/dataset/model 승인 원장에 적재되지 않는다.
 
 현재 최신 개발 웹은 별도 backend8010·frontend5174다. `VITE_API_BASE_URL=http://127.0.0.1:8010/api`를 해당 Vite 세션에 설정한다. Chroma 기본8001과 겹치지 않는다. 일반 신규 설치의 기본8000/5173은 아래와 같다.
