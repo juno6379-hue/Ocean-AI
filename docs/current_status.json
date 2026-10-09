@@ -1,8 +1,8 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T14:58:44.035876+00:00",
+  "as_of": "2026-10-09T16:32:01.496868+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/38 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/39 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
       "passed": 1106,
@@ -59,7 +59,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Frozen isolated backend/frontend regression, actual QC/AI sample HTTP and browser workflows, unchanged 13 operational tables and worker queue; historical production gates retained separately",
+    "method": "Frozen frontend regression and actual QC/AI menu sample/live browser flows; previous backend source hashes unchanged; 13 operational table fingerprints and worker queue unchanged",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -76,20 +76,19 @@
       "combined_passed": 14,
       "log_sha256": "61d6498acbe77d31f7453fc3ccb077bddbcb7cb0fb2d7cd6093971d0ec6678fd"
     },
-    "frontend_build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
+    "frontend_build_log_sha256": "21c14c1e71443e1963e844914516ee2e52220af07871b698878f2d89624953dc",
     "metric_browser": "PASS",
     "metric_browser_receipt_sha256": "540089ebc6552a3302274f30a3e7fd00f28bb88596ff25a98818737bfaa2a33a",
     "frontend_tests": {
-      "passed": 146,
+      "passed": 155,
       "failed": 0,
-      "skipped": 0,
       "build": "PASS",
       "lint_existing_warnings": 12,
       "new_qc_ai_lint_warnings": 0,
-      "log_sha256": "f21179ce686ee2191e539fe15ec06b5b5489965d67ae2d433aacc44f139e9f57",
-      "build_log_sha256": "2e79929766f693eb62280766aac9736caf108e35a669f7238c16eae2ff6348a8",
-      "lint_log_sha256": "a02faaa3bf12f17160af55c77a3b16829f812f12b442bb5ff37383fc97a1f97c",
-      "date": "2026-10-09"
+      "date": "2026-10-10",
+      "log_sha256": "eb4bdbd6b7c114d7ab51cd7192bdfc3ea1f9773580d29af7f9f51fc2e2b7539d",
+      "build_log_sha256": "21c14c1e71443e1963e844914516ee2e52220af07871b698878f2d89624953dc",
+      "lint_log_sha256": "7de80acb70b08c6c85d9e587ff7f8bbb40b191fb4d84f51085f17cf7a5012595"
     },
     "postgresql_full_restore": {
       "status": "PASS",
@@ -568,6 +567,109 @@
         "ocean-ai-platform/frontend/tests/qc-sample-workspace-runtime.mjs": "bda6a524ca8a96589d4e6de3da0458b9f39949889607ef32afff7ea151310fc8",
         "ocean-ai-platform/frontend/tests/qc-sample-workspace.test.mjs": "10c3a1ba9e05ada35e699c736e62ff3ed5d3569976d13336b3eccecf470dcc84"
       }
+    },
+    "sample_data_workspace_entry": {
+      "document": "39_SAMPLE_DATA_WORKSPACE_ENTRY.md",
+      "receipt": "39_SAMPLE_DATA_WORKSPACE_ENTRY.json",
+      "status": "COMPLETE_SAMPLE_DEFAULT_WITH_EXPLICIT_LIVE_SWITCH",
+      "verification": {
+        "frontend": {
+          "checked_at_utc": "2026-10-09T16:28:16.830282+00:00",
+          "frontend_passed": 155,
+          "frontend_failed": 0,
+          "build": "PASS",
+          "lint": "PASS",
+          "source_files": 109,
+          "source_unchanged": true,
+          "backend_unchanged": true,
+          "source_freeze_sha256": "c05e85776623d9a6da9e214fa69c740f120584ca4ae5f85415381320a4bf57b6",
+          "logs_sha256": {
+            "tests": "eb4bdbd6b7c114d7ab51cd7192bdfc3ea1f9773580d29af7f9f51fc2e2b7539d",
+            "build": "21c14c1e71443e1963e844914516ee2e52220af07871b698878f2d89624953dc",
+            "lint": "7de80acb70b08c6c85d9e587ff7f8bbb40b191fb4d84f51085f17cf7a5012595"
+          }
+        },
+        "lint_existing_warnings": 12,
+        "new_lint_warnings": 0,
+        "backend": {
+          "rerun": false,
+          "unchanged_files": 279,
+          "previous_passed": 1106,
+          "previous_skipped": 1,
+          "previous_document": "38_QC_AI_SAMPLE_WORKFLOW.json"
+        },
+        "api_review": {
+          "passed": 78,
+          "failed": 0,
+          "requests": 63,
+          "receipt_sha256": "74a9a4a129a9fae0920ce0839aca76797491291ac97f97a17ea68d9627a41441"
+        },
+        "browser": {
+          "passed": 29,
+          "failed": 0,
+          "viewports": [
+            {
+              "page": "QC",
+              "width": 890,
+              "height": 836
+            },
+            {
+              "page": "AI",
+              "width": 1280,
+              "height": 720
+            }
+          ],
+          "receipt_sha256": "ce138e2a3eda84774e27d1235624142e07da6e17972909f46f1b2569425cca63",
+          "screenshots": [
+            {
+              "name": "qc-default-sample-final.png",
+              "sha256": "323e27cf63f29766d753a9d876c5c6c5ac9403850444a9066cd9f2193756efe2"
+            },
+            {
+              "name": "ai-default-sample-final.png",
+              "sha256": "01ec8fb16325795a7412624d99be68e76bc19c2e2b70484489c1f6ae2210ad50"
+            }
+          ]
+        },
+        "operational_audit": {
+          "unchanged": true,
+          "tables": 13,
+          "queue_unchanged": true,
+          "queue_count": 0,
+          "counts": {
+            "observation_raw": 13621,
+            "observation_standard": 4074,
+            "qc_rule_result": 0,
+            "source_observation_binding": 0,
+            "source_contract_packets": 0,
+            "source_contract_decisions": 0,
+            "approval_history": 0,
+            "dataset_registry": 0,
+            "model_registry": 0,
+            "agent_workflow_run": 0,
+            "agent_workflow_transition": 0,
+            "retraining_history": 0,
+            "retraining_pool": 0
+          },
+          "receipt_sha256": "c2d0462f919fd55b45f6c21050afcbebfeda22d9bd0462a3fa6c9371c33aaaec"
+        }
+      },
+      "code_sha256": {
+        "ocean-ai-platform/frontend/src/components/Layout.tsx": "940ff4fb431cf53a3e82e9a11663a19a982260dd4e7ab9de1dc02c0afb7f9a3d",
+        "ocean-ai-platform/frontend/src/components/MenuPurpose.tsx": "47797bc56d32c79a87b1d9b9a956090b3e845337452403f3bdf0c783813d9176",
+        "ocean-ai-platform/frontend/src/components/QCWorkspace.tsx": "5c7fc760ba98fb539791076cae800cd5f75b2f7d0402238a19e03d7654440ff1",
+        "ocean-ai-platform/frontend/src/data/workspaceMode.ts": "e13dc32ae4709920dee516f114c1e16417dc3bc2516c5610ff71fc9f6e505720",
+        "ocean-ai-platform/frontend/src/pages/AIInsights.tsx": "928219333d9a766118a8738df11a435504ecfba6b103207c69183d58c6d67312",
+        "ocean-ai-platform/frontend/src/pages/AIInsightsSample.tsx": "84ed0ae03095686f807625266575d5404451fa610d161a0e9b8f750fd74d1278",
+        "ocean-ai-platform/frontend/src/pages/QCCopilot.tsx": "98dca46e2c84e2afa09964676dff52ecbb07aa2cb1c3aea5ed581780b5669d50",
+        "ocean-ai-platform/frontend/src/pages/QCSample.tsx": "0f08eefbe7c6e071e366aa829eef5eee696e2b645111598033f52b3cde0ae6b3",
+        "ocean-ai-platform/frontend/tests/ai-insights-sample-ui.test.mjs": "94950974bc7bdf46f0ba51c8a48160c39551aa25b63c86ece94ebf812b86f7cd",
+        "ocean-ai-platform/frontend/tests/qc-ai-default-sample.test.mjs": "8169da2485330b220f33679bfc4200f40ab59f222eca27408f296f8376ad74a4",
+        "ocean-ai-platform/frontend/tests/qc-daily-ui.test.mjs": "dcdf339210a253dc45ec0013a1ff6726f28815c9e98d64457ed771646ca6e861",
+        "ocean-ai-platform/frontend/tests/qc-sample-ui.test.mjs": "2ca3ba80ab3aca49986513316d9b4579adc2bc890d27fa4f4ce25f843b052462",
+        "ocean-ai-platform/frontend/tests/qc-sample-workspace.test.mjs": "c4e9f3ca90047759ea4eb0ec6d7bcff9b9dfdac80ce21327764b5915700949af"
+      },
+      "production_completed": false
     }
   },
   "runtime": {
@@ -611,7 +713,8 @@
       "ai_sample_enabled": true
     },
     "qc_sample_page_url": "http://127.0.0.1:5174/qc?source=SAMPLE",
-    "ai_sample_page_url": "http://127.0.0.1:5174/ai-insights?source=SAMPLE"
+    "ai_sample_page_url": "http://127.0.0.1:5174/ai-insights?source=SAMPLE",
+    "ai_page_url": "http://127.0.0.1:5174/ai-insights"
   },
   "database_counts": {
     "source_contract_packets": 0,
@@ -827,7 +930,7 @@
     "runtime_is_canonical_workstation_copy": true,
     "session_http_status": 503
   },
-  "database_counts_checked_at": "2026-10-09T14:57:43.803536+00:00",
+  "database_counts_checked_at": "2026-10-09T16:32:00.498433+00:00",
   "additive_schema_application": {
     "checked_at": "2026-10-08T05:07:26.153330+00:00",
     "files": [
@@ -1046,7 +1149,7 @@
     "physical_qc_evaluated": 0,
     "production_models": 0
   },
-  "verification_base_revision": "8853038d3d6bd1ad704b2739fb1c9616624e915c",
+  "verification_base_revision": "9a464ab113f03a70e278255f00489759b3c50098",
   "experimental_development_release": {
     "document": "30_EXPERIMENTAL_TRAIN_DEPLOYMENT.json",
     "release_id": "6a1e751fbbd9b2a28cc8cecd228e5eda4283872c38dc39e9950065b3fac20989",
@@ -1124,6 +1227,7 @@
       "fitted_development_baselines": true,
       "operational_models": 0,
       "operational_writes": 0
-    }
+    },
+    "sample_workspace_default": "SAMPLE_ON_NEW_QC_AI_ENTRY_WITH_EXPLICIT_LIVE_SWITCH"
   }
 }

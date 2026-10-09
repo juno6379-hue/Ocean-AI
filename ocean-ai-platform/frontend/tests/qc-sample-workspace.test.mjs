@@ -34,6 +34,7 @@ async function mount(api,initial='/qc?source=SAMPLE',withLayout=false){
 }
 async function dispose(){if(root)await act(async()=>root.unmount());container?.remove();root=null;apiClient.clearOperatorToken();await win.happyDOM.waitUntilComplete();}
 const label=text=>container.querySelector(`[aria-label="${text}"]`),button=text=>[...container.querySelectorAll('button')].find(b=>b.textContent.trim()===text);
+const assertLiveQCQuery=()=>assert.deepEqual(Object.fromEntries(new URLSearchParams(route.search)),{source:'REGISTERED',data_mode:'LIVE'});
 async function click(node){assert.ok(node,'Expected action must be rendered');await act(async()=>{node.dispatchEvent(new MouseEvent('click',{bubbles:true}));await new Promise(r=>setTimeout(r,15));});await flush();}
 async function change(node,value){assert.ok(node,'Expected source control must be rendered');await act(async()=>{Object.getOwnPropertyDescriptor(Object.getPrototypeOf(node),'value').set.call(node,value);if(node.tagName!=='SELECT')node.dispatchEvent(new Event('input',{bubbles:true}));node.dispatchEvent(new Event('change',{bubbles:true}));await new Promise(r=>setTimeout(r,15));});await flush();}
 async function choose(name){const scenario=sampleFixture.context.scenario_catalog.find(s=>s.scenario_id===name);await click([...container.querySelectorAll('.qs-table tbody button')].find(b=>b.textContent.trim()===scenario.label+' 상세'));}
@@ -47,7 +48,7 @@ test('React operational QC sample source mounts only the isolated engine workspa
 test('React source switching clears operational filters, preserves history and returns to actual empty QC without sample counts',async()=>{
  const initial='/qc?source=GD_OBS_ST_MONTHLY&station=DT_0028&item=WATER_TEMP&as_of_day=2026-07-09&as_of_time=15%3A41%3A20&sea=서해';
  try{await mount(apiFixture(),initial);assert.match(container.textContent,/선택 시간창 데이터 없음/);assert.ok(requests.some(r=>r.url.startsWith('/api/qc/overview?')));await change(label('QC 자료 경로'),'SAMPLE');assert.equal(route.search,'?source=SAMPLE');assert.equal(container.querySelectorAll('.qs-shortcuts button').length,4);await act(async()=>navigate(-1));await flush();assert.equal(new URLSearchParams(route.search).get('station'),'DT_0028');assert.equal(new URLSearchParams(route.search).get('item'),'WATER_TEMP');assert.equal(label('QC 자료 경로').value,'GD_OBS_ST_MONTHLY');assert.equal(container.querySelector('.qs-banner'),null);
-  await act(async()=>navigate(1));await flush();assert.equal(route.search,'?source=SAMPLE');await change(label('QC 자료 경로'),'REGISTERED');assert.equal(route.pathname,'/qc');assert.equal(route.search,'');assert.equal(label('QC 자료 경로').value,'REGISTERED');assert.equal(container.querySelector('.qs-shortcuts'),null);assert.equal(container.querySelectorAll('.qc-summary-card').length,6);assert.match(container.textContent,/선택 시간창 데이터 없음/);assert.doesNotMatch(container.querySelector('.qc-summary-cards').textContent,/대표 사례 4건 기준/);
+  await act(async()=>navigate(1));await flush();assert.equal(route.search,'?source=SAMPLE');await change(label('QC 자료 경로'),'REGISTERED');assert.equal(route.pathname,'/qc');assertLiveQCQuery();assert.equal(label('QC 자료 경로').value,'REGISTERED');assert.equal(container.querySelector('.qs-shortcuts'),null);assert.equal(container.querySelectorAll('.qc-summary-card').length,6);assert.match(container.textContent,/선택 시간창 데이터 없음/);assert.doesNotMatch(container.querySelector('.qc-summary-cards').textContent,/대표 사례 4건 기준/);
  }finally{await dispose();}
 });
 
@@ -60,14 +61,14 @@ test('React four sample scenarios keep one fixed aggregate scope; detail approva
 test('React switching an unfinished operational request to sample aborts its transport and discards a late operational packet',async()=>{
  const api=apiFixture();let release,pending;
  api.setHook((url,init,base)=>url.startsWith('/api/qc/overview?')?new Promise(resolve=>{pending=init;release=()=>resolve(json(operatingOverview(true)));}):base(url,init));
- try{await mount(api,'/qc');assert.ok(release);await change(label('QC 자료 경로'),'SAMPLE');assert.equal(pending.signal.aborted,true);await act(async()=>release());await flush();assert.equal(label('QC 자료 경로').value,'SAMPLE');assert.equal(container.querySelectorAll('.qs-shortcuts button').length,4);assert.equal(container.querySelector('.qc-summary-cards'),null);
+ try{await mount(api,'/qc?source=REGISTERED&data_mode=LIVE');assert.ok(release);await change(label('QC 자료 경로'),'SAMPLE');assert.equal(pending.signal.aborted,true);await act(async()=>release());await flush();assert.equal(label('QC 자료 경로').value,'SAMPLE');assert.equal(container.querySelectorAll('.qs-shortcuts button').length,4);assert.equal(container.querySelector('.qc-summary-cards'),null);
  }finally{if(release)release();await dispose();}
 });
 
 test('React leaving sample during an unfinished overview aborts it and prevents late sample data from replacing operational empty state',async()=>{
  const api=apiFixture();let release,pending;
  api.setHook((url,init,base)=>url.startsWith('/api/qc-sample/')&&url.endsWith('/overview')?new Promise(resolve=>{pending=init;release=()=>resolve(base(url,init));}):base(url,init));
- try{await mount(api);assert.ok(release);await change(label('QC 자료 경로'),'REGISTERED');assert.equal(pending.signal.aborted,true);await act(async()=>release());await flush();assert.equal(route.search,'');assert.match(container.textContent,/선택 시간창 데이터 없음/);assert.equal(container.querySelector('.qs-shortcuts'),null);assert.equal(container.querySelector('.qs-banner'),null);
+ try{await mount(api);assert.ok(release);await change(label('QC 자료 경로'),'REGISTERED');assert.equal(pending.signal.aborted,true);await act(async()=>release());await flush();assertLiveQCQuery();assert.match(container.textContent,/선택 시간창 데이터 없음/);assert.equal(container.querySelector('.qs-shortcuts'),null);assert.equal(container.querySelector('.qs-banner'),null);
  }finally{if(release)release();await dispose();}
 });
 

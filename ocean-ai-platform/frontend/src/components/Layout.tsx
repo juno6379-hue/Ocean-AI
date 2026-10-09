@@ -11,16 +11,15 @@ import OperatorSession from './OperatorSession';
 import WorkflowStatus from './WorkflowStatus';
 import MenuPurpose from './MenuPurpose';
 import { menuPurposeFor } from '../data/menuPurposes';
-import { observationContext } from '../data/observationPeriod';
+import { workspaceDataMode,workspaceMenuQuery } from '../data/workspaceMode';
 
 const Layout: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
   const search = new URLSearchParams(location.search);
-  const sampleMode=path==='/qc/sample'||(['/qc','/copilot','/ai-insights'].includes(path)&&search.get('source')==='SAMPLE');
+  const workspacePage=['/qc','/copilot','/ai-insights'].includes(path);
+  const sampleMode=path==='/qc/sample'||(workspacePage&&workspaceDataMode(search)==='SAMPLE');
   const compactWorkspace=path==='/observations'||path==='/qc'||path==='/qc/sample'||path==='/copilot'||(path==='/ai-insights'&&sampleMode);
-  const context = sampleMode?new URLSearchParams():observationContext(search);
-  const contextQuery=context.size ? `?${context}` : '';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -60,6 +59,7 @@ const Layout: React.FC = () => {
             </>
           )}
           <button
+            aria-label="메뉴 닫기"
             className="absolute top-4 right-4 lg:hidden text-slate-400 hover:text-white"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -74,7 +74,7 @@ const Layout: React.FC = () => {
             return (
               <Link
                 key={item.name}
-                to={item.path + (sampleMode&&['/qc','/ai-insights'].includes(item.path)?'?source=SAMPLE':contextQuery)}
+                to={item.path + workspaceMenuQuery(path,search,item.path)}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
                 title={`${item.name} · ${menuPurposeFor(item.path)?.purpose || ''}`}
@@ -117,7 +117,7 @@ const Layout: React.FC = () => {
             <Waves className="w-6 h-6 text-blue-600" />
             <h1 className="font-bold text-slate-800 text-sm">해양관측 플랫폼</h1>
           </div>
-          <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2 text-slate-600">
+          <button aria-label="메뉴 열기" onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2 text-slate-600">
             <Menu className="w-6 h-6" />
           </button>
         </header>

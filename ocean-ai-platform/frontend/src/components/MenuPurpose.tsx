@@ -1,14 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Compass } from 'lucide-react';
 import { menuPurposeFor, menuPurposes } from '../data/menuPurposes';
-import { observationContext } from '../data/observationPeriod';
+import { workspaceMenuQuery } from '../data/workspaceMode';
 import ObservationPeriodNotice from './ObservationPeriodNotice';
 
 export default function MenuPurpose(){
   const {pathname,search}=useLocation(),entry=menuPurposeFor(pathname);
   if(!entry)return null;
-  const context=observationContext(new URLSearchParams(search));
-  const query=context.size?`?${context}`:'';
+  const searchParams=new URLSearchParams(search);
   // The observation workspace has its own period and task controls beside the map.
   if(pathname==='/observations')return null;
   const basis=entry.basis==='daily'?'업무매뉴얼 제2장 PDF 2–3쪽: 일일점검 → 이상·조치 보고 → 점검 결과 확인'
@@ -17,7 +16,7 @@ export default function MenuPurpose(){
   return <section aria-label={`${entry.name} 업무 안내`} className="mx-4 mt-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex min-w-0 items-center gap-2"><Compass aria-hidden="true" className="h-4 w-4 shrink-0 text-blue-600"/><p className="text-xs font-medium leading-relaxed text-slate-700">{entry.purpose}</p></div>
-      <nav aria-label="다음 업무" className="flex flex-wrap items-center gap-2">{entry.next.map(path=><Link key={path} to={path+query} className="inline-flex items-center gap-1.5 rounded-md border border-blue-100 px-2.5 py-1.5 text-[11px] font-medium text-blue-800 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{menuPurposes[path].name}<ArrowRight aria-hidden="true" className="h-3 w-3"/></Link>)}</nav>
+      <nav aria-label="다음 업무" className="flex flex-wrap items-center gap-2">{entry.next.map(path=><Link key={path} to={path+workspaceMenuQuery(pathname,searchParams,path)} className="inline-flex items-center gap-1.5 rounded-md border border-blue-100 px-2.5 py-1.5 text-[11px] font-medium text-blue-800 hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">{menuPurposes[path].name}<ArrowRight aria-hidden="true" className="h-3 w-3"/></Link>)}</nav>
     </div>
     <ObservationPeriodNotice />
     <details key={pathname} className="mt-2 text-xs text-slate-600"><summary className="w-fit cursor-pointer rounded text-[11px] text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">현재 기능과 업무 범위</summary>

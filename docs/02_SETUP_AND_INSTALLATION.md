@@ -148,3 +148,7 @@ backend CLI: `python -m app.scripts.review_document_backlog --help`, `resume_doc
 AI 샘플 API는 별도의 `AI_INSIGHTS_SAMPLE_ENABLED=false`가 기본이다. 시험용 backend에서만 `QC_SAMPLE_ENABLED=true`, `AI_INSIGHTS_SAMPLE_ENABLED=true`, `ENVIRONMENT=development`를 명시하고 loopback으로 실행한다. production/staging은 flag가 true여도 404다. 기존 8000/5173·8001·8011을 재설정하지 않고 현재 검토용 8010/5174에서 확인한다. 사용자의 실제 계정·외부 AI API key·운영 worker/serving 활성화가 필요하지 않다.
 
 QC와 AI의 bootstrap·session·전용 token header는 서로 다르며 각각 서버 메모리에서만 존재한다. 샘플 학습은 작은 합성 배열에 대한 CPU 계산이며 SQL·원천 파일·학습 큐·serving 호출이 없다. 재학습 후보는 가상 제안이다. 보고서는 승인 후 **명시 재개**해야 다운로드할 수 있고 외부 발송은 수행하지 않는다.
+
+## 10/10 표준 QC·AI 메뉴의 샘플 자료 선택
+
+문맥 없는 `/qc`, `/copilot`, `/ai-insights`는 명시된 샘플 화면을 기본 제공한다. 샘플을 사용하는 검토 서버는 기존 두 sample flag를 명시 활성화해야 한다. 비활성 서버는 샘플 비활성 오류를 보여 주며 운영 자료로 자동 대체하지 않는다. 운영 화면으로 나가는 선택은 `data_mode=LIVE`를 URL에 남겨 새로고침과 메뉴 이동을 보존한다. 기존 원천·기간·관측소를 지정한 주소는 실제 조회를 유지한다. [39](39_SAMPLE_DATA_WORKSPACE_ENTRY.md)의 실행·검증 기록을 따른다.
