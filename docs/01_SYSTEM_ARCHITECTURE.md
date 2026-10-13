@@ -1,5 +1,7 @@
 # 01. 시스템 아키텍처
 
+2026-10-13 추가 검토: 현재 DuckDB에는 원천 4종을 묶은 공통 `observations` 뷰와 validation 결합 뷰가 있다. 실제 원천 Parquet의 물리 열 구성과 API/QC/학습 adapter는 서로 다르므로 전체 공통 Schema 전환 완료는 아니다. 권장 공통 DTO·Metadata Contract·repository와 소비 기능 변경 범위는 [40](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md)을 따른다. [41](41_OPERATIONAL_AUTO_MAPPING.md)은 별도로 구현한 시스템 운영 정책 계약·정확한 Binding·선택 범위의 PostgreSQL 관측 적재를 설명한다.
+
 기준일: 2026-10-08. 이 문서는 게시된 코드의 구성과 실행 경계를 설명한다. 문서 목록은 [docs 안내](README.md), 승인 원천과 모델 실행의 상세 계약은 [구현·검증 기록 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다.
 
 ## 구성과 데이터 흐름

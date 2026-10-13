@@ -19,6 +19,7 @@ const stationRow=(code,name)=>({station_code:code,station_name:name,held_rows:20
 const itemRow=(station,code,extra={})=>({source_group:'GR_OBS_ST',station_code:station,item_code:code,item_labels:'\uFFFD',month:'2026-07-01',held_rows:20,...extra});
 function response(url,config={}){
  const p=config.params||{};
+ if(url.endsWith('/auto-mapping/status'))return {enabled:false,mapping_version:'OPS-MDC-MAP-2.0',auto_approved_contracts:0,registered_bindings:0,first_timestamp_utc:null,last_timestamp_utc:null,variables:[]};
  if(url.endsWith('/foundation/summary'))return {verified_monthly_files:99,conversion:{state:'COMPLETE'},validation:{baseline_files:6149,new_monthly_verified_files:99,at:'fixture'},monthly_groups:[]};
  if(url.endsWith('/stations'))return [{station_id:'DT_0001',name:'인천'},{station_id:'DT_0002',name:'평택'},{station_id:'DB_ONLY',name:'보유자료 없음'}];
  if(url.endsWith('/lake/summary'))return {source:p.source,from_month:p.from_month,to_month:p.to_month,snapshot,stations:p.from_month==='2026-07'?[stationRow('DT_0001','\uFFFD'),stationRow('DT_0002','평택'),{...stationRow('EMPTY','빈 관측소'),held_rows:0}]:[]};

@@ -1,5 +1,7 @@
 # 04. API 명세
 
+2026-10-13 추가: `GET /api/source-contracts/auto-mapping/status`는 시스템 운영 정책의 활성 설정, 매핑 판본, 자동 APPROVED 계약 수, 등록 Binding 수, 실제 운영 관측 UTC 범위와 변수별 행 수를 반환한다. 등록 Binding은 보존 원장 건수이며 모든 계약이 현재 활성이라는 보장은 아니다. 계약 목록은 `approval_mode=SYSTEM_POLICY`, `approval_scope=OPERATIONAL_STANDARDIZATION_ONLY`를 사람의 전체 원천 검토와 구분한다. 상세·receipt GET은 시스템 receipt를 재검증하며, reviewer/admin만 같은 packet SHA를 지정해 REVOKED 처리할 수 있다. 철회는 적재 batch와 같은 PostgreSQL advisory lock을 사용한다. 자동 정책의 HTTP 승인·적재 endpoint는 없고 명시 활성화한 CLI가 실행한다. [운영 적재 기록](41_OPERATIONAL_AUTO_MAPPING.md), [공통 Schema 검토](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md)를 따른다.
+
 7월 현황 확장: `/api/lake/summary`, `/monitoring`, `/daily-reports`, `/equipment-evidence`, `/stations/{station}`의 기본 월은2026-07이다. `/api/lake/publication-comparison`은 기준월과 원천별 동결 검증 결과·명시적 예외를 제공한다. `/api/stations`와 `/api/stations/catalog/classifications`의 선택 `as_of_month=2026-07`은 승인과 별개인 읽기 전용 문서 참조다. [검증범위·checksum·STALE응답](27_JULY_REPORT_PARQUET_MATCH.md)을 확인한다.
 
 현행화: 2026-10-09. 10/8 읽기 전용 `/openapi.json`의 **154 경로·163 HTTP operation**을 게시된 router/prefix AST와 대조했고, 10/9에는 공식 사진 경로를 추가했다. 코드 기준은 [main.py](../ocean-ai-platform/backend/app/main.py)와 각 행의 router 링크다. 서버가 제공하는 `/docs`와 `/openapi.json`에서 세부 query 타입·enum·response schema를 확인한다. 최신 검증 API 주소는 `http://127.0.0.1:8010`이며 기존 canonical8000을 유지한다.
@@ -282,6 +284,7 @@ QC 평가·anomaly fit/analyze 상세 payload는 [QC](12_QC_RULE_RESULT_LAYER.md
 | 경로 / 구현 | Method | Request body | 필수 query |
 |---|---|---|---|
 | [/api/source-contracts](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | — |
+| [/api/source-contracts/auto-mapping/status](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | system mapping policy, registered binding counts, UTC span |
 | [/api/source-contracts/request](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | POST | POST: ReviewRequest* | — |
 | [/api/source-contracts/{contract_id}](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | GET | — | — |
 | [/api/source-contracts/{contract_id}/decision](../ocean-ai-platform/backend/app/api/routes_source_contracts.py) | POST | POST: ReviewDecision* | — |

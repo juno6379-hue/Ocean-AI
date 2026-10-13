@@ -1,6 +1,6 @@
 # Observation 표준화 계층
 
-현행화: 2026-10-08
+현행화: 2026-10-13
 
 ## 세 가지 저장 역할
 
@@ -13,6 +13,8 @@
 Raw/Standard의 자연키는 관측소·센서·변수·UTC 시각이다. 원천 literal, typed depth, 파일 해시·locator, 물리 센서 episode 등의 전체 계약은 ORM의 숫자 필드만으로 보존할 수 없으므로 binding과 동결 receipt도 함께 검증한다.
 
 ## 승인 원천 경로
+
+10/13에는 사용자 요청에 따른 별도 운영 자동 경로를 추가했다. 검증된 monthly Parquet에 `source-operational-mapping-1` 정책 계약을 시스템 actor로 승인하고 exact Binding 및 Raw/Standard를 적재한다. 사람의 행별 판정을 요구하지 않으며 적용 범위는 `OPERATIONAL_STANDARDIZATION_ONLY`다. 아래 전체 의미·물리·QC·학습 승인 경로는 이 제한된 receipt를 승인 대체물로 받지 않는다. [실행 범위와 검증](41_OPERATIONAL_AUTO_MAPPING.md), [공통 스키마 검토](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md)를 함께 읽는다.
 
 1. [source_contract_authority](../ocean-ai-platform/backend/app/services/source_contract_authority.py)의 `source_contract_v2` packet에 원천 grain, 증거 파일 역할·SHA·locator, 물리 센서·유효기간 및 변환 계약을 제출한다.
 2. [source-contract API](../ocean-ai-platform/backend/app/api/routes_source_contracts.py)로 실제 operator가 요청한다. reviewer/admin은 예상 packet SHA를 지정해 판정한다. 파일에 `APPROVED`라고 쓰거나 agent가 검토한 사실만으로 승인되지 않는다.
@@ -42,7 +44,7 @@ SCALAR 외 CIRCULAR_DEGREES, SIGNED_RADIAL, VECTOR_UV, PROFILE_BINS, TRAJECTORY�
 
 ## 기존 MDC 호환 경로와 한계
 
-[sync_mdc_db](../ocean-ai-platform/backend/app/scripts/sync_mdc_db.py)의 기존 매핑은 `TIDE_LEVEL*`→TIDE, 일부 WAVE/기상/수질 item의 단위 기본값, TIDE m→cm, 미매핑 단위의 `IDENTITY_UNMAPPED_UNIT`을 포함한다. 여기서 만든 합성 sensor ID나 고정 시간 변환은 승인 원천 계약의 증거가 아니다. [observation_provenance](../ocean-ai-platform/backend/app/services/observation_provenance.py)는 SIMULATED/DEMO source를 운영 사건·학습 계보에서 배제한다.
+[sync_mdc_db](../ocean-ai-platform/backend/app/scripts/sync_mdc_db.py)는 10/13부터 Parquet 운영 적재와 [명시적 공용 매핑](06_MDC_QUERY_MAPPING.md)을 공유한다. 파고 m·파주기 s·파향/풍향 DEG를 구분하며 문자열에 WAVE가 있다는 이유로 모두 WAVE/m으로 합치지 않는다. TIDE m→cm와 미매핑 단위의 `IDENTITY_UNMAPPED_UNIT`은 sync 호환 경로에 남는다. 자동 Parquet 경로는 시스템에서 채택한 단위·KST·identity 변환만 사용한다. 여기서 만든 source-scoped logical sensor ID는 실제 장비 serial/episode가 아니다. [observation_provenance](../ocean-ai-platform/backend/app/services/observation_provenance.py)는 SIMULATED/DEMO source를 운영 사건·학습 계보에서 배제한다.
 
 Standard 자연키에는 버전이 들어 있지 않다. `standardization_version`만 변경해 같은 자연키의 과거 값을 무제한 재적재하는 버전 이력 저장소로 해석하지 않는다. 변환 변경은 새 검토 계약·snapshot 및 충돌 처리 검토가 필요하다.
 
@@ -51,3 +53,5 @@ Standard 자연키에는 버전이 들어 있지 않다. `standardization_versio
 `GET /api/observations`와 `GET /api/observations/standard`는 [조회 API](../ocean-ai-platform/backend/app/api/routes_observations.py)에서 분리되어 있다. 실제 원천 candidate 생성은 승인 적재와 별도이며 null 미확정 필드를 유지한다. 2026-10-08 읽기 전용 운영 확인에서 source packet/decision/binding은 모두 0이었다. AIR_PRES 500행 원문·Parquet 일치 검토는 2026-10-07의 미승인 초안이며 18,502개 항목이 미확정이었다.
 
 원천 승인·적재·frozen snapshot 시험은 [source authority 시험](../ocean-ai-platform/backend/tests/test_source_contract_authority.py)과 [snapshot 시험](../ocean-ai-platform/backend/tests/test_source_contract_snapshot.py)에 있다. 구현 시험을 전체 원천 승인으로 확대하지 않는다.
+
+10/13 실제 운영 정책 적재와 최신 건수는 [41](41_OPERATIONAL_AUTO_MAPPING.md)에 기록한다. 원문 QC/MQC/N1 literal은 Binding에 그대로 남으며 수치값이 있어도 `UNREVIEWED`다. receipt의 `qc_approved`와 `training_eligible`은 false이며 날짜를 과거로 되돌려 승인·적재 가용시각을 만들지 않는다.

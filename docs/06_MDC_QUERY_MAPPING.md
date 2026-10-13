@@ -1,6 +1,6 @@
 # 06. MDC query와 관측 매핑
 
-기준일: 2026-10-08. 아래는 [현재 sync 구현](../ocean-ai-platform/backend/app/scripts/sync_mdc_db.py)의 실제 query/변환 규칙이다. 원천별 의미·단위·시간·센서 구간의 인간 승인은 [source contract](../ocean-ai-platform/backend/app/services/source_contract_authority.py)에서 별도로 검증한다. [설치·연계](05_MDC_DB_POSTGRESQL_MIGRATION.md)와 [관측소 분류](08_MDC_STATION_CODE_MAPPING.md)를 함께 사용한다.
+기준일: 2026-10-13. 아래는 [현재 sync 구현](../ocean-ai-platform/backend/app/scripts/sync_mdc_db.py)의 실제 query와 [공유 운영 매핑](../ocean-ai-platform/backend/app/services/observation_mapping.py) 규칙이다. 검증된 Parquet의 운영 표준화는 [시스템 정책 자동 계약·Binding](41_OPERATIONAL_AUTO_MAPPING.md)으로 처리할 수 있다. 원천별 의미·물리 센서·QC·학습 사용의 전체 승인은 [source contract](../ocean-ai-platform/backend/app/services/source_contract_authority.py)에서 별도로 검증한다. [설치·연계](05_MDC_DB_POSTGRESQL_MIGRATION.md)와 [관측소 분류](08_MDC_STATION_CODE_MAPPING.md)를 함께 사용한다.
 
 ## 관측소 기준정보
 
@@ -43,18 +43,22 @@ Raw QC에서 `'G '`와 `'G'`, 빈 문자열과 NULL을 같은 원문으로 바�
 
 | 원천 항목 조건 | 현재 variable / 기본 unit / sensor type |
 |---|---|
-| `TIDE_LEVEL*` | TIDE / cm / TIDE_GAUGE |
-| 코드에 `WAVE` 또는 SEA_LEVEL/WAVE_HEIGHT/WAVE_PERIOD | WAVE / m / WAVE_SENSOR |
-| WATER_TEMP 또는 TEMP | WATER_TEMP / C / WATER_QUALITY |
+| 명시한 TIDE_LEVEL 및 9종 장비 코드 | TIDE / cm / TIDE_GAUGE |
+| 명시한 MAX/SIGNIFI/AVG/WAVE_HEIGHT와 MOSE/HIPPY 파고 | 원천 변수 유지 / m / WAVE_SENSOR |
+| 명시한 MAX/SIGNIFI/WAVE_PERIOD와 MOSE/HIPPY 파주기 | 원천 변수 유지 / s / WAVE_SENSOR |
+| 명시한 WAVE_DIRECT와 MOSE/HIPPY 파향 | 원천 변수 유지 / DEG / WAVE_SENSOR · CIRCULAR_DEGREES |
+| WATER_TEMP, WATER_TEMP2, TEMP | WATER_TEMP / C / WATER_QUALITY |
 | SALINITY 또는 SALINITY2 | SALINITY / PSU / WATER_QUALITY |
-| ELECT_CONDUCT | ELECT_CONDUCT / MS/CM / WATER_QUALITY |
-| WIND_SPEED 또는 WIND_GUST | 원천 WIND_SPEED 또는 WIND_GUST 그대로 / M/S / METEOROLOGY |
-| WIND_DIRECT | WIND_DIRECT / DEG / METEOROLOGY |
-| AIR_PRES | AIR_PRES / HPA / METEOROLOGY |
-| AIR_TEMP | AIR_TEMP / C / METEOROLOGY |
+| ELECT_CONDUCT 또는 ELECT_CONDUCT2 | ELECT_CONDUCT / MS/CM / WATER_QUALITY |
+| WIND_SPEED | WIND_SPEED / M/S / METEOROLOGY |
+| WIND_GUST 또는 MAX_WIND_SPEED | WIND_GUST / M/S / METEOROLOGY |
+| WIND_DIRECT 또는 WIND_DIRECTION | WIND_DIRECT / DEG / METEOROLOGY · CIRCULAR_DEGREES |
+| AIR_PRES, AIR_PRES2, AIR_PRESS | AIR_PRES / HPA / METEOROLOGY |
+| AIR_TEMP 또는 AIR_TEMP2 | AIR_TEMP / C / METEOROLOGY |
+| HUMIDITY | HUMIDITY / % / METEOROLOGY |
 | 그 외 | 원천 코드 / UNKNOWN / MDC |
 
-이 표는 coarse legacy mapper의 동작 설명이다. `WAVE_PERIOD`에도 M 기본 단위가 적용되는 현행 규칙은 파주기 의미·단위를 확정한 계약이 아니며, 업무별 정밀 mapping 전에 담당자 검토가 필요하다. 원천 단위가 UNKNOWN일 때 기본 단위를 채우는 동작도 원문 단위 확인으로 해석하면 안 된다.
+10/13부터 sync와 Parquet 운영 적재는 `OPS-MDC-MAP-2.0`을 공유한다. 과거 `WAVE` 부분 문자열을 모두 m로 처리하던 규칙을 제거했다. 전체 코드 목록은 공유 매핑의 `ITEMS`를 따른다. 미등록 코드에는 새 자동 계약을 적용하지 않으며 GNSS/장비 코드를 임의 해양 변수로 적재하지 않는다. 단위·KST·identity 배율은 사용자 요청에 따른 명시적 시스템 정책이며 과거 원문 단위·물리 기준면의 사실 확인과 구분한다. 이미 저장된 legacy 행은 덮어쓰지 않는다.
 
 Standard 변환은 TIDE의 M→CM에 ×100, CM에는 identity를 적용한다. WAVE M은 M으로 유지하고 그 외에는 source unit과 `IDENTITY_UNMAPPED_UNIT` 계열 규칙이 남을 수 있다. 생성된 `S_{item}_{station}{depth_suffix}`는 source channel 식별자다. 실제 장비 serial, 교체·철거 경계와 유효기간을 추정하여 덧붙이지 않는다.
 
@@ -64,4 +68,4 @@ Standard 변환은 TIDE의 M→CM에 ×100, CM에는 identity를 적용한다. W
 
 물리 sensor/episode/event, effective `[start,end)`, unit/quantity transform, source timezone와 명시 offset UTC, 수신시각 정책, QC codebook/rule/가용시각, training 상태가 검토되어야 한다. 벡터·profile·trajectory의 각 component에도 원천 행·clock·QC·episode·가용시각 근거가 필요하며 aggregate 가용시각보다 늦은 component를 숨길 수 없다. 이름이나 같은 workbook 행만으로 station-sensor를 결합하지 않는다.
 
-현재 API `/api/events/reference-catalog`와 기준정보는 검토용 source channel catalog다. 운영 `mdc_sensor_catalog` table은 2026-10-08 확인 시 없었다. 실제 승인된 source binding은 0이며 기존 SQL 행을 학습 입력으로 자동 승격하지 않는다. [학습 입력 계약](18_DATASET_REGISTRY.md)과 [구현 기록 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다.
+현재 API `/api/events/reference-catalog`와 기준정보는 검토용 source channel catalog다. 운영 `mdc_sensor_catalog` table은 2026-10-08 확인 시 없었다. 당시 source binding 0건 기록은 과거 감사 결과다. 10/13 자동 정책 계약과 실제 운영 Binding의 범위·건수는 [41](41_OPERATIONAL_AUTO_MAPPING.md)을 따른다. 이 제한된 운영 매핑 receipt나 기존 SQL 행을 학습 입력으로 자동 승격하지 않는다. [학습 입력 계약](18_DATASET_REGISTRY.md)과 [구현 기록 82](../ocean-ai-platform/docs/82_SOURCE_CONTRACT_AND_MODEL_EXECUTION_RELEASE.md)를 참조한다.

@@ -1,10 +1,12 @@
 # Ocean-AI 현행 문서 안내
 
-기준일: **2026-10-09**. 이 폴더의 01~39 문서는 10/8 QC·AI·Fusion·승인 gate 확장, 7월 현황·월간보고서 대조, 실제 원시 자료의 개발용 학습·시험 배포와 10/9 관측현황 원천 재산정·동일 기준시각·실측 그래프·사진·운영 진단·가상 품질 시험을 반영한다. 구현 검증과 실제 운영 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
+기준일: **2026-10-13**. 이 폴더의 01~41 문서는 QC·AI·Fusion·승인 gate, 7월 현황·월간보고서 대조, 개발용 학습·시험 배포, 관측현황·실측 그래프·운영 진단과 샘플 품질 시험을 반영한다. 10/13에는 [공통 Schema 검토](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md)와 [실제 운영 표준 매핑·시스템 계약·Binding](41_OPERATIONAL_AUTO_MAPPING.md)을 추가했다. 구현 검증, 시스템의 제한된 운영 정책 채택, 실제 원천·QC·학습 승인을 구분한다. 기계 판독용 확인 결과는 [current_status.json](current_status.json)이다.
 
 ## 현재 확인 결과
 
-2026-10-08 운영 PostgreSQL을 읽기 전용으로 확인했고, 백엔드 health/readiness와 프런트엔드 HTTP 응답은 정상이다. 10/9 재확인에서 canonical 작업본의 학습 worker 설정은 true이나 실행 검증은 false(`STALE_OR_CHANGED`)이며 큐는 비어 있다. 10/8 실행 기록을 현재 상태로 재사용하지 않는다. **원천 계약·판정·관측 binding·승인 기록·dataset·학습 이력·model registry는 모두 0건**이고, 실제 운영 모델도 0개다. 실제 계정은 사용자 지시로 업무 수행 시점에 설정한다(DEFERRED_BY_USER). 현재 readonly 기술 분석은 가능하고 실제 승인 쓰기는 차단한다. 운영 `mdc_sensor_catalog` 테이블은 아직 적용되지 않았다.
+10/13 실제 PostgreSQL에 **시스템 운영 정책 계약·판정 각 3건, 관측 Binding 745,445행, 시스템 승인 이력 6건**을 생성했다. 적재 범위는 7월 9일 15:41:20 KST까지 최근 24시간이며 source 3종과 매핑 가능한 코드만 포함한다. 기존 모든 source/승인/binding 0건 기록은 10/8~10/9 당시의 감사 결과다. 이번 자동 receipt는 운영 표준화만 허용하며 **dataset·학습 이력·model registry 및 최종 QC 승인은 여전히 0건**이다. 실제 사람 계정은 사용자 지시로 업무 수행 시점에 설정한다(DEFERRED_BY_USER). `mdc_sensor_catalog` 운영 테이블은 아직 적용되지 않았다. 최신 실행·검증은 [41](41_OPERATIONAL_AUTO_MAPPING.md)을 따른다.
+
+10/9 재확인에서 canonical 작업본의 학습 worker 설정은 true이나 실행 검증은 false(`STALE_OR_CHANGED`)였고 큐는 비어 있었다. 그 PID·실행 기록을 오늘의 학습 완료로 재사용하지 않는다. 현재 검증 backend8010은 worker·serving을 꺼둔 LIVE 조회 및 샘플 환경이다.
 
 `/api/mlops/readiness`는 `BLOCKED`, 수용 기준 상태는 `NOT_DEFINED`, `/api/mlops/serving/health`는 `409 NO_ACTIVE_LOCAL_MODEL`이다. 프로세스 실행과 자료형 기준선 구현을 업무별 모델의 운영 완료로 해석하지 않는다. 72개 업무 키는 `REPRESENTATION_BASELINE_SCOPE_PARTIAL`이며, 구현 범위는 6종 자료형과 3종 업무 알고리즘의 기준선이다.
 
@@ -55,6 +57,8 @@
 | 37 | [QC 샘플 검증 모드](37_QC_SAMPLE_VALIDATION_MODE.md) | 정상·지연·결측·Spike의 별도 웹 세션·기존 엔진 계산·샘플 검토와 중지/재개·운영 격리 |
 | 38 | [QC·AI 인사이트 샘플 실행](38_QC_AI_SAMPLE_WORKFLOW.md) | 첨부 AI 화면·4합성 시나리오·예측/이상/Drift 학습·평가·검토 중지/재개·보고서·독립 검증 |
 | 39 | [샘플 데이터 기반 QC·AI 메뉴 실행](39_SAMPLE_DATA_WORKSPACE_ENTRY.md) | 기본 메뉴 샘플·명시 운영 전환/재조회·기존 조회 문맥 유지·독립/실화면 검증 |
+| 40 | [공통 관측 Schema 구조 검토](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md) | 실제 DuckDB 공통 뷰·원천별 파일 차이·Metadata Contract·API/QC/학습 전환 범위 |
+| 41 | [운영 자동 매핑·실제 Binding](41_OPERATIONAL_AUTO_MAPPING.md) | 공유 표준 코드·시스템 정책 승인·최근 24시간 실제 적재·멱등 재개·원문 전수 대조 |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
 관측현황의 기본 관측기간은 **2026년7월 단일 월**이다. QC 운영 대시보드는 backend 오늘 기준을 기본으로 구현·검증했고 명시된 과거 native cutoff도 유지한다. [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)에 역할·19개 요구사항·11개 시험·실제 입력과 성능 한계를 기록했다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { API_BASE_URL, apiClient } from '../api/client';
 import TechnicalReviewReceipt from './TechnicalReviewReceipt';
+import OperationalMappingStatus from './OperationalMappingStatus';
 import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
 import { observationItemLabel } from '../data/observationAvailability';
 import { isMarineObservationItem } from '../data/marineObservationItems';
@@ -138,6 +139,7 @@ export default function FoundationLake() {
       <p className="text-sm text-slate-600">검증표 기준 {data.validation.at}. 원천 변환과 검증표 갱신 시각은 별개입니다.</p>
       <p>확대 문서 처리 {data.document_extraction?.completed ?? 0}/{data.document_extraction?.total ?? 0} · {data.document_extraction?.state ?? '미확인'} · 추출과 내용 검토는 별도</p>
     </div> : !error && <p>조회 중…</p>}
+    <OperationalMappingStatus />
     <TechnicalReviewReceipt />
     <div className="bg-white border rounded-xl p-5 space-y-3"><h3 className="font-bold">추가 월별 Parquet 원천 조회</h3>
       <p className="text-sm">파일 순서로 최대 100행. 원천 QC·수층을 유지하며 단위·시간대를 임의 변환하지 않습니다.</p>

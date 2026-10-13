@@ -1,8 +1,8 @@
 {
   "schema_version": "ocean-ai-documentation-status-2",
-  "as_of": "2026-10-09T16:32:01.496868+00:00",
+  "as_of": "2026-10-13T09:44:31.056689+00:00",
   "code_revision": null,
-  "scope": "repository docs/01 through docs/39 plus operations recovery appendix85",
+  "scope": "repository docs/01 through docs/41 plus operations recovery appendix85",
   "verification": {
     "backend_tests": {
       "passed": 1106,
@@ -59,7 +59,7 @@
     },
     "live_readonly_api": "PASS",
     "browser_qc_panel": "PASS",
-    "method": "Frozen frontend regression and actual QC/AI menu sample/live browser flows; previous backend source hashes unchanged; 13 operational table fingerprints and worker queue unchanged",
+    "method": "Isolated source/QC/workflow regression; actual PostgreSQL bulk insertion/replay; all 745445 source Parquet literals and raw/standard/binding joins reconciled; preexisting rows preserved; real API and browser status checked",
     "frontend_period_tests": {
       "passed": 7,
       "date": "2026-10-08"
@@ -670,6 +670,130 @@
         "ocean-ai-platform/frontend/tests/qc-sample-workspace.test.mjs": "c4e9f3ca90047759ea4eb0ec6d7bcff9b9dfdac80ce21327764b5915700949af"
       },
       "production_completed": false
+    },
+    "operational_auto_mapping_backend_tests": {
+      "passed": 143,
+      "failed": 0,
+      "automatic_mapping_cases": 19,
+      "warnings": 32,
+      "seconds": 23.37,
+      "date": "2026-10-13",
+      "database_scope": "ISOLATED_ONLY"
+    },
+    "operational_auto_mapping_frontend_tests": {
+      "passed": 11,
+      "failed": 0,
+      "build": "PASS",
+      "lint_errors": 0,
+      "new_lint_warnings": 0,
+      "existing_lint_warnings": 12,
+      "date": "2026-10-13"
+    },
+    "operational_auto_mapping_postgres_probe": {
+      "status": "PASS",
+      "checks": [
+        "POSTGRES_BULK_INSERT",
+        "IDEMPOTENT_REPLAY",
+        "BINDING_EXPLICIT_UTC",
+        "SOURCE_RECEIPT_VERIFICATION",
+        "CHANGED_BOUND_RECORD_BLOCKED"
+      ],
+      "isolated_schema_removed": true,
+      "public_data_modified": false,
+      "checked_at": "2026-10-13T09:41:16.410363+00:00"
+    },
+    "operational_auto_mapping_actual_source": {
+      "status": "PASS",
+      "checked_at": "2026-10-13T09:44:31.056689+00:00",
+      "checks": [
+        "ALL_BINDINGS_RAW_STANDARD_POLICY_CLOCK_QC_JOIN",
+        "ALL_SOURCE_ITEM_COUNTS_AND_CUTOFF_RECONCILED",
+        "BASELINE_STATION_SENSOR_RAW_STANDARD_UNCHANGED",
+        "ALL_THREE_RECEIPTS_AND_ACTUAL_SOURCE_FILE_HASHES",
+        "NO_DATASET_MODEL_EVENT_OR_FINAL_QC_APPROVAL_CREATED",
+        "ALL_745445_ORIGINAL_PARQUET_LITERAL_ROWS_EXACT_MATCH"
+      ],
+      "database_counts": {
+        "source_contract_packets": 3,
+        "source_contract_decisions": 3,
+        "source_observation_binding": 745445,
+        "approval_history": 6,
+        "observation_raw": 759066,
+        "observation_standard": 749519,
+        "station_metadata": 325,
+        "sensor_metadata": 834,
+        "mdc_item_mapping": 82,
+        "dataset_registry": 0,
+        "model_registry": 0,
+        "retraining_history": 0,
+        "qc_rule_result": 0,
+        "event_registry": 0,
+        "event_evidence": 0,
+        "sensor_alias": 0,
+        "agent_workflow_run": 0,
+        "agent_workflow_transition": 0,
+        "retraining_pool": 0
+      },
+      "scope": {
+        "from_native": "2026-07-08T15:41:20",
+        "to_native": "2026-07-09T15:41:20",
+        "timezone": "Asia/Seoul",
+        "whole_history_loaded": false
+      },
+      "registered_bindings": 745445,
+      "variables": {
+        "AIR_PRES": 88817,
+        "AIR_TEMP": 81233,
+        "ELECT_CONDUCT": 54036,
+        "HUMIDITY": 15974,
+        "MAX_WAVE_HEIGHT": 3473,
+        "MAX_WAVE_PERIOD": 3473,
+        "MOSE_HF_MAX_WAVE_HEIGHT": 384,
+        "MOSE_HF_MAX_WAVE_PERIOD": 384,
+        "MOSE_HF_SIGNIFI_WAVE_HEIGHT": 384,
+        "MOSE_HF_SIGNIFI_WAVE_PERIOD": 384,
+        "MOSE_HF_WAVE_DIRECT": 384,
+        "MOSE_LF_MAX_WAVE_HEIGHT": 384,
+        "MOSE_LF_MAX_WAVE_PERIOD": 384,
+        "MOSE_LF_SIGNIFI_WAVE_HEIGHT": 384,
+        "MOSE_LF_SIGNIFI_WAVE_PERIOD": 384,
+        "MOSE_LF_WAVE_DIRECT": 384,
+        "SALINITY": 54202,
+        "SIGNIFI_WAVE_HEIGHT": 3473,
+        "SIGNIFI_WAVE_PERIOD": 3473,
+        "TIDE": 130953,
+        "WATER_TEMP": 62910,
+        "WAVE_DIRECT": 3307,
+        "WIND_DIRECT": 79793,
+        "WIND_GUST": 76695,
+        "WIND_SPEED": 79793
+      },
+      "source_reconciliation": [
+        {
+          "source": "GD_OBS_BU",
+          "rows": 67887,
+          "literal_mismatches": 0
+        },
+        {
+          "source": "GD_OBS_VBU",
+          "rows": 6480,
+          "literal_mismatches": 0
+        },
+        {
+          "source": "GR_OBS_ST",
+          "rows": 671078,
+          "literal_mismatches": 0
+        }
+      ],
+      "first_timestamp_utc": "2026-07-08T06:42:00Z",
+      "last_timestamp_utc": "2026-07-09T06:41:00Z"
+    },
+    "operational_auto_mapping_browser": {
+      "status": "PASS",
+      "registered_bindings": 745445,
+      "auto_approved_contracts": 3,
+      "url": "http://127.0.0.1:5174/data-lake?source=GR_OBS_ST&from=2026-07&to=2026-07&station=DT_0001&item=WATER_TEMP",
+      "screenshot_sha256": "64efbbd6e8d10ac1acafff8fce097564595f7fb0f2edbebba0e5b425d6cac06e"
     }
   },
   "runtime": {
@@ -717,10 +841,10 @@
     "ai_page_url": "http://127.0.0.1:5174/ai-insights"
   },
   "database_counts": {
-    "source_contract_packets": 0,
-    "source_contract_decisions": 0,
-    "source_observation_binding": 0,
-    "approval_history": 0,
+    "source_contract_packets": 3,
+    "source_contract_decisions": 3,
+    "source_observation_binding": 745445,
+    "approval_history": 6,
     "dataset_registry": 0,
     "model_registry": 0,
     "retraining_history": 0,
@@ -731,9 +855,12 @@
     "agent_workflow_run": 0,
     "agent_workflow_transition": 0,
     "qc_rule_result": 0,
-    "observation_raw": 13621,
-    "observation_standard": 4074,
-    "retraining_pool": 0
+    "observation_raw": 759066,
+    "observation_standard": 749519,
+    "retraining_pool": 0,
+    "station_metadata": 325,
+    "sensor_metadata": 834,
+    "mdc_item_mapping": 82
   },
   "schema_not_applied": [
     "mdc_sensor_catalog"
@@ -777,14 +904,16 @@
     "Historical source semantics, scale/datum/clock, QC effective periods and physical sensor validity remain unconfirmed where evidence is absent.",
     "Fitted statistical anomaly engine and development Fusion weights do not establish actual marine accuracy or 72 operating models.",
     "Workflow approval/resume only creates a draft and MLOps recommendation; it does not approve source/QC/dataset/model execution.",
-    "Actual approved source/dataset/model and QC candidate/workflow records remain zero.",
+    "System operational mapping has 3 approved policy contracts and 745445 bindings; full semantic source, dataset/model and Final QC approvals remain absent.",
     "Registered operational QC supports SCALAR only; typed directional/vector/profile/trajectory QC is not completed.",
     "A verified schedule/missing-transmission contract is absent; inferred clock gaps are not confirmed receive loss.",
     "Exact candidate/version-linked Final QC editing is not implemented; existing generic approval endpoints are not silently substituted.",
     "Stored AI reads are implemented; on-demand inference, new training, full spatial-field or dedicated distribution drift worker are not implemented by this release.",
     "Cold archive queries can exceed the ten-second UX target; actual 878400-row registered daily performance has not been verified.",
     "Only the actual 1280x720 browser viewport was verified; attempted capability overrides did not apply.",
-    "Actual account configuration and operational approvals remain deferred by the user."
+    "Actual account configuration and operational approvals remain deferred by the user.",
+    "Only the recent 24-hour mapped source window was loaded into PostgreSQL; 198212 policy-excluded rows and full historical loading are separate.",
+    "DuckDB already provides common raw query views; API/QC/training consumers do not yet share one versioned semantic schema."
   ],
   "document_ingestion": {
     "files": 71960,
@@ -805,9 +934,9 @@
     "checked_at": "2026-10-08T04:15:21.273811+00:00",
     "latest_run_status": "PARTIAL"
   },
-  "base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
+  "base_revision": "65c06816846bab9d00921fa51cc466d0db0dca7c",
   "revision_resolution": "The Git commit containing this file identifies the release; runtime fingerprints are recorded below.",
-  "implementation_release": "2026-10-09_QC_OPERATIONAL_DASHBOARD_EXPLICIT_LIMITS",
+  "implementation_release": "2026-10-13_OPERATIONAL_AUTO_MAPPING_AND_COMMON_SCHEMA_REVIEW",
   "previous_verification": {
     "base_tree": "35f86cf",
     "backend_tests": {
@@ -907,7 +1036,8 @@
       "frontend_build_log_sha256": "786a82c7715ff91e61a5ef4e4727014058a2a808de53befe4038d51e39d8a07b",
       "verification_base_revision": "7fdb8b45b9e6a088364f82db77dbceeab05d64cf",
       "containing_release_commit": "634c32485c03ad05d5a9065e5094f0c6bb8df911"
-    }
+    },
+    "pre_operational_auto_mapping_method": "Frozen frontend regression and actual QC/AI menu sample/live browser flows; previous backend source hashes unchanged; 13 operational table fingerprints and worker queue unchanged"
   },
   "previous_canonical_runtime": {
     "checked_at": "2026-10-08T04:10:55.581022+00:00",
@@ -930,7 +1060,7 @@
     "runtime_is_canonical_workstation_copy": true,
     "session_http_status": 503
   },
-  "database_counts_checked_at": "2026-10-09T16:32:00.498433+00:00",
+  "database_counts_checked_at": "2026-10-13T09:44:31.056689+00:00",
   "additive_schema_application": {
     "checked_at": "2026-10-08T05:07:26.153330+00:00",
     "files": [
@@ -1229,5 +1359,59 @@
       "operational_writes": 0
     },
     "sample_workspace_default": "SAMPLE_ON_NEW_QC_AI_ENTRY_WITH_EXPLICIT_LIVE_SWITCH"
+  },
+  "operational_auto_mapping": {
+    "status": "COMPLETE_FOR_SELECTED_MAPPED_WINDOW",
+    "approval_mode": "SYSTEM_POLICY",
+    "approval_scope": "OPERATIONAL_STANDARDIZATION_ONLY",
+    "mapping_version": "OPS-MDC-MAP-2.0",
+    "approved_full_semantic_source_contracts": 0,
+    "auto_approved_operational_contracts": 3,
+    "registered_bindings": 745445,
+    "first_timestamp_utc": "2026-07-08T06:42:00Z",
+    "last_timestamp_utc": "2026-07-09T06:41:00Z",
+    "scope": {
+      "from_native": "2026-07-08T15:41:20",
+      "to_native": "2026-07-09T15:41:20",
+      "timezone": "Asia/Seoul",
+      "whole_history_loaded": false
+    },
+    "source_rows": {
+      "GD_OBS_BU": 67887,
+      "GD_OBS_VBU": 6480,
+      "GR_OBS_ST": 671078
+    },
+    "mapped_variable_types": 25,
+    "unmapped_window_rows_excluded": 198212,
+    "initially_quarantined_rows": 17280,
+    "recovered_rows": 17280,
+    "remaining_mapped_row_quarantines": 0,
+    "new_source_identifier_references": [
+      "DT_0095",
+      "DT_0903"
+    ],
+    "physical_identity_approved": false,
+    "new_logical_channel_references": 832,
+    "training_approval_created": false,
+    "final_qc_approval_created": false,
+    "actual_validation_sha256": "96e963f950d64664ef035040c60cd3f780829ddc486339ad63c1f28a3f483c24",
+    "documentation": "41_OPERATIONAL_AUTO_MAPPING.md"
+  },
+  "common_observation_schema_review": {
+    "status": "PARTIAL_COMMON_QUERY_LAYER_PRESENT",
+    "checked_on": "2026-10-13",
+    "monthly_parquet_files_footer_checked": 99,
+    "monthly_physical_schema_variants": 3,
+    "duckdb_version": "1.5.6",
+    "duckdb_common_observation_fields": 15,
+    "duckdb_source_views": 4,
+    "null_inferred_integer_fields": [
+      "physical_sensor_id",
+      "standard_unit",
+      "timezone_name"
+    ],
+    "all_consumers_use_single_versioned_contract": false,
+    "full_common_schema_migration_complete": false,
+    "documentation": "40_COMMON_OBSERVATION_SCHEMA_REVIEW.md"
   }
 }

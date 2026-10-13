@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     QC_SAMPLE_ENABLED: bool = False
     AI_INSIGHTS_SAMPLE_ENABLED: bool = False
     MDC_SYNC_ENABLED: bool = False
+    SOURCE_AUTO_MAPPING_ENABLED: bool = False
     AUTO_CREATE_TABLES: bool = False
     VECTOR_SEARCH_ENABLED: bool = True
     # 문서 배치와 API가 공유하는 벡터 서버 주소를 .env에서도 읽는다.

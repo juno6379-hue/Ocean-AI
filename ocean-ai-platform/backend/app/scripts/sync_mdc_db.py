@@ -252,14 +252,10 @@ def insert_observations_idempotent(db: Session, observations: List[ObservationRa
     return result.rowcount or 0
 
 
-STANDARDIZATION_VERSION = "OBS-STD-1.0"
+from app.services.observation_mapping import VERSION as STANDARDIZATION_VERSION, map_item
 
 def map_mdc_item(item_code: str):
-    code=(item_code or "UNKNOWN").strip().upper()
-    if code.startswith("TIDE_LEVEL"): return "TIDE", "cm", "TIDE_GAUGE"
-    if "WAVE" in code or code in {"SEA_LEVEL","WAVE_HEIGHT","WAVE_PERIOD"}: return "WAVE", "m", "WAVE_SENSOR"
-    units={"WATER_TEMP":("WATER_TEMP","C","WATER_QUALITY"),"TEMP":("WATER_TEMP","C","WATER_QUALITY"),"SALINITY":("SALINITY","PSU","WATER_QUALITY"),"SALINITY2":("SALINITY","PSU","WATER_QUALITY"),"ELECT_CONDUCT":("ELECT_CONDUCT","MS/CM","WATER_QUALITY"),"WIND_SPEED":("WIND_SPEED","M/S","METEOROLOGY"),"WIND_DIRECT":("WIND_DIRECT","DEG","METEOROLOGY"),"WIND_GUST":("WIND_GUST","M/S","METEOROLOGY"),"AIR_PRES":("AIR_PRES","HPA","METEOROLOGY"),"AIR_TEMP":("AIR_TEMP","C","METEOROLOGY")}
-    return units.get(code,(code,"UNKNOWN","MDC"))
+    return map_item(item_code)
 
 def as_float(value):
     try: return float(value) if value is not None and str(value).strip() else None

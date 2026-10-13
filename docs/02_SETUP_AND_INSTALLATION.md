@@ -2,6 +2,8 @@
 
 기준일: 2026-10-08. Windows PowerShell 기준이며, [현재 문서 안내](README.md)와 [구현 경계](01_SYSTEM_ARCHITECTURE.md)를 함께 읽는다. 아래 기본 절차는 Oracle 수집, 운영 DDL, seed, 모델 학습을 자동으로 시작하지 않는다.
 
+2026-10-13 추가: 검증된 Parquet의 운영 정책 자동 계약·적재 CLI, 명시 활성화 설정과 source-only 참조 등록 옵션은 [41](41_OPERATIONAL_AUTO_MAPPING.md)의 dry-run/apply/replay 절차를 따른다. 기본 서버 실행만으로 대용량 적재를 시작하지 않는다.
+
 ## 요구 환경과 가져오기
 
 이전 tree는 Python 3.14.2와 Node 24.13.0에서 검증했고 이번 전체 회귀 결과는 [10/8 감사](10_IMPLEMENTATION_AUDIT.md)를 따른다. 깨끗한 `npm ci --ignore-scripts` 후 TypeScript/Vite build 통과를 검증했다. Backend requirements는 완전한 버전 lock 파일이 아니므로 재설치한 dependency 조합은 다시 검증한다. 다른 Python 버전의 호환성도 별도 확인한다. [잠금 파일](../ocean-ai-platform/frontend/package-lock.json)의 Vite 요구사항은 Node.js `^20.19.0 || >=22.12.0`이다. Node 18은 현재 설치 기준이 아니다. PostgreSQL 15와 Git이 필요하다. Ollama와 Chroma는 문서 검색을 사용할 때 추가한다.
@@ -39,6 +41,7 @@ Get-Content .env.example |
 | `TEST_DATABASE_URL` | 격리 시험용 `sqlite://`. 운영 DB를 시험 대상으로 지정하지 않는다. |
 | `DATA_MODE` | `live`. Demo prototype을 쓰려면 별도의 demo 환경을 명시한다. |
 | `MDC_SYNC_ENABLED` | `false`. Oracle 권한·clock·단위·수집 계획 검토 후 명시적으로 켠다. |
+| `SOURCE_AUTO_MAPPING_ENABLED` | `false`. 검증된 monthly Parquet 운영 정책 계약·적재 CLI를 실행할 환경에서만 true로 설정한다. 학습·최종 QC 승인을 대신하지 않는다. |
 | `AUTO_CREATE_TABLES` | `false`. 서버 시작으로 운영 스키마를 수정하지 않는다. |
 | `API_IDENTITIES` | `{}`. 쓰기와 승인에는 실제 사용자별 token과 role 등록이 필요하다. |
 | `DATASET_SNAPSHOT_DIR` | `data/dataset_snapshots`. 불변 dataset/dependency 파일 저장소다. |
