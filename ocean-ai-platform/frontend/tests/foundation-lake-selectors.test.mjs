@@ -26,6 +26,7 @@ function response(url,config={}){
   const station=decodeURIComponent(url.split('/').at(-1));
   return {source:p.source,station_code:station,snapshot,months:station==='DT_0001'?
    [itemRow(station,'WATER_TEMP'),itemRow(station,'SALINITY'),itemRow(station,'WATER_TEMP',{depth_from:'5'}),
+    ...['GNSS_X','GNSS_Y','GNSS_Z','VOLTAGE','BATT_V','PITCH','BUOY_INNER_TEMP','CUSTOM_UNKNOWN'].map(code=>itemRow(station,code,{item_labels:'수온'})),
     itemRow(station,'OLD',{month:'2026-06-01'}),itemRow(station,'OTHER_SOURCE',{source_group:'GD_OBS_BU'}),
     itemRow('DT_0002','OTHER_STATION'),itemRow(station,'EMPTY',{held_rows:0})]:[itemRow(station,'WIND_SPEED')]};
  }
@@ -105,4 +106,30 @@ test('Wrong snapshot or failed station request never enables a query using old o
   await mount(undefined,(url,config)=>{if(url.endsWith('/lake/summary'))throw new Error('offline');return response(url,config);});
   assert.equal(station().disabled,true);assert.equal(query().disabled,true);assert.match(container.textContent,/관측소 목록 조회 실패/);
  }finally{await dispose();}
+});
+
+test('Excluded GNSS deep links cannot select a hidden item or initiate raw queries',async()=>{
+ for(const code of ['GNSS_X','GNSS_Y','GNSS_Z'])try{
+  await mount('/data-lake?source=GR_OBS_ST&from=2026-07&to=2026-07&station=DT_0001&item='+code);
+  assert.equal(station().value,'DT_0001');assert.equal(item().value,'');assert.equal(query().disabled,true);
+  assert.deepEqual(codes(item()).sort(),['SALINITY','WATER_TEMP']);
+  assert.equal(requests.some(row=>row.url.endsWith('/foundation/observations')),false);
+ }finally{await dispose();}
+});
+
+test('A station with only position/equipment codes has no selectable marine item',async()=>{
+ try{
+  await mount(undefined,(url,config)=>{
+   const value=response(url,config);
+   return url.includes('/lake/stations/')?{...value,months:['GNSS_X','GNSS_Y','GNSS_Z','VOLTAGE'].map(code=>itemRow('DT_0001',code))}:value;
+  });
+  assert.deepEqual(codes(item()),[]);assert.equal(item().disabled,true);assert.equal(query().disabled,true);
+  assert.match(item().textContent,/해양 관측항목 없음/);
+ }finally{await dispose();}
+});
+
+test('Display scope keeps marine/weather codes and instrument variants but never admits unknown or equipment codes',async()=>{
+ const {isMarineObservationItem}=await import(compile(resolve(frontend,'data/marineObservationItems.ts')));
+ for(const code of ['WATER_TEMP','SALINITY','TIDE_LEVEL_MIROS','TIDE_LEVEL_VEGA_2','WIND_SPEED','AIR_PRES2','CURRENT_SPEED2','TURBIDITY','SIGNIFI_WAVE_HEIGHT','MOSE_HF_WAVE_DIRECT','SBD_WATER_TEMP_05'])assert.equal(isMarineObservationItem(code),true,code);
+ for(const code of ['GNSS_X','GNSS_Y','GNSS_Z','VOLTAGE','WATER_VOLTAGE','HEADING','PITCH','ROLL','BUOY_INNER_TEMP','TEMP_BAT_RM','WATER_TEMP_STATUS','UNCLASSIFIED',''])assert.equal(isMarineObservationItem(code),false,code);
 });

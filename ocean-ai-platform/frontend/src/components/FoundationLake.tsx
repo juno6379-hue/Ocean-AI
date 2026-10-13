@@ -5,6 +5,7 @@ import { API_BASE_URL, apiClient } from '../api/client';
 import TechnicalReviewReceipt from './TechnicalReviewReceipt';
 import { CURRENT_OBSERVATION_MONTH, observationPeriod } from '../data/observationPeriod';
 import { observationItemLabel } from '../data/observationAvailability';
+import { isMarineObservationItem } from '../data/marineObservationItems';
 
 type Choice = { code: string; label: string };
 type StationCatalog = { source: string; month: string; snapshot: string; rows: Choice[] };
@@ -91,7 +92,7 @@ export default function FoundationLake() {
         const choices=new Map<string,Choice>();
         for(const row of value.months){
           if(row.source_group!==source || row.station_code!==station || String(row.month).slice(0,7)!==month
-            || !(row.held_rows>0) || typeof row.item_code!=='string' || !row.item_code)continue;
+            || !(row.held_rows>0) || typeof row.item_code!=='string' || !isMarineObservationItem(row.item_code))continue;
           const name=readableName(row.item_labels)||observationItemLabel(row.item_code);
           choices.set(row.item_code,{code:row.item_code,label:name!==row.item_code?`${name} (${row.item_code})`:row.item_code});
         }
@@ -149,13 +150,13 @@ export default function FoundationLake() {
           {stationChoices.map(choice=><option key={choice.code} value={choice.code}>{choice.label}</option>)}
         </select></label>
         <label>항목 <select aria-label="항목" className="border p-2 min-w-48 max-w-full disabled:bg-slate-100" value={itemSelected?item:''} disabled={!stationSelected||itemsLoading||!itemChoices.length} onChange={e=>setItem(e.target.value)}>
-          <option value="">{!stationSelected?'관측소를 먼저 선택하세요':itemsLoading?'항목 불러오는 중…':itemError?'항목 조회 실패':!itemChoices.length?'이 관측소의 보유 항목 없음':'항목 선택'}</option>
+          <option value="">{!stationSelected?'관측소를 먼저 선택하세요':itemsLoading?'항목 불러오는 중…':itemError?'항목 조회 실패':!itemChoices.length?'이 관측소의 해양 관측항목 없음':'항목 선택'}</option>
           {itemChoices.map(choice=><option key={choice.code} value={choice.code}>{choice.label}</option>)}
         </select></label>
         <button disabled={busy||!stationSelected||!itemSelected||stationsLoading||itemsLoading} className="rounded bg-blue-600 text-white px-4 py-2 disabled:opacity-50" onClick={() => void query()}>{busy ? '조회 중…' : '원천·검증 조회'}</button>
       </div>
       {(stationError||itemError)&&<p role="alert" className="text-sm text-red-700">{stationError||itemError}</p>}
-      <p className="text-xs text-slate-600">선택한 원천·월에 자료가 있는 관측소와 해당 관측소의 항목만 표시합니다.</p>
+      <p className="text-xs text-slate-600">선택한 원천·월에 자료가 있는 수온·염분·조위·파랑·유향·유속·기상 등 해양 관측항목만 표시합니다.</p>
       {channelSnapshot&&<p className="text-xs text-slate-600">연결 검증본: {channelSnapshot} · 아래 채널 요약은 해당 원천·관측소·항목의 전체 보유기간이며, 표본은 선택한 한 달입니다. 시설 연결본과 검증본 ID가 다르면 같은 버전으로 간주하지 않습니다.</p>}
       {channels.map((c: any, n: number) => <div key={n} className="border rounded p-3"><b>{c.station_name} · {c.item_labels}: {c.overall_display}</b><p>관측소 코드 {c.condition_decisions.station_dictionary_decision} / 항목 코드 {c.condition_decisions.item_dictionary_decision} / 센서 {c.condition_decisions.sensor_decision}</p><p>QC 사건 연결 {c.linked_qc_event_month_count}/{c.held_month_count}개월 · QC 승인과 별개</p></div>)}
       {sample && <><p>{sample.returned_rows}행 조회 · 원천층 · 미승인</p><div className="overflow-auto max-h-96"><table className="text-xs w-full text-left"><thead><tr>{Object.keys(sample.rows[0] || {}).map(k => <th className="p-2 border-b" key={k}>{k}</th>)}</tr></thead><tbody>{sample.rows.map((r: any, i: number) => <tr key={i}>{Object.values(r).map((value: any, j: number) => <td className="p-2 border-b whitespace-nowrap" key={j}>{value == null ? '미확정' : String(value)}</td>)}</tr>)}</tbody></table></div></>}
