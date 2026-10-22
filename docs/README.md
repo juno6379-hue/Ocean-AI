@@ -59,6 +59,7 @@
 | 39 | [샘플 데이터 기반 QC·AI 메뉴 실행](39_SAMPLE_DATA_WORKSPACE_ENTRY.md) | 기본 메뉴 샘플·명시 운영 전환/재조회·기존 조회 문맥 유지·독립/실화면 검증 |
 | 40 | [공통 관측 Schema 구조 검토](40_COMMON_OBSERVATION_SCHEMA_REVIEW.md) | 실제 DuckDB 공통 뷰·원천별 파일 차이·Metadata Contract·API/QC/학습 전환 범위 |
 | 41 | [운영 자동 매핑·실제 Binding](41_OPERATIONAL_AUTO_MAPPING.md) | 공유 표준 코드·시스템 정책 승인·최근 24시간 실제 적재·멱등 재개·원문 전수 대조 |
+| 42 | [조위 AI-QC MLOps 엔진 통합](42_AI_QC_MLOPS_ENGINE_INTEGRATION.md) | `mlops-qc-engine` 5대 연동 브리지, `8765` 워크벤치 원클릭 기동, Clean Core 구조 및 [상세 기술 문서(`ml-ops-docs/00~05`)](ml-ops-docs/00_OVERVIEW_AND_INDEX.md) |
 | 85 | [운영·문서 복구](85_OPERATIONS_RECOVERY_REVIEW.md) | backup·resume·dry-run 승격·보호된 rollback |
 
 관측현황의 기본 관측기간은 **2026년7월 단일 월**이다. QC 운영 대시보드는 backend 오늘 기준을 기본으로 구현·검증했고 명시된 과거 native cutoff도 유지한다. [36](36_QC_OPERATIONAL_DASHBOARD_EXECUTION.md)에 역할·19개 요구사항·11개 시험·실제 입력과 성능 한계를 기록했다. 보고서 국가망140개(공개120·제한20),선택 원천 보유코드,과거 누적 보유를 구분한다. 7월Parquet146개 전체hash·행정산은 통과했으나 월말 원천 부족,HF자료 미확인,2차QC통계 차이가 남았다. 판정은 [27](27_JULY_REPORT_PARQUET_MATCH.md)을 따른다.

@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="dashboard-token" content="__TOKEN__"><title>학습자료 확인 및 Ocean-AI 스냅샷 · AI 모델 시험실</title>
+<style>
+:root{font-family:'Malgun Gothic',sans-serif;color:#203642;background:#f2f6f8}*{box-sizing:border-box}body{margin:0}main{max-width:1280px;margin:auto;padding:30px}h1{font-size:30px}h2{font-size:22px;margin-top:0}h3{font-size:17px;margin:14px 0 8px}p{line-height:1.7}.panel{background:white;border:1px solid #dbe5ea;border-radius:15px;padding:25px;margin:20px 0}.muted{color:#536c7b}.notice{padding:14px;border-radius:8px;background:#eef6fa;white-space:pre-wrap;overflow-wrap:anywhere}.error{background:#fff0ee;color:#9a3025}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}label{display:block;font-size:14px;margin-bottom:7px}input,select,textarea{display:block;width:100%;padding:11px;border:1px solid #bacbd5;border-radius:7px;background:white;color:#203642;min-width:0;font:inherit}textarea{font-family:Consolas,monospace;font-size:12px;resize:vertical}input[type=date]{max-width:250px}input[type=checkbox]{width:auto;display:inline-block;margin-right:6px}.path{font-size:12px;margin-top:9px}button,.linkbtn{display:inline-block;background:#166889;color:white;border:0;border-radius:8px;padding:11px 16px;font:inherit;text-decoration:none;cursor:pointer;margin:8px 8px 0 0}button:disabled{opacity:.5;cursor:wait}.secondary{background:#e7f0f4;color:#20556c}.accent{background:#175d48;color:white}.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.metric{padding:16px;background:#f1f7f9;border-radius:10px}.metric b{display:block;font-size:22px;margin-top:8px}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;border-bottom:1px solid #e2e9ee;padding:10px;white-space:nowrap}th{background:#f1f6f8}.tag{color:#175d48;background:#dcece7;padding:4px 10px;border-radius:12px;font-size:12px;display:inline-block}.tag.warn{color:#8a3b12;background:#fde8dc}svg{width:100%;height:240px}.legend{display:flex;gap:20px}details{margin-top:18px}summary{cursor:pointer}a{color:#166889}.month-chip-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:4px 0}.month-year-btn{min-width:68px;padding:4px 8px;margin:0;font-size:12px;font-weight:700;border-radius:6px;background:#dce9f0;color:#1d4e66}.month-chip{padding:4px 9px;margin:0;font-size:12px;border-radius:6px;border:1px solid #c5d6e0;background:white;color:#203642;cursor:pointer}.month-chip.in-range{background:#166889;color:white;border-color:#166889;font-weight:700}.month-chip.unavail{opacity:.38;background:#eff3f5;color:#7c909c;cursor:not-allowed}#status:empty,#profile:empty,#snapshotStatus:empty,#mergeSnapshotStatus:empty{display:none}[hidden]{display:none!important}@media(max-width:900px){main{padding:16px}.grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.panel{padding:18px}}
+main,.panel,.grid>*,.metric{min-width:0}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scroll{max-width:100%;overflow-x:auto}th,td,.tag{word-break:keep-all}.station-sort{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}.station-sort select{width:auto}.station-sort label{margin:0}.metrics{grid-template-columns:repeat(6,minmax(0,1fr))}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #508bab;outline-offset:3px}::selection{background:#c6e3ef;color:#153b50}table{font-variant-numeric:tabular-nums}
+.job-progress-card{margin:12px 0;padding:14px 16px;border-radius:10px;border:1.5px solid #b8d4ea;background:linear-gradient(180deg,#f5faff 0%,#ebf4fc 100%);box-shadow:0 2px 6px rgba(14,79,138,.06)}
+.job-progress-card.finished{border-color:#8fd1b6;background:linear-gradient(180deg,#f2fbf7 0%,#e6f7ef 100%)}
+.job-progress-card.failed{border-color:#f1a7a0;background:linear-gradient(180deg,#fff7f6 0%,#fdeceb 100%)}
+.job-progress-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.job-progress-title{font-weight:700;font-size:14px;color:#123e66;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.job-progress-card.finished .job-progress-title{color:#0e6245}
+.job-progress-card.failed .job-progress-title{color:#b42318}
+.job-progress-pct{font-size:15px;font-weight:800;color:#0e4f8a;font-variant-numeric:tabular-nums}
+.job-progress-card.finished .job-progress-pct{color:#0e6245}
+.job-progress-card.failed .job-progress-pct{color:#b42318}
+.job-progress-bar{height:12px;background:#d6e6f4;border-radius:999px;overflow:hidden;position:relative;margin:6px 0 10px}
+.job-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#176b98 0%,#0e4f8a 50%,#1f8ac0 100%);background-size:200% 100%;border-radius:999px;transition:width .35s ease;animation:progressPulse 2.2s linear infinite}
+.job-progress-fill.finished{background:#0e6245;animation:none}
+.job-progress-fill.failed{background:#b42318;animation:none}
+@keyframes progressPulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.job-stage-pills{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.job-stage-pill{font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;border:1px solid #c5d9ea;background:#fff;color:#5a7086;display:inline-flex;align-items:center;gap:4px}
+.job-stage-pill.done{background:#dcf2e8;border-color:#8fd1b6;color:#0e6245}
+.job-stage-pill.active{background:#0e4f8a;border-color:#0e4f8a;color:#fff;box-shadow:0 0 0 2px rgba(14,79,138,.18)}
+.job-metrics-strip{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#2b4458;margin-top:6px;padding-top:8px;border-top:1px dashed #c7dbed;font-variant-numeric:tabular-nums}
+.job-metrics-strip code{background:#fff;padding:2px 6px;border-radius:4px;border:1px solid #d5e3ec;font-weight:700;color:#0e4f8a}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){main{padding:12px}.panel{padding:16px 12px}.metric{padding:12px}.metric b{font-size:19px}#dataSensorCards button{min-height:44px}}
+.page-header{padding:24px;border-radius:16px;background:linear-gradient(110deg,#e0f5fa,#eaf0ff);margin-bottom:24px}.page-header h1{margin:16px 0 10px;line-height:1.35}.page-header p{margin:8px 0;max-width:75ch}.page-header-bar{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}.page-header-bar button{margin:0}.easy-guide{font-size:16px;color:#174a62}.panel:nth-of-type(1) h2{color:#136782}.panel:nth-of-type(2) h2{color:#6a4596}.panel:nth-of-type(3) h2{color:#17624c}.panel:nth-of-type(4) h2{color:#80531c}h1,h2,h3,summary{text-wrap:balance}p,.notice{text-wrap:pretty}.easy-collapsible{padding:14px 16px;border:1px solid #ccdce5;border-radius:10px;background:#f8fbfd}.easy-collapsible>summary{font-weight:700;color:#264e64;min-height:28px}.easy-collapsible[open]>summary{margin-bottom:16px}.easy-only{display:none}.easy-mode .easy-only{display:block}.season-balance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:12px 0}.season-card{margin:0;padding:12px;text-align:left;color:#203642;background:#f3f7fa;border:1px solid #c7d9e2;min-height:78px}.season-card b,.season-card span{display:block}.season-card span{font-size:12px;margin-top:5px}.season-card[data-season=spring]{background:#fff0f3;color:#8f354d}.season-card[data-season=summer]{background:#e4f8f0;color:#11614d}.season-card[data-season=autumn]{background:#fff0dc;color:#754711}.season-card[data-season=winter]{background:#e5f3ff;color:#235c82}.season-card:disabled{opacity:1;cursor:default;border-style:dashed}.season-card:disabled b{font-weight:500}.season-caption{margin:8px 0;font-size:13px;color:#405f70}.month-chip.season-highlight{outline:3px solid #a367c7;outline-offset:3px}.metric{margin:0;color:#203642;text-align:left;border:1px solid transparent;line-height:1.5}.metric:hover{border-color:#86b3c8;background:#e4f2f7}.metric small{display:block;color:#436273;margin-top:8px}.evidence-details{padding:14px 0;border-top:1px solid #dbe5ea}.evidence-details>summary{font-weight:700;color:#264e64;min-height:30px}.evidence-details[open]>summary{margin-bottom:14px}#dataFilePairSummary{font-variant-numeric:tabular-nums;text-align:left;display:block;width:100%;border:1px solid #97c7d0;background:#e4f6f3;color:#145c58;min-height:44px;line-height:1.6}#dataFilePairSummary:hover{border-color:#3e8b99;background:#d7f0ec}#dataFilePairNote{font-size:13px;overflow-wrap:anywhere}#dataFilePairSummary[data-needs-check=true]{background:#fff3df;color:#77470f}button,summary,a,input,select,textarea{touch-action:manipulation}summary:focus-visible,textarea:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #508bab;outline-offset:3px}input,textarea{caret-color:#166889}.scroll{scrollbar-color:#8bafbf #eef5f8}#dataAnomalyWarning:empty{display:none}@supports(background:linear-gradient(in oklab,white,black)){:root{--in-oklab:in oklab}.page-header{background:linear-gradient(110deg var(--in-oklab),#e0f5fa,#eaf0ff)}}@media(max-width:600px){.page-header{padding:18px}.page-header h1{font-size:25px}.season-balance{grid-template-columns:repeat(2,minmax(0,1fr))}button,summary,.month-chip,.month-year-btn{min-height:44px}.easy-collapsible{padding:12px}.page-header-bar{align-items:flex-start}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style></head><body class="easy-mode" data-ui-mode="easy"><main>
+<header class="page-header"><div class="page-header-bar"><a href="/">← AI 모델 시험실 · 두 모델 비교로 돌아가기</a><button id="easyModeToggle" type="button" class="secondary" aria-pressed="true">간단히 보기 · 자세히 보기로 전환</button></div><h1>📚 학습자료를 확인하고 묶음 만들기</h1><p class="easy-guide">관측소와 월을 고르고 자료를 검사한 뒤, 학습에 쓸 자료 묶음을 만드세요.</p><details class="easy-collapsible"><summary>학습자료 묶음의 형식과 검사 과정 자세히 보기</summary><p class="muted">로컬 CSV(`정형데이터`, `DB_Exporting`, 외부 반출 폴더)의 관측값과 예측조위를 결합·검사합니다. 정상(`MQC_FLAG = 'G'`) 시계열과 실제 이상치(`MQC_FLAG = 'B'`) 라벨을 분리 보존하여 `Ocean-AI` (`event-evidence-dataset-2`) 규격의 시간순 `TRAIN / VALIDATION / TEST` Parquet 스냅샷을 생성합니다.</p></details></header>
+<section class="panel"><h2>📂 사용할 자료 고르기</h2><p class="easy-only muted">월별 파일은 아래 월 카드로 고를 수 있습니다. 직접 경로를 넣거나 검사 옵션을 바꾸려면 자세한 설정을 여세요.</p><label for="mode">자료 종류</label><select id="mode"><option value="paired">관측 CSV + 예측조위 CSV</option><option value="historical">운영 상세 로그 한 벌 · 과거자료 검사</option></select><details class="easy-collapsible"><summary>파일 경로·검사 옵션·예제 자료 자세히 설정</summary><div class="grid"><div><label for="encoding">파일 인코딩</label><select id="encoding"><option value="utf-8-sig">UTF-8 · 기본</option><option value="cp949">CP949 · 한글이 깨지는 경우</option></select></div><div><label for="columnNorm">컬럼명 정규화 옵션</label><select id="columnNorm"><option value="strict">기본 · 표준 컬럼명 엄격 일치 (추측 금지)</option><option value="sqlplus_gd_obs_st">권장 · SQL*Plus GD_OBS_ST 7컬럼 절단 헤더 정규화 (OBS_POST_I→OBS_POST_ID 등)</option></select></div><div><label for="timeAlign">관측·예측 시각 정렬 기준</label><select id="timeAlign"><option value="exact_minute">기본 · 정각(:00초) 1분 시각만 결합</option><option value="minute_floor">권장 · 분 단위 버킷(:00초) 정규화 및 source_obs_timestamp 원본 보존</option></select></div></div>
+<div class="grid" style="margin-top:20px"><div><label for="obsFile">관측 CSV 또는 상세 로그 (`observation_path` / `observation_paths`)</label><select id="obsFile"><option value="">목록에서 선택하거나 아래에 경로 입력</option></select><input id="obsPath" class="path" aria-label="관측 CSV 경로" placeholder="CSV 파일의 전체 경로"><button id="inspect" class="secondary">파일 형식 확인</button><button id="addObsPathBtn" class="secondary">+ 다중 관측 파일 목록에 추가</button><label for="obsPathsList" style="margin-top:10px">다중 관측 CSV 목록 (줄바꿈 구분 · 비워두면 위 단일 경로 사용)</label><textarea id="obsPathsList" rows="3" placeholder="여러 월의 data_YYYYMM.csv 경로를 한 줄에 하나씩 입력하거나 '+ 다중 관측 파일 목록에 추가' 또는 '기간 내 월별 CSV 자동 매칭'을 누르세요."></textarea></div><div id="predictionBox"><label for="prdFile">예측조위 CSV (`prediction_path` / `prediction_paths`)</label><select id="prdFile"><option value="">목록에서 선택하거나 아래에 경로 입력</option></select><input id="prdPath" class="path" aria-label="예측조위 CSV 경로" placeholder="GO_TIDE_PRE_DATA 또는 pred_YYYYMM.csv 전체 경로"><button id="inspectPrediction" class="secondary">예측 파일 형식 확인</button><button id="addPrdPathBtn" class="secondary">+ 다중 예측 파일 목록에 추가</button><label for="prdPathsList" style="margin-top:10px">다중 예측조위 CSV 목록 (줄바꿈 구분 · 비워두면 위 단일 경로 사용)</label><textarea id="prdPathsList" rows="3" placeholder="여러 월의 pred_YYYYMM.csv 또는 GO_TIDE_PRE_DATA_YYYYMM.csv 경로를 한 줄에 하나씩 입력하세요."></textarea></div></div>
+<p class="muted">관측 CSV에는 OBS_POST_ID, OBS_ITEM_CODE, OBS_TIME, OBS_VALUE, MQC_FLAG가 필요합니다(`MQC_FLAG='G'`는 정상 학습·검증·테스트 시계열에, `MQC_FLAG='B'`는 실제 이상치 분류 평가용 `joined_labeled.csv`에 보존됩니다). 예측조위 CSV에는 OBS_POST_ID, OBS_TIME, TIDE_PRE_VAL이 필요합니다.</p>
+<button id="trainingPair" class="secondary">2020~2022 학습자료 두 벌 선택</button><button id="newExportPair" class="secondary">2024년 1월 신규 반출자료(DT_0001) 선택</button><button id="anomalyRichPreset" class="accent">실제 이상치(MQC_FLAG='B') 다수 포함 관측소(DT_0035 · 2024년 1월) 선택</button><button id="historicalExample" class="secondary">확보된 실제 과거자료로 먼저 보기</button><button id="clearMultiPathsBtn" class="secondary">다중 파일 경로 목록 비우기</button></details><p id="profile" class="notice"></p></section>
+<section class="panel"><h2>📍 관측소와 검사할 월 고르기</h2><div class="station-sort"><label for="dataStationSort">관측소 정렬</label><select id="dataStationSort"><option value="name">가나다순</option><option value="code">관측소 코드순</option></select></div><div class="grid"><div><label for="station">관측소 (친숙한 한글 명칭)</label><select id="station"></select></div><div><label for="sensor">센서 카드 선택</label><div id="dataSensorCards" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px"></div><select id="sensor"></select></div><div><label for="dateStart">시작 날짜</label><input id="dateStart" type="date"></div><div><label for="dateEnd">마지막 날짜 · 해당 날짜 전체 포함</label><input id="dateEnd" type="date"></div></div>
+<div style="margin:14px 0;padding:12px 14px;background:#f8fbfd;border:1px solid #d5e3ec;border-radius:10px;user-select:none">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+<b style="font-size:13px;color:#174a62">📅 연·월 카드 드래그/클릭 선택 (마우스 누른 채로 쭈우욱 드래그하여 연속 월 선택 · 다중 연도/월 토글 지원)</b>
+<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+<label style="margin:0;font-size:12px;color:#174a62;cursor:pointer;background:#e5eff5;padding:4px 8px;border-radius:6px"><input type="checkbox" id="dataToggleMonthMode"> 개별 월·연도 다중 토글 모드</label>
+<button type="button" id="dataPreset2023All" class="secondary" style="padding:5px 10px;margin:0;font-size:12px">2023년 전체 (1~12월)</button>
+<button type="button" id="dataPreset2024All" class="secondary" style="padding:5px 10px;margin:0;font-size:12px">2024년 전체 (1~12월)</button>
+<button type="button" id="dataPreset2025All" class="secondary" style="padding:5px 10px;margin:0;font-size:12px">2025년 전체 (1~12월)</button>
+<button type="button" id="dataPreset2024_2025All" class="secondary" style="padding:5px 10px;margin:0;font-size:12px">2024~2025년 전체 (2년 · 24개월)</button>
+<button type="button" id="dataPreset2026Avail" class="secondary" style="padding:5px 10px;margin:0;font-size:12px">2026년 가용 (1~7월)</button>
+</div>
+</div>
+<div id="dataMonthChipGrid"></div>
+<div id="dataSeasonBalanceBar" aria-label="선택한 월의 계절 분포"></div>
+<div id="dataSelectedMonthsSummary" style="margin-top:10px;padding:10px 12px;background:#eef6fa;border:1px solid #cbe0ec;border-radius:8px;font-size:12px;color:#174a62">연·월 카드를 클릭하거나 드래그하면 선택된 월별 CSV 목록이 여기에 표시됩니다.</div>
+</div>
+<p id="expected" class="notice">날짜를 선택하면 예상 1분 자료 건수를 표시합니다.</p>
+<button id="dataFilePairSummary" type="button" class="notice file-pair-summary" aria-controls="obsPathsList" aria-describedby="dataFilePairNote" aria-live="polite">고른 월 0개월 · 경로 목록의 관측/예측 짝 0개월 · 경로 보기</button>
+<p id="dataFilePairNote" class="muted">파일명에서 월을 집계합니다. 파일 내용과 실제 유효량은 검사 후 확인하세요.</p>
+<button id="autoMatchPeriodFilesBtn" class="secondary">선택 기간(또는 선택 월) 월별 관측·예측 CSV 자동 매칭 (다중 월 / 365일 지원)</button>
+<button id="analyze">자료 결합·검사 실행 (`joined.csv` + `joined_labeled.csv` 생성)</button><p id="status" class="notice" role="status"></p><div id="dataAnalyzeProgressPanel" hidden></div></section>
+<section id="result" class="panel" hidden><h2>🔎 실제 검사 결과와 학습자료 묶음</h2><p id="resultBasis" class="muted"></p><p class="muted">결과 카드를 누르면 해당 수치의 근거로 이동합니다.</p><div id="metrics" class="metrics"></div><p id="dataAnomalyWarning" class="notice error" role="status"></p><p id="volume" class="notice"></p><p id="continuity" class="notice" tabindex="-1"></p>
+<div style="margin:16px 0;padding:16px;background:#f4faf7;border:1px solid #cce3d8;border-radius:10px"><h3>학습자료 묶음 만들기</h3><p class="muted">검사가 끝난 자료를 학습·검증·최종 평가용으로 나누어 저장합니다.</p><details class="easy-collapsible"><summary>Ocean-AI Parquet 스냅샷과 평가 지표 자세히 보기</summary><p class="muted">현재 결합된 유효 정상(`MQC_FLAG='G'`) 시계열을 시간순 `TRAIN(70%) / VALIDATION(15%) / TEST(15%)`로 분할합니다. 실제 이상치(`MQC_FLAG='B'`) 행은 `labeled_anomalies.csv`에 보존합니다. 평균 예측 오차(`MAE`), `RMSE`와 이상탐지 균형 점수(`F1-Score (100점 만점)`), `TP`, `FP`, `TN`, `FN`, `Precision`, `Recall`을 평가할 수 있는 `Ocean-AI` (`event-evidence-dataset-2`) Parquet 스냅샷입니다.</p></details><button id="buildSnapshotBtn" class="accent">이 검사 결과로 학습자료 묶음 만들기</button><p id="snapshotStatus" class="notice"></p></div>
+<details id="dataMonthlyEvidence" class="evidence-details"><summary>월별 자료량 보기</summary><div class="scroll"><table><thead><tr><th>월</th><th>예상 1분 건수</th><th>유효 건수 (G)</th><th>유효율</th></tr></thead><tbody id="months"></tbody></table></div></details>
+<details id="dataSamplesEvidence" class="evidence-details"><summary>결합된 자료 앞부분 · 최대 100개 시각 보기</summary><div class="legend"><span style="color:#176b98">● 관측값</span><span style="color:#d88425">● 예측조위</span></div><div id="chart"></div><p class="muted">원본 수치를 변환 없이 표시합니다. 결측 사이를 그래프로 이어 붙이지 않습니다.</p><div class="scroll"><table><thead><tr><th>정렬 시각 (OBS_TIME)</th><th>원본 관측 시각 (source_obs_timestamp)</th><th>관측값</th><th>예측조위</th></tr></thead><tbody id="samples"></tbody></table></div></details>
+<details id="dataExclusionsEvidence" class="evidence-details"><summary>제외 사유와 검사 기준 보기</summary><p>정상 학습·검증·테스트 시계열은 MQC_FLAG가 정확히 G이고 관측값·예측조위가 유한한 숫자인 자료만 사용합니다. MQC_FLAG가 B인 실제 이상치 자료는 별도 `joined_labeled.csv` 및 `labeled_anomalies.csv`에 보존되어 이상탐지 F1-Score 평가에 활용됩니다.</p><div id="exclusions" class="scroll"></div><p id="sourceInfo" class="muted"></p></details><div id="downloads"></div></section>
+<section class="panel"><h2>🗂️ 저장된 검사 기록과 학습자료 묶음</h2>
+<label for="history">최근 완료된 자료 검사 기록 단건 열람</label><select id="history"><option value="">검사 기록 선택</option></select>
+<details class="easy-collapsible"><summary>여러 검사 기록을 하나의 학습자료 묶음으로 합치기</summary>
+<h3>검사 기록(`dataset_ids`) 선택과 병합 설정</h3>
+<p class="muted">동일 관측소·센서의 여러 기간 검사 기록을 체크박스로 선택한 뒤 병합 스냅샷을 생성하면, 중복·충돌 시각을 자동 검증하고 전체 기간을 단일 Ocean-AI Parquet 스냅샷으로 통합합니다.</p>
+<div id="multiDatasetCheckboxes" class="scroll"><table><thead><tr><th>선택</th><th>Dataset ID</th><th>관측소 / 센서</th><th>기간</th><th>정상 유효 분 (G)</th><th>실제 이상치 분 (B)</th><th>4G➔1G 정상창 / 4G➔1B 이상치창</th><th>정규화 / 정렬</th></tr></thead><tbody id="datasetMergeRows"></tbody></table></div>
+<div style="max-width:360px;margin:12px 0"><label for="mergedSplitRatios">TRAIN / VALIDATION / TEST 분할 비율 (`split_ratios`)</label><input id="mergedSplitRatios" value="0.70,0.15,0.15" aria-label="TRAIN VALIDATION TEST 분할 비율"></div>
+<button id="buildMergedSnapshotBtn" class="accent">선택한 다중 데이터셋 병합 Ocean-AI 스냅샷 생성 (`dataset_ids`)</button>
+</details><p id="mergeSnapshotStatus" class="notice"></p>
+<details class="easy-collapsible"><summary>만들어진 학습자료 묶음과 다운로드 보기</summary><h3>Ocean-AI (`event-evidence-dataset-2`) Parquet 스냅샷</h3><div class="scroll"><table><thead><tr><th>스냅샷 ID</th><th>원본 Dataset ID(s)</th><th>관측소 / 센서</th><th>기간</th><th>정규화 / 시각정렬</th><th>전체 정상 행 (창 수)</th><th>보존 이상치 행 (B)</th><th>TRAIN / VAL / TEST 창</th><th>다운로드</th></tr></thead><tbody id="snapshotRows"></tbody></table></div></details></section>
+</main><script>
+const $=id=>document.getElementById(id), token=document.querySelector('meta[name="dashboard-token"]').content;
+let files=[], mapping=[], poller=null, currentDatasetId='', latestAnalyzeJob=null;
+let selectedDataYms=[], dataDragActive=false, dataDragStartYm='', dataRangeAnchorYm='';
+const fmt=n=>Number(n||0).toLocaleString('ko-KR');
+
+// UI calculation helpers
+function monthlyFilePriority(path,kind){
+  const normalized=String(path).replace(/\\/g,'/').toLowerCase(),name=normalized.split('/').pop();
+  if(kind==='observation')return normalized.includes('/정형데이터/gd_obs_st/')?0:name.startsWith('gd_obs_st_')?1:2;
+  if(normalized.includes('/정형데이터/go_tide_pre_data/'))return 0;
+  if(name.startsWith('pred_'))return 5;
+  if(normalized.includes('/20261021_greenblue/'))return 1;
+  if(normalized.includes('/261008_gb_temp/'))return 2;
+  if(normalized.includes('/go_tide_pre_data_utf8/'))return 3;
+  return 4;
+}
+function preferMonthlyFile(path,current,kind){
+  if(!current)return true;
+  const rank=monthlyFilePriority(path,kind)-monthlyFilePriority(current,kind);
+  return rank<0||(rank===0&&String(path).replace(/\\/g,'/').toLowerCase()<String(current).replace(/\\/g,'/').toLowerCase());
+}
+function seasonBalanceSummary(yms){
+  const months=[...new Set(Array.from(yms||[],String).filter(ym=>/^\d{4}(0[1-9]|1[0-2])$/.test(ym)&&Number(ym.slice(0,4))>0))].sort();
+  const definitions=[['spring','봄',[3,4,5]],['summer','여름',[6,7,8]],['autumn','가을',[9,10,11]],['winter','겨울',[12,1,2]]];
+  const seasons=definitions.map(([key,label,numbers])=>{const selected=months.filter(ym=>numbers.includes(Number(ym.slice(4))));return {key,label,months:selected,count:selected.length};});
+  const missing=seasons.filter(season=>season.count===0).map(season=>season.key);
+  return {total:months.length,years:[...new Set(months.map(ym=>ym.slice(0,4)))],seasons,missing,message:months.length?`고른 월 ${months.length}개월 · ${missing.length?'선택하지 않은 계절: '+seasons.filter(season=>!season.count).map(season=>season.label).join(', '):'네 계절의 월을 모두 선택했습니다.'}`:'선택한 월이 없습니다. 월 카드나 날짜 범위를 확인해 주세요.'};
+}
+function filePairSummary(selectedYms,observationPaths,predictionPaths,mode='paired'){
+  const validYm=ym=>/^\d{4}(0[1-9]|1[0-2])$/.test(ym)&&Number(ym.slice(0,4))>0;
+  const selected=new Set(Array.from(selectedYms||[],String).filter(validYm));
+  const pathMonths=(paths,pattern)=>new Set((Array.isArray(paths)?paths:String(paths||'').split(/\r?\n/)).map(path=>String(path).trim().split(/[\\/]/).pop().match(pattern)).filter(Boolean).map(match=>match[1]).filter(validYm));
+  const observation=pathMonths(observationPaths,/^(?:gd_obs_st_|data_)(\d{6})\.csv$/i),prediction=pathMonths(predictionPaths,/^(?:pred_|go_tide_pre_data_)(\d{6})\.csv$/i);
+  const pairedMonths=[...observation].filter(ym=>prediction.has(ym)).sort();
+  const unmatchedMonths=[...new Set([...observation,...prediction])].filter(ym=>!observation.has(ym)||!prediction.has(ym)).sort();
+  const pairedCount=mode==='historical'?null:pairedMonths.length;
+  const message=mode==='historical'?`고른 월 ${selected.size}개월 · 과거자료 검사 모드 · 월별 관측/예측 짝은 미검증입니다.`:`고른 월 ${selected.size}개월 · 경로 목록의 관측/예측 짝 ${pairedCount}개월${!prediction.size?' · 예측 경로 확인 필요':!observation.size?' · 관측 경로 확인 필요':unmatchedMonths.length?' · 짝이 없는 경로 월 '+unmatchedMonths.join(', '):pairedCount?'':' · 월별 경로 확인 필요'}`;
+  return {selectedCount:selected.size,pairedCount,observationCount:observation.size,predictionCount:prediction.size,pairedMonths,unmatchedMonths,message};
+}
+function optionalCountText(value,unit=''){
+  return value===null||value===undefined||value===''||!Number.isFinite(Number(value))?'미확인':Number(value).toLocaleString('ko-KR')+unit;
+}
+function sortDataRecords(records){
+  return [...records].sort((a,b)=>String(b.date_start||'').localeCompare(String(a.date_start||''))||(b.total_windows||0)-(a.total_windows||0)||String(b.created_at||b.snapshot_id||b.dataset_id||'').localeCompare(String(a.created_at||a.snapshot_id||a.dataset_id||'')));
+}
+function sortedStationMapping(records,mode='name'){
+  return [...records].sort((a,b)=>(mode==='code'?a.CODE.localeCompare(b.CODE):String(a.NAME||a.CODE).localeCompare(String(b.NAME||b.CODE),'ko'))||a.CODE.localeCompare(b.CODE));
+}
+function formatElapsedMmSs(seconds){
+  const sec=Math.max(0,Math.floor(Number(seconds)||0));
+  return `${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;
+}
+function normalizeSnapshotProgress(progress,status='RUNNING',elapsedOverride=null){
+  const p=progress&&typeof progress==='object'?progress:{};
+  const st=String(status||'RUNNING').toUpperCase();
+  const stage=st==='FINISHED'?'finished':String(p.stage||'hash');
+  let stageIndex=st==='FINISHED'?4:(Number(p.stage_index)||0);
+  if(!stageIndex){
+    if(stage==='hash')stageIndex=1;
+    else if(stage==='observation'||stage==='reading_observation'||stage==='historical'||stage==='reading_historical')stageIndex=2;
+    else if(stage==='prediction'||stage==='reading_prediction')stageIndex=3;
+    else if(stage==='saving_csv'||stage==='building_snapshot'||stage==='finished')stageIndex=4;
+    else stageIndex=1;
+  }
+  const numOrNull=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?Number(v):null;
+  const fileIndex=numOrNull(p.file_index),totalFiles=numOrNull(p.total_files);
+  const stageFileIndex=numOrNull(p.stage_file_index)??fileIndex,stageTotalFiles=numOrNull(p.stage_total_files)??totalFiles;
+  let percent=numOrNull(p.percent);
+  if(st==='FINISHED')percent=100;
+  else if(percent===null){
+    const ratio=stageFileIndex&&stageTotalFiles?Math.min(1,Math.max(0,stageFileIndex/stageTotalFiles)):0.5;
+    if(stageIndex===1)percent=Math.round(10*ratio);
+    else if(stageIndex===2)percent=Math.round(10+40*ratio);
+    else if(stageIndex===3)percent=Math.round(50+35*ratio);
+    else percent=stage==='building_snapshot'?94:90;
+  }
+  percent=Math.max(0,Math.min(100,Number(percent)||0));
+  const elapsedSeconds=numOrNull(elapsedOverride)??numOrNull(p.elapsed_seconds)??0;
+  const stageDefs=[{index:1,label:'① 해시 확인'},{index:2,label:'② 관측 CSV 스캔'},{index:3,label:'③ 예측 CSV 스캔'},{index:4,label:'④ Parquet 빌드'}];
+  const stageLabelMap={hash:'원본 파일 해시 확인',observation:'관측 CSV 스캔',reading_observation:'관측 CSV 스캔',prediction:'예측조위 CSV 스캔',reading_prediction:'예측조위 CSV 스캔',historical:'과거 상세 로그 스캔',reading_historical:'과거 상세 로그 스캔',saving_csv:'결합 CSV 저장',building_snapshot:'Parquet 스냅샷 생성',finished:'스냅샷 생성 완료'};
+  return {
+    status:st,stage,stageIndex,stageTotal:4,
+    stageLabel:stageLabelMap[stage]||'자료 결합·검사 중',
+    percent:Math.round(percent*10)/10,
+    fileName:p.file?String(p.file):(stage==='building_snapshot'||stage==='finished'?'snapshot.parquet':''),
+    fileIndex,totalFiles,stageFileIndex,stageTotalFiles,
+    rowsScanned:numOrNull(p.rows_scanned),
+    elapsedSeconds,elapsedText:formatElapsedMmSs(elapsedSeconds),
+    stages:stageDefs.map(d=>({index:d.index,label:d.label,state:st==='FINISHED'||d.index<stageIndex?'done':d.index===stageIndex?'active':'pending'})),
+  };
+}
+function resolveDataActiveJobId(jobInfo){
+  const active=jobInfo&&typeof jobInfo==='object'?jobInfo.active_job:null;
+  if(!active)return '';
+  if(typeof active==='string')return active.trim();
+  if(typeof active==='object')return String(active.job_id||active.id||'').trim();
+  return '';
+}
+function normalizeDataJobRecord(job,activeJobId=''){
+  if(!job||typeof job!=='object')return null;
+  if(job.status!=='RUNNING')return job;
+  const jid=String(job.job_id||job.id||'').trim();
+  const isOrphan=job.orphaned===true||(Boolean(jid)&&(!activeJobId||jid!==String(activeJobId).trim()));
+  if(!isOrphan)return job;
+  return {
+    ...job,
+    status:'FAILED',
+    orphaned:true,
+    error:job.error||'이전 실행이 중단되어 완료 기록이 없습니다.',
+  };
+}
+function isRicherDataProgress(candidateProg,referenceProg){
+  const numOrNull=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?Number(v):null;
+  const c=candidateProg&&typeof candidateProg==='object'?candidateProg:{};
+  const r=referenceProg&&typeof referenceProg==='object'?referenceProg:{};
+  const cRows=numOrNull(c.rows_scanned)??0,rRows=numOrNull(r.rows_scanned)??0;
+  if(cRows!==rRows)return cRows>rRows;
+  const cFileIdx=numOrNull(c.file_index)??0,rFileIdx=numOrNull(r.file_index)??0;
+  if(cFileIdx!==rFileIdx)return cFileIdx>rFileIdx;
+  const cStageIdx=numOrNull(c.stage_index)??0,rStageIdx=numOrNull(r.stage_index)??0;
+  if(cStageIdx!==rStageIdx)return cStageIdx>rStageIdx;
+  const cPct=numOrNull(c.percent)??0,rPct=numOrNull(r.percent)??0;
+  if(cPct!==rPct)return cPct>rPct;
+  const cHasFile=Boolean(c.file),rHasFile=Boolean(r.file);
+  if(cHasFile!==rHasFile)return cHasFile;
+  const initStages=new Set(['','hash']);
+  const cNonInit=!initStages.has(String(c.stage||'')),rNonInit=!initStages.has(String(r.stage||''));
+  if(cNonInit!==rNonInit)return cNonInit;
+  return true;
+}
+function buildFailedDataJobState(lastJobState,fallbackJob=null,errorMessage=''){
+  const numOrNull=v=>v!==null&&v!==undefined&&v!==''&&Number.isFinite(Number(v))?Number(v):null;
+  const fb=fallbackJob&&typeof fallbackJob==='object'?fallbackJob:{};
+  const base=lastJobState&&typeof lastJobState==='object'?lastJobState:fb;
+  const fbProg=fb.progress&&typeof fb.progress==='object'?fb.progress:{};
+  const baseProg=base.progress&&typeof base.progress==='object'?base.progress:fbProg;
+  const mergedProg=isRicherDataProgress(baseProg,fbProg)?{...fbProg,...baseProg}:{...baseProg,...fbProg};
+  const elapsedCandidates=[
+    numOrNull(base.elapsed_seconds),
+    numOrNull(baseProg.elapsed_seconds),
+    numOrNull(fb.elapsed_seconds),
+    numOrNull(fbProg.elapsed_seconds),
+  ].filter(v=>v!==null&&v>0);
+  const recordedElapsed=elapsedCandidates.length?Math.max(...elapsedCandidates):null;
+  const startedAt=numOrNull(base.started_at)??numOrNull(fb.started_at);
+  const elapsedSeconds=recordedElapsed!==null?recordedElapsed:(startedAt!==null?Math.max(0,Math.round((Date.now()/1000-startedAt)*10)/10):0);
+  const mergedJob=isRicherDataProgress(baseProg,fbProg)?{...fb,...base}:{...base,...fb,...base,progress:mergedProg};
+  return {
+    ...mergedJob,
+    status:'FAILED',
+    error:errorMessage||base.error||fb.error||'작업이 실패했습니다.',
+    started_at:startedAt??base.started_at??fb.started_at,
+    elapsed_seconds:elapsedSeconds,
+    progress:{
+      ...mergedProg,
+      elapsed_seconds:elapsedSeconds>0?Math.max(numOrNull(mergedProg.elapsed_seconds)??0,elapsedSeconds):(numOrNull(mergedProg.elapsed_seconds)??elapsedSeconds),
+    },
+  };
+}
+// End UI calculation helpers
+// UI presentation helpers
+function setEasyMode(enabled){
+  const easy=Boolean(enabled);
+  document.body.classList.toggle('easy-mode',easy);
+  document.body.dataset.uiMode=easy?'easy':'detail';
+  const toggle=document.getElementById('easyModeToggle');
+  if(toggle){toggle.setAttribute('aria-pressed',String(easy));toggle.textContent=easy?'간단히 보기 · 자세히 보기로 전환':'자세히 보기 · 간단히 보기로 전환';}
+  document.querySelectorAll('details.easy-collapsible').forEach(details=>{details.open=!easy;});
+}
+function focusEvidence(targetId){
+  const target=document.getElementById(targetId);if(!target)return;
+  for(let node=target;node;node=node.parentElement){if(node.tagName==='DETAILS')node.open=true;}
+  target.hidden=false;
+  if(!['BUTTON','INPUT','SELECT','TEXTAREA','A','SUMMARY'].includes(target.tagName))target.setAttribute('tabindex','-1');
+  const reduced=typeof window.matchMedia==='function'&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  target.focus({preventScroll:true});
+  target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest'});
+}
+function openDataFilePaths(){
+  focusEvidence('obsPathsList');
+}
+// End UI presentation helpers
+function updateDataFilePairSummary(){
+  const box=$('dataFilePairSummary');if(!box)return;
+  const effective=(listId,pathId)=>$(listId).value.trim()?$(listId).value:$(pathId).value;
+  const selected=[...getCurrentDataSelSet()],summary=filePairSummary(selected,effective('obsPathsList','obsPath'),effective('prdPathsList','prdPath'),$('mode').value);
+  const missingSelected=summary.pairedCount===null?[]:selected.filter(ym=>!summary.pairedMonths.includes(ym));
+  box.textContent=summary.message+' · 경로 보기';
+  $('dataFilePairNote').textContent=(summary.pairedCount===null?'':summary.pairedMonths.length?'짝이 있는 경로 월: '+summary.pairedMonths.join(', ')+' · ':'')+(missingSelected.length?'고른 월 중 경로 짝 확인 필요: '+missingSelected.join(', ')+' · ':'')+'파일명에서 월을 집계하며 파일 내용과 실제 유효량은 아직 확인하지 않았습니다. 월별 이름이 아닌 파일은 짝 집계에 포함하지 않습니다.';
+  box.dataset.needsCheck=String(summary.pairedCount!==null&&(!summary.pairedCount||summary.unmatchedMonths.length>0||missingSelected.length>0));
+}
+function updateDataSeasonBalance(){
+  const box=$('dataSeasonBalanceBar');if(!box)return;
+  const summary=seasonBalanceSummary([...getCurrentDataSelSet()]);
+  box.innerHTML=`<p class="season-caption">${esc(summary.years.length?summary.years.map(year=>year+'년').join(' · ')+' · ':'')}${esc(summary.message)}</p><div class="season-balance">${summary.seasons.map(season=>`<button type="button" class="season-card" data-season="${season.key}" ${season.count?'':'disabled'} aria-label="${esc(season.label+' '+season.count+'개월'+(season.count?' · '+season.months.join(', ')+' · 월 카드로 이동':''))}"><b><i aria-hidden="true" style="font-style:normal">${{spring:'🌸',summer:'☀️',autumn:'🍂',winter:'❄️'}[season.key]}</i> ${esc(season.label)} · ${season.count}개월</b><span>${season.count?season.months.map(ym=>esc(ym.slice(0,4)+'.'+ym.slice(4))).join(' · '):'고른 월 없음'}</span></button>`).join('')}</div><p class="season-caption">계절을 누르면 해당 월 카드로 이동합니다. 선택 월이나 학습 기준은 바뀌지 않습니다.</p>`;
+  box.querySelectorAll('button[data-season]').forEach(button=>{button.onclick=()=>{
+    const season=summary.seasons.find(item=>item.key===button.dataset.season);if(!season?.months.length)return;
+    const grid=$('dataMonthChipGrid');
+    grid.querySelectorAll('.season-highlight').forEach(month=>month.classList.remove('season-highlight'));
+    const target=grid.querySelector(`.month-chip[data-ym="${season.months[0]}"]`);if(!target)return;
+    target.classList.add('season-highlight');
+    if(!target.id)target.id='dataMonth'+season.months[0];
+    focusEvidence(target.id);
+  };});
+}
+function renderDataStations(){
+  const selected=$('station').value,sensor=$('sensor').value;
+  $('station').replaceChildren();
+  for(const st of sortedStationMapping(mapping,$('dataStationSort').value))$('station').add(new Option(`${st.NAME} 조위관측소 (${st.CODE})`,st.CODE));
+  if(mapping.some(st=>st.CODE===selected))$('station').value=selected;
+  sensors();
+  if([...$('sensor').options].some(opt=>opt.value===sensor)){$('sensor').value=sensor;$('sensor').dispatchEvent(new Event('change'));}
+}
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function formatStationLabel(code){const st=mapping.find(x=>x.CODE===code);return st&&st.NAME?`${st.NAME} 조위관측소`:code;}
+function formatSensorLabel(sensorCode){const s=String(sensorCode||'').trim();const suffix=s.startsWith('TIDE_LEVEL_')?s.slice(11):s;const m=suffix.match(/^([A-Za-z]+)_(\d+)$/);if(m)return `${m[1].toUpperCase()} ${m[2]}호 센서`;return suffix?`${suffix} 센서`:s;}
+function parseSplitRatios(raw){const parts=String(raw||'0.70,0.15,0.15').split(',').map(x=>Number(x.trim()));if(parts.length!==3||parts.some(x=>!Number.isFinite(x)||x<=0))throw Error('분할 비율(split_ratios)은 쉼표로 구분된 양수 3개(예: 0.70,0.15,0.15)여야 합니다.');if(Math.abs(parts[0]+parts[1]+parts[2]-1.0)>0.01)throw Error('분할 비율(TRAIN, VALIDATION, TEST)의 합계가 1.0이어야 합니다.');return parts;}
+async function api(path,body){const options=body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-Dashboard-Token':token},body:JSON.stringify(body)};const response=await fetch(path,options);const value=await response.json();if(!response.ok)throw Error(typeof value.detail==='string'?value.detail:'입력 내용을 확인해 주세요.');return value;}
+function setStatus(text,error=false){$('status').textContent=text;$('status').className='notice'+(error?' error':'');updateDataFilePairSummary();}
+function changeMode(){$('predictionBox').hidden=$('mode').value==='historical';updateDataFilePairSummary();}
+function sensors(){const selected=mapping.find(x=>x.CODE===$('station').value);$('sensor').replaceChildren();const cardBox=$('dataSensorCards');if(cardBox)cardBox.replaceChildren();if(!selected)return;const roles={'TIDE1(MAIN)':'주 센서','TIDE2':'보조 1','TIDE3':'보조 2'};for(const key of ['TIDE1(MAIN)','TIDE2','TIDE3']){const sensor=selected[key];if(sensor&&sensor!=='-'){const fullCode='TIDE_LEVEL_'+sensor;const friendly=formatSensorLabel(fullCode);$('sensor').add(new Option(`${friendly} (${roles[key]} · ${fullCode})`,fullCode));}}const syncCards=()=>{if(!cardBox)return;cardBox.innerHTML=[...$('sensor').options].map(opt=>{const active=opt.value===$('sensor').value;return `<button type="button" class="secondary" style="margin:0;padding:6px 12px;font-size:12px;border:1.5px solid ${active?'#166889':'#c5d6e0'};background:${active?'#166889':'#fff'};color:${active?'#fff':'#203642'};font-weight:700" data-sensor="${esc(opt.value)}">📡 ${esc(formatSensorLabel(opt.value))}</button>`;}).join('');cardBox.querySelectorAll('button[data-sensor]').forEach(btn=>{btn.onclick=()=>{$( 'sensor').value=btn.getAttribute('data-sensor');syncCards();};});};$('sensor').onchange=syncCards;syncCards();}
+function expected(){const a=Date.parse($('dateStart').value+'T00:00:00Z'),b=Date.parse($('dateEnd').value+'T00:00:00Z');if(Number.isFinite(a)&&Number.isFinite(b)&&b>=a){const days=(b-a)/86400000+1;$('expected').textContent=`선택 기간 ${fmt(days)}일 · 예상 ${fmt(days*1440)}건. 아직 실제 유효량은 계산하지 않았습니다.`;}else $('expected').textContent='시작 날짜와 마지막 날짜를 올바르게 선택해 주세요.';}
+async function inspect(path){const result=await api('/api/data/profile',{path,encoding:$('encoding').value,column_normalization:$('columnNorm').value});const kind={historical:'운영 상세 로그 · 과거자료',observation:'관측 CSV · 필수 컬럼 확인',prediction:'예측조위 CSV · 필수 컬럼 확인',unsupported:'학습 입력 형식과 다름 · 컬럼을 임의로 바꾸지 않습니다.'}[result.kind];const hint=result.sqlplus_gd_obs_st_detected&&result.column_normalization==='strict'?'\n[안내] SQL*Plus GD_OBS_ST 7컬럼 절단 헤더가 감지되었습니다. 위에서 "SQL*Plus GD_OBS_ST 7컬럼 절단 헤더 정규화" 옵션을 선택하면 결합 검사를 실행할 수 있습니다.':'';$('profile').textContent=`${kind}${hint}\n${result.columns.join(', ')}\n파일 크기 ${fmt(result.bytes)}바이트. 앞부분 5행만 확인했으며 전체 검사 결과가 아닙니다.`;return result;}
+function chart(rows){if(!rows.length){$('chart').textContent='결합된 유효 자료가 없습니다.';return;}const values=rows.flatMap(r=>[r.obs,r.prd]);const min=Math.min(...values),max=Math.max(...values),span=max-min||1;const x=i=>50+i*850/Math.max(rows.length-1,1),y=v=>210-(v-min)*175/span;let paths='';for(const [key,color] of [['obs','#176b98'],['prd','#d88425']]){let d='';rows.forEach((r,i)=>{const continuous=i>0&&(Date.parse(r.time.replace(' ','T'))-Date.parse(rows[i-1].time.replace(' ','T'))===60000);d+=`${continuous?'L':'M'}${x(i).toFixed(2)},${y(r[key]).toFixed(2)} `;});paths+=`<path d="${d}" fill="none" stroke="${color}" stroke-width="2"/>`;rows.forEach((r,i)=>{paths+=`<circle cx="${x(i)}" cy="${y(r[key])}" r="2" fill="${color}"/>`;});}$('chart').innerHTML=`<svg viewBox="0 0 950 240" role="img" aria-label="관측값과 예측조위 그래프"><line x1="50" y1="210" x2="900" y2="210" stroke="#bbcbd3"/><text x="4" y="35" font-size="12">${max.toFixed(2)}</text><text x="4" y="210" font-size="12">${min.toFixed(2)}</text>${paths}</svg>`;}
+function render(r){
+  currentDatasetId=r.dataset_id;$('result').hidden=false;$('snapshotStatus').textContent='';
+  $('resultBasis').textContent=`${formatStationLabel(r.station)} (${r.station}) / ${formatSensorLabel(r.sensor)} (${r.sensor}) · ${r.date_start} ~ ${r.date_end} · 컬럼정규화=${r.column_normalization||'strict'} · 시각정렬=${r.time_alignment||'exact_minute'} · 기록 ${r.dataset_id}`;
+  const metrics=[['예상 1분 건수',optionalCountText(r.expected_minutes),'dataMonthlyEvidence'],['정상 결합 건수 (G)',optionalCountText(r.valid_minutes),'dataSamplesEvidence'],['정상 유효율',optionalCountText(r.valid_percent,'%'),'dataExclusionsEvidence'],['유효량 환산',optionalCountText(r.equivalent_days,'일'),'dataMonthlyEvidence'],['실제 이상치 (MQC=B)',optionalCountText(r.anomaly_minutes,'건'),'dataExclusionsEvidence'],['4G➔1B 이상치 평가창',optionalCountText(r.contiguous_labeled_4g_input_1b_target_windows,'개'),'continuity']];
+  $('metrics').innerHTML=metrics.map(([label,value,target])=>`<button type="button" class="metric" data-evidence="${target}">${esc(label)}<b>${esc(value)}</b><small>근거 보기 →</small></button>`).join('');
+  $('metrics').querySelectorAll('button[data-evidence]').forEach(button=>{button.onclick=()=>focusEvidence(button.dataset.evidence);});
+  const anomalyKnown=r.anomaly_minutes!==null&&r.anomaly_minutes!==undefined&&r.anomaly_minutes!==''&&Number.isFinite(Number(r.anomaly_minutes));
+  $('dataAnomalyWarning').textContent=!anomalyKnown?'실제 이상치(B) 건수가 미확인입니다. 이상탐지 평가는 미검증입니다.':Number(r.anomaly_minutes)===0?'실제 이상치(B)가 0건입니다. 이 자료만으로 이상탐지 성능을 확인할 수 없으며 이상탐지 평가는 미검증입니다.':'';
+  const volumeKnown=typeof r.meets_draft_365_day_volume==='boolean';
+  $('volume').textContent=`${!volumeKnown?'365일 유효량 참고 기준 확인 필요':r.meets_draft_365_day_volume?'365일 유효량 참고 기준 충족':'365일 유효량 참고 기준 미달 (단일 월/구간 또는 여러 검사 기록을 합친 학습자료 묶음 생성 가능)'} · 학습자료 묶음(Parquet 스냅샷)을 만든 뒤 두 모델의 평균 예측 오차(MAE/RMSE)와 이상탐지 균형 점수(F1-Score (100점 만점))를 비교할 수 있습니다.`;
+  const c=r.continuity;
+  $('continuity').textContent=`결측 ${optionalCountText(r.missing_minutes,'분')} · 가장 긴 빈 구간 ${optionalCountText(c.longest_missing_minutes,'분')} · 연속 구간 ${optionalCountText(c.segments,'개')} · 가장 긴 연속 구간 ${optionalCountText(c.longest_continuous_minutes,'분')}\n4분 정상(G) 입력과 다음 1분 정상(G) 관측값이 이어지는 학습 입력창 ${optionalCountText(c.contiguous_4_input_1_target_windows,'개')} · 4분 정상(G) 입력 직후 실제 이상치(B)가 나타나는 이상탐지 평가창 ${optionalCountText(r.contiguous_labeled_4g_input_1b_target_windows,'개')}.`;
+  $('months').innerHTML=[...r.monthly].sort((a,b)=>a.month.localeCompare(b.month)).map(x=>`<tr><td>${x.month}</td><td>${fmt(x.expected_minutes)}</td><td>${fmt(x.valid_minutes)}</td><td>${x.valid_percent}%</td></tr>`).join('');
+  $('samples').innerHTML=r.preview.map(x=>`<tr><td>${esc(x.time)}</td><td>${esc(x.source_obs_timestamp||x.time)}</td><td>${x.obs}</td><td>${x.prd}</td></tr>`).join('');chart(r.preview);
+  const labels={rows_scanned:'읽은 전체 행',target_rows:'선택 관측소·센서 행',invalid_time:'잘못된 시각 또는 1분 경계 아님',non_zero_second_normalized_rows:'초 단위(:48초 등) 분 버킷 정규화 행',outside_period:'선택 기간 밖',within_period:'선택 기간 안',mqc_not_G:'MQC_FLAG가 G 아님',mqc_B_rows:'MQC_FLAG가 B인 실제 이상치 행',usable_anomaly_minutes:'보존된 고유 이상치(MQC=B) 시각',missing_or_nonfinite_value:'값 없음 또는 숫자 오류',identical_duplicate_rows:'같은 값의 중복',duplicate_conflict_rows:'다른 값의 중복 행',conflict_minutes:'중복 충돌로 제외한 시각',usable_unique_minutes:'사용 가능한 고유 정상(G) 시각'};
+  const sections=[['관측 / 상세 로그',r.observation],['예측조위',r.prediction]];
+  $('exclusions').innerHTML=sections.filter(x=>x[1]).map(([name,counts])=>`<h3>${name}</h3><table>${Object.entries(counts).map(([key,value])=>`<tr><td>${labels[key]||esc(key)}</td><td>${fmt(value)}</td></tr>`).join('')}</table>`).join('')+`<p>관측값은 있으나 예측조위와 결합되지 않은 시각: ${optionalCountText(r.unmatched_observation_minutes,'개')}</p>`;
+  $('sourceInfo').textContent='원본 경로와 SHA-256은 다운로드하는 검사 기록에 저장되어 있습니다. 원본은 수정하지 않았습니다.';
+  $('downloads').innerHTML=`<a class="linkbtn" href="/api/data/result/${r.dataset_id}/csv">정상 결합 CSV (G) 받기</a><a class="linkbtn secondary" href="/api/data/result/${r.dataset_id}/provenance_csv">출처 보존 CSV (source_obs_timestamp) 받기</a><a class="linkbtn accent" href="/api/data/result/${r.dataset_id}/labeled_csv">MQC 라벨 보존 CSV (G+B 이상치 포함) 받기</a><a class="linkbtn secondary" href="/api/data/result/${r.dataset_id}/manifest">검사 기록(JSON) 받기</a>`;
+}
+
+async function history(){
+  const selectedHistory=$('history').value,checked=new Set([...document.querySelectorAll('.ds-merge-check:checked')].map(el=>el.value));
+  const records=sortDataRecords(await api('/api/data/history'));
+  $('history').replaceChildren(new Option('검사 기록 선택',''));
+  for(const r of records)$('history').add(new Option(`${formatStationLabel(r.station)} / ${formatSensorLabel(r.sensor)} · ${r.date_start||''} ~ ${r.date_end||''} · 정상 ${fmt(r.valid_minutes)}건 / 이상치(B) ${optionalCountText(r.anomaly_minutes,'건')} · ${r.dataset_id}`,r.dataset_id));
+  if(records.some(r=>r.dataset_id===selectedHistory))$('history').value=selectedHistory;
+  $('datasetMergeRows').innerHTML=records.map(r=>`<tr><td><input type="checkbox" class="ds-merge-check" value="${esc(r.dataset_id)}" data-station="${esc(r.station)}" data-sensor="${esc(r.sensor)}"${checked.has(r.dataset_id)?' checked':''}></td><td><b>${esc(r.dataset_id)}</b></td><td>${esc(formatStationLabel(r.station))} / ${esc(formatSensorLabel(r.sensor))}</td><td>${esc(r.date_start||'')} ~ ${esc(r.date_end||'')}</td><td>${fmt(r.valid_minutes)}분</td><td><span class="tag ${r.anomaly_minutes>0?'warn':''}">B: ${optionalCountText(r.anomaly_minutes,'분')}</span></td><td>정상 ${optionalCountText(r.contiguous_windows,'창')} / 이상치 ${optionalCountText(r.contiguous_anomaly_windows,'창')}</td><td><span class="tag">${esc(r.column_normalization)}</span> <span class="tag">${esc(r.time_alignment)}</span></td></tr>`).join('')||'<tr><td colspan="8">저장된 검사 기록이 없습니다.</td></tr>';
+  const snaps=sortDataRecords(await api('/api/data/snapshots'));
+  $('snapshotRows').innerHTML=snaps.map(s=>`<tr><td><b>${esc(s.snapshot_id)}</b></td><td>${esc((s.dataset_ids||[s.dataset_id]).filter(Boolean).join(', '))}</td><td>${esc(formatStationLabel(s.station))} / ${esc(formatSensorLabel(s.sensor))}</td><td>${esc(s.date_start)} ~ ${esc(s.date_end)}</td><td><span class="tag">${esc(s.column_normalization)}</span> <span class="tag">${esc(s.time_alignment)}</span></td><td>${fmt(s.total_rows)}행 (${fmt(s.total_windows)}창)</td><td><span class="tag ${s.anomaly_rows_count>0?'warn':''}">B: ${optionalCountText(s.anomaly_rows_count,'행')}</span></td><td>${optionalCountText(s.splits?.TRAIN?.window_count)} / ${optionalCountText(s.splits?.VALIDATION?.window_count)} / ${optionalCountText(s.splits?.TEST?.window_count)}</td><td><a href="/api/data/snapshots/${encodeURIComponent(s.snapshot_id)}/download/parquet">Parquet</a> · <a href="/api/data/snapshots/${encodeURIComponent(s.snapshot_id)}/download/manifest">Manifest</a></td></tr>`).join('')||'<tr><td colspan="9">아직 생성된 스냅샷이 없습니다.</td></tr>';
+}
+function renderDataAnalyzeProgressPanel(rawJob){
+  const box=$('dataAnalyzeProgressPanel');if(!box)return;
+  if(!rawJob){box.hidden=true;return;}
+  const job=rawJob.orphaned&&rawJob.status==='RUNNING'?{...rawJob,status:'FAILED',error:rawJob.error||'이전 실행이 중단되어 완료 기록이 없습니다.'}:rawJob;
+  latestAnalyzeJob=job;
+  let elapsed=Number(job.elapsed_seconds||job.progress?.elapsed_seconds||0);
+  if(job.status==='RUNNING'&&job.started_at){
+    const parsed=typeof job.started_at==='number'?job.started_at*1000:Date.parse(job.started_at);
+    if(Number.isFinite(parsed))elapsed=Math.max(elapsed,Math.max(0,(Date.now()-parsed)/1000));
+  }
+  const norm=normalizeSnapshotProgress(job.progress,job.status,elapsed);
+  const stClass=norm.status==='FINISHED'?' finished':norm.status==='FAILED'?' failed':'';
+  const stBadge=norm.status==='FINISHED'?'완료 (100%)':norm.status==='FAILED'?'실패':`진행률 ${norm.percent}%`;
+  const fileCountStr=norm.fileIndex&&norm.totalFiles?`${norm.fileIndex} / ${norm.totalFiles}`:norm.stageFileIndex&&norm.stageTotalFiles?`${norm.stageFileIndex} / ${norm.stageTotalFiles}`:'—';
+  const jid=job.job_id||job.id||'';
+  box.hidden=false;
+  if(!box.querySelector('.job-progress-card'))box.insertAdjacentHTML('beforeend',`<div class="job-progress-card">
+    <div class="job-progress-head">
+      <div class="job-progress-title">📦 자료 검사와 학습자료 묶음 준비 <code data-progress-field="job"></code></div>
+      <div class="job-progress-pct" data-progress-field="badge"></div>
+    </div>
+    <div class="job-progress-bar" role="progressbar" aria-label="자료 검사 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="job-progress-fill"></div>
+    </div>
+    <div class="job-stage-pills">${norm.stages.map(s=>`<span class="job-stage-pill" data-progress-stage="${s.index}">${esc(s.label)}</span>`).join('')}</div>
+    <div class="job-metrics-strip">
+      <span><b>현재 단계:</b> <span data-progress-field="stage"></span></span>
+      <span><b>파일 카운터:</b> <code data-progress-field="count"></code></span>
+      <span><b>처리 파일:</b> <code data-progress-field="file"></code></span>
+      <span><b>누적 스캔 행:</b> <code data-progress-field="rows"></code></span>
+      <span><b>경과 시간:</b> <code data-progress-field="elapsed"></code></span>
+    </div>
+    <div data-progress-field="error" class="error" style="margin-top:8px;font-size:12px;font-weight:600" hidden></div>
+  </div>`);
+  box.querySelector('.job-progress-card').className='job-progress-card'+stClass;
+  const fill=box.querySelector('.job-progress-fill');fill.className='job-progress-fill'+stClass;fill.style.width=norm.percent+'%';
+  box.querySelector('[role="progressbar"]').setAttribute('aria-valuenow',String(norm.percent));
+  const values={job:jid?'('+jid+')':'',badge:stBadge,stage:norm.stageLabel,count:fileCountStr,file:norm.fileName||'대기 중',rows:norm.rowsScanned!=null?fmt(norm.rowsScanned)+'행':'—',elapsed:norm.elapsedText};
+  for(const [key,value] of Object.entries(values))box.querySelector(`[data-progress-field="${key}"]`).textContent=value;
+  norm.stages.forEach(stage=>{box.querySelector(`[data-progress-stage="${stage.index}"]`).className='job-stage-pill '+stage.state;});
+  const error=box.querySelector('[data-progress-field="error"]');error.hidden=!(norm.status==='FAILED'&&job.error);error.textContent=error.hidden?'':'❌ '+job.error;
+}
+setInterval(()=>{if(latestAnalyzeJob&&latestAnalyzeJob.status==='RUNNING')renderDataAnalyzeProgressPanel(latestAnalyzeJob);},1000);
+async function checkJob(id){const prevJob=latestAnalyzeJob;try{const rawJob=await api('/api/data/jobs/'+id);const job=rawJob?.orphaned&&rawJob.status==='RUNNING'?{...rawJob,status:'FAILED',error:rawJob.error||'이전 실행이 중단되어 완료 기록이 없습니다.'}:rawJob;if(job.status==='FAILED'){clearInterval(poller);poller=null;$('analyze').disabled=false;renderDataAnalyzeProgressPanel(buildFailedDataJobState(job,prevJob,job.error));setStatus('검사 실패: '+job.error,true);return;}renderDataAnalyzeProgressPanel(job);if(job.status==='RUNNING'){setStatus('검사 중입니다. 큰 CSV는 시간이 걸릴 수 있습니다. '+(job.progress?`${job.progress.stage} · ${fmt(job.progress.rows_scanned||0)}행 읽음`:''));return;}clearInterval(poller);poller=null;$('analyze').disabled=false;render(job.result);setStatus('검사 완료. 정상 결합 CSV(G), 출처 보존 CSV, MQC 라벨 보존 CSV(G+B), 검사 기록을 저장했습니다.');await history();}catch(e){clearInterval(poller);poller=null;$('analyze').disabled=false;renderDataAnalyzeProgressPanel(buildFailedDataJobState(latestAnalyzeJob||prevJob,{job_id:id},e.message));setStatus(e.message,true);}}
+function appendPathToTextarea(textareaId,pathVal){const v=(pathVal||'').trim();if(!v)return;const cur=$(textareaId).value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);if(!cur.includes(v))cur.push(v);$(textareaId).value=cur.join('\n');updateDataFilePairSummary();}
+function ymToDateBounds(ymStart,ymEnd){const a=ymStart<=ymEnd?ymStart:ymEnd,b=ymStart<=ymEnd?ymEnd:ymStart;const y1=Number(a.slice(0,4)),m1=Number(a.slice(4,6)),y2=Number(b.slice(0,4)),m2=Number(b.slice(4,6));const lastDay=new Date(Date.UTC(y2,m2,0)).getUTCDate();return {start:`${String(y1).padStart(4,'0')}-${String(m1).padStart(2,'0')}-01`,end:`${String(y2).padStart(4,'0')}-${String(m2).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`,ymStart:a,ymEnd:b};}
+function getAvailableDataYms(){
+  const obs=new Set(),prd=new Set();
+  for(const f of files){
+    const base=f.path.split(/[\\/]/).pop().toLowerCase();
+    const mObs=base.match(/^(?:gd_obs_st_|data_)(\d{6})\.csv$/i);
+    if(mObs)obs.add(mObs[1]);
+    const mPrd=base.match(/^(pred_|go_tide_pre_data_)(\d{6})\.csv$/);
+    if(mPrd)prd.add(mPrd[2]);
+  }
+  if(($('mode')?.value||'paired')!=='historical'&&prd.size>0){
+    return new Set([...obs].filter(ym=>prd.has(ym)));
+  }
+  return obs;
+}
+let dataLastMouseHandledYm='', dataDragBaseSet=null;
+function getCurrentDataSelSet(){
+  const avail=getAvailableDataYms();
+  const ds=($('dateStart')?.value||'').slice(0,7).replace('-',''),de=($('dateEnd')?.value||'').slice(0,7).replace('-','');
+  return new Set(selectedDataYms.length?selectedDataYms:[...avail].filter(ym=>ds&&de&&ym>=ds&&ym<=de));
+}
+function updateDataMonthChipsUI(){
+  const box=$('dataMonthChipGrid');if(!box)return;
+  const selSet=getCurrentDataSelSet();
+  box.querySelectorAll('.month-chip[data-ym]').forEach(btn=>{
+    btn.classList.toggle('in-range',selSet.has(btn.getAttribute('data-ym')));
+  });
+  const summaryEl=$('dataSelectedMonthsSummary');
+  if(summaryEl){
+    const list=[...selSet].sort();
+    summaryEl.innerHTML=list.length?`<b>선택된 학습/검사 대상 CSV (${list.length}개월):</b> `+list.map(ym=>`<span class="tag" style="margin:2px">GD_OBS_ST_${ym}.csv + GO_TIDE_PRE_DATA_${ym}.csv</span>`).join(' '):'선택된 월별 CSV가 없습니다. 위 월 카드를 클릭하거나 드래그하여 선택하세요.';
+  }
+  updateDataSeasonBalance();updateDataFilePairSummary();
+}
+function applySelectedDataYms(yms){
+  const avail=getAvailableDataYms();
+  selectedDataYms=[...new Set(yms.filter(ym=>avail.has(ym)))].sort();
+  if(selectedDataYms.length){
+    const b=ymToDateBounds(selectedDataYms[0],selectedDataYms[selectedDataYms.length-1]);
+    $('dateStart').value=b.start;$('dateEnd').value=b.end;
+    $('mode').value='paired';changeMode();$('columnNorm').value='sqlplus_gd_obs_st';$('timeAlign').value='minute_floor';
+  }
+  expected();updateDataMonthChipsUI();$('autoMatchPeriodFilesBtn').click();
+}
+function setDataYmRange(ymStart,ymEnd,additive=false){
+  const a=ymStart<=ymEnd?ymStart:ymEnd,b=ymStart<=ymEnd?ymEnd:ymStart;
+  const group=[...getAvailableDataYms()].filter(ym=>ym>=a&&ym<=b).sort();
+  if(!additive){
+    applySelectedDataYms(group);
+    return;
+  }
+  const cur=getCurrentDataSelSet();
+  const allSel=group.length>0&&group.every(ym=>cur.has(ym));
+  for(const ym of group){if(allSel)cur.delete(ym);else cur.add(ym);}
+  applySelectedDataYms([...cur]);
+}
+function renderDataMonthChips(){const box=$('dataMonthChipGrid');if(!box)return;const avail=getAvailableDataYms();if(box.querySelector('.month-chip')){updateDataMonthChipsUI();return;}const selSet=getCurrentDataSelSet();const years=['2023','2024','2025','2026'];
+box.innerHTML=years.map(yr=>{let chips='';const availInYr=[];for(let m=1;m<=12;m++){const ym=`${yr}${String(m).padStart(2,'0')}`;const has=avail.has(ym);if(has)availInYr.push(ym);const inRange=selSet.has(ym);chips+=`<button type="button" class="month-chip ${inRange?'in-range':''} ${has?'':'unavail'}" data-ym="${ym}" ${has?'':'disabled'} title="${ym} (${has?'관측+예측 CSV 보유 · 클릭 또는 드래그로 선택':'짝 CSV 파일 없음'})">${m}월</button>`;}const yrHas=availInYr.length>0;return `<div class="month-chip-row"><button type="button" class="month-year-btn" data-yr="${yr}" ${yrHas?'':'disabled'} title="${yrHas?`${yr}년 전체 (${availInYr.length}개월) 선택 · Ctrl+클릭 또는 다중 모드로 여러 연도 동시 선택`:`${yr}년은 예측조위 CSV가 없어 짝 선택 불가`}">${yr}년 전체</button>${chips}</div>`;}).join('');
+updateDataMonthChipsUI();
+box.querySelectorAll('.month-chip:not([disabled])').forEach(btn=>{
+  const ym=btn.getAttribute('data-ym');
+  btn.onmousedown=e=>{
+    if(e.button!==0)return;
+    e.preventDefault();
+    dataLastMouseHandledYm=ym;
+    dataDragActive=true;dataDragStartYm=ym;
+    const toggleMode=$('dataToggleMonthMode')?.checked||e.ctrlKey||e.metaKey;
+    if(toggleMode){
+      const cur=getCurrentDataSelSet();
+      if(cur.has(ym))cur.delete(ym);else cur.add(ym);
+      dataDragBaseSet=new Set(cur);
+      applySelectedDataYms([...cur]);
+      return;
+    }
+    if(e.shiftKey&&dataRangeAnchorYm){
+      setDataYmRange(dataRangeAnchorYm,ym);
+      dataRangeAnchorYm=ym;
+      return;
+    }
+    dataRangeAnchorYm=ym;
+    setDataYmRange(ym,ym);
+  };
+  btn.onmouseenter=()=>{
+    if(!dataDragActive||!dataDragStartYm)return;
+    const a=dataDragStartYm<=ym?dataDragStartYm:ym,b=dataDragStartYm<=ym?ym:dataDragStartYm;
+    const rangeYms=[...getAvailableDataYms()].filter(x=>x>=a&&x<=b).sort();
+    if($('dataToggleMonthMode')?.checked&&dataDragBaseSet){
+      const next=new Set(dataDragBaseSet);
+      rangeYms.forEach(k=>next.add(k));
+      applySelectedDataYms([...next]);
+    }else{
+      setDataYmRange(dataDragStartYm,ym);
+    }
+  };
+  btn.onclick=e=>{
+    if(dataLastMouseHandledYm){dataLastMouseHandledYm='';return;}
+    const toggleMode=$('dataToggleMonthMode')?.checked||e.ctrlKey||e.metaKey;
+    if(toggleMode){
+      const cur=getCurrentDataSelSet();
+      if(cur.has(ym))cur.delete(ym);else cur.add(ym);
+      applySelectedDataYms([...cur]);
+    }else if(e.shiftKey&&dataRangeAnchorYm){
+      setDataYmRange(dataRangeAnchorYm,ym);
+    }else{
+      dataRangeAnchorYm=ym;
+      setDataYmRange(ym,ym);
+    }
+  };
+});
+box.querySelectorAll('.month-year-btn:not([disabled])').forEach(btn=>{btn.onclick=e=>{const yr=btn.getAttribute('data-yr');const availYms=[...avail].filter(x=>x.startsWith(yr)).sort();if(availYms.length){dataRangeAnchorYm='';const additive=Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked);setDataYmRange(availYms[0],availYms[availYms.length-1],additive);}};});}
+window.addEventListener('mouseup',()=>{if(dataDragActive){dataDragActive=false;dataDragBaseSet=null;setTimeout(()=>{dataLastMouseHandledYm='';},0);}});
+$('mode').onchange=changeMode;$('station').onchange=sensors;for(const name of ['dateStart','dateEnd'])$(name).onchange=()=>{selectedDataYms=[];expected();renderDataMonthChips();};
+if($('dataPreset2023All'))$('dataPreset2023All').onclick=e=>{dataRangeAnchorYm='';setDataYmRange('202301','202312',Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked));};
+if($('dataPreset2024All'))$('dataPreset2024All').onclick=e=>{dataRangeAnchorYm='';setDataYmRange('202401','202412',Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked));};
+if($('dataPreset2025All'))$('dataPreset2025All').onclick=e=>{dataRangeAnchorYm='';setDataYmRange('202501','202512',Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked));};
+if($('dataPreset2024_2025All'))$('dataPreset2024_2025All').onclick=e=>{dataRangeAnchorYm='';setDataYmRange('202401','202512',Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked));};
+if($('dataPreset2026Avail'))$('dataPreset2026Avail').onclick=e=>{dataRangeAnchorYm='';const a=[...getAvailableDataYms()].filter(x=>x.startsWith('2026')).sort();setDataYmRange(a[0]||'202601',a[a.length-1]||'202607',Boolean(e.ctrlKey||e.metaKey||e.shiftKey||$('dataToggleMonthMode')?.checked));};
+for(const [select,input] of [['obsFile','obsPath'],['prdFile','prdPath']])$(select).onchange=()=>{$(input).value=$(select).value;updateDataFilePairSummary();};
+for(const id of ['obsPath','prdPath','obsPathsList','prdPathsList'])$(id).addEventListener('input',updateDataFilePairSummary);
+$('addObsPathBtn').onclick=()=>appendPathToTextarea('obsPathsList',$('obsPath').value);
+$('addPrdPathBtn').onclick=()=>appendPathToTextarea('prdPathsList',$('prdPath').value);
+$('clearMultiPathsBtn').onclick=()=>{selectedDataYms=[];$('obsPathsList').value='';$('prdPathsList').value='';renderDataMonthChips();setStatus('다중 파일 목록을 비웠습니다.');};
+$('autoMatchPeriodFilesBtn').onclick=()=>{const ds=$('dateStart').value,de=$('dateEnd').value;if(!ds||!de||ds>de){setStatus('시작 날짜와 마지막 날짜를 먼저 올바르게 선택해 주세요.',true);return;}const ymStart=ds.slice(0,7).replace('-',''),ymEnd=de.slice(0,7).replace('-','');const activeYms=selectedDataYms.length?new Set(selectedDataYms):null;const obsByYm=new Map(),prdByYm=new Map();for(const f of files){const base=f.path.split(/[\\/]/).pop().toLowerCase();const mObs=base.match(/^(?:gd_obs_st_|data_)(\d{6})\.csv$/i);if(mObs&&(activeYms?activeYms.has(mObs[1]):(mObs[1]>=ymStart&&mObs[1]<=ymEnd))&&preferMonthlyFile(f.path,obsByYm.get(mObs[1]),'observation'))obsByYm.set(mObs[1],f.path);const mPrd=base.match(/^(pred_|go_tide_pre_data_)(\d{6})\.csv$/);if(mPrd&&(activeYms?activeYms.has(mPrd[2]):(mPrd[2]>=ymStart&&mPrd[2]<=ymEnd))){if(preferMonthlyFile(f.path,prdByYm.get(mPrd[2]),'prediction'))prdByYm.set(mPrd[2],f.path);}}const isPaired=($('mode')?.value||'paired')==='paired';const commonYms=isPaired?[...obsByYm.keys()].filter(k=>prdByYm.has(k)).sort():[...obsByYm.keys()].sort();let obsMatched=commonYms.map(k=>obsByYm.get(k)),prdMatched=isPaired?commonYms.map(k=>prdByYm.get(k)):[...prdByYm.keys()].sort().map(k=>prdByYm.get(k));if(!obsMatched.length&&ymStart<='202212'&&ymEnd>='202001'){const o20=files.find(x=>x.path.endsWith('GD_OBS_ST_2020_2022_ALL_DT.csv')),p20=files.find(x=>x.path.endsWith('GO_TIDE_PRE_DATA_2020_2022_ALL_DT.csv'));if(o20)obsMatched=[o20.path];if(p20)prdMatched=[p20.path];}if(!obsMatched.length){if(isPaired&&obsByYm.size>0&&prdByYm.size===0){setStatus(`선택 기간(${ymStart}~${ymEnd})에는 조위 예측 CSV(GO_TIDE_PRE_DATA_YYYYMM.csv)가 없어 관측+예측 결합 검사를 할 수 없습니다. 표준 자료 범위 2023-01~2026-07의 예측 경로를 확인해 주세요.`,true);return;}setStatus(`선택 기간(${ymStart}~${ymEnd})에 매칭되는 관측 CSV 파일을 찾지 못했습니다.`,true);return;}$('obsPathsList').value=obsMatched.join('\n');$('obsPath').value=obsMatched[0];if(prdMatched.length){$('prdPathsList').value=prdMatched.join('\n');$('prdPath').value=prdMatched[0];}const dropped=isPaired?obsByYm.size-commonYms.length:0;setStatus(`기간(${commonYms[0]||ymStart}~${commonYms[commonYms.length-1]||ymEnd}) 자동 매칭 완료: 관측 CSV ${obsMatched.length}개, 예측조위 CSV ${prdMatched.length}개(월별 중복 제거)를 다중 파일 목록에 채웠습니다.${dropped>0?` (예측 CSV 없는 ${dropped}개월 제외)`:''}`);};
+$('inspect').onclick=async()=>{try{await inspect($('obsPath').value);}catch(e){setStatus(e.message,true);}};
+$('inspectPrediction').onclick=async()=>{try{await inspect($('prdPath').value);}catch(e){setStatus(e.message,true);}};
+$('trainingPair').onclick=async()=>{try{const obs=files.find(x=>x.path.endsWith('GD_OBS_ST_2020_2022_ALL_DT.csv')),prd=files.find(x=>x.path.endsWith('GO_TIDE_PRE_DATA_2020_2022_ALL_DT.csv'));if(!obs||!prd)throw Error('작년 학습자료 두 벌을 찾지 못했습니다.');$('mode').value='paired';changeMode();$('columnNorm').value='strict';$('timeAlign').value='exact_minute';$('obsFile').value=obs.path;$('obsPath').value=obs.path;$('prdFile').value=prd.path;$('prdPath').value=prd.path;$('obsPathsList').value='';$('prdPathsList').value='';selectedDataYms=[];const info=await inspect(obs.path),row=info.sample[0];if(!row)throw Error('관측 CSV에 데이터가 없습니다.');$('dateStart').value=row.OBS_TIME.slice(0,10);$('dateEnd').value=row.OBS_TIME.slice(0,10);expected();renderDataMonthChips();setStatus('2020~2022 학습에 사용한 실제 CSV 두 벌을 선택했습니다. 대상 관측소와 날짜를 확인한 뒤 실행해 주세요.');}catch(e){setStatus(e.message,true);}};
+$('newExportPair').onclick=async()=>{try{const preferred=[...files].sort((a,b)=>monthlyFilePriority(a.path,'observation')-monthlyFilePriority(b.path,'observation')||a.path.localeCompare(b.path)),obs=preferred.find(x=>/^(?:gd_obs_st_|data_)202401\.csv$/i.test(x.path.split(/[\\/]/).pop())),prd=[...files].sort((a,b)=>monthlyFilePriority(a.path,'prediction')-monthlyFilePriority(b.path,'prediction')||a.path.localeCompare(b.path)).find(x=>/^(?:go_tide_pre_data_|pred_)202401\.csv$/i.test(x.path.split(/[\\/]/).pop()));if(!obs||!prd)throw Error('2024년 1월 관측(GD_OBS_ST_202401.csv 또는 data_202401.csv) 또는 예측조위 파일을 찾지 못했습니다.');$('mode').value='paired';changeMode();$('columnNorm').value='sqlplus_gd_obs_st';$('timeAlign').value='minute_floor';$('obsFile').value=obs.path;$('obsPath').value=obs.path;$('prdFile').value=prd.path;$('prdPath').value=prd.path;$('obsPathsList').value='';$('prdPathsList').value='';$('station').value='DT_0001';sensors();$('sensor').value='TIDE_LEVEL_VEGA';$('sensor').dispatchEvent(new Event('change'));selectedDataYms=['202401'];$('dateStart').value='2024-01-01';$('dateEnd').value='2024-01-31';expected();renderDataMonthChips();await inspect(obs.path);setStatus(`2024년 1월 정형데이터(${obs.path.split(/[\\/]/).pop()})와 예측조위 CSV를 선택했습니다.`);}catch(e){setStatus(e.message,true);}};
+$('anomalyRichPreset').onclick=async()=>{try{const preferred=[...files].sort((a,b)=>monthlyFilePriority(a.path,'observation')-monthlyFilePriority(b.path,'observation')||a.path.localeCompare(b.path)),obs=preferred.find(x=>/^(?:gd_obs_st_|data_)202401\.csv$/i.test(x.path.split(/[\\/]/).pop())),prd=[...files].sort((a,b)=>monthlyFilePriority(a.path,'prediction')-monthlyFilePriority(b.path,'prediction')||a.path.localeCompare(b.path)).find(x=>/^(?:go_tide_pre_data_|pred_)202401\.csv$/i.test(x.path.split(/[\\/]/).pop()));if(!obs||!prd)throw Error('2024년 1월 관측(GD_OBS_ST_202401.csv 또는 data_202401.csv) 또는 예측조위(GO_TIDE_PRE_DATA_202401.csv) 파일을 찾지 못했습니다.');$('mode').value='paired';changeMode();$('columnNorm').value='sqlplus_gd_obs_st';$('timeAlign').value='minute_floor';$('obsFile').value=obs.path;$('obsPath').value=obs.path;$('prdFile').value=prd.path;$('prdPath').value=prd.path;$('obsPathsList').value='';$('prdPathsList').value='';$('station').value='DT_0035';sensors();$('sensor').value='TIDE_LEVEL_LASER_1';$('sensor').dispatchEvent(new Event('change'));selectedDataYms=['202401'];$('dateStart').value='2024-01-01';$('dateEnd').value='2024-01-31';expected();renderDataMonthChips();await inspect(obs.path);setStatus('실제 MQC_FLAG="B" 이상치가 4,778건 포함된 흑산도 조위관측소(LASER 1호 센서 · 2024-01) 프리셋을 설정했습니다. "자료 결합·검사 실행"을 눌러 확인하세요.');}catch(e){setStatus(e.message,true);}};
+$('historicalExample').onclick=async()=>{try{const selected=files.find(x=>x.path.includes('debug_logs'));if(!selected)throw Error('과거 상세 로그를 찾지 못했습니다.');$('mode').value='historical';changeMode();$('obsFile').value=selected.path;$('obsPath').value=selected.path;$('obsPathsList').value='';$('prdPathsList').value='';selectedDataYms=[];const info=await inspect(selected.path),row=info.sample[0];if(!row)throw Error('과거 로그에 데이터가 없습니다.');$('station').value=row.station;sensors();$('sensor').value=row.sensor;$('sensor').dispatchEvent(new Event('change'));$('dateStart').value=row.timestamp.slice(0,10);$('dateEnd').value=row.timestamp.slice(0,10);expected();renderDataMonthChips();setStatus('실제 과거자료와 첫 날짜를 선택했습니다. 아래 ‘자료 결합·검사 실행’을 눌러 전체 파일을 검사하세요.');}catch(e){setStatus(e.message,true);}};
+$('analyze').onclick=async()=>{if(poller)return;$('analyze').disabled=true;$('result').hidden=true;const prevAnalyzeJob=latestAnalyzeJob;const optimisticJob={status:'RUNNING',started_at:Date.now()/1000,progress:{stage:'hash',stage_index:1,stage_total:4,percent:2}};try{const multiObs=$('obsPathsList').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);const multiPrd=$('prdPathsList').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);const payload={mode:$('mode').value,encoding:$('encoding').value,column_normalization:$('columnNorm').value,time_alignment:$('timeAlign').value,observation_path:$('obsPath').value,prediction_path:$('prdPath').value,observation_paths:multiObs.length?multiObs:[$('obsPath').value].filter(Boolean),prediction_paths:multiPrd.length?multiPrd:[$('prdPath').value].filter(Boolean),station:$('station').value,sensor:$('sensor').value,date_start:$('dateStart').value,date_end:$('dateEnd').value};renderDataAnalyzeProgressPanel(optimisticJob);const job=await api('/api/data/analyze',payload);setStatus('검사를 시작했습니다.');poller=setInterval(()=>checkJob(job.job_id),1200);await checkJob(job.job_id);}catch(e){$('analyze').disabled=false;const activeOrPrev=latestAnalyzeJob&&latestAnalyzeJob!==optimisticJob?latestAnalyzeJob:prevAnalyzeJob;renderDataAnalyzeProgressPanel(buildFailedDataJobState(activeOrPrev,optimisticJob,e.message));setStatus(e.message,true);}};
+$('buildSnapshotBtn').onclick=async()=>{if(!currentDatasetId)return;$('buildSnapshotBtn').disabled=true;$('snapshotStatus').textContent='Ocean-AI 호환 Parquet 스냅샷을 생성하는 중…';const prevAnalyzeJob=latestAnalyzeJob;const optimisticJob={id:currentDatasetId,status:'RUNNING',started_at:Date.now()/1000,progress:{stage:'building_snapshot',stage_index:4,stage_total:4,percent:92,file:'snapshot.parquet'}};renderDataAnalyzeProgressPanel(optimisticJob);try{const ratios=parseSplitRatios($('mergedSplitRatios')?.value||'0.70,0.15,0.15');const s=await api('/api/data/snapshots',{dataset_id:currentDatasetId,split_ratios:ratios});renderDataAnalyzeProgressPanel({id:s.snapshot_id,status:'FINISHED',elapsed_seconds:prevAnalyzeJob?.elapsed_seconds||1,progress:{stage:'finished',stage_index:4,stage_total:4,percent:100,file:'snapshot.parquet',rows_scanned:s.total_rows}});$('snapshotStatus').textContent=`스냅샷 생성 완료: ${s.snapshot_id} · 전체 정상 ${fmt(s.total_rows)}행 (${fmt(s.total_windows)}개 창: TRAIN ${fmt(s.splits.TRAIN.window_count)} / VAL ${fmt(s.splits.VALIDATION.window_count)} / TEST ${fmt(s.splits.TEST.window_count)}) · 보존 이상치(B) ${optionalCountText(s.anomaly_rows_count,'행')} · Parquet SHA-256: ${s.parquet.sha256.slice(0,16)}…`;await history();}catch(e){renderDataAnalyzeProgressPanel(buildFailedDataJobState(prevAnalyzeJob,optimisticJob,e.message));$('snapshotStatus').textContent='스냅샷 생성 실패: '+e.message;}finally{$('buildSnapshotBtn').disabled=false;}};
+$('buildMergedSnapshotBtn').onclick=async()=>{const checked=[...document.querySelectorAll('.ds-merge-check:checked')].map(el=>el.value);if(!checked.length){$('mergeSnapshotStatus').textContent='병합할 데이터셋 기록을 최소 1개 이상 체크해 주세요.';$('mergeSnapshotStatus').className='notice error';return;}$('buildMergedSnapshotBtn').disabled=true;$('mergeSnapshotStatus').className='notice';$('mergeSnapshotStatus').textContent=`선택한 ${checked.length}개 데이터셋을 병합하여 Ocean-AI Parquet 스냅샷을 생성하는 중…`;const prevAnalyzeJob=latestAnalyzeJob;const optimisticJob={status:'RUNNING',started_at:Date.now()/1000,progress:{stage:'building_snapshot',stage_index:4,stage_total:4,percent:92,file:'snapshot.parquet'}};renderDataAnalyzeProgressPanel(optimisticJob);try{const ratios=parseSplitRatios($('mergedSplitRatios').value);const s=await api('/api/data/snapshots',{dataset_ids:checked,split_ratios:ratios});renderDataAnalyzeProgressPanel({id:s.snapshot_id,status:'FINISHED',elapsed_seconds:1,progress:{stage:'finished',stage_index:4,stage_total:4,percent:100,file:'snapshot.parquet',rows_scanned:s.total_rows}});$('mergeSnapshotStatus').textContent=`다중 데이터셋 병합 스냅샷 생성 완료: ${s.snapshot_id} · 병합 원본 ${checked.length}개 · 전체 정상 ${fmt(s.total_rows)}행 (${fmt(s.total_windows)}창) · 보존 이상치(B) ${optionalCountText(s.anomaly_rows_count,'행')}`;await history();}catch(e){renderDataAnalyzeProgressPanel(buildFailedDataJobState(prevAnalyzeJob,optimisticJob,e.message));$('mergeSnapshotStatus').textContent='병합 스냅샷 생성 실패: '+e.message;$('mergeSnapshotStatus').className='notice error';}finally{$('buildMergedSnapshotBtn').disabled=false;}};
+$('history').onchange=async()=>{if(!$('history').value)return;try{render(await api('/api/data/results/'+$('history').value));}catch(e){setStatus(e.message,true);}};
+
+$('dataStationSort').onchange=renderDataStations;
+$('easyModeToggle').onclick=()=>setEasyMode(document.body.dataset.uiMode!=='easy');
+$('dataFilePairSummary').onclick=openDataFilePaths;
+setEasyMode(true);
+async function init(){
+  try{
+    const catalog=await api('/api/data/catalog');
+    files=[...catalog.files].sort((a,b)=>a.name.localeCompare(b.name,'ko')||a.path.localeCompare(b.path));mapping=catalog.mapping;
+    for(const id of ['obsFile','prdFile'])for(const f of files)$(id).add(new Option(f.name,f.path));
+    renderDataStations();renderDataMonthChips();await history();
+    try{
+      const jobInfo=await api('/api/data/jobs');
+      const activeId=resolveDataActiveJobId(jobInfo);
+      if(activeId){
+        $('analyze').disabled=true;
+        if(typeof jobInfo.active_job==='object')renderDataAnalyzeProgressPanel(jobInfo.active_job);
+        poller=setInterval(()=>checkJob(activeId),1200);
+        await checkJob(activeId);
+      }else if(Array.isArray(jobInfo.jobs)&&jobInfo.jobs.length){
+        renderDataAnalyzeProgressPanel(normalizeDataJobRecord(jobInfo.jobs[0],activeId));
+      }
+    }catch(_){}
+  }catch(e){setStatus(e.message,true);}
+}
+init();
+(function initOceanAiDataEmbedBridge(){
+  try{
+    const params=new URLSearchParams(window.location.search||'');
+    if(params.get('embed')==='1'){
+      document.body.classList.add('ocean-ai-embed');
+      const style=document.createElement('style');
+      style.textContent='body.ocean-ai-embed header{padding:8px 16px;} body.ocean-ai-embed header p{display:none;}';
+      document.head.appendChild(style);
+    }
+    if(window.parent&&window.parent!==window){
+      window.parent.postMessage({source:'ai-qc-mlops',page:'data_preview',type:'READY',embed:params.get('embed')==='1'},'*');
+    }
+  }catch(_){}
+})();
+</script></body></html>

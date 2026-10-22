@@ -1,0 +1,1595 @@
+{
+  "schema_version": "1.0",
+  "inventory_id": "2025_TRAINING_ARCHIVE",
+  "generated_at": "2026-09-23T00:00:00+09:00",
+  "evidence_level": "LOCAL_BACKUP_VERIFIED",
+  "source_root_label": "소스코드",
+  "directory_count": 94,
+  "role_counts": {
+    "OPERATIONAL_2025": 64,
+    "TRAINING_ARCHIVE_NON_OPERATIONAL": 23,
+    "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL": 7
+  },
+  "directories": [
+    {
+      "station_code": "DT_0001",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0001",
+      "sensor_directory": "TIDE_LEVEL_OTT",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_OTT",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0001",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0002",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0002",
+      "sensor_directory": "TIDE_LEVEL_OTT",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0002/TIDE_LEVEL_OTT",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0003",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0004",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0004",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0005",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0005",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0005",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0006",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0006",
+      "sensor_directory": "TIDE_LEVEL_VEGA_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0006/TIDE_LEVEL_VEGA_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0007",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0007",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0007",
+      "sensor_directory": "TIDE_LEVEL_OTT",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_OTT",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0008",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0008",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0010",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0011",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0011",
+      "sensor_directory": "TIDE_LEVEL_VEGA_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0011/TIDE_LEVEL_VEGA_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0012",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0012",
+      "sensor_directory": "TIDE_LEVEL_VEGA_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0012/TIDE_LEVEL_VEGA_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0013",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV.backup",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0014",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "combine_csv.py",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0014",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0014/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0016",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0017",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0017/TIDE_LEVEL_MIROS",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0017",
+      "sensor_directory": "TIDE_LEVEL_MIROS_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0017/TIDE_LEVEL_MIROS_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0017",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0017/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0018",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0018",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0018/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0020",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0020",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER_1",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0020",
+      "sensor_directory": "TIDE_LEVEL_VEGA_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_VEGA_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0021",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0021",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0022",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0022",
+      "sensor_directory": "TIDE_LEVEL_VEGA_2_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA_2_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0023",
+      "sensor_directory": "TIDE_LEVEL_OTT",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0023/TIDE_LEVEL_OTT",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0023",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0023/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0024",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0024/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0025",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0025",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0025",
+      "sensor_directory": "TIDE_LEVEL_WLS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_WLS",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0026",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0026",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0027",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0027",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0028",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0028",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0029",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0029",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0029",
+      "sensor_directory": "TIDE_LEVEL_LASER_1_데이터 부족",
+      "role": "TRAINING_ARCHIVE_INSUFFICIENT_DATA_LABEL",
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER_1_데이터 부족",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0029",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0031",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0032",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0035",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0035",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0035/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0037",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0039",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0041",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0042",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0043",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0044",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0049",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0049/TIDE_LEVEL_MIROS",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0049",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0050",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0051",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV.backup",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0052",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV.backup",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0054",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0054/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0054",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0054/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0056",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0057",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV.backup",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0058",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0058/TIDE_LEVEL_MIROS",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0059",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0060",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0061",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0061",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0062",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0062/TIDE_LEVEL_LASER",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0062",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0062/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0062",
+      "sensor_directory": "TIDE_LEVEL_OTT",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0062/TIDE_LEVEL_OTT",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0063",
+      "sensor_directory": "TIDE_LEVEL_LASER",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER",
+      "file_count": 9,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV.backup",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0063",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0063",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0064",
+      "sensor_directory": "TIDE_LEVEL_MIROS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0065",
+      "sensor_directory": "TIDE_LEVEL_WLS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0066",
+      "sensor_directory": "TIDE_LEVEL_WLS",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0067",
+      "sensor_directory": "TIDE_LEVEL_LASER_1",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0067",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "TRAINING_ARCHIVE_NON_OPERATIONAL",
+      "path": "model_output_forecast/DT_0067/TIDE_LEVEL_VEGA",
+      "file_count": 7,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0068",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0091",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0091",
+      "sensor_directory": "TIDE_LEVEL_VEGA_2",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    },
+    {
+      "station_code": "DT_0092",
+      "sensor_directory": "TIDE_LEVEL_VEGA",
+      "role": "OPERATIONAL_2025",
+      "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA",
+      "file_count": 8,
+      "files": [
+        "Thres.forecast.DEV",
+        "Thres.forecast.DEV_4sigma",
+        "best_model.h5",
+        "forecast_loss_curve.png",
+        "forecast_result.csv",
+        "forecast_vs_actual.png",
+        "residual_lstm_forecast.h5",
+        "scaler.forecast.gz"
+      ]
+    }
+  ]
+}

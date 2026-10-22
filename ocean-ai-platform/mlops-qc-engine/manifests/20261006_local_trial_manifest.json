@@ -1,0 +1,1605 @@
+{
+  "schema_version": "local-trial-1",
+  "purpose": "OFFLINE_TRIAL_ONLY",
+  "created_at": "2026-10-06T09:59:45.359793+00:00",
+  "root": "2026년_AI_품질처리_데이터백업/운영코드/AI_anomaly_detection",
+  "expected_pair_count": 64,
+  "ai_flag_position": 11,
+  "operational_deployment": false,
+  "files": [
+    {
+      "path": "AI_QC_east_sea_no_update.py",
+      "bytes": 56973,
+      "sha256": "000e90fb6b50856bbdd869cc3cad57e208014afd321c21c417b50abfeef3860e"
+    },
+    {
+      "path": "AI_QC_south_sea_no_update.py",
+      "bytes": 56981,
+      "sha256": "4cd27ccbbdad09b6f95363ac8901ac2c4fcf2ca5d919a80d7034dfb89525b202"
+    },
+    {
+      "path": "AI_QC_west_sea_no_update.py",
+      "bytes": 57012,
+      "sha256": "7768d86f2b513ca1412ad1e5d6a82ba58ae07a371a5e49c83b783b81ac1c30a4"
+    },
+    {
+      "path": "Daemon_east_sea.bat",
+      "bytes": 1123,
+      "sha256": "81b2271015a43d435a2216b5e051467c0c25c23fbbc2a4cc95c4f220b0d6961a"
+    },
+    {
+      "path": "Daemon_near_time.bat",
+      "bytes": 892,
+      "sha256": "f7c59ed1eb27b55bef534956e10e0931091956b6e622c952d3f611ed35a89899"
+    },
+    {
+      "path": "Daemon_south_sea.bat",
+      "bytes": 1124,
+      "sha256": "e2a70676611ae0447b780a564ebc8bdfc84ccce05292ab595b34afd298404035"
+    },
+    {
+      "path": "Daemon_west_sea.bat",
+      "bytes": 1124,
+      "sha256": "e2a70676611ae0447b780a564ebc8bdfc84ccce05292ab595b34afd298404035"
+    },
+    {
+      "path": "Delay_Graph_generator.py",
+      "bytes": 2653,
+      "sha256": "a26314e2d16e05df27e11a0e4d8f1830160186d9fc6c11ae1761edb4802e9a31"
+    },
+    {
+      "path": "NEAR_TIME_QC_no_update.py",
+      "bytes": 21688,
+      "sha256": "ee7d803e72f6a8701af52c6701a1b1273d8a4db1cf7c841dd46748b9c4ce2cf6"
+    },
+    {
+      "path": "NEAR_TIME_QC_no_update_v2.py",
+      "bytes": 21601,
+      "sha256": "2410d8b55004857a58383b38b543dc4a70ce657503fab29c52dbe37b8285f658"
+    },
+    {
+      "path": "NEAR_TIME_QC_no_update_v3.py",
+      "bytes": 18495,
+      "sha256": "26d5bfa2bd773d44c09dcd0316e6cfb0d1d2c56a70958ca252bf7e9f79637a78"
+    },
+    {
+      "path": "Z_graph_solution.py",
+      "bytes": 17193,
+      "sha256": "d513c0327cfc905514fee8e5d94afe4923d7f997a01067c091c8bfc5fd57cc82"
+    },
+    {
+      "path": "Z_graph_solution_on_date.py",
+      "bytes": 14148,
+      "sha256": "d92ed0ee0d933800b93ce4cf97fc7b2ffe5be4f844d70087305d48a0f2da8e0a"
+    },
+    {
+      "path": "analysis_db_monitoring_v2.py",
+      "bytes": 5304,
+      "sha256": "e7108d8797efaac2e2bea487c68f0666c0bd6f5494a5640db8602e0ee9977bc5"
+    },
+    {
+      "path": "east_sea.bat",
+      "bytes": 241,
+      "sha256": "bce999672507b5de35d1005a09a2b3ed575eec19d490614952de5f1ed0ac3374"
+    },
+    {
+      "path": "mappingBySea.csv",
+      "bytes": 1945,
+      "sha256": "f43e41b1f05dda51c2b3f6479f23157de47ea49570ab73ac6522669a6ec1189d"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "c68f11c679366bd78d171ff9a3931bc76fa8ff364960aa8cb9d7c0b66a63901d"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "be2c8fcd5d95aab8210ef6c711cab27dbabcb408f74f48f78e22f2d6744f5c45"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "8b77e70bef1d8acc63fba81dd1e612a667607277b3d10f80dc157a2df7bb5fd6"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "0dc420a3ca952f1675d2107a3d4af16975271ee92b6f3ab01d0f3416bca3f7fe"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "d9a3dffb6d32d57b4c8386db4dfbf9578fae2c05819d4796e984e3394094325f"
+    },
+    {
+      "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 582,
+      "sha256": "92c3bcc4f2bcd0ad30ac8137f82144c3acf078f5a411d281863ccee8351d155d"
+    },
+    {
+      "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "c17297c4f35cee1b56cc5f63478a48e6a2ef607c16b2fc9550eef3e217d2d17d"
+    },
+    {
+      "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "d07aeb6c68182d3b50308c0bffe0aa9ce8155921a24b8620d08b6a53933d0a3b"
+    },
+    {
+      "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "4fd457f9b8d3bcf3b6f1745061275608139ce1e0cee6161f100b144c702651a0"
+    },
+    {
+      "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "0f1bd3c06a1ac5dfe6d68b2c4b788da85ae759e8f6313e6ccdca125bc574d66b"
+    },
+    {
+      "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "a01a6358f97e7a319b774e870dd301f8738bf72729d16b12d5fa84b2ee51ccde"
+    },
+    {
+      "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "1a896e9d143141299d43ab64c132dd5bcb1785578091a3389c90985f99cf849f"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "83961d874c7b794f79f505efd799e8c9b18e3bfd062cf9c3fa8f5435a3f817fe"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "119a6005cd6fcc222de78cf85c911f403cf805d6d9a3f7d9f730976dc712e9b4"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "db0ef73f165bd0560a3b1e83f2f652092cc9afc3453ec8b82bf1600c0ed48101"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "3e892d58435c380403914b5248938811ddcce9a6c2df242cbb7ef92387031aef"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "2abe0369e390fa0fbb74b204a97ca7f89190e146f45aca1cc0287d1975e04dd4"
+    },
+    {
+      "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "db0ef73f165bd0560a3b1e83f2f652092cc9afc3453ec8b82bf1600c0ed48101"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "53c7e06cb0532d193ab7f7b4c5a460f061b6fa8f0749bcfdbef0ecd0af27112c"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "abab7db532c991a89750cd1a2ab7fc9845433fcfd644253405cad8a763f07675"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "c679d0701b7cad74895673adc41b186bc7f726c4303d78c765def75de7a898b6"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "f1ba82657118eadd1a2fe32699c8a1d53ffd2a8487e62ba4a718d78f6e990c77"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "61150f42cadd621912536b4b1e30b37d9031f31374f9627fe00eec1afb8dd67e"
+    },
+    {
+      "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "d90fe60b3b1387bc80226512adb59f9e2daee9e1d813da94ae8e575c5d92bdb5"
+    },
+    {
+      "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "a579b6bc5968c1be21fbffc12ceeabc3aa2255bf50a391f7464d6d62a608dcfc"
+    },
+    {
+      "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "d248292546083a0a8275663e8b4c5e32fb115103c9afb5d0df8437e1ef7cd091"
+    },
+    {
+      "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 577,
+      "sha256": "ee2bb23b950198849ff645b9c761bf331f9738a5ac7767b6a1256b7b8117ce52"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "6a5d3a601d1500295c407218cbfff0a0d352e617f083a5ab09c50b299aaea543"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "33a743438861569df795d81c0350762437852e77002f0bf36d87d3d4230864ce"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "763719fac8ac2d58dbed842c1a9ed040b864eb401d3c879aad2052e40fbcf5ff"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "11f2e535141e84b811a67b2c1f92bd11cab3ab48472044025e005dfdf0862156"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6ffe1b3263d7cd4f4b5e2f9e45cf2002455466dda5fe258674f0d95f7cba6745"
+    },
+    {
+      "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "56ff1bc04b2dc77210303aa75c92b411c4fe4479dad833f404eab4db6d448c44"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "7d0359e2bea6acf65c3582f7833d908313e16ebecf5d745fcf4ed282fcbcd1c4"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "b571dbf0216b3ff448f25bef7c6d63115db6d90a9e0ffb1293d7f241ff9447dd"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 587,
+      "sha256": "5dfa83fdb974e38d149749bd3c8b5c5ce714d11de0ef631421b8eca49c00e74a"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "8ff06bd90d90f9e6092412e1cea2ec4631c10c2a5f32e98524f2a67b3d2019a7"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "ae548515181f998b92ea893142d7ca6e697c93f91b78c845c5c6397d10cb86dd"
+    },
+    {
+      "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 586,
+      "sha256": "125d52805332e57378b3f0aa392b00734ce96efde05016930e1d5453777a3ec3"
+    },
+    {
+      "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "9475b251d23a090b98eefacf7ee7cf93d4b65fbea0ec47ae7d4af72843b8f657"
+    },
+    {
+      "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "28739b7bf53f16a75b1840c7858503b2c26cb1ec74338365798b060fe37cd9f0"
+    },
+    {
+      "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 577,
+      "sha256": "451b660fbc3e5ec7be90f3e65a3d03ade812f07ce5b0f095322c9ad9c1248c95"
+    },
+    {
+      "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "7fad92c755a4ad86c6e0174d2b2df735dae0f5366a17c3f806742ff812a743d2"
+    },
+    {
+      "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "493565b9e97c83234f8bd97ac8d758b864a0efe0f382cfc1820a68f2dafec78b"
+    },
+    {
+      "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 577,
+      "sha256": "d940c8f4dd51e63e40c6eef32a2b6a064d51344553c8dadafd0c2ff27fd7fd20"
+    },
+    {
+      "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "7346ac53f6b72372c7fa0abb9c9b728d4ca416c6aeca10ef71f9fb9eaac3187c"
+    },
+    {
+      "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "3c7f06b433ee0986b51dc79732048b458ba21bacd98a5a2f8a7e0fa19dc3c651"
+    },
+    {
+      "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "4b80b9f0656152c7bf1459995c0dc0417c3522d03cc012ce9921cf7a9e98d186"
+    },
+    {
+      "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "01520da5fc43a6112e4a0869ba0d09470d13ecf19244db98ebcf19d014ba86e0"
+    },
+    {
+      "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "3a57ef269563a74116d236bc6afe330620b17af9d8bcd60d43d84742708ad63d"
+    },
+    {
+      "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "bc22fa4c9a9b47d5f12d67fb665981af3edb063f7e451733fbb0f0f93c9854c1"
+    },
+    {
+      "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "831cc31b8447d3aed761c6d76d33e44f65629fcbdcf16fbf900e7f813f0f08ea"
+    },
+    {
+      "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "f6b46300859ac54ea8751c802b269b87a0609b03aaf5fec6109f06dba9f0ae69"
+    },
+    {
+      "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "af264389dde6203e16c0e38d4df40565bf6f9c790cb2c30692ccc2023f922478"
+    },
+    {
+      "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "79971c5990f79f9b68e0f768c1f6d0944ea269903a65db635721fe73051a04b3"
+    },
+    {
+      "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "13af8d48c4c7a0aaae51763980013946ef05803a7eb1b6884304b68e8afba5d9"
+    },
+    {
+      "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 582,
+      "sha256": "166b666959014dd41b7e448d947421282639522c9eea032c91667f3df6fa4eb3"
+    },
+    {
+      "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "cf769119a061a4bfb52b9e97819808b322458b3d5a9b380bbc8a235eebb5dc9b"
+    },
+    {
+      "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "c3ef17dabc7ae524706f90fc5eea80dcd613b21237894bcd2b0378786f366106"
+    },
+    {
+      "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "3e1fc2ad33b598a241cb034d95e56f0662b597048076504b48d6b13b75b5223b"
+    },
+    {
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "6469f9a48ae3b9d6a368c61f118cf2e366df724084ca2dd4446826b146d53238"
+    },
+    {
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "128c0a517260af8371b115dc4b42ce0847f17245c39df5e0ac4ad6861eaa76a9"
+    },
+    {
+      "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 577,
+      "sha256": "e23ed082f69e144988de9be218942965bf1947fc37bb963f7b58b75e1f000ac5"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "a050b47d2aec702a9ce61717e024905088cfb475d64d5a3ebee8d32fb0a91765"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "5b58f56e11d20e68eee932714c972404a0b0f14c6ab2f0341c5be513a9b6cd5f"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "16217622f5f062e543f9b9c2718010758fcf3bf2aa268104deb84ab404b41b49"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "268a38482b27529da6b954ad93fe4150fa1a6a66c066338c5e5775e000ff1b21"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "4142577f48293f06a0b9e9c2c7758b377151df6e738da7809b27b593a8883ce6"
+    },
+    {
+      "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "f37b179d03dad0cbf97703970ea10bb3e11e8fe44f39118d8798d6ae9125c5a8"
+    },
+    {
+      "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "c51ee1557ea1d25828b9db5214bf8d8b8f56b794abdb78d18d396c65950fde44"
+    },
+    {
+      "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "3dadd5c7dfbcbe8459b2cc7c28855504ff0b7c284116aaa88cc17160c5ffd054"
+    },
+    {
+      "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 582,
+      "sha256": "07cdda11a9ca101fa7a0f93e842b7c0028b3c21cc1a28b114eb9008938f05368"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "173f77604c1cdf1c5a08daba5e910dce69bb5a1f606cd79970e39ab5f7475f2d"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "fe6a5e43c9f3a722e969dd5564dfc322e34e79080b81dbf66ab15bd31e1902c6"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 585,
+      "sha256": "3c1947e1c19a9e0374a9c039626bb19438a363cfc4671393372231ef1a982747"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "aebb7ac7e9efc4ceeaa9bf245192bc0519f6a0158c91611dee0c08103419ba30"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "124afb15aa3f66662297632afbcdf0943dae7f382cdc8295646ca1ad091a60e9"
+    },
+    {
+      "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 584,
+      "sha256": "cb8d7dca8bcac1c355de9af003751d80e9d5d17caf9c51b916498a0616fded3c"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "459c94aaa8213edee36e5895cd6b69b0b590d018cee0bc19fa0827fca4d7b818"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "24a82be1ffa55d9cdc9790a45cfa9690fd21560478340911847484d40f650bbb"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "0c6ecb6418c4dc43d9a39c678ebd43823ab21f19f04e42561a81f3bd5d4706cf"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "db6d58d2accfd71c15c058e9d43f29f2333b3beda164a639931fcc2a598f0d29"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6de9a5dc4b480d390e0bca4558fbb8599a5912e0e49bc59229bcc45f2c1a2d54"
+    },
+    {
+      "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "3968f7fd1c6986c34f1ba8f5d2486e94ee18ae5a304c9fcbd04ce31b048cf2cb"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "9d485e49c22d4185f806d6ea29a29800f6f3853b4d8ab1018598526cd2c6a936"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "01c1509321e4a2640fd059cf12685ee288df481092b938a0a7f26d73a93a2078"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "57312fc0d8758d99e0b5ce89cde5671b8b5c5ad53c7df281e205b7978b5b9231"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "8817a37bc57620d2ff14babc4340a7fb2cecc4b8f6e385c838bb8410c44f503a"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "22f1de2a5335f12c4b3d4e00358970ad811049a2759c39207466dfec404da6a0"
+    },
+    {
+      "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "d54783e65225b067f82248b5788556478a7845691c5a36417b21316e9d42d2b3"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "636e5d6ee3c3a183d28934733e4051c8e32932b57e84f1db5310840e52ce7bf1"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "3dd2a6a2a99e37994083972865933bbdb42cef839888f25965034d45eb54cfd9"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "c9324c8909f6e2fd3ffd2a0a6fd17821f63a0a96fd4240c345a0d3275e470f86"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "eb873ecdb67a78ad27e1633beb8029b8250574d99e892afd75c81b3880477556"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "0125e9a1c57ecd99c673bc9ba51f4dcd780fc15d614c6d1d2c59e3ec861c1bfa"
+    },
+    {
+      "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "611da93a5e7f2bd63fc4cfa4b4472b5f6d374bbb6e5155847fac4de5161d8735"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "40ba5b75982712fdfadc3936e82092b23e591bd5ac8ea1f46a95db43fdb28391"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "57b81009cb20b8bb9b00aac65c2eb8cc306bf3a33951f1fdf34a14d26485ae0d"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "9195ef4de173e546987ee211590023ffcc5946c89e40c30a6b7771ca5a0a4ec7"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "8c854d06c67a1b08dd604e540f70ec5ac662b92209c8f9169d36fc5e46d46d60"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "15fc19dbb7e2817715f2025485353d4950283a4694c6ffa754302ec78b25b329"
+    },
+    {
+      "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "d22697f25495d4d2d17fccffccf61eaf405e32ad8f312529eb061dff24df8cd1"
+    },
+    {
+      "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "b491572af0b48e37669584b893ed33ea4435dd8dfffe873d93d5cf3d022cffb9"
+    },
+    {
+      "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "0bd4a29a97ab7861b93b8940d6990625956acd33692d694bfb65a721ba0afcf4"
+    },
+    {
+      "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "59c4d7bd3c09f2b73067ccbb84860f2f072f15f4d1d4db100d1e1a54e4df9ad5"
+    },
+    {
+      "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 16,
+      "sha256": "0e0b49191193b5664ea139ded1daa42f905e0788c06dc26ba0b902fa3057f234"
+    },
+    {
+      "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "7cb1e1f5a731161ca89e9e608dc1f43d12e200d0bb9061f09e5609a27d57baab"
+    },
+    {
+      "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "b029deec087c64473a758a21723f1a7058b1ed14519a083b920618e2199b7160"
+    },
+    {
+      "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "92e5bb1335867e4a1a65167f8c85d450784f08fa88ec8b804eb356d8ed9dff5a"
+    },
+    {
+      "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "19481d8d44850ba768eeb39229db3390943d88a6f7b1cebd30a50aa7acb71ff6"
+    },
+    {
+      "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "216157c02e1576c24a6c5053c4a4527812d5e102f785a3a7c53e2f85313f6339"
+    },
+    {
+      "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "7971de00cc122944c7b2a9c5cc411707fd7d938ea28b45e6c1856e3c304a2713"
+    },
+    {
+      "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6fbf7b78b7540296185cb362cd53523643681a7568129ac47382b7675eb9e3ab"
+    },
+    {
+      "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "52d6ebd7070309534e5f6123b59723eb571f1a7c44d5c6bc4391c1db58171c1f"
+    },
+    {
+      "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "3f53239398d029f46fc8f4e08de2fb83809c8028a53ebc5fac94d40ab4c2a500"
+    },
+    {
+      "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "fd7aef596f6ad5eedf76882191ddb54ecd1733ef39e8d968b1652500693bb58f"
+    },
+    {
+      "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 576,
+      "sha256": "a5d116fffc5a6a46669e008a83e9cfcc395c4bba282d0a1f1d16d6e72d18377c"
+    },
+    {
+      "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "eaa100b4f8c06a4a701a47bf3c2b0ae64bf815f0d05bbcf79559cab6d485b1cd"
+    },
+    {
+      "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "e3d1141464ba3b09d5baeab3178e833c81056899453c9d38acbf860bf45f1a4c"
+    },
+    {
+      "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "dd999a72743180e6b576447fd62ae80165e49b72b73b27da37f1ea87283fdbe6"
+    },
+    {
+      "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "a96f503a594550ebdda8e49683d45b6f9edc889327e683e249544b6741e190e6"
+    },
+    {
+      "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "0e132e2b2cce464a50c7ca25524dea8a6b2890b0c09c102d44061c0a752156bf"
+    },
+    {
+      "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "d52939c8934cf1254f47bce73b8f9d00cb8a672739b33c6302d48cd5f0d6621d"
+    },
+    {
+      "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "f6f96abf039e4ac9ee8f4e61e23b8d6d22503f46a6538417ada4cae889bf8f16"
+    },
+    {
+      "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "cb03c51936ddb1cd7afb9d7b3916e65f06f815774b98cd8514c734b3f1a0143a"
+    },
+    {
+      "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "47e710eb7eacf9e3ddde689f13b44cd3ccbbabfaf038dea0fc7cf00e65f2c7c9"
+    },
+    {
+      "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "6122cbba5499edf2bf659b05104a2fffb5cf7a5c430182d9208320dcdc8e05e1"
+    },
+    {
+      "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "54380b9860ec443a7bade94992445d420bd2586490448339ac5c6250a18d14c3"
+    },
+    {
+      "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "89f339c5e6f383dc92dab7d598a10665bed836e8b5900fa07e383fccf76f3530"
+    },
+    {
+      "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "7529ec1db3edfdf314c8d98f2998e2d02c977432d5537c329e0825eaa383c98f"
+    },
+    {
+      "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "e441e2e96b0fefa5e85a65aaedd9fa6d73f1fc13341f1aa299c2fa3ea027562e"
+    },
+    {
+      "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "f63e77ef2dbfbef7b0769e4c6cd385f83a161e756c23b0d613ac9eb259e03656"
+    },
+    {
+      "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "a07508b57081a4b37289b0227328258bc6289396e12df8bfad2aec6746e2fd00"
+    },
+    {
+      "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6bef5adbfc86c642fcd9fbb55e5a95cb527aff03400eaabe70226bdc1180cff9"
+    },
+    {
+      "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "b8ed19c422c5aba9c56f647ac89385587c24f2f64132803e8643adad39a77730"
+    },
+    {
+      "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "55730bc8dfa1e99fd189f0b5dfc66833686051ded1946c25e7095592180f2deb"
+    },
+    {
+      "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "89aaec26d9839f46772df187c50c8d232c0a9de85c385ff021ccee4c511b96e5"
+    },
+    {
+      "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 583,
+      "sha256": "90a0d9d68ed9a9318d7ea4213557d8de6b5de8f255d6627b55fc8cb14f9c4b2f"
+    },
+    {
+      "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "41c38f9d3c37ecccbdfc740cda2776739e76bfe16774249d09ffd28b12b0d89c"
+    },
+    {
+      "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "f9149b5046d9c48f36ca0f7549f2f1dbcee14feac426bfbd8e510a7864544d23"
+    },
+    {
+      "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 585,
+      "sha256": "001deec8cb0617126ff1b99b66b5d1bcc79eed76bb45781882d29049a174e023"
+    },
+    {
+      "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "772e009ca8630a22be3eea33e735bf918683c1637836c8bc62e5da7fa6c750c3"
+    },
+    {
+      "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "e963772c27b4964db25fdfd1b6e9be8283580604359fd0214ac77de4c5f73ec8"
+    },
+    {
+      "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "91222b8f5e810b301ed983bef933d2cd3b434ed2599d8bc3a50d6ec3733d642e"
+    },
+    {
+      "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "46ef3468cbf892122cb7b86939c15e0c0a0518f7d7d4c986d30d2758f188a79d"
+    },
+    {
+      "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "f4fa2e35e6bffaea500fc6f5dd242af06f0916289721c3c4cbd5588d5a2ef69d"
+    },
+    {
+      "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 576,
+      "sha256": "6599d12883419bd8f3279c96ecef2342ba82d2ccf95cab034dff534685f9b795"
+    },
+    {
+      "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "87aa9b48d8dac535e5ec6f3cbafd883c092137e24f767f092f369c66b8a3539c"
+    },
+    {
+      "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "8600f52e66a2206bd364cc1b9bdd904c2594e9d68370e6800b90c03c4ed7ec00"
+    },
+    {
+      "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "966d75111363f093e7e715096bbbb48d10e99addac473e8dfdb52bb59f203c80"
+    },
+    {
+      "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "821acdbaf021fe6373629de4016ad4831801c3be88e4ddc784ffe11ebad1eba1"
+    },
+    {
+      "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "29cb3a92cb1404327e72e1263c3c82d4f8669a35691c362cf7e9be2635a398e7"
+    },
+    {
+      "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 586,
+      "sha256": "8ccfd2fa39e0aa16560ecd8dd26c91ed1bf34a0aa86d108ff30f1b992b91e945"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 16,
+      "sha256": "60f24273050b8c51d9d48805875570390eb4673905ac7305192464ee2b529e25"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "1adf36f91fbeb94dc2021344d4c328c0fd6c4bb62838736bd65485fd9ab86b96"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 582,
+      "sha256": "b425f9eaad4483f6f794023c8ebf04450380f63be79b068aa3d968d2ba92a478"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "e68224a3ea1f2219a7a64acd76587c7173ff4aae8ff767fb9d17dd141fd96832"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "9ca98cb75efd41f50c127d17bd1335afb4b7598432a1c6978515fca6eb7cfea4"
+    },
+    {
+      "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "46c154b05974d773c2d44a1dafed6fc4955d12cbfdeab95f21a74878b00b5f3b"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "6e60d735d86c4b73cf9fc857b6b4c9cb602ba305e8b5f0093035915f76c30465"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "afb934c267d99cda56661ac4749a774d7bca058a4ea03d93c6e066ec54cd3db6"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "8f3f1ba8ba01b1652fc867923e4dc5ad2900621b6e5cf3314d9542e3ff05aabb"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "02b27c5ebaff7c194e73500fba31f8d7c6e2556ef00cda56df226ab86a19c6f8"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "1635746177fa1e3926634688e4d27504eb706857af0eb90ad9f1c608022c1be2"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "9f3fd40cb06145fbe937005f7ffdd75eb62fca1a80aad53a3e9ef040d3896c94"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "5d11cca2b6b73d6b778e20d958835ac50a44a80de5af213f934d752bee5c861d"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6ede7babdd1db88d2c81d546acd13e60427c518e7f3a0665e8480e398811996b"
+    },
+    {
+      "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 578,
+      "sha256": "500c4f120374d3c10e14a88325a9e2cc583d015b586a138cf536c713ba8e4144"
+    },
+    {
+      "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+      "bytes": 16,
+      "sha256": "e494583497e5d4614f9588af07313794a98f8e01cb9b674b5dc105cadfedcf32"
+    },
+    {
+      "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "daf8629f088a3db5502671fe7efbf4e24e6fe4b10d9be035657b4d8acee2c173"
+    },
+    {
+      "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "bytes": 584,
+      "sha256": "601b1ada0f5ecc23daf4f01d61a9f001e0cf361875202f01aa0fae522cfe7ccc"
+    },
+    {
+      "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "46be6016df523ce8ba788c26efe5acb01bb9b5aa8497583bd8280d0ac60c25a4"
+    },
+    {
+      "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "f5eb952d8d60afc4aa6126c31c8d55f8b348f6c591dd4a16a14a767a30f65dbb"
+    },
+    {
+      "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/scaler.forecast.gz",
+      "bytes": 584,
+      "sha256": "f30b5a952dc1eaa55a92fdbace3b2fa490d3619a9d35e4b4a6bd23e7ebc9c6ea"
+    },
+    {
+      "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "5bcfbfe1095c7a7ba12db8f8b4deaa008a95e9b82972e348ecc03481912811bc"
+    },
+    {
+      "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "7fe710a28dcabb069cda3074af7c5a91c22a82ed5239d69cff18ddcd0bf61cc0"
+    },
+    {
+      "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/scaler.forecast.gz",
+      "bytes": 581,
+      "sha256": "073f2914235615db39149be5cbf3e9343b7f819985ca100ea3d2656418c9cacd"
+    },
+    {
+      "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "745e5a9a334f924aab75e828dee477b5cf0810acd696f598eba914cc60d45709"
+    },
+    {
+      "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "34ae1d8a9d0a346f2f104a7875f81a0a4c073d1559a31e8e3a1eabebe919e5e8"
+    },
+    {
+      "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "bytes": 580,
+      "sha256": "c8d7e849e3f76c4cd1cd3f5ab8eaeda912c32a635ef8f86f1afb0ccb061b0dc3"
+    },
+    {
+      "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "97297b181b92a1fe9f45cd1efbeadde01776682474ca392457baf85a056531a9"
+    },
+    {
+      "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "eb0ce4b596012fb33a330f06e4a799a89b44e03fcc545260a55e7e8f85235f23"
+    },
+    {
+      "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 579,
+      "sha256": "c84d8ddc89dd92a7f227ab2f9d9a9bf95fd26705f5fcbe93058113d4f9202861"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "57b6d44c4ae38093aa0db9bc23967571ff99b1693513ade20443bb8111de8deb"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "6ff4386d543860470a4b483498c2eee588e7838a79f1e742a1a463b3306c860c"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 576,
+      "sha256": "e1634a68a4b4506fe0d28dae000d0ed2e9b7471eaa8b70923659491df62837c7"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/Thres.forecast.DEV",
+      "bytes": 17,
+      "sha256": "1a48156f52da455801191e82865b1890ad3687c45b2833e2225428a1b9245162"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "5a56c0f8cc7a3f10ea08b9b8c82d88d2912e4e48139adbda07052bfc134c7d5f"
+    },
+    {
+      "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/scaler.forecast.gz",
+      "bytes": 577,
+      "sha256": "5b38cd60556e4c0d7277704488601a474f2ac2e5295a64c154c9a1843aa16b51"
+    },
+    {
+      "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+      "bytes": 18,
+      "sha256": "4fd9578ae199ae6601bf3fd2ef8fe2ccb9349b2010ab53d0b071d4567e521df9"
+    },
+    {
+      "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "bytes": 236832,
+      "sha256": "a47e8da53733187d10adbcfa4b74b07481305283faaf1fc630b7dad4dd5fe3d6"
+    },
+    {
+      "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "bytes": 584,
+      "sha256": "eda460cb0f5adbb8c5307aa80ac61aa7a692e9f1783858e0ed2aacbcba85f10c"
+    },
+    {
+      "path": "model_output_forecast/residual_std_thresholds.csv",
+      "bytes": 3911,
+      "sha256": "33a9c3024704dcf7482532d5231a751c8257b914fbb970ffa43587ab76dcb513"
+    },
+    {
+      "path": "model_output_forecast/threshold_multiplier.sneaky",
+      "bytes": 3899,
+      "sha256": "b9325710ed00cc58d2fc46c6f3227beb7c01ea346a65bc8b5d94e2b543662754"
+    },
+    {
+      "path": "monitor_oracle_delay_time_test.py",
+      "bytes": 6717,
+      "sha256": "f44ed614a9da78523ce7e7b070d751b8b32d986315d37bfa95b880a56e552406"
+    },
+    {
+      "path": "near_time.bat",
+      "bytes": 238,
+      "sha256": "001aaac43816ddb44a282026a55cd683891e8d9ff884b248f7eb53c8c6eb64b5"
+    },
+    {
+      "path": "show_graph_plot.py",
+      "bytes": 10194,
+      "sha256": "e6b575fda80cc869569dc2acaa9cc9e39d3133aa5402f1465c57e31dd154a32e"
+    },
+    {
+      "path": "south_sea.bat",
+      "bytes": 245,
+      "sha256": "518d86fbb48380c0fcafb45fdd62edd5abccf58670c6a132926a35c2b4f95c66"
+    },
+    {
+      "path": "total_graph_metrix_result.py",
+      "bytes": 15106,
+      "sha256": "7273caef4d55cd963e692e9d035bc091b81dba1ce001a0033a706129f15ae991"
+    },
+    {
+      "path": "west_sea.bat",
+      "bytes": 243,
+      "sha256": "c055398da3cab9f97dfa7e557b81ab612508a0572680ecf0934eaadd8ab556cd"
+    }
+  ],
+  "models": [
+    {
+      "station": "DT_0006",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0011",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0012",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0013",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0020",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0039",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0056",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0057",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0091",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0091",
+      "sensor": "TIDE_LEVEL_VEGA_2",
+      "sea": "동해",
+      "model": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0001",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0001",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0002",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0003",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0007",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0007",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0008",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0008",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0018",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0025",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0025",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0028",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0028",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0032",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0035",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0037",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0041",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0043",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0044",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0050",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0051",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0052",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0064",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0065",
+      "sensor": "TIDE_LEVEL_WLS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0066",
+      "sensor": "TIDE_LEVEL_WLS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0067",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0068",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0059",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0060",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "서해",
+      "model": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0004",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0004",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0005",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0005",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0010",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0014",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0016",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0021",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0021",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0022",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0026",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0026",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0027",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0027",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0029",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0029",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0031",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0042",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0049",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0061",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0061",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0063",
+      "sensor": "TIDE_LEVEL_LASER",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0063",
+      "sensor": "TIDE_LEVEL_LASER_1",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0063",
+      "sensor": "TIDE_LEVEL_MIROS",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/Thres.forecast.DEV"
+    },
+    {
+      "station": "DT_0092",
+      "sensor": "TIDE_LEVEL_VEGA",
+      "sea": "남해",
+      "model": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+      "scaler": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+      "threshold": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/Thres.forecast.DEV"
+    }
+  ]
+}

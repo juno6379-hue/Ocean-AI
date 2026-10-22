@@ -1,0 +1,2921 @@
+{
+  "schema_version": "1.0",
+  "baseline_id": "2025_OPERATION_64",
+  "generated_at": "2026-09-23T00:00:00+09:00",
+  "evidence_level": "LOCAL_BACKUP_VERIFIED",
+  "approval": {
+    "status": "DRAFT_PENDING_LIVE_HASH_CONFIRMATION",
+    "required_next_evidence": [
+      "live runtime mapping path and sha256",
+      "live runtime model artifact sha256 for all 64 pairs",
+      "live runtime source and environment identity",
+      "owner and information-team approval"
+    ]
+  },
+  "selection_basis": {
+    "operational_pair_count": 64,
+    "local_mapping_station_count": 49,
+    "report_operational_scope": "50 stations and 64 tide-gauge models",
+    "report_reference": "2025 result report PDF pages 59-60, table 3-34",
+    "developer_decision": "64 operational models were intentionally aligned for comparison with the 2024 neural-network AI"
+  },
+  "source_root_label": "소스코드",
+  "mapping": {
+    "path": "AI QC/mappingBySea.csv",
+    "size_bytes": 1945,
+    "sha256": "F43E41B1F05DDA51C2B3F6479F23157DE47EA49570AB73AC6522669A6EC1189D",
+    "modified_at_local": "2025-10-24T16:45:48"
+  },
+  "training_code": [
+    {
+      "path": "모델학습/LSTM_Training_GPU.py",
+      "size_bytes": 11237,
+      "sha256": "1C3AD25953E744E2AA0FB960638DDC3D4B16F0DA9F68001E6CA56BABE28A418B",
+      "modified_at_local": "2025-12-11T09:48:15"
+    },
+    {
+      "path": "모델학습/calculate_residual_std_thresholds.py",
+      "size_bytes": 4440,
+      "sha256": "B714E9D525B5001BBAFB541ABA2343D8DE13F19ACE02A5498DB4932F82367FFA",
+      "modified_at_local": "2025-12-11T09:44:22"
+    },
+    {
+      "path": "모델학습/calculate_threshold_multiplier.py",
+      "size_bytes": 6005,
+      "sha256": "1B3DD9C504CB359B28D55C0B01ED9ECFB368E95728CB56B95D0A8690D1ADAB03",
+      "modified_at_local": "2025-12-11T09:46:29"
+    }
+  ],
+  "inference_code": [
+    {
+      "path": "AI QC/AI_QC_east_sea.py",
+      "size_bytes": 52851,
+      "sha256": "91D81623B2A167135998C9F82BF86C457E5A365D5F42D752C25E5538A6FA81F9",
+      "modified_at_local": "2024-10-07T17:39:47"
+    },
+    {
+      "path": "AI QC/AI_QC_east_sea_no_update.py",
+      "size_bytes": 56630,
+      "sha256": "147DD99416576D74DA2A713B2B5DBFECD4DE6182AE1C9956E29B79AFA0853CCC",
+      "modified_at_local": "2024-09-10T15:31:36"
+    },
+    {
+      "path": "AI QC/AI_QC_south_sea.py",
+      "size_bytes": 53312,
+      "sha256": "BA0DACC01FDC6562CFA8CC1CF710FE086B544EBB18D68F5E8A212265D6ACB179",
+      "modified_at_local": "2024-10-07T17:40:22"
+    },
+    {
+      "path": "AI QC/AI_QC_south_sea_no_update.py",
+      "size_bytes": 56630,
+      "sha256": "2A09E25EBB714B64513E3A5817EAC130AAF9E0DB02B692E5FAC43CE81525F813",
+      "modified_at_local": "2024-09-10T15:31:55"
+    },
+    {
+      "path": "AI QC/AI_QC_west_sea.py",
+      "size_bytes": 52850,
+      "sha256": "A616F0E038D5EF71422145468DBD54363815734C6CD42B3C44BA4C73CC93F0BD",
+      "modified_at_local": "2024-10-07T17:40:39"
+    },
+    {
+      "path": "AI QC/AI_QC_west_sea_no_update.py",
+      "size_bytes": 56629,
+      "sha256": "3C5558968BDAA402DD27B24651051060C35BBF0BB02948073D04C747201DB064",
+      "modified_at_local": "2024-09-10T15:31:37"
+    }
+  ],
+  "shared_assets": [
+    {
+      "path": "model_output_forecast/residual_std_thresholds.csv",
+      "size_bytes": 3911,
+      "sha256": "33A9C3024704DCF7482532D5231A751C8257B914FBB970FFA43587AB76DCB513",
+      "modified_at_local": "2025-07-21T14:21:53"
+    },
+    {
+      "path": "model_output_forecast/threshold_multiplier.sneaky",
+      "size_bytes": 3899,
+      "sha256": "B9325710ED00CC58D2FC46C6F3227BEB7C01EA346A65BC8B5D94E2B543662754",
+      "modified_at_local": "2025-07-21T14:26:22"
+    }
+  ],
+  "environment_assets": [
+    {
+      "path": "AI QC/환경/python3_10_env.tar.gz",
+      "size_bytes": 738715349,
+      "sha256": "D10BA48C59F38E82C0046667A55D404075ECC991B13F6F52E39EA6BA5B748BAD",
+      "modified_at_local": "2025-11-10T10:46:16"
+    }
+  ],
+  "models": [
+    {
+      "station_name": "묵호",
+      "station_code": "DT_0006",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "D248292546083A0A8275663E8B4C5E32FB115103C9AFB5D0DF8437E1EF7CD091",
+          "modified_at_local": "2025-05-01T01:43:45"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 577,
+          "sha256": "EE2BB23B950198849FF645B9C761BF331F9738A5AC7767B6A1256B7B8117CE52",
+          "modified_at_local": "2025-05-01T01:43:45"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "A579B6BC5968C1BE21FBFFC12CEEABC3AA2255BF50A391F7464D6D62A608DCFC",
+          "modified_at_local": "2025-05-01T01:44:02"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "9F6693AC33A5137AADAF9A0438B4B5F06D9FE033C4C1730762CF6D52F6A5029B",
+          "modified_at_local": "2025-05-01T01:32:26"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0006/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "B6116B4EB5A2938FE23CECD054FCF319E383680194FF66598DFD825EE046F2F9",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "후포",
+      "station_code": "DT_0011",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "493565B9E97C83234F8BD97AC8D758B864A0EFE0F382CFC1820A68F2DAFEC78B",
+          "modified_at_local": "2025-04-30T14:21:22"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 577,
+          "sha256": "D940C8F4DD51E63E40C6EEF32A2B6A064D51344553C8DADAFD0C2FF27FD7FD20",
+          "modified_at_local": "2025-04-30T14:21:22"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "7FAD92C755A4AD86C6E0174D2B2DF735DAE0F5366A17C3F806742FF812A743D2",
+          "modified_at_local": "2025-04-30T14:21:39"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "4818C9B6F3A35F0E481BC9DC473D69C67BFAC3C969F0981C7514D3D5D4D472C1",
+          "modified_at_local": "2025-04-30T14:07:44"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0011/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "6B548C3B6B51B65C56AEE74DDF6FD8C26DAF93D6D2E8242F5E1C509D98452D42",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "속초",
+      "station_code": "DT_0012",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "3C7F06B433EE0986B51DC79732048B458BA21BACD98A5A2F8A7E0FA19DC3C651",
+          "modified_at_local": "2025-04-30T01:21:09"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "4B80B9F0656152C7BF1459995C0DC0417C3522D03CC012CE9921CF7A9E98D186",
+          "modified_at_local": "2025-04-30T01:21:09"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "7346AC53F6B72372C7FA0ABB9C9B728D4CA416C6AECA10EF71F9FB9EAAC3187C",
+          "modified_at_local": "2025-04-30T01:21:30"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "0C3CA59B3FF7D42DB58695912ADAC26E0C89BA12A4EDAC382FF93EF991BD73E5",
+          "modified_at_local": "2025-04-30T01:07:20"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0012/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "959A248C9BC45A797758022A80F2ECCC828F00FFD3A84A2E046F7A2940156EF8",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "울릉도",
+      "station_code": "DT_0013",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "3A57EF269563A74116D236BC6AFE330620B17AF9D8BCD60D43D84742708AD63D",
+          "modified_at_local": "2025-04-30T15:52:47"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "BC22FA4C9A9B47D5F12D67FB665981AF3EDB063F7E451733FBB0F0F93C9854C1",
+          "modified_at_local": "2025-04-30T15:52:47"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "01520DA5FC43A6112E4A0869BA0D09470D13ECF19244DB98EBCF19D014BA86E0",
+          "modified_at_local": "2024-09-10T15:22:45"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "3269DECB679F179F23298A7F27C895EDE7BFB04E8B26B3B89387E652CCA3F620",
+          "modified_at_local": "2025-04-30T15:45:14"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0013/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "D654474C9B84D0FC5883FF1D92C013DEACF4E304299A539E42F52A50979EDB8F",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "울산",
+      "station_code": "DT_0020",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "128C0A517260AF8371B115DC4B42CE0847F17245C39DF5E0AC4AD6861EAA76A9",
+          "modified_at_local": "2025-05-01T00:52:38"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 577,
+          "sha256": "E23ED082F69E144988DE9BE218942965BF1947FC37BB963F7B58B75E1F000AC5",
+          "modified_at_local": "2025-05-01T00:52:38"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "6469F9A48AE3B9D6A368C61F118CF2E366DF724084CA2DD4446826B146D53238",
+          "modified_at_local": "2025-05-01T00:52:53"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "1229427651AF1B23BBC4F260A8EE7A2E60BEBE7A265DCDB41233659B7CB18C7E",
+          "modified_at_local": "2025-05-01T00:42:20"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0020/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "72E5ED64E8D7C83E02CFC032E33B60D4270409BCCDDB7983F5F1A81C17DFC150",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "왕돌초",
+      "station_code": "DT_0039",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "FD7AEF596F6AD5EEDF76882191DDB54ECD1733EF39E8D968B1652500693BB58F",
+          "modified_at_local": "2025-04-29T10:59:29"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 576,
+          "sha256": "A5D116FFFC5A6A46669E008A83E9CFCC395C4BBA282D0A1F1D16D6E72D18377C",
+          "modified_at_local": "2025-04-29T10:59:29"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "3F53239398D029F46FC8F4E08DE2FB83809C8028A53EBC5FAC94D40AB4C2A500",
+          "modified_at_local": "2025-04-29T10:59:39"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "791651CABD290D4655089F1B121D9342ACEF7A8694E4AE931B5E6A9168D71995",
+          "modified_at_local": "2025-04-29T10:52:08"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0039/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "11C031B678B0A2B66C03C8F8074ACAF50AEFB0069EAE8FDD682FB9B859915883",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "부산항신항",
+      "station_code": "DT_0056",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "E963772C27B4964DB25FDFD1B6E9BE8283580604359FD0214AC77DE4C5F73EC8",
+          "modified_at_local": "2025-04-28T16:53:23"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "91222B8F5E810B301ED983BEF933D2CD3B434ED2599D8BC3A50D6EC3733D642E",
+          "modified_at_local": "2025-04-28T16:53:23"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "772E009CA8630A22BE3EEA33E735BF918683C1637836C8BC62E5DA7FA6C750C3",
+          "modified_at_local": "2025-04-28T16:54:45"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "510DE6B804A0D4E1F7B372B28E458DF75F6B1D2B14039B92258B99B95AFD7FF1",
+          "modified_at_local": "2025-04-28T16:18:31"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0056/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "BB8A5CA104C3C89C0DC3D1AC7AE1BF6C93AB17C926DB604BBA5B882B45514BAC",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "동해항",
+      "station_code": "DT_0057",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "F4FA2E35E6BFFAEA500FC6F5DD242AF06F0916289721C3C4CBD5588D5A2EF69D",
+          "modified_at_local": "2025-04-29T04:13:31"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 576,
+          "sha256": "6599D12883419BD8F3279C96ECEF2342BA82D2CCF95CAB034DFF534685F9B795",
+          "modified_at_local": "2025-04-29T04:13:31"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "46EF3468CBF892122CB7B86939C15E0C0A0518F7D7D4C986D30D2758F188A79D",
+          "modified_at_local": "2024-09-10T15:26:03"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "807C4A88CB674126E477103F7D9E1809ACC98698C5EFC6D9A8B099570A1ECBC2",
+          "modified_at_local": "2025-04-29T04:01:25"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0057/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "B07AA877F44686704A6B6F773CA93729FB82048CAFC5649718D51AC5F8570CC1",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "포항",
+      "station_code": "DT_0091",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6FF4386D543860470A4B483498C2EEE588E7838A79F1E742A1A463B3306C860C",
+          "modified_at_local": "2025-05-01T12:44:12"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 576,
+          "sha256": "E1634A68A4B4506FE0D28DAE000D0ED2E9B7471EAA8B70923659491DF62837C7",
+          "modified_at_local": "2025-05-01T12:44:12"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "57B6D44C4AE38093AA0DB9BC23967571FF99B1693513ADE20443BB8111DE8DEB",
+          "modified_at_local": "2025-05-01T12:44:20"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "2E31988F0D5D4D106E400967B4AD4DBB86EBB870D76F42D8FD85E11C5D1A8D2B",
+          "modified_at_local": "2025-05-01T12:38:54"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "48627C75CD956ADD1D1F25B266683872CC7A09E1FADC2C7EEB85158AD000C822",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "포항",
+      "station_code": "DT_0091",
+      "sensor_code": "TIDE_LEVEL_VEGA_2",
+      "sea_info": "동해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "5A56C0F8CC7A3F10EA08B9B8C82D88D2912E4E48139ADBDA07052BFC134C7D5F",
+          "modified_at_local": "2025-05-01T12:07:42"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/scaler.forecast.gz",
+          "size_bytes": 577,
+          "sha256": "5B38CD60556E4C0D7277704488601A474F2AC2E5295A64C154C9A1843AA16B51",
+          "modified_at_local": "2025-05-01T12:07:42"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "1A48156F52DA455801191E82865B1890AD3687C45B2833E2225428A1B9245162",
+          "modified_at_local": "2025-05-01T12:07:50"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "BFD1DDD8B0704A3449FFE9A789CE752EC94D4B72F0FA1A018D1B1DB003D8DFBE",
+          "modified_at_local": "2025-05-01T12:02:40"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0091/TIDE_LEVEL_VEGA_2/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "1A2EB39DF3BED8B47E950181DE6CD57E83A957FE2CAE3110BD9DBA615E148733",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "인천",
+      "station_code": "DT_0001",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "D9A3DFFB6D32D57B4C8386DB4DFBF9578FAE2C05819D4796E984E3394094325F",
+          "modified_at_local": "2025-05-01T08:24:59"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 582,
+          "sha256": "92C3BCC4F2BCD0AD30AC8137F82144C3ACF078F5A411D281863CCEE8351D155D",
+          "modified_at_local": "2025-05-01T08:24:59"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "0DC420A3CA952F1675D2107A3D4AF16975271EE92B6F3AB01D0F3416BCA3F7FE",
+          "modified_at_local": "2025-05-01T08:25:12"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "2E62797D0FA24DA3DFEFA5A675AA78F3236CF955544686FE1FF67C7467F32F02",
+          "modified_at_local": "2025-05-01T08:16:37"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "DC592EFB067D87C8A4E23FE35C4FE6173A48E89464169C628DB2DC6607DBD291",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "인천",
+      "station_code": "DT_0001",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "BE2C8FCD5D95AAB8210EF6C711CAB27DBABCB408F74F48F78E22F2D6744F5C45",
+          "modified_at_local": "2025-04-30T05:16:57"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "8B77E70BEF1D8ACC63FBA81DD1E612A667607277B3D10F80DC157A2DF7BB5FD6",
+          "modified_at_local": "2025-04-30T05:16:57"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "C68F11C679366BD78D171FF9A3931BC76FA8FF364960AA8CB9D7C0B66A63901D",
+          "modified_at_local": "2025-04-30T05:17:16"
+        }
+      },
+      "optional_artifacts": {
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0001/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "EE454D5CA0ACCA2771C5259DF9C306F7583A01F2DCACB7FC7905106B8E36D7A1",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "평택",
+      "station_code": "DT_0002",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "D07AEB6C68182D3B50308C0BFFE0AA9CE8155921A24B8620D08B6A53933D0A3B",
+          "modified_at_local": "2025-04-30T02:24:10"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "4FD457F9B8D3BCF3B6F1745061275608139CE1E0CEE6161F100B144C702651A0",
+          "modified_at_local": "2025-04-30T02:24:10"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "C17297C4F35CEE1B56CC5F63478A48E6A2EF607C16B2FC9550EEF3E217D2D17D",
+          "modified_at_local": "2025-04-30T02:24:32"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "A02A9798D556EA49DD26FD365B211FBD804953EDE2D8483E7622743002236CB6",
+          "modified_at_local": "2025-04-30T02:10:06"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0002/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "F53847F6465A5A6069B48F1824CE521FEEA927E0158D8C148A5AD1E349DFDD7F",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "영광",
+      "station_code": "DT_0003",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "A01A6358F97E7A319B774E870DD301F8738BF72729D16B12D5FA84B2EE51CCDE",
+          "modified_at_local": "2025-05-01T06:15:18"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "1A896E9D143141299D43AB64C132DD5BCB1785578091A3389C90985F99CF849F",
+          "modified_at_local": "2025-05-01T06:15:18"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "0F1BD3C06A1AC5DFE6D68B2C4B788DA85AE759E8F6313E6CCDCA125BC574D66B",
+          "modified_at_local": "2025-05-01T06:15:33"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "DF79605294E8381646340A2A49000615ADFCF775762F63CD9C65750934A1B390",
+          "modified_at_local": "2025-05-01T06:05:30"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0003/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "06F6BE1817905AE3EE54175970CE9CDEA6739146E7CE86FC2BEC85B68F26F56C",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "목포",
+      "station_code": "DT_0007",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6FFE1B3263D7CD4F4B5E2F9E45CF2002455466DDA5FE258674F0D95F7CBA6745",
+          "modified_at_local": "2025-04-30T00:13:34"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "56FF1BC04B2DC77210303AA75C92B411C4FE4479DAD833F404EAB4DB6D448C44",
+          "modified_at_local": "2025-04-30T00:13:34"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "11F2E535141E84B811A67B2C1F92BD11CAB3AB48472044025E005DFDF0862156",
+          "modified_at_local": "2025-04-30T00:13:56"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "D39BBD71F2A2A1947E57E9CBA04BF26A2CB8D9DBD89178619D701949EE14FE16",
+          "modified_at_local": "2025-04-29T23:59:46"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "21B9BD21C21F54A4BD0C46C60B2225170548DC947563499E8973008D15E9B975",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "목포",
+      "station_code": "DT_0007",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "33A743438861569DF795D81C0350762437852E77002F0BF36D87D3D4230864CE",
+          "modified_at_local": "2025-04-29T21:53:42"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "763719FAC8AC2D58DBED842C1A9ED040B864EB401D3C879AAD2052E40FBCF5FF",
+          "modified_at_local": "2025-04-29T21:53:42"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "6A5D3A601D1500295C407218CBFFF0A0D352E617F083A5AB09C50B299AAEA543",
+          "modified_at_local": "2025-04-29T21:54:04"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "5A5EFAEF1D41A6C3947B3F90D84A540066AFC78DE92F8BC84A33F0E8ABD94A4B",
+          "modified_at_local": "2025-04-29T21:39:43"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0007/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "2DDCBAD64EBE26EF926DCD4DBB21F920A3204DCEC2C87B5D33CDA5BA832965E4",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "안산",
+      "station_code": "DT_0008",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "B571DBF0216B3FF448F25BEF7C6D63115DB6D90A9E0FFB1293D7F241FF9447DD",
+          "modified_at_local": "2025-04-29T22:49:19"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 587,
+          "sha256": "5DFA83FDB974E38D149749BD3C8B5C5CE714D11DE0EF631421B8ECA49C00E74A",
+          "modified_at_local": "2025-04-29T22:49:19"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "7D0359E2BEA6ACF65C3582F7833D908313E16EBECF5D745FCF4ED282FCBCD1C4",
+          "modified_at_local": "2025-04-29T22:49:40"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "3E9F5D31A7822635D545CC7D2A05F2A458673E56F4679D817524F0D6CCE3F596",
+          "modified_at_local": "2025-04-29T22:35:53"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "1A35F087E26DD7AFC5B113F69E083580AD81CA4AF0D6502E5D0821C764C30F29",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "안산",
+      "station_code": "DT_0008",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "AE548515181F998B92EA893142D7CA6E697C93F91B78C845C5C6397D10CB86DD",
+          "modified_at_local": "2025-05-01T09:53:10"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 586,
+          "sha256": "125D52805332E57378B3F0AA392B00734CE96EFDE05016930E1D5453777A3EC3",
+          "modified_at_local": "2025-05-01T09:53:10"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "8FF06BD90D90F9E6092412E1CEA2EC4631C10C2A5F32E98524F2A67B3D2019A7",
+          "modified_at_local": "2025-05-01T09:53:20"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "9AEEA42C3BA4E679F48884167CF33F10528B9C95E1C14D62135785A88EDB17DE",
+          "modified_at_local": "2025-05-01T09:46:25"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0008/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "1DDF13ACC0161C9CA7D48292BAA000A1B555EF3F3366A6D59DA0091ED41827A5",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "군산",
+      "station_code": "DT_0018",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "C3EF17DABC7AE524706F90FC5EEA80DCD613B21237894BCD2B0378786F366106",
+          "modified_at_local": "2025-04-29T20:22:18"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "3E1FC2AD33B598A241CB034D95E56F0662B597048076504B48D6B13B75B5223B",
+          "modified_at_local": "2025-04-29T20:22:18"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "CF769119A061A4BFB52B9E97819808B322458B3D5A9B380BBC8A235EEBB5DC9B",
+          "modified_at_local": "2025-04-29T20:22:39"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "B827C970EE2AF86CB6B482E890BE3226531AED29771ACE4B437885BECF121D98",
+          "modified_at_local": "2025-04-29T20:08:34"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0018/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "3CE8023C30C2A51E090F64CF691D5EE7C469DAAAE8DC3CC47815B4D12CA1D2FB",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "보령",
+      "station_code": "DT_0025",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "FE6A5E43C9F3A722E969DD5564DFC322E34E79080B81DBF66AB15BD31E1902C6",
+          "modified_at_local": "2025-04-30T08:56:05"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 585,
+          "sha256": "3C1947E1C19A9E0374A9C039626BB19438A363CFC4671393372231EF1A982747",
+          "modified_at_local": "2025-04-30T08:56:05"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "173F77604C1CDF1C5A08DABA5E910DCE69BB5A1F606CD79970E39AB5F7475F2D",
+          "modified_at_local": "2025-04-30T08:56:26"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "EFD20D5E52FC58C340E43CE0CAA6F56B538C985848A3B01F8E2D724CE9798274",
+          "modified_at_local": "2025-04-30T08:41:36"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "3AE50CF57D59979C4972956B09F30FED9C552B64F408A0F7BE5F5DBC07EE9EF8",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "보령",
+      "station_code": "DT_0025",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "124AFB15AA3F66662297632AFBCDF0943DAE7F382CDC8295646CA1AD091A60E9",
+          "modified_at_local": "2025-04-30T12:25:08"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 584,
+          "sha256": "CB8D7DCA8BCAC1C355DE9AF003751D80E9D5D17CAF9C51B916498A0616FDED3C",
+          "modified_at_local": "2025-04-30T12:25:09"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "AEBB7AC7E9EFC4CEEAA9BF245192BC0519F6A0158C91611DEE0C08103419BA30",
+          "modified_at_local": "2025-04-30T12:25:30"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "A5C0C42681570457665FFC926419ED000E6E224C7008FE8D9DD992D7EB46F0CB",
+          "modified_at_local": "2025-04-30T12:11:13"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0025/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "3CD83465BBF268284703306A71CE563AE7E5FF481853AF1F5423B98C5D060DD9",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "진도",
+      "station_code": "DT_0028",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "3DD2A6A2A99E37994083972865933BBDB42CEF839888F25965034D45EB54CFD9",
+          "modified_at_local": "2025-04-30T17:27:27"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "C9324C8909F6E2FD3FFD2A0A6FD17821F63A0A96FD4240C345A0D3275E470F86",
+          "modified_at_local": "2025-04-30T17:27:27"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "636E5D6EE3C3A183D28934733E4051C8E32932B57E84F1DB5310840E52CE7BF1",
+          "modified_at_local": "2025-04-30T17:27:39"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "357F51FF1D0B524855E51FC96115C739B9F3ABBE23DD540C63A5152AB4C83277",
+          "modified_at_local": "2025-04-30T17:19:25"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "40CE5AE972BA4AC3FBD5249BDB7BCFD6A38483865C0AEF46E67512F4C6C78655",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "진도",
+      "station_code": "DT_0028",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "0125E9A1C57ECD99C673BC9BA51F4DCD780FC15D614C6D1D2C59E3EC861C1BFA",
+          "modified_at_local": "2025-05-01T11:17:19"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "611DA93A5E7F2BD63FC4CFA4B4472B5F6D374BBB6E5155847FAC4DE5161D8735",
+          "modified_at_local": "2025-05-01T11:17:19"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "EB873ECDB67A78AD27E1633BEB8029B8250574D99E892AFD75C81B3880477556",
+          "modified_at_local": "2025-05-01T11:17:28"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "532A8FD5679A7F2F1F917FA9AD82C7B24F6A51F6E408D42D2147EE31490F0804",
+          "modified_at_local": "2025-05-01T11:11:31"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0028/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "C06C0DC6E60EBE7EEC866DFE04FCC4A358945BAC2BDAE6301760E807DF110D74",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "강화대교",
+      "station_code": "DT_0032",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "7CB1E1F5A731161CA89E9E608DC1F43D12E200D0BB9061F09E5609A27D57BAAB",
+          "modified_at_local": "2025-04-28T12:41:24"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "B029DEEC087C64473A758A21723F1A7058B1ED14519A083B920618E2199B7160",
+          "modified_at_local": "2025-04-28T12:41:24"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 16,
+          "sha256": "0E0B49191193B5664EA139DED1DAA42F905E0788C06DC26BA0B902FA3057F234",
+          "modified_at_local": "2025-04-28T12:41:44"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "71970F3F4B002791B1C602EBB54CB149A57D44BB2928D32AD8D66B806E0CF29D",
+          "modified_at_local": "2025-04-28T12:28:08"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0032/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "83A12618FAAE85A8609D232E34CB51D37BB54F9BA31400E664E5DD791231C100",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "흑산도",
+      "station_code": "DT_0035",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "19481D8D44850BA768EEB39229DB3390943D88A6F7B1CEBD30A50AA7ACB71FF6",
+          "modified_at_local": "2025-04-30T21:53:42"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "216157C02E1576C24A6C5053C4A4527812D5E102F785A3A7C53E2F85313F6339",
+          "modified_at_local": "2025-04-30T21:53:42"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "92E5BB1335867E4A1A65167F8C85D450784F08FA88EC8B804EB356D8ED9DFF5A",
+          "modified_at_local": "2025-04-30T21:53:54"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "219A332AB1F281D58AC87596A05FBBE059469FC6C0E0B459533A0BC88FF122EA",
+          "modified_at_local": "2025-04-30T21:46:14"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0035/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "10B16917B12C4E62B0C9D7C941985ED1FB6219DDFF470F112735F7BB2827B8E5",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "어청도",
+      "station_code": "DT_0037",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6FBF7B78B7540296185CB362CD53523643681A7568129AC47382B7675EB9E3AB",
+          "modified_at_local": "2025-05-01T07:04:17"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "52D6EBD7070309534E5F6123B59723EB571F1A7C44D5C6BC4391C1DB58171C1F",
+          "modified_at_local": "2025-05-01T07:04:17"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "7971DE00CC122944C7B2A9C5CC411707FD7D938EA28B45E6C1856E3C304A2713",
+          "modified_at_local": "2025-05-01T07:04:32"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "7F351A55741548921E40C82BB137DD98DAA592AD6A0CA839729E435B892A6F4D",
+          "modified_at_local": "2025-05-01T06:54:42"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0037/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "944CD1B7EEFD9D3CAEFE44357AA680D619DAE803045CDE95EEA3CC588E03DA83",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "복사초",
+      "station_code": "DT_0041",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "E3D1141464BA3B09D5BAEAB3178E833C81056899453C9D38ACBF860BF45F1A4C",
+          "modified_at_local": "2025-04-29T15:35:56"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "DD999A72743180E6B576447FD62AE80165E49B72B73B27DA37F1EA87283FDBE6",
+          "modified_at_local": "2025-04-29T15:35:56"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "EAA100B4F8C06A4A701A47BF3C2B0AE64BF815F0D05BBCF79559CAB6D485B1CD",
+          "modified_at_local": "2025-04-29T15:36:14"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0041/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "F1196E1111CE67A1BE44C01F59D5E08977C4D9A52AA8F93BCD726A11A8631B8F",
+          "modified_at_local": "2025-04-29T15:24:26"
+        }
+      }
+    },
+    {
+      "station_name": "영흥도",
+      "station_code": "DT_0043",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "CB03C51936DDB1CD7AFB9D7B3916E65F06F815774B98CD8514C734B3F1A0143A",
+          "modified_at_local": "2025-04-29T10:24:15"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "47E710EB7EACF9E3DDDE689F13B44CD3CCBBABFAF038DEA0FC7CF00E65F2C7C9",
+          "modified_at_local": "2025-04-29T10:24:15"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "F6F96ABF039E4AC9EE8F4E61E23B8D6D22503F46A6538417ADA4CAE889BF8F16",
+          "modified_at_local": "2025-04-29T10:24:37"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "520071F720088D02D81740E1CCF15D0241824C9C93831C493C4CFF5045B8D0D7",
+          "modified_at_local": "2025-04-29T10:06:54"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0043/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "681F8B98B7A7B3E05ABED710BA6FFFDE6C06EDBC5F2F5DDA887E150E660FAE03",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "영종대교",
+      "station_code": "DT_0044",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "54380B9860EC443A7BADE94992445D420BD2586490448339AC5C6250A18D14C3",
+          "modified_at_local": "2025-04-29T09:12:58"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "89F339C5E6F383DC92DAB7D598A10665BED836E8B5900FA07E383FCCF76F3530",
+          "modified_at_local": "2025-04-29T09:12:58"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "6122CBBA5499EDF2BF659B05104A2FFFB5CF7A5C430182D9208320DCDC8E05E1",
+          "modified_at_local": "2025-04-29T09:13:20"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "D9CC52D49AE0863A57393681BB8370216CF883556ACF8A1B3C7B7886A10B4334",
+          "modified_at_local": "2025-04-29T08:55:16"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0044/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "8C84951B487EAFC68F0EA0A1A2F5BD4BF6ABF9CD21356695990DCFF522279858",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "태안",
+      "station_code": "DT_0050",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6BEF5ADBFC86C642FCD9FBB55E5A95CB527AFF03400EAABE70226BDC1180CFF9",
+          "modified_at_local": "2025-04-29T06:51:33"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "B8ED19C422C5ABA9C56F647AC89385587C24F2F64132803E8643ADAD39A77730",
+          "modified_at_local": "2025-04-29T06:51:33"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "A07508B57081A4B37289B0227328258BC6289396E12DF8BFAD2AEC6746E2FD00",
+          "modified_at_local": "2025-04-29T06:51:55"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "853C8D53C23255B141590E18444465DE659D48C132EC04C5B2983D3B60224E35",
+          "modified_at_local": "2025-04-29T06:37:21"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0050/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "D69F3BCF56374377449E7657179226C8CBF4AA6D2C1583BBBED6F1E17A977F49",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "서천마량",
+      "station_code": "DT_0051",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "89AAEC26D9839F46772DF187C50C8D232C0A9DE85C385FF021CCEE4C511B96E5",
+          "modified_at_local": "2025-04-29T05:59:34"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 583,
+          "sha256": "90A0D9D68ED9A9318D7EA4213557D8DE6B5DE8F255D6627B55FC8CB14F9C4B2F",
+          "modified_at_local": "2025-04-29T05:59:34"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "55730BC8DFA1E99FD189F0B5DFC66833686051DED1946C25E7095592180F2DEB",
+          "modified_at_local": "2024-09-10T15:24:40"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "4EFB280AD12821ACD3D8390D0C842F62CD2D9F88AADE37B37CB1B4600B9065CE",
+          "modified_at_local": "2025-04-29T05:45:20"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0051/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "C2AC70DBE213A4C7C9D1A5D269599F0CF7348958FCCA739D3F45A0B2D8AD45BB",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "인천송도",
+      "station_code": "DT_0052",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "F9149B5046D9C48F36CA0F7549F2F1DBCEE14FEAC426BFBD8E510A7864544D23",
+          "modified_at_local": "2025-04-28T15:52:37"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 585,
+          "sha256": "001DEEC8CB0617126FF1B99B66B5D1BCC79EED76BB45781882D29049A174E023",
+          "modified_at_local": "2025-04-28T15:52:37"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "41C38F9D3C37ECCCBDFC740CDA2776739E76BFE16774249D09FFD28B12B0D89C",
+          "modified_at_local": "2024-09-10T15:25:19"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "D80D9B4515BAA6C32A629D93A1FBDC3D0DB549AA560883572B4002525C750689",
+          "modified_at_local": "2025-04-28T15:14:28"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0052/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "8729EF58DA818849471A360FDFC219CA2CA89D69A672D757822F311C5C58B29C",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "교동대교",
+      "station_code": "DT_0064",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "DAF8629F088A3DB5502671FE7EFBF4E24E6FE4B10D9BE035657B4D8ACEE2C173",
+          "modified_at_local": "2025-04-28T18:36:18"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 584,
+          "sha256": "601B1ADA0F5ECC23DAF4F01D61A9F001E0CF361875202F01AA0FAE522CFE7CCC",
+          "modified_at_local": "2025-04-28T18:36:18"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 16,
+          "sha256": "E494583497E5D4614F9588AF07313794A98F8E01CB9B674B5DC105CADFEDCF32",
+          "modified_at_local": "2025-04-28T18:36:33"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "25FABA3F0B23D67A75427A78F21B8496CCA8CC65E2620087CC343B792F101C47",
+          "modified_at_local": "2025-04-28T18:16:41"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0064/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "1B248483E9280D26D60149485D17E2DEFAD29EA3E545DCFC7B95F791A0747F15",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "덕적도",
+      "station_code": "DT_0065",
+      "sensor_code": "TIDE_LEVEL_WLS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "F5EB952D8D60AFC4AA6126C31C8D55F8B348F6C591DD4A16A14A767A30F65DBB",
+          "modified_at_local": "2025-05-01T03:15:28"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/scaler.forecast.gz",
+          "size_bytes": 584,
+          "sha256": "F30B5A952DC1EAA55A92FDBACE3B2FA490D3619A9D35E4B4A6BD23E7EBC9C6EA",
+          "modified_at_local": "2025-05-01T03:15:28"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "46BE6016DF523CE8BA788C26EFE5ACB01BB9B5AA8497583BD8280D0AC60C25A4",
+          "modified_at_local": "2025-05-01T03:15:38"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "C3A02CF90C400CA1FCBB61B2247D66917A180A5FCF42CB73D8703993C821C771",
+          "modified_at_local": "2025-05-01T03:09:03"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0065/TIDE_LEVEL_WLS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "424CDFAA77A6E63DA61740B7919A3D6450CF62983948CC7541D0929FD4121B9D",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "향화도",
+      "station_code": "DT_0066",
+      "sensor_code": "TIDE_LEVEL_WLS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "7FE710A28DCABB069CDA3074AF7C5A91C22A82ED5239D69CFF18DDCD0BF61CC0",
+          "modified_at_local": "2025-05-01T02:40:10"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "073F2914235615DB39149BE5CBF3E9343B7F819985CA100EA3D2656418C9CACD",
+          "modified_at_local": "2025-05-01T02:40:10"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "5BCFBFE1095C7A7BA12DB8F8B4DEAA008A95E9B82972E348ECC03481912811BC",
+          "modified_at_local": "2025-05-01T02:40:24"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "CF963D9EB0E5DE72BBA8DCC94B13B09403A1DA6B5F8A3D8695E787EE924CC8E7",
+          "modified_at_local": "2025-05-01T02:30:40"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0066/TIDE_LEVEL_WLS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "F467527C472FC014181E9E172D1C63F429F4669645418FE6D9B5D9EBDC780C30",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "안흥",
+      "station_code": "DT_0067",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "34AE1D8A9D0A346F2F104A7875F81A0A4C073D1559A31E8E3A1EABEBE919E5E8",
+          "modified_at_local": "2025-05-01T03:53:37"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "C8D7E849E3F76C4CD1CD3F5AB8EAEDA912C32A635EF8F86F1AFB0CCB061B0DC3",
+          "modified_at_local": "2025-05-01T03:53:37"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "745E5A9A334F924AAB75E828DEE477B5CF0810ACD696F598EBA914CC60D45709",
+          "modified_at_local": "2025-05-01T03:53:52"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "77AEA589EB0390FADA5B1BEE831ECA71A9FBCA89BAF1690C23DB748213952F6D",
+          "modified_at_local": "2025-05-01T03:43:26"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0067/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "F3668F39E75525C9DC2AD331A6753FF5D8AA28916BFE1F2122EA8F26BAD800A1",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "위도",
+      "station_code": "DT_0068",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "EB0CE4B596012FB33A330F06E4A799A89B44E03FCC545260A55E7E8F85235F23",
+          "modified_at_local": "2025-05-01T05:29:27"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "C84D8DDC89DD92A7F227AB2F9D9A9BF95FD26705F5FCBE93058113D4F9202861",
+          "modified_at_local": "2025-05-01T05:29:27"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "97297B181B92A1FE9F45CD1EFBEADDE01776682474CA392457BAF85A056531A9",
+          "modified_at_local": "2025-05-01T05:29:42"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "370306FB2777371E7E0D046668DFB9D6E5481DE19DBAD1809134D222DAD363E9",
+          "modified_at_local": "2025-05-01T05:20:23"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0068/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "6BE837E12317E1C59CAECE424928F657ABB69B4150E10122512A6A08061CC853",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "백령도",
+      "station_code": "DT_0059",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "8600F52E66A2206BD364CC1B9BDD904C2594E9D68370E6800B90C03C4ED7EC00",
+          "modified_at_local": "2025-04-29T00:51:04"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "966D75111363F093E7E715096BBBB48D10E99ADDAC473E8DFDB52BB59F203C80",
+          "modified_at_local": "2025-04-29T00:51:04"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "87AA9B48D8DAC535E5EC6F3CBAFD883C092137E24F767F092F369C66B8A3539C",
+          "modified_at_local": "2025-04-29T00:51:22"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "E31395360231F4E8FF2C1396E53C055D12D96C547230C5F550C1A7E6D80873EE",
+          "modified_at_local": "2025-04-29T00:38:42"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0059/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "4C140C769E59B84C0A0DF6E0E6B03A5B4A9DEAFC38C71E990064E90009C5AC9D",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "연평도",
+      "station_code": "DT_0060",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "서해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "29CB3A92CB1404327E72E1263C3C82D4F8669A35691C362CF7E9BE2635A398E7",
+          "modified_at_local": "2025-04-28T23:35:39"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 586,
+          "sha256": "8CCFD2FA39E0AA16560ECD8DD26C91ED1BF34A0AA86D108FF30F1B992B91E945",
+          "modified_at_local": "2025-04-28T23:35:39"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "821ACDBAF021FE6373629DE4016AD4831801C3BE88E4DDC784FFE11EBAD1EBA1",
+          "modified_at_local": "2025-04-28T23:35:57"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "15D5B631D7E515E50AC62D476F27A72EF1779FFA10F41F5DC1DE14A993ECA6E2",
+          "modified_at_local": "2025-04-28T23:23:24"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0060/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "999DABBD33FB3EE7EA2C2392C934E038099F87B65F287085291643FC94F8956E",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "제주",
+      "station_code": "DT_0004",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "2ABE0369E390FA0FBB74B204A97CA7F89190E146F45ACA1CC0287D1975E04DD4",
+          "modified_at_local": "2025-04-30T23:37:28"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "DB0EF73F165BD0560A3B1E83F2F652092CC9AFC3453EC8B82BF1600C0ED48101",
+          "modified_at_local": "2025-04-30T23:37:28"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "3E892D58435C380403914B5248938811DDCCE9A6C2DF242CBB7EF92387031AEF",
+          "modified_at_local": "2025-04-30T23:37:45"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "7FAEDB5521B18A6D3DCA4D872E797DA1B0CEB27DCC7545420C9C3A18A95B0420",
+          "modified_at_local": "2025-04-30T23:26:39"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "A9C2FAFA54CA27A80B0C501A55E95EC878ABD0227AFCA15D38B2D1182D3448F3",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "제주",
+      "station_code": "DT_0004",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "119A6005CD6FCC222DE78CF85C911F403CF805D6D9A3F7D9F730976DC712E9B4",
+          "modified_at_local": "2025-04-30T22:47:50"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "DB0EF73F165BD0560A3B1E83F2F652092CC9AFC3453EC8B82BF1600C0ED48101",
+          "modified_at_local": "2025-04-30T22:47:50"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "83961D874C7B794F79F505EFD799E8C9B18E3BFD062CF9C3FA8F5435A3F817FE",
+          "modified_at_local": "2025-04-30T22:48:07"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "AB9CBB36FEEFB3385035B98F99F4721D134C8DDD141C8CC5320605E07403F413",
+          "modified_at_local": "2025-04-30T22:37:05"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0004/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "66144B7BE072D8777D8DC5F4FF763F1E73D1F07EE136132E127FC3B5FC8B59BF",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "부산",
+      "station_code": "DT_0005",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "ABAB7DB532C991A89750CD1A2AB7FC9845433FCFD644253405CAD8A763F07675",
+          "modified_at_local": "2025-04-30T03:34:43"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "C679D0701B7CAD74895673ADC41B186BC7F726C4303D78C765DEF75DE7A898B6",
+          "modified_at_local": "2025-04-30T03:34:43"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "53C7E06CB0532D193AB7F7B4C5A460F061B6FA8F0749BCFDBEF0ECD0AF27112C",
+          "modified_at_local": "2025-04-30T03:35:04"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "38E62137CCFE24D423115F9A13B696E0707022FBEBCAFD090E67483E3878868F",
+          "modified_at_local": "2025-04-30T03:20:49"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "81E72DC8639FB6669E79919768B8F76AA092D49E35D66389B7AF8DE1441FB3F1",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "부산",
+      "station_code": "DT_0005",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "61150F42CADD621912536B4B1E30B37D9031F31374F9627FE00EEC1AFB8DD67E",
+          "modified_at_local": "2025-05-01T07:43:55"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "D90FE60B3B1387BC80226512ADB59F9E2DAEE9E1D813DA94AE8E575C5D92BDB5",
+          "modified_at_local": "2025-05-01T07:43:55"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "F1BA82657118EADD1A2FE32699C8A1D53FFD2A8487E62BA4A718D78F6E990C77",
+          "modified_at_local": "2025-05-01T07:44:08"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "A1A208FACFB1B9BF9790272B6DBF7BF02D4C2BBFAE52E08CD3C5B99F39FE9958",
+          "modified_at_local": "2025-05-01T07:35:36"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0005/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 16,
+          "sha256": "53844457319335B97757197F5A8A3D757334861C1FE895B571D6F57E24E073B3",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "서귀포",
+      "station_code": "DT_0010",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "28739B7BF53F16A75B1840C7858503B2C26CB1EC74338365798B060FE37CD9F0",
+          "modified_at_local": "2025-05-01T09:13:40"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 577,
+          "sha256": "451B660FBC3E5EC7BE90F3E65A3D03ADE812F07CE5B0F095322C9AD9C1248C95",
+          "modified_at_local": "2025-05-01T09:13:40"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "9475B251D23A090B98EEFACF7EE7CF93D4B65FBEA0EC47AE7D4AF72843B8F657",
+          "modified_at_local": "2025-05-01T09:13:51"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "7F1E1F90AD317085D898E31827EFCE1625CEC479BEF394A5714656EDCB68D7C2",
+          "modified_at_local": "2025-05-01T09:06:41"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0010/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "8DCE203B419D3B4A93675E443C47FE82FC913BF5BAFEF934994DAF8344D76393",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "통영",
+      "station_code": "DT_0014",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "F6B46300859AC54EA8751C802B269B87A0609B03AAF5FEC6109F06DBA9F0AE69",
+          "modified_at_local": "2025-04-30T19:52:32"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "AF264389DDE6203E16C0E38D4DF40565BF6F9C790CB2C30692CCC2023F922478",
+          "modified_at_local": "2025-04-30T19:52:32"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "831CC31B8447D3AED761C6D76D33E44F65629FCBDCF16FBF900E7F813F0F08EA",
+          "modified_at_local": "2025-04-30T19:52:44"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "56C60F5997E2BD6B2002D7FC61750D0179CFF2C9267E3968C56839E38005489B",
+          "modified_at_local": "2025-04-30T19:44:40"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0014/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "FE943EAB09BD65388D5D48243EB03A5E95EC058E5B73558FCDA2893193C00121",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "여수",
+      "station_code": "DT_0016",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "13AF8D48C4C7A0AAAE51763980013946EF05803A7EB1B6884304B68E8AFBA5D9",
+          "modified_at_local": "2025-04-29T16:58:30"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 582,
+          "sha256": "166B666959014DD41B7E448D947421282639522C9EEA032C91667F3DF6FA4EB3",
+          "modified_at_local": "2025-04-29T16:58:30"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "79971C5990F79F9B68E0F768C1F6D0944EA269903A65DB635721FE73051A04B3",
+          "modified_at_local": "2025-04-29T16:58:52"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "D17E200DBB8F2A681271688D09B25501A5D1D01F060A164E2134821088184AA4",
+          "modified_at_local": "2025-04-29T16:44:29"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0016/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "DBBADE47C4A36248D9D65D3C568FDAE007F6D69FD8C91C32DDD7ADECF0DEFEE2",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "추자도",
+      "station_code": "DT_0021",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "5B58F56E11D20E68EEE932714C972404A0B0F14C6AB2F0341C5BE513A9B6CD5F",
+          "modified_at_local": "2025-04-30T09:49:40"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "16217622F5F062E543F9B9C2718010758FCF3BF2AA268104DEB84AB404B41B49",
+          "modified_at_local": "2025-04-30T09:49:40"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "A050B47D2AEC702A9CE61717E024905088CFB475D64D5A3EBEE8D32FB0A91765",
+          "modified_at_local": "2025-04-30T09:50:01"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "CB6336149F5387135E879EF69135183187984D630AC5C1EA1ED8C57FD1EE72AB",
+          "modified_at_local": "2025-04-30T09:35:47"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "32F0C6A1752B54E439C077EE036B43E66CD0B1B1A371C090CA311661C18EF92E",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "추자도",
+      "station_code": "DT_0021",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "4142577F48293F06A0B9E9C2C7758B377151DF6E738DA7809B27B593A8883CE6",
+          "modified_at_local": "2025-05-01T10:37:29"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "F37B179D03DAD0CBF97703970EA10BB3E11E8FE44F39118D8798D6AE9125C5A8",
+          "modified_at_local": "2025-05-01T10:37:29"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "268A38482B27529DA6B954AD93FE4150FA1A6A66C066338C5E5775E000FF1B21",
+          "modified_at_local": "2025-05-01T10:37:38"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "F2A70E11786C858F5B114ADE4A1A9EECD2D996BAF9EBB99B4691C835F60278A9",
+          "modified_at_local": "2025-05-01T10:31:49"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0021/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "BC37554F948B23B4E935B9968003C586A45FBDC1FEBF78B127D48FD96AE134C7",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "성산포",
+      "station_code": "DT_0022",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "3DADD5C7DFBCBE8459B2CC7C28855504FF0B7C284116AAA88CC17160C5FFD054",
+          "modified_at_local": "2025-05-01T04:45:21"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 582,
+          "sha256": "07CDDA11A9CA101FA7A0F93E842B7C0028B3C21CC1A28B114EB9008938F05368",
+          "modified_at_local": "2025-05-01T04:45:21"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "C51EE1557EA1D25828B9DB5214BF8D8B8F56B794ABDB78D18D396C65950FDE44",
+          "modified_at_local": "2025-05-01T04:45:36"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "B2C3BCF5A36D5284704C7DFD517E1356691110203F4CF83BF3119FFA95ACEA58",
+          "modified_at_local": "2025-05-01T04:35:29"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0022/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "104B26F40384817649D6DBCA14F2D453FA2F93DB5936B497A7CF486E408EC622",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "고흥발포",
+      "station_code": "DT_0026",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "24A82BE1FFA55D9CDC9790A45CFA9690FD21560478340911847484D40F650BBB",
+          "modified_at_local": "2025-04-30T18:05:03"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "0C6ECB6418C4DC43D9A39C678EBD43823AB21F19F04E42561A81F3BD5D4706CF",
+          "modified_at_local": "2025-04-30T18:05:03"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "459C94AAA8213EDEE36E5895CD6B69B0B590D018CEE0BC19FA0827FCA4D7B818",
+          "modified_at_local": "2025-04-30T18:05:15"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "86FA93903597AC1069ACFE66B856D8410B08C6EC8F7F35ACD28F73953FF1620D",
+          "modified_at_local": "2025-04-30T17:56:50"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 16,
+          "sha256": "7E71CCC39BAD9A7699E117231A1EA9456F9DE662847EA412E77522F7E1DE9CE3",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "고흥발포",
+      "station_code": "DT_0026",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6DE9A5DC4B480D390E0BCA4558FBB8599A5912E0E49BC59229BCC45F2C1A2D54",
+          "modified_at_local": "2025-05-01T16:37:34"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "3968F7FD1C6986C34F1BA8F5D2486E94EE18AE5A304C9FCBD04CE31B048CF2CB",
+          "modified_at_local": "2025-05-01T16:37:34"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "DB6D58D2ACCFD71C15C058E9D43F29F2333B3BEDA164A639931FCC2A598F0D29",
+          "modified_at_local": "2025-05-01T16:37:41"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "EC66B4A74A7A72C29D675EE0CED6DC308423581268CA225522395B750CDB37C7",
+          "modified_at_local": "2025-05-01T16:32:30"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0026/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "A57F8F4A75F174D154B312AD22D0494760D279E162EF671C4D1670433CB40CDA",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "완도",
+      "station_code": "DT_0027",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "01C1509321E4A2640FD059CF12685EE288DF481092B938A0A7F26D73A93A2078",
+          "modified_at_local": "2025-04-30T20:40:02"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "57312FC0D8758D99E0B5CE89CDE5671B8B5C5AD53C7DF281E205B7978B5B9231",
+          "modified_at_local": "2025-04-30T20:40:02"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "9D485E49C22D4185F806D6EA29A29800F6F3853B4D8AB1018598526CD2C6A936",
+          "modified_at_local": "2025-04-30T20:40:15"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "E75FE1C0B69DDC10283FA699EBF79F344E9C0EE47D4A83EC3C29DEF6CEF66F37",
+          "modified_at_local": "2025-04-30T20:31:50"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "0A7C5F758DA19F68C4D1BC562A202A6D624C0864BC2ED599A7996C88CAB753F3",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "완도",
+      "station_code": "DT_0027",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "22F1DE2A5335F12C4B3D4E00358970AD811049A2759C39207466DFEC404DA6A0",
+          "modified_at_local": "2025-05-01T16:02:38"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "D54783E65225B067F82248B5788556478A7845691C5A36417B21316E9D42D2B3",
+          "modified_at_local": "2025-05-01T16:02:38"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "8817A37BC57620D2FF14BABC4340A7FB2CECC4B8F6E385C838BB8410C44F503A",
+          "modified_at_local": "2025-05-01T16:02:45"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "A92E0319949F65BBC003E0ED0562C191AE4354839B6C350035F47E259D9E9B6B",
+          "modified_at_local": "2025-05-01T15:57:37"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0027/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "EF1591D4A106FE67A6B0DBFA1F4758059A5719A9945154924B970276F7EF60B3",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "거제도",
+      "station_code": "DT_0029",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "57B81009CB20B8BB9B00AAC65C2EB8CC306BF3A33951F1FDF34A14D26485AE0D",
+          "modified_at_local": "2025-04-28T10:09:44"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "9195EF4DE173E546987EE211590023FFCC5946C89E40C30A6B7771CA5A0A4EC7",
+          "modified_at_local": "2025-04-28T10:09:44"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "40BA5B75982712FDFADC3936E82092B23E591BD5AC8EA1F46A95DB43FDB28391",
+          "modified_at_local": "2025-04-28T10:11:00"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "AEDB3CC148B70E276221C51C3604D4186475E8B82623415EC311FF9D9218A3B7",
+          "modified_at_local": "2025-04-26T12:08:52"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "854FEE2C7D3545FC64D0FF3847C9A174B0791F5B5F5B50C69E3C97C879CAD8A9",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "거제도",
+      "station_code": "DT_0029",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "15FC19DBB7E2817715F2025485353D4950283A4694C6FFA754302EC78B25B329",
+          "modified_at_local": "2025-05-01T14:44:23"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "D22697F25495D4D2D17FCCFFCCF61EAF405E32AD8F312529EB061DFF24DF8CD1",
+          "modified_at_local": "2025-05-01T14:44:23"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "8C854D06C67A1B08DD604E540F70EC5AC662B92209C8F9169D36FC5E46D46D60",
+          "modified_at_local": "2025-05-01T14:44:31"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "EA77576A17610A53D82C53CAB4F84FC7EDAE4B8F9BE93DA5F5B2128A82CD5B90",
+          "modified_at_local": "2025-05-01T14:39:14"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0029/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "D007308C9F5EA874764995A8CF8F883BF682D451FFB58F402CF3BD71BBDEDE30",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "거문도",
+      "station_code": "DT_0031",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "0BD4A29A97AB7861B93B8940D6990625956ACD33692D694BFB65A721BA0AFCF4",
+          "modified_at_local": "2025-04-28T12:18:41"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 581,
+          "sha256": "59C4D7BD3C09F2B73067CCBB84860F2F072F15F4D1D4DB100D1E1A54E4DF9AD5",
+          "modified_at_local": "2025-04-28T12:18:41"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "B491572AF0B48E37669584B893ED33EA4435DD8DFFFE873D93D5CF3D022CFFB9",
+          "modified_at_local": "2025-04-28T12:19:59"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "01F31DD9A6A4C10C73177844C0BF1BD4DBE3C5FC57D16B921FFD1BFAEC6314C2",
+          "modified_at_local": "2025-04-28T11:17:22"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0031/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "2CCB31921DDAE339F460F4AB647F93067173ADED255C7F4E3C4000B290FF085C",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "교본초",
+      "station_code": "DT_0042",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "0E132E2B2CCE464A50C7CA25524DEA8A6B2890B0C09C102D44061C0A752156BF",
+          "modified_at_local": "2025-04-30T16:50:02"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "D52939C8934CF1254F47BCE73B8F9D00CB8A672739B33C6302D48CD5F0D6621D",
+          "modified_at_local": "2025-04-30T16:50:02"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "A96F503A594550EBDDA8E49683D45B6F9EDC889327E683E249544B6741E190E6",
+          "modified_at_local": "2025-04-30T16:50:17"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "DE63A540275AC73092FDB78CFFE6FDB934E652BF35488C0F10CD8DC1A280D98A",
+          "modified_at_local": "2025-04-30T16:40:06"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0042/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "D1618F556E4637D8BAD82A8D9AC392A703135EC7CB401CCC992FBEF7D6D97450",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "광양",
+      "station_code": "DT_0049",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "E441E2E96B0FEFA5E85A65AAEDD9FA6D73F1FC13341F1AA299C2FA3EA027562E",
+          "modified_at_local": "2025-05-01T14:01:45"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 579,
+          "sha256": "F63E77EF2DBFBEF7B0769E4C6CD385F83A161E756C23B0D613AC9EB259E03656",
+          "modified_at_local": "2025-05-01T14:01:45"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "7529EC1DB3EDFDF314C8D98F2998E2D02C977432D5537C329E0825EAA383C98F",
+          "modified_at_local": "2025-05-01T14:01:53"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "626FDA6B604D1F208410B7CFC6DA71334486FB6133C5280B73BE16282FDA9881",
+          "modified_at_local": "2025-05-01T13:56:44"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0049/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "39D4BDCBB81F13675B124A52FADC972563C51FE4C23ED96B7B1AFEC89B7B9EA5",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "삼천포",
+      "station_code": "DT_0061",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "1ADF36F91FBEB94DC2021344D4C328C0FD6C4BB62838736BD65485FD9AB86B96",
+          "modified_at_local": "2025-04-28T22:37:37"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 582,
+          "sha256": "B425F9EAAD4483F6F794023C8EBF04450380F63BE79B068AA3D968D2BA92A478",
+          "modified_at_local": "2025-04-28T22:37:37"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 16,
+          "sha256": "60F24273050B8C51D9D48805875570390EB4673905AC7305192464EE2B529E25",
+          "modified_at_local": "2025-04-28T22:37:55"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "12D50F8E96C47346CC2273448381BC1E4BA4FD4BF963C4E93506E2708EF310F3",
+          "modified_at_local": "2025-04-28T22:25:01"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "528B4043D2777C37CA861C9A05498782EA45826CB487E74BBEF5EDA48A833757",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "삼천포",
+      "station_code": "DT_0061",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "9CA98CB75EFD41F50C127D17BD1335AFB4B7598432A1C6978515FCA6EB7CFEA4",
+          "modified_at_local": "2025-05-01T15:20:28"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "46C154B05974D773C2D44A1DAFED6FC4955D12CBFDEAB95F21A74878B00B5F3B",
+          "modified_at_local": "2025-05-01T15:20:28"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "E68224A3EA1F2219A7A64ACD76587C7173FF4AAE8FF767FB9D17DD141FD96832",
+          "modified_at_local": "2025-05-01T15:20:36"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "228D94E86F6F0750674702D4E618EE788F2DDD2AA92CCDA5AAF8C62F17486B81",
+          "modified_at_local": "2025-05-01T15:15:20"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0061/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "BB0A02D65BDE0E2994706CFEF8B78557294A9DD09345F529B190948A60D12464",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "가덕도",
+      "station_code": "DT_0063",
+      "sensor_code": "TIDE_LEVEL_LASER",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "AFB934C267D99CDA56661AC4749A774D7BCA058A4EA03D93C6E066EC54CD3DB6",
+          "modified_at_local": "2025-04-28T14:48:14"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "8F3F1BA8BA01B1652FC867923E4DC5AD2900621B6E5CF3314D9542E3FF05AABB",
+          "modified_at_local": "2025-04-28T14:48:14"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "6E60D735D86C4B73CF9FC857B6B4C9CB602BA305E8B5F0093035915F76C30465",
+          "modified_at_local": "2024-09-10T15:26:39"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "D465B95CEC327EA4EFB4BA8B2254596A7061978BFDE15FDF924A1077BCC7AB49",
+          "modified_at_local": "2025-04-28T13:46:56"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "69D1A82BCEA79C0B4C5F6611BD8916BB6F1F09CA8848FEE7FB71737EE180ECDE",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "가덕도",
+      "station_code": "DT_0063",
+      "sensor_code": "TIDE_LEVEL_LASER_1",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE2",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "1635746177FA1E3926634688E4D27504EB706857AF0EB90AD9F1C608022C1BE2",
+          "modified_at_local": "2025-04-28T17:36:40"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/scaler.forecast.gz",
+          "size_bytes": 580,
+          "sha256": "9F3FD40CB06145FBE937005F7FFDD75EB62FCA1A80AAD53A3E9EF040D3896C94",
+          "modified_at_local": "2025-04-28T17:36:40"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "02B27C5EBAFF7C194E73500FBA31F8D7C6E2556EF00CDA56DF226AB86A19C6F8",
+          "modified_at_local": "2025-04-28T17:37:56"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "6434081F4899A3FC5DFE5E7B4885B9B9C63A1743377CFC6653A7114DB8F69E7A",
+          "modified_at_local": "2025-04-28T17:16:09"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_LASER_1/Thres.forecast.DEV_4sigma",
+          "size_bytes": 16,
+          "sha256": "40F9C142CFA5159FD71553EE7AD6F9976397C62606FE3875EA5A6BA2041015B0",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "가덕도",
+      "station_code": "DT_0063",
+      "sensor_code": "TIDE_LEVEL_MIROS",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE3",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "6EDE7BABDD1DB88D2C81D546ACD13E60427C518E7F3A0665E8480E398811996B",
+          "modified_at_local": "2025-04-28T18:29:33"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/scaler.forecast.gz",
+          "size_bytes": 578,
+          "sha256": "500C4F120374D3C10E14A88325A9E2CC583D015B586A138CF536C713BA8E4144",
+          "modified_at_local": "2025-04-28T18:29:33"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/Thres.forecast.DEV",
+          "size_bytes": 17,
+          "sha256": "5D11CCA2B6B73D6B778E20D958835AC50A44A80DE5AF213F934D752BEE5C861D",
+          "modified_at_local": "2025-04-28T18:30:54"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "E6C3FDA6A81666BFAA9CA37E1322DBDD5CF225554DCBD9D5923C80DD937F971A",
+          "modified_at_local": "2025-04-28T17:59:53"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0063/TIDE_LEVEL_MIROS/Thres.forecast.DEV_4sigma",
+          "size_bytes": 18,
+          "sha256": "3F7054C836A8147F25AB830F5992FB99D6EC325C42D82B89CAE03F092A106907",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    },
+    {
+      "station_name": "여호항",
+      "station_code": "DT_0092",
+      "sensor_code": "TIDE_LEVEL_VEGA",
+      "sea_info": "남해",
+      "info_flag": "Y",
+      "mapping_column": "TIDE1(MAIN)",
+      "role": "OPERATIONAL_2025",
+      "model_directory": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA",
+      "artifacts": {
+        "residual_lstm_forecast.h5": {
+          "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/residual_lstm_forecast.h5",
+          "size_bytes": 236832,
+          "sha256": "A47E8DA53733187D10ADBCFA4B74B07481305283FAAF1FC630B7DAD4DD5FE3D6",
+          "modified_at_local": "2025-05-01T13:22:56"
+        },
+        "scaler.forecast.gz": {
+          "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/scaler.forecast.gz",
+          "size_bytes": 584,
+          "sha256": "EDA460CB0F5ADBB8C5307AA80AC61AA7A692E9F1783858E0ED2AACBCBA85F10C",
+          "modified_at_local": "2025-05-01T13:22:56"
+        },
+        "Thres.forecast.DEV": {
+          "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/Thres.forecast.DEV",
+          "size_bytes": 18,
+          "sha256": "4FD9578AE199AE6601BF3FD2EF8FE2CCB9349B2010AB53D0B071D4567E521DF9",
+          "modified_at_local": "2025-05-01T13:23:04"
+        }
+      },
+      "optional_artifacts": {
+        "best_model.h5": {
+          "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/best_model.h5",
+          "size_bytes": 236832,
+          "sha256": "2CB12151DF0DBB37DC819D0F618756314E4574E792A856A075A7692127A5BE3C",
+          "modified_at_local": "2025-05-01T13:17:41"
+        },
+        "Thres.forecast.DEV_4sigma": {
+          "path": "model_output_forecast/DT_0092/TIDE_LEVEL_VEGA/Thres.forecast.DEV_4sigma",
+          "size_bytes": 17,
+          "sha256": "0399EED9213F29268E03F1C3E022F6C8059531B2EBD7C4BDB61F0BC843A631B1",
+          "modified_at_local": "2025-04-21T13:02:21"
+        }
+      }
+    }
+  ],
+  "validation": {
+    "expected_operational_models": 64,
+    "actual_operational_models": 64,
+    "missing_required_files": [],
+    "passed": true
+  }
+}

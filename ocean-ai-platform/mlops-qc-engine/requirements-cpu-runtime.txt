@@ -1,0 +1,4 @@
+# CPU-only overlay for the unchanged Python 3.10 restored environment.
+# Create with its interpreter: -m venv --system-site-packages runtime/python3_10_cpu_env
+# Install in that overlay with --no-deps; verify is_cuda_build is false before use.
+tensorflow-intel==2.10.0

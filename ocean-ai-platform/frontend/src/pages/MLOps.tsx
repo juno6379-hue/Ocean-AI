@@ -37,6 +37,64 @@ const MLOps: React.FC = () => {
   const [readiness, setReadiness] = useState<any>(null);
   const [adapterCoverage,setAdapterCoverage] = useState<any>(null);
   const [adapterError,setAdapterError] = useState('');
+  const [activeTab, setActiveTab] = useState<'registry' | 'workbench' | 'data_preview'>('registry');
+  const [qcEngineStatus, setQcEngineStatus] = useState<any>(null);
+  const [syncingQcEngine, setSyncingQcEngine] = useState(false);
+  const [startingQcEngine, setStartingQcEngine] = useState(false);
+  const [qcIframeKey, setQcIframeKey] = useState(0);
+  const [qcSyncNotice, setQcSyncNotice] = useState('');
+
+  const fetchQcEngineStatus = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/mlops/qc-engine/status`);
+      setQcEngineStatus(res.data);
+    } catch {
+      // Optional status probe; do not fail main MLOps view if offline
+    }
+  };
+
+  const handleStartQcEngine = async () => {
+    if (startingQcEngine) return;
+    setStartingQcEngine(true);
+    setQcSyncNotice('');
+    try {
+      const res = await axios.post(`${API_BASE_URL}/mlops/qc-engine/start`);
+      setQcEngineStatus(res.data);
+      setQcIframeKey((prev) => prev + 1);
+      setQcSyncNotice(
+        res.data?.workbench_running
+          ? `조위 AI-QC 워크벤치 서버(127.0.0.1:${res.data?.workbench_port ?? 8765})가 실행 중입니다.`
+          : '워크벤치 서버 시작 확인이 지연되고 있습니다. 잠시 후 다시 시도해 주세요.'
+      );
+    } catch {
+      setQcSyncNotice('조위 AI-QC 워크벤치 서버 기동 요청 실패');
+    } finally {
+      setStartingQcEngine(false);
+    }
+  };
+
+  const handleSyncQcEngine = async () => {
+    if (syncingQcEngine) return;
+    setSyncingQcEngine(true);
+    setQcSyncNotice('');
+    try {
+      const res = await axios.post(`${API_BASE_URL}/mlops/qc-engine/sync`);
+      const c = res.data?.synced_counts;
+      setQcSyncNotice(
+        c
+          ? `AI-QC-MLOps 동기화 완료: 데이터셋 ${c.datasets}건 · 모델 ${c.models}건 · 학습이력 ${c.retraining_runs}건 · 승인 ${c.approvals}건`
+          : 'AI-QC-MLOps 동기화 완료'
+      );
+      await fetchQcEngineStatus();
+      const ctrl = new AbortController();
+      busy.current = false;
+      await fetchData(ctrl.signal);
+    } catch {
+      setQcSyncNotice('AI-QC-MLOps 동기화 요청 실패');
+    } finally {
+      setSyncingQcEngine(false);
+    }
+  };
 
   const fetchData = async (signal:AbortSignal) => {
     if(busy.current)return;
@@ -109,8 +167,21 @@ const MLOps: React.FC = () => {
   useEffect(() => {
     const abort=new AbortController();
     fetchData(abort.signal);
+    fetchQcEngineStatus();
     const interval = setInterval(()=>fetchData(abort.signal), 60000);
-    return () => {abort.abort();busy.current=false;clearInterval(interval);};
+    const onMessage = (event: MessageEvent) => {
+      const payload = event?.data;
+      if (payload && (payload.type === 'OCEAN_AI_QC_EVENT' || payload.source === 'ai-qc-mlops')) {
+        handleSyncQcEngine();
+      }
+    };
+    window.addEventListener('message', onMessage);
+    return () => {
+      abort.abort();
+      busy.current=false;
+      clearInterval(interval);
+      window.removeEventListener('message', onMessage);
+    };
   }, []);
 
   const handleRetrain = () => document.getElementById('training-input-review')?.scrollIntoView({behavior:'smooth',block:'start'});
@@ -152,6 +223,108 @@ const MLOps: React.FC = () => {
           <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">등록부 조회 · 승인 권한 별도</span>
         </div>
       </div>
+
+      {/* AI-QC-MLOps 3-Tab Navigation & Sync Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+        <div role="tablist" aria-label="MLOps 화면 전환" className="flex flex-wrap items-center gap-2">
+          {[
+            { id: 'registry' as const, label: '플랫폼 통합 레지스트리' },
+            { id: 'workbench' as const, label: '조위 AI-QC 학습·승격 워크벤치' },
+            { id: 'data_preview' as const, label: '관측·예측 CSV 데이터 결합 검사기' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-colors ${
+                activeTab === tab.id
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5 text-xs">
+          {qcEngineStatus && (
+            <span className={`px-2.5 py-1 rounded-full font-medium ${qcEngineStatus.engine_available ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600'}`}>
+              QC 엔진 {qcEngineStatus.engine_available ? `연결됨 (${qcEngineStatus.source_mode})` : '오프라인'} · 워크벤치 {qcEngineStatus.workbench_running ? '8765 실행 중' : '8765 대기'} · 번들 모델 {qcEngineStatus.bundle_counts?.models ?? 0}건 / 데이터셋 {qcEngineStatus.bundle_counts?.datasets ?? 0}건
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={handleStartQcEngine}
+            disabled={startingQcEngine}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 disabled:bg-slate-300 disabled:text-slate-500 transition-colors"
+          >
+            <Play className="w-3.5 h-3.5" />
+            {startingQcEngine ? '워크벤치 기동 중...' : qcEngineStatus?.workbench_running ? '8765 워크벤치 새로고침' : '8765 워크벤치 서버 기동'}
+          </button>
+          <button
+            type="button"
+            onClick={handleSyncQcEngine}
+            disabled={syncingQcEngine}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 disabled:bg-slate-300 disabled:text-slate-500 transition-colors"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${syncingQcEngine ? 'animate-spin' : ''}`} />
+            {syncingQcEngine ? '동기화 중...' : 'AI-QC-MLOps 동기화'}
+          </button>
+        </div>
+      </div>
+
+      {qcSyncNotice && (
+        <div role="status" className="bg-indigo-50 border border-indigo-200 text-indigo-800 px-4 py-2 rounded-lg text-xs font-medium">
+          {qcSyncNotice}
+        </div>
+      )}
+
+      {activeTab === 'workbench' && (
+        <section aria-label="조위 AI-QC 학습·승격 워크벤치" className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs text-slate-600">
+            <span className="font-bold text-slate-800">조위 AI-QC 학습·챔피언 승격·롤백 워크벤치 (포트 8765 임베디드)</span>
+            <a
+              href={qcEngineStatus?.ui_urls?.direct_workbench || 'http://127.0.0.1:8765/?embed=1'}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              새 창에서 열기 ↗
+            </a>
+          </div>
+          <iframe
+            key={`workbench-${qcIframeKey}`}
+            title="조위 AI-QC 학습·승격 워크벤치"
+            src={qcEngineStatus?.ui_urls?.workbench || '/qc-mlops-ui/?embed=1'}
+            className="w-full h-[840px] border-0"
+          />
+        </section>
+      )}
+
+      {activeTab === 'data_preview' && (
+        <section aria-label="관측·예측 CSV 데이터 결합 검사기" className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs text-slate-600">
+            <span className="font-bold text-slate-800">관측·예측 CSV 10분 결합 및 스냅샷 검사기 (포트 8765 임베디드)</span>
+            <a
+              href={qcEngineStatus?.ui_urls?.direct_data_preview || 'http://127.0.0.1:8765/data?embed=1'}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-600 hover:underline font-medium"
+            >
+              새 창에서 열기 ↗
+            </a>
+          </div>
+          <iframe
+            key={`data-preview-${qcIframeKey}`}
+            title="관측·예측 CSV 데이터 결합 검사기"
+            src={qcEngineStatus?.ui_urls?.data_preview || '/qc-mlops-ui/data?embed=1'}
+            className="w-full h-[840px] border-0"
+          />
+        </section>
+      )}
 
       <p className="text-xs leading-relaxed text-slate-500">관측 조회 문맥: {period.source} · {period.from} ~ {period.to} · 관측망 {scope.get('network')||'전체'} · 해역 {scope.get('sea')||'전체'}. 아래 모델·평가·승인 건수는 이 필터와 별도의 전체 등록부입니다.</p>
       <section aria-label="운영 준비 검증" className="bg-white border border-slate-200 rounded-xl p-4 text-sm text-slate-700">

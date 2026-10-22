@@ -22,10 +22,11 @@
 
 ```text
 Ocean-AI/
-├── docs/                     # 현행 설치·API·계층·승인·운영 상태 문서
+├── docs/                     # 현행 설치·API·계층·승인·운영 상태 문서 및 ml-ops-docs/ 상세 기술 문서
 ├── ocean-ai-platform/
 │   ├── backend/              # FastAPI·SQLAlchemy·PostgreSQL, ML·문서 실행 코드와 시험
 │   ├── frontend/             # React·TypeScript·Vite UI
+│   ├── mlops-qc-engine/      # 조위 AI-QC 학습·승격 워크벤치 및 5대 연동 브리지 코어 엔진 (ai-qc-mlops)
 │   └── docs/                 # 상세 구현과 날짜별 과거 실행 기록
 └── process.md                # 기존 업무 절차 참고 자료
 ```
@@ -39,6 +40,7 @@ Ocean-AI/
 3. [설치 및 실행](docs/02_SETUP_AND_INSTALLATION.md)
 4. [API 명세](docs/04_API_SPECIFICATION.md)
 5. [현재 단계와 다음 작업](docs/24_P0_END_TO_END_PROGRESS.md)
+6. [조위 AI-QC MLOps 엔진 통합 및 워크벤치 실행](docs/42_AI_QC_MLOPS_ENGINE_INTEGRATION.md) ([상세 기술 문서 00~05](docs/ml-ops-docs/00_OVERVIEW_AND_INDEX.md))
 
 backend 예제의 `POSTGRES_PASSWORD`는 Docker Compose용이며 `Settings` 필드가 아니다. 예제 전체를 backend `.env`로 그대로 복사하면 validation 오류가 발생할 수 있다. [설치 문서](docs/02_SETUP_AND_INSTALLATION.md)의 분리 절차로 서버 설정과 Compose 비밀번호를 준비한다. 자동 MDC 동기화와 자동 전체 DDL은 기본 꺼져 있다. 데이터 경로나 기존 인덱스를 바꾸기 전에 보존된 contract와 적용 스키마를 확인한다.
 

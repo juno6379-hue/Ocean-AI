@@ -40,3 +40,7 @@ ocean-ai-platform/frontend/public/downloads/
 ocean-ai-platform/report_analysis.txt
 ocean-ai-platform/mdc_item_inventory.json
 ocean-ai-platform/mdc_schema_inventory.json
+ocean-ai-platform/mlops-qc-engine/reports/
+ocean-ai-platform/mlops-qc-engine/runtime/
+ocean-ai-platform/mlops-qc-engine/manifests/releases/
+

@@ -8,6 +8,11 @@ from app.core.database import get_db
 from app.core.security import Actor, require_reviewer
 from app.models.domain import ModelRegistry, RetrainingHistory, AIPredictionResult
 from app.services.mlops_readiness import get_mlops_readiness, model_readiness
+from app.services.qc_mlops_bridge import (
+    get_qc_engine_status,
+    start_qc_workbench_server,
+    sync_qc_mlops_artifacts,
+)
 from pydantic import BaseModel, Field
 import datetime
 import uuid
@@ -233,6 +238,21 @@ def queue_retraining(req: RetrainRequest, db: Session = Depends(get_db)):
         if manifest.get("target_variable") != model.target_variable or any(manifest.get(k) != provenance.get(k) for k in ("domain", "item_id", "task")):
             raise HTTPException(409, {"code": "BASE_MODEL_COMPARISON_SCOPE_MISMATCH", "mutation_performed": False})
     return enqueue(ManifestRequest(manifest_path=req.manifest_path,expected_sha256=req.expected_sha256), db)
+
+
+@router.get("/qc-engine/status")
+def read_qc_engine_status(db: Session = Depends(get_db)):
+    return get_qc_engine_status(db)
+
+
+@router.post("/qc-engine/start")
+def trigger_qc_engine_start(db: Session = Depends(get_db)):
+    return start_qc_workbench_server(db)
+
+
+@router.post("/qc-engine/sync")
+def trigger_qc_engine_sync(db: Session = Depends(get_db)):
+    return sync_qc_mlops_artifacts(db)
 
 
 from app.api.routes_mlops_execution import router as execution_router

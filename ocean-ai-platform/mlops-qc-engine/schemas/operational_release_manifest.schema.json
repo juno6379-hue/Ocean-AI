@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://internal.example/oceandb/ai-qc-operational-release.schema.json",
+  "title": "AI QC Operational Release Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_id",
+    "created_at",
+    "sea",
+    "previous_release_id",
+    "data",
+    "source",
+    "environment",
+    "mapping",
+    "models",
+    "approval"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "release_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "sea": {"type": "string", "enum": ["EAST", "WEST", "SOUTH", "ALL"]},
+    "previous_release_id": {"type": ["string", "null"]},
+    "data": {"$ref": "#/$defs/artifactWithPeriod"},
+    "source": {"$ref": "#/$defs/artifact"},
+    "environment": {"$ref": "#/$defs/artifact"},
+    "mapping": {"$ref": "#/$defs/artifact"},
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["station_code", "sensor_code", "model", "scaler", "threshold", "run_id"],
+        "properties": {
+          "station_code": {"type": "string"},
+          "sensor_code": {"type": "string"},
+          "run_id": {"type": "string"},
+          "model": {"$ref": "#/$defs/artifact"},
+          "scaler": {"$ref": "#/$defs/artifact"},
+          "threshold": {"$ref": "#/$defs/artifact"},
+          "threshold_metadata": {"$ref": "#/$defs/artifact"}
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "approved_by", "approved_at"],
+      "properties": {
+        "status": {"type": "string", "enum": ["DRAFT", "CANDIDATE", "APPROVED", "RETIRED"]},
+        "approved_by": {"type": ["string", "null"]},
+        "approved_at": {"type": ["string", "null"], "format": "date-time"}
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "sha256"],
+      "properties": {
+        "uri": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"}
+      }
+    },
+    "artifactWithPeriod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uri", "sha256", "period_start", "period_end"],
+      "properties": {
+        "uri": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"},
+        "period_start": {"type": "string", "format": "date-time"},
+        "period_end": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}
